@@ -1,0 +1,70 @@
+{if !$request_async}{include file="includes/head.tpl"}{/if}
+
+<h1>Dashboard</h1>
+{if $content.metagame}
+    <table class="table table-hover table-condensed">
+        <tbody>
+        <tr>
+            <th>{$content.data.count_tournaments} tournaments</th>
+            <th>{$content.data.count_players} players</th>
+            <th>{$content.data.count_matches} matches ({$content.data.percent} %)</th>
+        </tr>
+        </tbody>
+    </table>
+{/if}
+{if $content.metagame}
+    <h2>Metagame breakdown</h2>
+    <table class="table table-hover table-condensed">
+        <tbody>
+            <tr>
+                <th>Archétype</th>
+                <th>Nombre</th>
+                <th>%</th>
+            </tr>
+            {foreach from=$content.metagame item="deck"}
+                <tr{if $deck.name_archetype == "Other"} class="active"{/if}>
+                    <td>{$deck.name_archetype}</td>
+                    <td>{$deck.count}</td>
+                    <td>{$deck.percent} %</td>
+                </tr>
+            {/foreach}
+        </tbody>
+    </table>
+{/if}
+{if $content.archetypes}
+    <h2>Winrate by Archetype</h2>
+    <table class="table table-hover table-condensed table-matchups">
+        <tbody>
+            <tr>
+                <th></th>
+                {foreach from=$content.archetypes item="archetype"}
+                    <th class="rotated-text"><div><span>{$archetype.name_archetype}</span></div></th>
+                {/foreach}
+                <th class="rotated-text"><div><span>TOTAL</span></div></th>
+            </tr>
+            {foreach from=$content.archetypes item="archetype"}
+                <tr>
+                    <td class="strong">{$archetype.name_archetype}</td>
+                    {foreach from=$archetype.winrates item="deck"}
+                        <td class="
+                            {if $archetype.name_archetype==$deck.name_archetype} matchup-mirror{/if}
+                            {if $deck.id_archetype==0} matchup-total{/if}
+                            {if $deck.percent>50}{if $deck.percent>60}matchup-positive{else}matchup-slightly-positive{/if}{/if}
+                            {if $deck.percent<50}{if $deck.percent<40}matchup-negative{else}matchup-slightly-negative{/if}{/if}
+                        ">
+                            {if $deck.percent!==null}
+                                <span class="matchup-deviation">{$deck.deviation_down}%-{$deck.deviation_up}%</span>
+                                <div class="matchup-percent">{$deck.percent}</div>
+                                <span class="matchup-count">{$deck.count}</span>
+                            {else}
+                                --
+                            {/if}
+                        </td>
+                    {/foreach}
+                </tr>
+            {/foreach}
+        </tbody>
+    </table>
+{/if}
+
+{if !$request_async}{include file="includes/footer.tpl"}{/if}

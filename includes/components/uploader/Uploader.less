@@ -1,0 +1,98 @@
+div.input.upload{
+    height:35px;
+    font-size:12px;
+
+    .status_bar, a.delete, a.file{
+        display:none;
+    }
+    input[type='file']{
+        display:block;
+    }
+
+    .status_bar{
+        border:solid 1px #27ae60;
+        background:#27ae60;
+        position:relative;
+        width:200px;
+        height:25px;
+        .background, .foreground{
+            top:0;
+            left:0;
+            position:absolute;
+        }
+        .background{
+            height:100%;
+            background:#2ecc71;
+        }
+        .foreground{
+            color:#ffffff;
+            font-weight:bold;
+            width:100%;
+            height:25px;
+            line-height:25px;
+            text-align: center;
+        }
+    }
+
+
+    a.delete, a.file{
+        margin-right:5px;
+        text-decoration: none;
+        line-height: 12px;
+        height:12px;
+        padding:10px;
+        color:#ffffff;
+        background:#2A80B9;
+        border:solid 1px #ffffff;
+        span{
+            vertical-align: top;
+            display:inline-block;
+            width:14px;
+            height:14px;
+            background-image:url("glyphicons-halflings-white.png");
+        }
+    }
+
+    a.file{
+        &.img{
+            vertical-align: middle;
+            background:none;
+            padding:0;
+            height:35px;
+            img{
+                height:35px;
+            }
+        }
+        span{
+            margin-left:3px;
+            background-position:-48px 0;
+        }
+    }
+
+    a.delete{
+        background:#E84C3D;
+        border-color:#C1392D;
+        padding:5px;
+        span{
+            background-position: -312px 0;
+        }
+    }
+
+    &.loading{
+        input[type='file'], a.delete, a.file{
+            display:none;
+        }
+        div.status_bar{
+            display:block;
+        }
+    }
+
+    &.has_file{
+        input[type='file'], div.status_bar{
+            display:none;
+        }
+        a.delete, a.file{
+            display:inline-block;
+        }
+    }
+}

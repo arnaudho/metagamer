@@ -1,0 +1,28 @@
+{
+	"login":{
+		"require":true,
+		"regExp":"TextNoHtml",
+		"tag":"input",
+		"attributes":{
+            "placeholder":"Login",
+			"type":"text"
+		}
+	},
+	"mdp":{
+		"require":true,
+		"regExp":"TextNoHtml",
+		"tag":"input",
+		"attributes":{
+            "placeholder":"Mot de passe",
+			"type":"password"
+		}
+	},
+	"submit":{
+		"tag":"input",
+		"attributes":{
+			"type":"submit",
+			"value":"Login",
+			"class":"button"
+		}
+	}
+}

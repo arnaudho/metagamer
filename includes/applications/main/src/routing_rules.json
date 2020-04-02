@@ -1,0 +1,45 @@
+{
+	"front":
+	{
+		"/":
+		{
+			"*":
+			{
+				"controller":"index",
+				"action":"index"
+			}
+		},
+		"{$controller}/":
+		{
+			"parameters":
+			{
+				"controller":"[a-zA-Z0-9\\-]+"
+			},
+			"*":
+			{
+				"action":"index"
+			}
+		},
+		"{$controller}/{$action}/":
+		{
+			"parameters":
+			{
+				"controller":"[a-zA-z0-9\\-]+",
+				"action":"[a-zA-z0-9\\-]+"
+			},
+			"*":
+			{
+				"controller":"{$controller}",
+				"action":"{$action}"
+			}
+		}
+	},
+	"back": {
+		"/": {
+			"*": {
+				"controller": "index",
+				"action": "index"
+			}
+		}
+	}
+}

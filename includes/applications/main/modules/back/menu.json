@@ -1,0 +1,8 @@
+[
+    {
+        "default":true,
+        "label":"Sample",
+        "controller":"test",
+        "action":"listing"
+    }
+]
