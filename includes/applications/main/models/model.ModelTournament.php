@@ -38,7 +38,7 @@ namespace app\main\models {
          * @param $pIdTournament
          * @return array|bool|resource
          */
-        public function resetTournamentDataByName ($pIdTournament) {
+        public function resetTournamentDataById ($pIdTournament) {
             $id_tournament = $this->one(Query::condition()->andWhere("id_tournament", Query::EQUAL, $pIdTournament), "id_tournament");
             if (!$id_tournament) {
                 return false;

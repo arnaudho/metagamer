@@ -8,6 +8,7 @@
         {if $content.players!==null}
             <em>{$content.players|count} results</em>
         {/if}
+        <p>Note : search by Arena <em>#tag</em> may be more efficient</p>
     </div>
 </form>
 {if $content.players!==null}
@@ -29,7 +30,7 @@
             </tr>
         {foreachelse}
             <tr>
-                <td colspan="4" class="bg-danger">No results found</td>
+                <td colspan="5" class="bg-danger">No results found</td>
             </tr>
         {/foreach}
     </table>

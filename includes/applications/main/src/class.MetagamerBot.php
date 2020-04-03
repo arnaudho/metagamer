@@ -11,7 +11,7 @@ use core\db\Query;
 class MetagamerBot extends BotController
 {
     CONST UPLOADS = 'files/uploads/';
-    CONST BYE = "Bye(";
+    CONST BYE = "(Bye, or no result found)";
     CONST MAPPING_PAIRINGS = array(
         1 => "table",
         2 => "player",
@@ -99,25 +99,26 @@ class MetagamerBot extends BotController
         // insert players -- update decklists later
         foreach ($decklists as $key => $player) {
             if (isset($ids_people[$player['arenaid']])) {
-                if (!$id_player = $this->modelPlayer->getPlayerIdByTournamentIdArenaId($this->tournament, $ids_people[$player['arenaid']])) {
-                    $this->modelPlayer->insert(
-                        array(
-                            "id_tournament" => $this->tournament,
-                            "id_people" => $ids_people[$player['arenaid']]
-                        )
-                    );
-                    $id_player = $this->modelPlayer->getInsertId();
-                }
+                $this->modelPlayer->insert(
+                    array(
+                        "id_tournament" => $this->tournament,
+                        "id_people" => $ids_people[$player['arenaid']]
+                    )
+                );
+                $id_player = $this->modelPlayer->getInsertId();
+
                 $decklists[$key]['id_player'] = $id_player;
             } else {
                 trace_r("WARNING - player not found for tournament #" . $this->tournament . " : " . $player['arenaid']);
-
             }
         }
 
         // get player archetypes & match history
         foreach ($decklists as $player) {
-            $this->parsePlayer($player['id_player'], $player['url']);
+            if (!$this->parsePlayer($player['id_player'], $player['url'])) {
+                // remove player from DB
+                $this->modelPlayer->deleteById($player['id_player']);
+            }
         }
 
         return true;
@@ -128,6 +129,10 @@ class MetagamerBot extends BotController
         preg_match_all('/<table[^>]*id="maindeck"[^>]*>.*cardname.*<\/table>/Uims', $deck, $output_array);
         $decklist = $output_array[0][0];
         preg_match_all('/history.*<table[^>]*>.*opponent.*<\/table>/Uims', $deck, $output_array);
+        if (!$output_array[0]) {
+            trace_r("Player " . $pIdPlayer . " ignored -- no match history");
+            return false;
+        }
         $history = $output_array[0][0];
         $name_archetype = ModelArchetype::decklistMapper($decklist);
 
@@ -167,13 +172,8 @@ class MetagamerBot extends BotController
                 $id = self::MAPPING_HISTORY[$key];
                 switch ($id) {
                     case "playerid":
-                        $content = trim($content);
-                        break;
                     case "result":
                         $content = trim($content);
-                        trace_r($content);
-                        $content = $content[0] == 2 ? 1 : 0;
-                        trace_r("=> " . $content);
                         break;
                 }
                 $matches[$num][$id] = $content;
@@ -183,12 +183,34 @@ class MetagamerBot extends BotController
         $insert_matches = array();
         // insert matches
         foreach ($matches as $match) {
-            preg_match('/(.+#[0-9]+),/', $match['playerid'], $output_array);
-            $opponent_arena_id = $output_array[1];
-            if ($opponent_arena_id == self::BYE) {
-                trace_r("Bye -- match ignored");
+            $ignore_match = false;
+            // parse result
+            switch ($match['result']) {
+                case "2-0":
+                case "2-1":
+                    $match['result'] = 1;
+                    break;
+                case "0-2":
+                case "1-2":
+                    $match['result'] = 0;
+                    break;
+                default:
+                    $ignore_match = true;
+            }
+            if ($ignore_match) {
                 continue;
             }
+
+            if ($match['playerid'] == self::BYE) {
+                continue;
+            }
+            preg_match('/\s*(.+#[0-9]+),/', $match['playerid'], $output_array);
+            if (!array_key_exists(1, $output_array)) {
+                trace_r("WARNING -- Player match error");
+                trace_r($match);
+                continue;
+            }
+            $opponent_arena_id = $output_array[1];
             $opponent_player_id = $this->modelPlayer->getPlayerIdByTournamentIdArenaId($this->tournament, $opponent_arena_id);
             if ($opponent_player_id) {
                 $insert_matches[] = array(
@@ -198,9 +220,15 @@ class MetagamerBot extends BotController
                 );
             } else {
                 trace_r("WARNING - player not found for tournament #" . $this->tournament . " : " . $opponent_arena_id);
+                trace_r($match);
             }
         }
-        $mMatches->insertMultiple($insert_matches);
+
+        if ($insert_matches) {
+            $mMatches->insertMultiple($insert_matches);
+        } else {
+            trace_r("WARNING - No matches to insert for player " . $pIdPlayer);
+        }
         return true;
     }
 
