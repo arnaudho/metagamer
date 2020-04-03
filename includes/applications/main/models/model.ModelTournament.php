@@ -29,7 +29,6 @@ namespace app\main\models {
                 )
             );
             $data['count_matches'] = $matches;
-            trace_r($data);
             return $data;
         }
 

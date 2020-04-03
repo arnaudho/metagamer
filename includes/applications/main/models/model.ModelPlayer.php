@@ -41,19 +41,12 @@ namespace app\main\models {
                 $sum += $d['count'];
             }
             foreach ($data as &$d) {
-                $d['percent'] = round(100*$d['count']/$sum);
+                $d['percent'] = round(100*$d['count']/$sum, 1);
             }
             usort($data, function ($a, $b) {
                 return $b['count'] - $a['count'];
             });
             return $data;
-        }
-
-        public function evaluatePlayerArchetypeById ($pPlayerId) {
-            $player = $this->getTupleById($pPlayerId);
-            if ($player) {
-
-            }
         }
 
         public function getPlayerIdByTournamentIdArenaId ($pTournamentId, $pArenaId) {

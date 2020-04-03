@@ -15,6 +15,9 @@ namespace app\main\models {
          */
         static public function decklistMapper ($pDecklist) {
             $mapping = array(
+                "Simic Ramp" => array(
+                    "Risen Reef"
+                ),
                 "Sultai Midrange" => array(
                     "Hydroid Krasis",
                     "Watery Grave"
@@ -27,18 +30,16 @@ namespace app\main\models {
                     "Teferi, Time Raveler",
                     "Breeding Pool"
                 ),
-                "Rakdos Aristocrats" => array(
-                    "Midnight Reaper",
-                    "Priest of Forgotten Gods"
-                ),
                 "Jund Sacrifice" => array(
                     "Korvold, Fae-Cursed King",
                     "Trail of Crumbs"
                 ),
+                "Rakdos Aristocrats" => array(
+                    "Cauldron Familiar"
+                ),
                 "Temur Adventures" => array(
                     "Lucky Clover",
-                    "Escape to the Wilds",
-                    "Fae of Whises"
+                    "Escape to the Wilds"
                 ),
                 "UW blink" => array(
                     "Thassa, Deep-Dwelling",
@@ -62,8 +63,7 @@ namespace app\main\models {
                     "Breeding Pool"
                 ),
                 "Simic Flash" => array(
-                    "Frilled Mystic",
-                    "Nissa, Who Shakes the World"
+                    "Frilled Mystic"
                 )
             );
             $archetype = "Other";

@@ -38,6 +38,50 @@ class MetagamerBot extends BotController
         parent::__construct($pName);
     }
 
+    public function evaluateArchetypes ($pUrl) {
+        $data = $this->callUrl($pUrl);
+        if (empty($data)) {
+            trace_r("PARSING ERROR : URL " . $pUrl . " not found");
+            return false;
+        }
+
+        // get tournament name
+        preg_match_all('/<h1[^>]*>([^<]*)<.*Submitted decklists.*<\/h1>/Umis', $data, $output_array);
+        $name_tournament = trim($output_array[1][0]);
+        if (empty($name_tournament)) {
+            trace_r("Tournament name not found");
+            return false;
+        }
+
+        $mTournament = new ModelTournament();
+
+        if (!$tournament = $mTournament->one(Query::condition()->andWhere("name_tournament", Query::EQUAL, $name_tournament))) {
+            trace_r("Tournament does not exist");
+            return false;
+        }
+        $this->tournament = $tournament['id_tournament'];
+
+        $decklists = array();
+        preg_match_all('/<tr[^>]*>[^<]*<td>([^<]*)<\/td>[^<]*<td>([^<]*)<\/td>[^<]*<td><a[^>]*href="([^"]*)"[^>]*>[^<]*<\/a><\/td>[^<]*<\/tr>/Usi', $data, $output_array);
+        unset($output_array[0]);
+        foreach ($output_array as $key => $element) {
+            foreach ($element as $num => $player) {
+                $decklists[$num][self::MAPPING_DECKLISTS[$key]] = $player;
+            }
+        }
+
+        // update players archetypes
+        foreach ($decklists as $decklist) {
+            $id_player = $this->modelPlayer->getPlayerIdByTournamentIdArenaId($this->tournament, $decklist['arenaid']);
+            if ($id_player) {
+                $this->parsePlayer($id_player, $decklist['url'], false);
+            } else {
+                trace_r("WARNING - player " . $decklist['arenaid'] . " not found for tournament #" . $this->tournament);
+            }
+        }
+        return true;
+    }
+
     public function parseDecklists ($pUrl)
     {
         $data = $this->callUrl($pUrl);
@@ -130,16 +174,18 @@ class MetagamerBot extends BotController
         return true;
     }
 
-    public function parsePlayer ($pIdPlayer, $pUrl) {
+    public function parsePlayer ($pIdPlayer, $pUrl, $pParseMatchHistory = true) {
         $deck = $this->callUrl($pUrl);
         preg_match_all('/<table[^>]*id="maindeck"[^>]*>.*cardname.*<\/table>/Uims', $deck, $output_array);
         $decklist = $output_array[0][0];
-        preg_match_all('/history.*<table[^>]*>.*opponent.*<\/table>/Uims', $deck, $output_array);
-        if (!$output_array[0]) {
-            trace_r("Player " . $pIdPlayer . " ignored -- no match history");
-            return false;
+        if ($pParseMatchHistory) {
+            preg_match_all('/history.*<table[^>]*>.*opponent.*<\/table>/Uims', $deck, $output_array);
+            if (!$output_array[0]) {
+                trace_r("Player " . $pIdPlayer . " ignored -- no match history");
+                return false;
+            }
+            $history = $output_array[0][0];
         }
-        $history = $output_array[0][0];
         $name_archetype = ModelArchetype::decklistMapper($decklist);
 
         // insert archetype if needed
@@ -165,7 +211,9 @@ class MetagamerBot extends BotController
             )
         );
 
-        $this->parseMatchHistory($pIdPlayer, $history);
+        if ($pParseMatchHistory) {
+            $this->parseMatchHistory($pIdPlayer, $history);
+        }
         return true;
     }
 
