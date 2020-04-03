@@ -115,6 +115,12 @@ class MetagamerBot extends BotController
 
         // get player archetypes & match history
         foreach ($decklists as $player) {
+            // TODO fix : Undefined index: id_player (reimport tournament #65 to debug)
+            if (!array_key_exists('id_player', $player)) {
+                trace_r("WARNING - undefined id_player for tournament #" . $this->tournament);
+                trace_r($player);
+                continue;
+            }
             if (!$this->parsePlayer($player['id_player'], $player['url'])) {
                 // remove player from DB
                 $this->modelPlayer->deleteById($player['id_player']);

@@ -12,7 +12,10 @@ namespace app\main\models {
         }
 
         public function searchPlayerByArenaId ($pArenaId) {
-            $data = Query::select("name_tournament, name_archetype, decklist_player, arena_id, discord_id, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins, IF(COUNT(1) IS NULL, 0, COUNT(1)) AS matches", $this->table)
+            $data = Query::select(
+                    "name_tournament, name_archetype, decklist_player, arena_id,
+                    discord_id, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins,
+                    IF(COUNT(1) IS NULL, 0, COUNT(1)) AS matches", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people AND arena_id LIKE '%" . $pArenaId . "%'")
                 ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
@@ -24,13 +27,14 @@ namespace app\main\models {
             return $data;
         }
 
-        public function countArchetypesByTournamentId ($pTournamentId = null) {
-            $q = Query::select("name_archetype, COUNT(*) AS count", $this->table)
+        public function countArchetypes ($pCondition = null) {
+            if(!$pCondition)
+                $pCondition = Query::condition();
+            $q = Query::select("archetypes.id_archetype, name_archetype, COUNT(*) AS count", $this->table)
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = " . $this->table . ".id_tournament")
                 ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = " . $this->table . ".id_archetype")
+                ->andCondition($pCondition)
                 ->groupBy("name_archetype");
-            if ($pTournamentId) {
-                $q->andCondition(Query::condition()->andWhere("id_tournament", Query::EQUAL, $pTournamentId));
-            }
             $data = $q->execute($this->handler);
             $sum = 0;
             foreach ($data as $d) {

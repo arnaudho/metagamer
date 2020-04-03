@@ -11,10 +11,11 @@ namespace app\main\models {
             parent::__construct("matches", "id_player");
         }
 
-        public function getWinrateByArchetypeId ($pArchetypeId, $pTournamentId = null) {
+        public function getWinrateByArchetypeId ($pArchetypeId, $pCondition = null, $order_archetypes = array()) {
             $data = array();
-            $wins = $this->countWinsByArchetypeId($pArchetypeId, $pTournamentId);
-            $matches = $this->countMatchesByArchetypeId($pArchetypeId, $pTournamentId);
+            $wins = $this->countWinsByArchetypeId($pArchetypeId, $pCondition, $order_archetypes);
+            $matches = $this->countMatchesByArchetypeId($pArchetypeId, $pCondition, $order_archetypes);
+
             $total_wins = 0;
             $total_matches = 0;
             foreach ($wins as $win) {
@@ -43,32 +44,42 @@ namespace app\main\models {
             return $data;
         }
 
-        public function countWinsByArchetypeId ($pArchetypeId, $pTournamentId = null) {
+        public function countWinsByArchetypeId ($pArchetypeId, $pCondition = null, $order_archetypes = array()) {
+            if(!$pCondition)
+                $pCondition = Query::condition();
             $q = Query::select("op.id_archetype, SUM(matches.result_match) AS wins", $this->table)
                 ->join("players p", Query::JOIN_INNER, $this->table . ".id_player = p.id_player")
                 ->join("players op", Query::JOIN_INNER, $this->table . ".opponent_id_player = op.id_player")
 //                ->join("archetypes ap", Query::JOIN_INNER, "ap.id_archetype = p.id_archetype")
 //                ->join("archetypes aop", Query::JOIN_INNER, "aop.id_archetype = op.id_archetype")
+                ->andCondition($pCondition)
                 ->andWhere("p.id_archetype", Query::EQUAL, $pArchetypeId)
                 ->groupBy("op.id_archetype");
-            if ($pTournamentId) {
-                $q->andCondition(Query::condition()->andWhere("id_tournament", Query::EQUAL, $pTournamentId));
+            if ($order_archetypes) {
+                $q->andWhere("op.id_archetype", Query::IN, "(" . implode(",", $order_archetypes) . ")", false);
             }
-            $data = Query::select("archetypes.*, IF(wins IS NULL, 0, wins) AS wins", "(" . $q->get(false) . ") tmp")
-                ->join("archetypes", Query::JOIN_OUTER_RIGHT, "tmp.id_archetype = archetypes.id_archetype")
-                ->order("id_archetype")
-                ->execute($this->handler);
+            $q2 = Query::select("archetypes.*, IF(wins IS NULL, 0, wins) AS wins", "(" . $q->get(false) . ") tmp")
+                ->join("archetypes", Query::JOIN_OUTER_RIGHT, "tmp.id_archetype = archetypes.id_archetype");
+            if ($order_archetypes) {
+                $q2->andWhere("archetypes.id_archetype", Query::IN, "(" . implode(",", $order_archetypes) . ")", false)
+                    ->order("FIELD(archetypes.id_archetype, " . implode(",", $order_archetypes) . ")");
+            }
+            $data = $q2->execute($this->handler);
             return $data;
         }
 
-        public function countMatchesByArchetypeId ($pArchetypeId, $pTournamentId = null) {
+        public function countMatchesByArchetypeId ($pArchetypeId, $pCondition = null, $order_archetypes = array()) {
+            if(!$pCondition)
+                $pCondition = Query::condition();
             $q = Query::select("op.id_archetype, COUNT(1) AS count", $this->table)
                 ->join("players p", Query::JOIN_INNER, $this->table . ".id_player = p.id_player")
                 ->join("players op", Query::JOIN_INNER, $this->table . ".opponent_id_player = op.id_player")
+                ->andCondition($pCondition)
                 ->andWhere("p.id_archetype", Query::EQUAL, $pArchetypeId)
                 ->groupBy("op.id_archetype");
-            if ($pTournamentId) {
-                $q->andCondition(Query::condition()->andWhere("id_tournament", Query::EQUAL, $pTournamentId));
+            if ($order_archetypes) {
+                $q->andWhere("op.id_archetype", Query::IN, "(" . implode(",", $order_archetypes) . ")", false)
+                    ->order("FIELD(op.id_archetype, " . implode(",", $order_archetypes) . ")");
             }
             $data = $q->execute($this->handler);
             return $data;
