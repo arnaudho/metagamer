@@ -47,6 +47,10 @@ namespace app\main\controllers\front {
             foreach ($archetypes as &$archetype) {
                 $winrate = $this->modelMatches->getWinrateByArchetypeId($archetype['id_archetype'], null, $order_archetypes);
                 foreach ($winrate as &$matchup) {
+                    // divide mirror count
+                    if ($matchup['id_archetype'] == $archetype['id_archetype']) {
+                        $matchup['count'] = ceil($matchup['count']/2);
+                    }
                     $deviation = StatsUtils::getStandardDeviation($matchup['percent'], $matchup['count']);
                     $matchup['deviation_up'] = round($matchup['percent'] + $deviation);
                     if ($matchup['deviation_up'] > 100) {
