@@ -11,6 +11,17 @@ namespace app\main\models {
             parent::__construct("tournaments", "id_tournament");
         }
 
+        public function countPlayers ($pCondition = null) {
+            if (!$pCondition) {
+                $pCondition = Query::condition();
+            }
+            $players = Query::select("COUNT(1) AS count", "players")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->andCondition($pCondition)
+                ->execute();
+            return $players[0]['count'];
+        }
+
         public function getTournamentData ($pTournamentId) {
             $name = $this->getTupleById($pTournamentId, "name_tournament");
             $players = Query::select("id_player", "players")

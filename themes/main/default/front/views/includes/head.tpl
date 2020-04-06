@@ -25,4 +25,5 @@
 				<a href="dashboard/">Dashboard</a>
 				<a href="player/">Player search</a>
 				<a href="tournament/import/">Import tournament</a>
+				<a href="tournament/search/">Search tournament</a>
 			</div>

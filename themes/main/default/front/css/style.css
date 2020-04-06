@@ -17,6 +17,8 @@ table td.matchup-negative {background-color: #ffb3b3;}
 table td.matchup-slightly-negative {background-color: #ffe6e6;}
 table td.matchup-positive {background-color: #99ff99;}
 table td.matchup-slightly-positive {background-color: #ccffcc;}
+table td.winrate-negative {color: red;}
+table td.winrate-positive {color: green;}
 table th.rotated-text {height: 140px;white-space: nowrap;padding: 0 !important;vertical-align: bottom !important;}
 table th.rotated-text > div {transform:translate(13px, 0px)rotate(310deg);width: 30px;  }
 table th.rotated-text > div > span {padding: 5px 10px;}
