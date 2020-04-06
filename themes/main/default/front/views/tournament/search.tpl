@@ -9,7 +9,7 @@
                 <option value="{$tournament.id_tournament}"{if $content.tournament.id_tournament == $tournament.id_tournament} selected{/if}>{$tournament.name_tournament}</option>
             {/foreach}
         </select>
-        <button type="submit" class="btn btn-primary">Select</button>
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
     </div>
 </form>
 
@@ -23,8 +23,8 @@
     <table class="table table-hover table-condensed">
         <tbody>
         <tr>
-            <th>Archétype</th>
-            <th>Nombre</th>
+            <th>Archetype</th>
+            <th>Count</th>
             <th>%</th>
             <th>Winrate</th>
         </tr>

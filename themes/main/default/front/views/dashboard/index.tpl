@@ -17,8 +17,8 @@
     <table class="table table-hover table-condensed">
         <tbody>
             <tr>
-                <th>Archétype</th>
-                <th>Nombre</th>
+                <th>Archetype</th>
+                <th>Count</th>
                 <th>%</th>
             </tr>
             {foreach from=$content.metagame item="deck"}

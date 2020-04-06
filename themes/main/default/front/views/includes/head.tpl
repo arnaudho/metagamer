@@ -22,8 +22,8 @@
 	<body>
 		<div class="container">
 			<div class="menu">
-				<a href="dashboard/">Dashboard</a>
-				<a href="player/">Player search</a>
-				<a href="tournament/import/">Import tournament</a>
-				<a href="tournament/search/">Search tournament</a>
+				<a href="dashboard/"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a>
+				<a href="player/"><span class="glyphicon glyphicon-user"></span> Player search</a>
+				<a href="tournament/import/"><span class="glyphicon glyphicon-save"></span> Import tournament</a>
+				<a href="tournament/search/"><span class="glyphicon glyphicon-search"></span> Search tournament</a>
 			</div>

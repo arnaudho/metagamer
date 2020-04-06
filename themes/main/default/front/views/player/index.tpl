@@ -4,7 +4,7 @@
 <form class="form-inline">
     <div class="form-group">
         <input type="text" placeholder="Search for player..." name="search" class="form-control">
-        <button type="submit" class="btn btn-primary">Search</button>
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
         {if $content.players!==null}
             <em>{$content.players|count} results</em>
         {/if}
@@ -12,7 +12,7 @@
     </div>
 </form>
 {if $content.players!==null}
-    <table class="table table-striped">
+    <table class="table table-striped table-condensed table-players">
         <tr>
             <th>Arena ID</th>
             <th>Tournament</th>
@@ -26,7 +26,11 @@
                 <td>{$player.name_tournament}</td>
                 <td>{$player.wins}-{$player.matches-$player.wins}</td>
                 <td>{$player.name_archetype}</td>
-                <td><a href="{$player.decklist_player}">View decklist</a></td>
+                <td>
+                    <a href="{$player.decklist_player}" class="btn btn-info" target="_blank">
+                        <span class="glyphicon glyphicon-duplicate"></span>
+                    </a>
+                </td>
             </tr>
         {foreachelse}
             <tr>
