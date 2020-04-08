@@ -4,6 +4,7 @@ namespace app\main\models {
     use core\application\BaseModel;
     use core\db\Query;
     use core\db\QueryCondition;
+    use core\db\QuerySelect;
 
     class ModelMatch extends BaseModel {
 
@@ -77,6 +78,7 @@ namespace app\main\models {
         public function countWinsByArchetypeId ($pCondition = null, $order_archetypes = array()) {
             if(!$pCondition)
                 $pCondition = Query::condition();
+            /** @var QuerySelect $q */
             $q = Query::select("op.id_archetype, SUM(matches.result_match) AS wins", $this->table)
                 ->join("players p", Query::JOIN_INNER, $this->table . ".id_player = p.id_player")
                 ->join("players op", Query::JOIN_INNER, $this->table . ".opponent_id_player = op.id_player")
@@ -103,6 +105,7 @@ namespace app\main\models {
         public function countMatchesByArchetypeId ($pCondition = null, $order_archetypes = array()) {
             if(!$pCondition)
                 $pCondition = Query::condition();
+            /** @var QuerySelect $q */
             $q = Query::select("op.id_archetype, COUNT(1) AS count", $this->table)
                 ->join("players p", Query::JOIN_INNER, $this->table . ".id_player = p.id_player")
                 ->join("players op", Query::JOIN_INNER, $this->table . ".opponent_id_player = op.id_player")

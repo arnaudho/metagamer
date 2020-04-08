@@ -22,6 +22,7 @@ namespace app\main\controllers\front {
         }
 
         public function import () {
+            $this->setTitle("Import tournament");
             if (isset($_GET['url'])) {
                 $bot = new MetagamerBot("Roe (Online GP parser)");
                 $result = $bot->parseDecklists($_GET['url']);
@@ -34,6 +35,7 @@ namespace app\main\controllers\front {
         }
 
         public function search () {
+            $this->setTitle("Search tournament");
             $list_tournaments = $this->modelTournament->all(Query::condition()->order("date_tournament DESC, name_tournament"), "id_tournament, name_tournament");
             $this->addContent("list_tournaments", $list_tournaments);
             if (isset($_GET['id'])) {

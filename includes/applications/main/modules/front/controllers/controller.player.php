@@ -20,6 +20,7 @@ namespace app\main\controllers\front {
         }
 
         public function index () {
+            $this->setTitle("Search player");
             if (isset($_GET['search'])) {
                 $players = $this->modelPlayer->searchPlayerByArenaId($_GET['search']);
                 $this->addContent("players", $players);

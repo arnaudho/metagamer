@@ -25,6 +25,7 @@ namespace app\main\controllers\front {
         }
 
         public function index () {
+            $this->setTitle("Dashboard");
             $data = array(
                 "count_tournaments" => $this->modelTournament->count(Query::condition()),
                 "count_players"     => $this->modelPlayer->count(Query::condition()),
@@ -44,27 +45,26 @@ namespace app\main\controllers\front {
 
             $archetypes = $metagame;
 
-            foreach ($archetypes as &$archetype) {
+            foreach ($archetypes as $key => $archetype) {
                 $winrate = $this->modelMatches->getWinrateByArchetypeId($archetype['id_archetype'], null, $order_archetypes);
-                foreach ($winrate as &$matchup) {
+                foreach ($winrate as $m => $matchup) {
                     // divide mirror count
                     if ($matchup['id_archetype'] == $archetype['id_archetype']) {
-                        $matchup['count'] = ceil($matchup['count']/2);
+                        $winrate[$m]['count'] = ceil($matchup['count']/2);
                     }
                     $deviation = StatsUtils::getStandardDeviation($matchup['percent'], $matchup['count']);
-                    $matchup['deviation_up'] = round($matchup['percent'] + $deviation);
+                    $winrate[$m]['deviation_up'] = round($matchup['percent'] + $deviation);
                     if ($matchup['deviation_up'] > 100) {
-                        $matchup['deviation_up'] = 100;
+                        $winrate[$m]['deviation_up'] = 100;
                     }
-                    $matchup['deviation_down'] = round($matchup['percent'] - $deviation);
+                    $winrate[$m]['deviation_down'] = round($matchup['percent'] - $deviation);
                     if ($matchup['deviation_down'] < 0) {
-                        $matchup['deviation_down'] = 0;
+                        $winrate[$m]['deviation_down'] = 0;
                     }
                 }
-                $archetype['winrates'] = $winrate;
+                $archetypes[$key]['winrates'] = $winrate;
             }
             $this->addContent("archetypes", $archetypes);
-            return 0;
         }
     }
 }
