@@ -1,0 +1,73 @@
+{
+    "Simic Ramp": 
+    [
+        "Risen Reef"
+    ],
+    "Sultai Midrange": 
+    [
+        "Hydroid Krasis",
+        "Watery Grave"
+    ],
+    "Jeskai Fires":
+    [
+        "Fires of Invention",
+        "Cavalier of Flame"
+    ],
+    "Bant MidRamp":
+    [
+        "Teferi, Time Raveler",
+        "Breeding Pool"
+    ],
+    "Rakdos Aristocrats":
+    [
+        "Cauldron Familiar",
+        "Claim the Firstborn"
+    ],
+    "Temur Adventures":
+    [
+        "Lucky Clover",
+        "Bonecrusher Giant"
+    ],
+    "UW blink":
+    [
+        "Thassa, Deep-Dwelling",
+        "Charming Prince"
+    ],
+    "UW controle":
+    [
+        "Narset, Parter of Veils",
+        "Omen of the Sea"
+    ],
+    "Monored aggro":
+    [
+        "Torbran, Thane of Red Fell",
+        "Embercleave"
+    ],
+    "Temur Reclamation":
+    [
+        "Wilderness Reclamation",
+        "Expansion"
+    ],
+    "Temur Flash":
+    [
+        "Stomping Ground",
+        "Steam Vents"
+    ],
+    "Simic Flash":
+    [
+        "Frilled Mystic"
+    ],
+    "_comment":
+    {
+        "4C Bolas":
+        [
+            "Nicol Bolas",
+            "Elspeth Conquers Death"
+        ],
+        "Jund Sacrifice":
+        [
+            "Korvold",
+            "Trail of Crumbs"
+        ]
+    }
+}

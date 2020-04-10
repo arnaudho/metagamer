@@ -41,7 +41,11 @@ namespace core\data
 		 */
 		static public function decode($pString)
 		{
-			return json_decode($pString,true);
+			$decoded = json_decode($pString,true);
+			if (array_key_exists("_comment", $decoded)) {
+				unset($decoded["_comment"]);
+			}
+			return $decoded;
 		}
 
 		/**

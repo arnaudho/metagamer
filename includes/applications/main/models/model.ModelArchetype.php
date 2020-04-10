@@ -2,8 +2,12 @@
 namespace app\main\models {
 
     use core\application\BaseModel;
+    use core\application\Core;
+    use core\data\SimpleJSON;
 
     class ModelArchetype extends BaseModel {
+
+        CONST ARCHETYPE_OTHER = "Other";
 
         public function __construct()
         {
@@ -14,59 +18,17 @@ namespace app\main\models {
          * Returns archetype according to cards found in decklist
          */
         static public function decklistMapper ($pDecklist) {
-            $mapping = array(
-                "Simic Ramp" => array(
-                    "Risen Reef"
-                ),
-                "Sultai Midrange" => array(
-                    "Hydroid Krasis",
-                    "Watery Grave"
-                ),
-                "Jeskai Fires" => array(
-                    "Fires of Invention",
-                    "Cavalier of Flame"
-                ),
-                "Bant MidRamp" => array(
-                    "Teferi, Time Raveler",
-                    "Breeding Pool"
-                ),
-                "Jund Sacrifice" => array(
-                    "Korvold, Fae-Cursed King",
-                    "Trail of Crumbs"
-                ),
-                "Rakdos Aristocrats" => array(
-                    "Cauldron Familiar"
-                ),
-                "Temur Adventures" => array(
-                    "Lucky Clover",
-                    "Escape to the Wilds"
-                ),
-                "UW blink" => array(
-                    "Thassa, Deep-Dwelling",
-                    "Charming Prince"
-                ),
-                "UW controle" => array(
-                    "Narset, Parter of Veils",
-                    "The Birth of Meletis"
-                ),
-                "Monored aggro" => array(
-                    "Torbran, Thane of Red Fell",
-                    "Runaway Steam-Kin"
-                ),
-                "Temur Reclamation" => array(
-                    "Wilderness Reclamation",
-                    "Nightpack Ambusher"
-                ),
-                "Temur Flash" => array(
-                    "Stomping Ground",
-                    "Steam Vents",
-                    "Breeding Pool"
-                ),
-                "Simic Flash" => array(
-                    "Frilled Mystic"
-                )
-            );
-            $archetype = "Other";
+            $archetyes_file = Core::$path_to_application."/src/archetypes.json";
+
+            try
+            {
+                $mapping = SimpleJSON::import($archetyes_file);
+            }
+            catch(\Exception $e)
+            {
+                return null;
+            }
+            $archetype = self::ARCHETYPE_OTHER;
             foreach ($mapping as $name => $deck) {
                 foreach ($deck as $key => $card) {
                     if (!preg_match_all('/' . $card . '/', $pDecklist, $output_array)) {
