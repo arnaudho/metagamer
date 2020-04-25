@@ -56,7 +56,7 @@ namespace app\main\models {
             if (!$id_player) {
                 preg_match('/(#[0-9]+)/', $pArenaId, $output_array);
                 $id_player = Query::select("id_player", $this->table)
-                    ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " . $pTournamentId . " AND people.arena_id LIKE '%" . $output_array[1] . "'")
+                    ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " . $pTournamentId . " AND (people.arena_id LIKE '%" . $output_array[1] . "' OR people.discord_id = '" . $pArenaId . "')")
                     ->execute($this->handler);
             }
             return $id_player ? $id_player[0]['id_player'] : null;
