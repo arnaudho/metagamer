@@ -1,0 +1,22 @@
+#messages p { padding: 15px; font-size: 16px; border-radius: 3px;}
+.container .menu { background-color: #F4F4F4; display: flex; justify-content: start; font-size: 18px; margin-bottom: 6px;}
+.container .menu a { padding: 14px 20px;}
+.container .menu a:hover { background-color: #adddf9; text-decoration: none;}
+.strong {font-weight: bold;}
+table.table-matchups tbody tr td {text-align: center; vertical-align: middle;}
+table.table-matchups .matchup-deviation {font-size: 0.7em;}
+table.table-matchups .matchup-percent {font-size: 1.25em;}
+table.table-matchups .matchup-count {font-size: 0.8em; float: right;}
+table td.matchup-total {font-weight: bold; font-size: 1.05em;}
+table tr td.matchup-mirror {background-color: #DDDDDD;}
+table td.matchup-negative {background-color: #ffb3b3;}
+table td.matchup-slightly-negative {background-color: #ffe6e6;}
+table td.matchup-positive {background-color: #99ff99;}
+table td.matchup-slightly-positive {background-color: #ccffcc;}
+table td.winrate-negative {color: red; font-weight: bold;}
+table td.winrate-positive {color: green; font-weight: bold;}
+table th.rotated-text {height: 140px;white-space: nowrap;padding: 0 !important;vertical-align: bottom !important;}
+table th.rotated-text > div {transform:translate(13px, 0px)rotate(310deg);width: 30px;  }
+table th.rotated-text > div > span {padding: 5px 10px;}
+table.table-players tbody tr td {vertical-align: middle;}
+.container form.loading { pointer-events: none; opacity: 0.6;}

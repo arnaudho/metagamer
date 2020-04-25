@@ -16,11 +16,12 @@ namespace app\main\models {
         public function getWinrate ($pCondition = null, $order_archetypes = array()) {
             if(!$pCondition)
                 $pCondition = Query::condition();
-            $pCondition->andCondition(
+            $pArchetypeCondition = clone $pCondition;
+            $pArchetypeCondition->andCondition(
                 Query::condition()->andWhere("p.id_archetype", Query::NOT_EQUAL, "op.id_archetype", false)
             );
-            $wins = $this->countWinsByArchetypeId($pCondition, $order_archetypes);
-            $matches = $this->countMatchesByArchetypeId($pCondition, $order_archetypes);
+            $wins = $this->countWinsByArchetype($pArchetypeCondition, $order_archetypes);
+            $matches = $this->countMatchesByArchetype($pArchetypeCondition, $order_archetypes);
             $counts = array();
             foreach ($matches as $archetype) {
                 $counts[$archetype['id_archetype']] = $archetype['count'];
@@ -37,9 +38,10 @@ namespace app\main\models {
             $data = array();
             if(!$pCondition)
                 $pCondition = Query::condition();
-            $pCondition->andCondition(Query::condition()->andWhere("p.id_archetype", Query::EQUAL, $pArchetypeId));
-            $wins = $this->countWinsByArchetypeId($pCondition, $order_archetypes);
-            $matches = $this->countMatchesByArchetypeId($pCondition, $order_archetypes);
+            $pArchetypeCondition = clone $pCondition;
+            $pArchetypeCondition->andCondition(Query::condition()->andWhere("p.id_archetype", Query::EQUAL, $pArchetypeId));
+            $wins = $this->countWinsByArchetype($pArchetypeCondition, $order_archetypes);
+            $matches = $this->countMatchesByArchetype($pArchetypeCondition, $order_archetypes);
 
             $total_wins = 0;
             $total_matches = 0;
@@ -75,7 +77,7 @@ namespace app\main\models {
          * @return array|resource
          * @throws \Exception
          */
-        public function countWinsByArchetypeId ($pCondition = null, $order_archetypes = array()) {
+        public function countWinsByArchetype ($pCondition = null, $order_archetypes = array()) {
             if(!$pCondition)
                 $pCondition = Query::condition();
             /** @var QuerySelect $q */
@@ -86,7 +88,7 @@ namespace app\main\models {
 //                ->join("archetypes aop", Query::JOIN_INNER, "aop.id_archetype = op.id_archetype")
                 ->andCondition($pCondition)
                 ->groupBy("op.id_archetype");
-            if(strpos($pCondition->getWhere(), "tournaments")) {
+            if(strpos($pCondition->getWhere(), "tournaments") || strpos($pCondition->getWhere(), "format")) {
                 $q->join('tournaments', Query::JOIN_INNER, "tournaments.id_tournament = p.id_tournament");
             }
             if ($order_archetypes) {
@@ -102,7 +104,7 @@ namespace app\main\models {
             return $data;
         }
 
-        public function countMatchesByArchetypeId ($pCondition = null, $order_archetypes = array()) {
+        public function countMatchesByArchetype ($pCondition = null, $order_archetypes = array()) {
             if(!$pCondition)
                 $pCondition = Query::condition();
             /** @var QuerySelect $q */
@@ -111,7 +113,7 @@ namespace app\main\models {
                 ->join("players op", Query::JOIN_INNER, $this->table . ".opponent_id_player = op.id_player")
                 ->andCondition($pCondition)
                 ->groupBy("op.id_archetype");
-            if(strpos($pCondition->getWhere(), "tournaments")) {
+            if(strpos($pCondition->getWhere(), "tournaments") || strpos($pCondition->getWhere(), "format")) {
                 $q->join('tournaments', Query::JOIN_INNER, "tournaments.id_tournament = p.id_tournament");
             }
             if ($order_archetypes) {
@@ -120,6 +122,30 @@ namespace app\main\models {
             }
             $data = $q->execute($this->handler);
             return $data;
+        }
+
+        public function countMatches ($pCond = null) {
+            if (!$pCond) {
+                $pCond = Query::condition();
+            }
+            $q = Query::select("count(1) as nb", $this->table)
+                ->join("players", Query::JOIN_INNER, "players.id_player = matches.id_player")
+                ->join("tournaments", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament")
+                ->setCondition($pCond)
+                ->execute($this->handler);
+            return $q[0]["nb"];
+        }
+
+        public function countWins ($pCond = null) {
+            if (!$pCond) {
+                $pCond = Query::condition();
+            }
+            $q = Query::select("SUM(result_match) AS total", $this->table)
+                ->join("players", Query::JOIN_INNER, "players.id_player = matches.id_player")
+                ->join("tournaments", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament")
+                ->setCondition($pCond)
+                ->execute($this->handler);
+            return $q[0]["total"];
         }
     }
 }
