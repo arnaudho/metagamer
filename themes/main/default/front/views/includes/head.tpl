@@ -27,3 +27,8 @@
 				<a href="tournament/import/"><span class="glyphicon glyphicon-save"></span> Import tournament</a>
 				<a href="tournament/search/"><span class="glyphicon glyphicon-search"></span> Search tournament</a>
 			</div>
+			<div id="messages">
+				{foreach from=$messages item="message"}
+					<p class="bg-{$message.type}">{$message.message}</p>
+				{/foreach}
+			</div>

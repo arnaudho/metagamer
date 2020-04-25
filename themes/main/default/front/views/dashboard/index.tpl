@@ -1,6 +1,22 @@
 {if !$request_async}{include file="includes/head.tpl"}{/if}
 
-<h1>Dashboard</h1>
+{if $content.list_formats}
+    <form class="form-inline">
+        <div class="form-group">
+            <select name="id_format" id="format-select" class="form-control">
+                <option value="" disabled{if !$content.format} selected{/if}>Choose a format</option>
+                {foreach from=$content.list_formats item="format"}
+                    <option value="{$format.id_format}"{if $content.format.id_format == $format.id_format} selected{/if}>{$format.name_format}</option>
+                {/foreach}
+            </select>
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
+        </div>
+    </form>
+{/if}
+{if $content.format}
+    <h1>Dashboard - {$content.format.name_format}</h1>
+{/if}
+
 {if $content.metagame}
     <table class="table table-hover table-condensed">
         <tbody>
@@ -11,8 +27,6 @@
         </tr>
         </tbody>
     </table>
-{/if}
-{if $content.metagame}
     <h2>Metagame breakdown</h2>
     <table class="table table-hover table-condensed">
         <tbody>

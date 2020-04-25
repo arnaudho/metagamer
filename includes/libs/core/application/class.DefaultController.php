@@ -15,6 +15,11 @@ namespace core\application
 	 */
 	class DefaultController extends EventDispatcher
 	{
+		CONST MESSAGE_ERROR = "danger";
+		CONST MESSAGE_WARNING = "warning";
+		CONST MESSAGE_INFO = "info";
+		CONST MESSAGE_SUCCESS = "success";
+
 		/**
 		 * Tableau associatif des données qu'on souhaite envoyer &agrave; la vue.
 		 * @var array
@@ -34,6 +39,13 @@ namespace core\application
 		 * @var array
 		 */
 		private $forms = array();
+
+
+		/**
+		 * Tableau associatif des messages qu'on souhaite envoyer &agrave; la vue.
+		 * @var array
+		 */
+		private $messages = array();
 
 
 		/**
@@ -101,6 +113,7 @@ namespace core\application
             $t->assign("dictionary", $terms);
             $t->assign("request_asyn", Core::$request_async);
             $t->assign("form", $this->forms);
+            $t->assign("messages", $this->messages);
             Core::setupRenderer($t);
             $t->render($this->template, $pDisplay);
             return true;
@@ -123,6 +136,7 @@ namespace core\application
 				"styles"=>Autoload::styles(),
 				"head"=>$this->head,
 				"forms"=>$this->forms,
+				"messages"=>$this->messages,
 				"content"=>$this->content,
 				"user_is"=>$is,
 				"controller"=>preg_replace("/\_/", "-", Core::$controller),
@@ -174,6 +188,26 @@ namespace core\application
 			if(!isset($this->content[$pSmartyVar]))
 				return "";
 			return $this->content[$pSmartyVar];
+		}
+
+
+		/**
+		 * @param $pMessage
+		 * @param string $pType
+		 */
+		protected function addMessage($pMessage, $pType = self::MESSAGE_INFO)
+		{
+			if (
+				$pType == self::MESSAGE_ERROR ||
+				$pType == self::MESSAGE_WARNING ||
+				$pType == self::MESSAGE_INFO ||
+				$pType == self::MESSAGE_SUCCESS
+			) {
+				$this->messages[] = array(
+					"type"    => $pType,
+					"message" => $pMessage
+				);
+			}
 		}
 
 
