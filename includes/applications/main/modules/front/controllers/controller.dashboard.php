@@ -28,8 +28,7 @@ namespace app\main\controllers\front {
         }
 
         public function index () {
-            $formats = $this->modelFormat->all();
-            $this->addContent("list_formats", $formats);
+            $this->addContent("list_formats", $this->modelFormat->all());
 
             $format = $this->modelFormat->getTupleById($_GET['id_format']);
             if ($format) {

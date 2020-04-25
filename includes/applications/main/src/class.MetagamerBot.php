@@ -82,8 +82,7 @@ class MetagamerBot extends BotController
         return true;
     }
 
-    public function parseDecklists ($pUrl)
-    {
+    public function parseDecklists ($pUrl, $pIdFormat) {
         $data = $this->callUrl($pUrl);
         if (empty($data)) {
             trace_r("PARSING ERROR : URL " . $pUrl . " not found");
@@ -104,7 +103,12 @@ class MetagamerBot extends BotController
             trace_r("Tournament already exists");
             return false;
         }
-        $mTournament->insert(array("name_tournament" => $name_tournament));
+        $mTournament->insert(
+            array(
+                "name_tournament" => $name_tournament,
+                "id_format" => $pIdFormat
+            )
+        );
         $this->tournament = $mTournament->getInsertId();
 
         $decklists = array();

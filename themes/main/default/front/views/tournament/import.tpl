@@ -1,8 +1,9 @@
 {if !$request_async}{include file="includes/head.tpl"}{/if}
 
 <h1>Import tournament</h1>
-<form class="form-inline">
+<form class="form-inline" method="post">
     <div class="form-group">
+        {include file="includes/list_formats.tpl"}
         <input type="text" placeholder="Tournament URL" name="url" class="form-control">
         <button type="submit" class="btn btn-primary">Import</button>
     </div>

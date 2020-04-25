@@ -3,12 +3,7 @@
 {if $content.list_formats}
     <form class="form-inline">
         <div class="form-group">
-            <select name="id_format" id="format-select" class="form-control">
-                <option value="" disabled{if !$content.format} selected{/if}>Choose a format</option>
-                {foreach from=$content.list_formats item="format"}
-                    <option value="{$format.id_format}"{if $content.format.id_format == $format.id_format} selected{/if}>{$format.name_format}</option>
-                {/foreach}
-            </select>
+            {include file="includes/list_formats.tpl"}
             <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
         </div>
     </form>
