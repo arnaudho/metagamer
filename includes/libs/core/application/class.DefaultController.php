@@ -99,6 +99,7 @@ namespace core\application
 		 */
 		public function render($pDisplay = true)
 		{
+			Autoload::addComponent("Metagamer");
 			$conf = get_class_vars('core\application\Configuration');
             $terms = Dictionary::terms();
 			$globalVars = $this->getGlobalVars();

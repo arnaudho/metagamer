@@ -19,6 +19,17 @@
             "https://dependencies.arnaud-nicolas.fr/?need=M4Tween"
         ]
     },
+	"Metagamer":
+	{
+		"css":
+		[
+			"metagamer/metagamer.css"
+		],
+		"javascript":
+		[
+			"metagamer/metagamer.js"
+		]
+	},
 	"Autocomplete":
 	{
 		"need":["Request"],
