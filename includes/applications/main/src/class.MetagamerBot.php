@@ -38,6 +38,9 @@ class MetagamerBot extends BotController
         parent::__construct($pName);
     }
 
+    /*
+     * Reevaluate archetypes for a given tournament
+     */
     public function evaluateArchetypes ($pUrl) {
         $data = $this->callUrl($pUrl);
         if (empty($data)) {
@@ -141,16 +144,17 @@ class MetagamerBot extends BotController
 
         $ids_people = array();
         foreach ($all_people as $people) {
-            $ids_people[$people['arena_id']] = $people['id_people'];
+            $ids_people[strtolower($people['arena_id'])] = $people['id_people'];
         }
 
         // insert players -- update decklists later
         foreach ($decklists as $key => $player) {
-            if (isset($ids_people[$player['arenaid']])) {
+            if (isset($ids_people[strtolower($player['arenaid'])])) {
                 $this->modelPlayer->insert(
                     array(
-                        "id_tournament" => $this->tournament,
-                        "id_people" => $ids_people[$player['arenaid']]
+                        "id_tournament"   => $this->tournament,
+                        "id_people"       => $ids_people[strtolower($player['arenaid'])],
+                        "decklist_player" => $player['url']
                     )
                 );
                 $id_player = $this->modelPlayer->getInsertId();
@@ -182,6 +186,7 @@ class MetagamerBot extends BotController
         $deck = $this->callUrl($pUrl);
         preg_match_all('/<table[^>]*id="maindeck"[^>]*>.*cardname.*<\/table>/Uims', $deck, $output_array);
         $decklist = $output_array[0][0];
+        $history = "";
         if ($pParseMatchHistory) {
             preg_match_all('/history.*<table[^>]*>.*opponent.*<\/table>/Uims', $deck, $output_array);
             if (!$output_array[0]) {
@@ -210,8 +215,7 @@ class MetagamerBot extends BotController
         $this->modelPlayer->updateById(
             $pIdPlayer,
             array(
-                "id_archetype"    => $id_archetype,
-                "decklist_player" => $pUrl
+                "id_archetype"    => $id_archetype
             )
         );
 

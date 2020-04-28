@@ -34,7 +34,8 @@ namespace app\main\models {
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = " . $this->table . ".id_tournament")
                 ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = " . $this->table . ".id_archetype")
                 ->andCondition($pCondition)
-                ->groupBy("name_archetype");
+                ->groupBy("name_archetype")
+                ->order("COUNT(*)", "DESC");
             $data = $q->execute($this->handler);
             $sum = 0;
             foreach ($data as $d) {
@@ -43,9 +44,6 @@ namespace app\main\models {
             foreach ($data as &$d) {
                 $d['percent'] = round(100*$d['count']/$sum, 1);
             }
-            usort($data, function ($a, $b) {
-                return $b['count'] - $a['count'];
-            });
             return $data;
         }
 
@@ -61,7 +59,6 @@ namespace app\main\models {
             }
             return $id_player ? $id_player[0]['id_player'] : null;
         }
-
 
         public function countPlayers ($pCond = null) {
             if (!$pCond) {

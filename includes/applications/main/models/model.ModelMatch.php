@@ -93,6 +93,9 @@ namespace app\main\models {
             }
             if ($order_archetypes) {
                 $q->andWhere("op.id_archetype", Query::IN, "(" . implode(",", $order_archetypes) . ")", false);
+            } else {
+                trace_r("WARNING - no archetypes selected for metagame");
+                return array();
             }
             $q2 = Query::select("archetypes.*, IF(wins IS NULL, 0, wins) AS wins", "(" . $q->get(false) . ") tmp")
                 ->join("archetypes", Query::JOIN_OUTER_RIGHT, "tmp.id_archetype = archetypes.id_archetype");
@@ -119,6 +122,9 @@ namespace app\main\models {
             if ($order_archetypes) {
                 $q->andWhere("op.id_archetype", Query::IN, "(" . implode(",", $order_archetypes) . ")", false)
                     ->order("FIELD(op.id_archetype, " . implode(",", $order_archetypes) . ")");
+            } else {
+                trace_r("WARNING - no archetypes selected for metagame");
+                return array();
             }
             $data = $q->execute($this->handler);
             return $data;
