@@ -109,7 +109,8 @@ class MetagamerBot extends BotController
         $mTournament->insert(
             array(
                 "name_tournament" => $name_tournament,
-                "id_format" => $pIdFormat
+                "id_format"       => $pIdFormat,
+                "url_tournament"  => $pUrl
             )
         );
         $this->tournament = $mTournament->getInsertId();
