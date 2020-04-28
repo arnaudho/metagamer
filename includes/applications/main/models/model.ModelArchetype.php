@@ -30,14 +30,28 @@ namespace app\main\models {
             }
             $archetype = self::ARCHETYPE_OTHER;
             foreach ($mapping as $name => $deck) {
-                foreach ($deck as $key => $card) {
+                if (!array_key_exists('contains', $deck)) {
+                    continue;
+                }
+                $next = false;
+                foreach ($deck['contains'] as $key => $card) {
                     if (!preg_match_all('/' . $card . '/', $pDecklist, $output_array)) {
+                        $next = true;
                         break;
                     }
-                    if ($key == (count($deck) - 1)) {
-                        $archetype = $name;
-                        break 2;
+                }
+                if ($next) {
+                    continue;
+                }
+                foreach ($deck['exclude'] as $key => $card) {
+                    if (preg_match_all('/' . $card . '/', $pDecklist, $output_array)) {
+                        $next = true;
+                        break;
                     }
+                }
+                if (!$next) {
+                    $archetype = $name;
+                    break;
                 }
             }
             return $archetype;
