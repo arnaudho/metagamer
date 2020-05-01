@@ -35,7 +35,7 @@ namespace app\main\models {
                 }
                 $next = false;
                 foreach ($deck['contains'] as $key => $card) {
-                    if (!preg_match_all('/' . $card . '/', $pDecklist, $output_array)) {
+                    if (!preg_match_all('/' . $card . '/i', $pDecklist, $output_array)) {
                         $next = true;
                         break;
                     }
@@ -43,10 +43,12 @@ namespace app\main\models {
                 if ($next) {
                     continue;
                 }
-                foreach ($deck['exclude'] as $key => $card) {
-                    if (preg_match_all('/' . $card . '/', $pDecklist, $output_array)) {
-                        $next = true;
-                        break;
+                if (array_key_exists('exclude', $deck)) {
+                    foreach ($deck['exclude'] as $key => $card) {
+                        if (preg_match_all('/' . $card . '/i', $pDecklist, $output_array)) {
+                            $next = true;
+                            break;
+                        }
                     }
                 }
                 if (!$next) {
