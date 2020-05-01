@@ -26,6 +26,7 @@
 				<a href="player/"><span class="glyphicon glyphicon-user"></span> Player search</a>
 				<a href="tournament/import/"><span class="glyphicon glyphicon-save"></span> Import tournament</a>
 				<a href="tournament/search/"><span class="glyphicon glyphicon-search"></span> Search tournament</a>
+				<a href="dashboard/archetypes/"><span class="glyphicon glyphicon-tasks"></span> Archetypes</a>
 			</div>
 			<div id="messages">
 				{foreach from=$messages item="message"}

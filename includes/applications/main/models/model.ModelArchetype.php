@@ -4,6 +4,7 @@ namespace app\main\models {
     use core\application\BaseModel;
     use core\application\Core;
     use core\data\SimpleJSON;
+    use core\db\Query;
 
     class ModelArchetype extends BaseModel {
 
@@ -12,6 +13,17 @@ namespace app\main\models {
         public function __construct()
         {
             parent::__construct("archetypes", "id_archetype");
+        }
+
+        public function getArchetypesGroupsByFormat ($pIdFormat) {
+            $archetypes = Query::select("name_archetype, name_deck, COUNT(*) AS count, decklist_player", $this->table)
+                ->join("players", Query::JOIN_INNER, $this->table . "." . $this->id . " = players.id_archetype")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->andWhere("id_format", Query::EQUAL, $pIdFormat)
+                ->andWhere("name_deck", Query::NOT_EQUAL, "''", false)
+                ->groupBy("name_archetype, name_deck")
+                ->execute($this->handler);
+            return $archetypes;
         }
 
         /**

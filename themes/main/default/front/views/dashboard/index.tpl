@@ -15,11 +15,11 @@
 {if $content.metagame}
     <table class="table table-hover table-condensed">
         <tbody>
-        <tr>
-            <th>{$content.data.count_tournaments} tournaments</th>
-            <th>{$content.data.count_players} players</th>
-            <th>{$content.data.count_matches} matches ({$content.data.percent} %)</th>
-        </tr>
+            <tr>
+                <th>{$content.data.count_tournaments} tournaments</th>
+                <th>{$content.data.count_players} players</th>
+                <th>{$content.data.count_matches} matches ({$content.data.percent} %)</th>
+            </tr>
         </tbody>
     </table>
     <h2>Metagame breakdown</h2>

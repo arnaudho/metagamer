@@ -82,5 +82,17 @@ namespace app\main\controllers\front {
                 $this->setTitle("Dashboard");
             }
         }
+
+        public function archetypes () {
+            $this->addContent("list_formats", $this->modelFormat->all());
+            $format = $this->modelFormat->getTupleById($_GET['id_format']);
+            if ($format) {
+                $this->setTitle("Dashboard - " . $format['name_format']);
+                $this->addContent("format", $format);
+                $archetypes = $this->modelArchetypes->getArchetypesGroupsByFormat($format['id_format']);
+                $this->addContent("archetypes", $archetypes);
+            }
+
+        }
     }
 }
