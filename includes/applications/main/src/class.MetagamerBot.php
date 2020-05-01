@@ -41,7 +41,7 @@ class MetagamerBot extends BotController
     /*
      * Reevaluate archetypes for a given tournament
      */
-    public function evaluateArchetypes ($pUrl) {
+    public function evaluateArchetypes ($pUrl, $pIdFormat) {
         $data = $this->callUrl($pUrl);
         if (empty($data)) {
             trace_r("PARSING ERROR : URL " . $pUrl . " not found");
@@ -58,7 +58,11 @@ class MetagamerBot extends BotController
 
         $mTournament = new ModelTournament();
 
-        if (!$tournament = $mTournament->one(Query::condition()->andWhere("name_tournament", Query::EQUAL, $name_tournament))) {
+        if (!$tournament = $mTournament->one(
+            Query::condition()
+                ->andWhere("name_tournament", Query::EQUAL, $name_tournament)
+                ->andWhere("id_format", Query::EQUAL, $pIdFormat)
+        )) {
             trace_r("Tournament does not exist");
             return false;
         }
@@ -102,7 +106,11 @@ class MetagamerBot extends BotController
 
         $mTournament = new ModelTournament();
 
-        if ($mTournament->one(Query::condition()->andWhere("name_tournament", Query::EQUAL, $name_tournament))) {
+        if ($mTournament->one(
+            Query::condition()
+                ->andWhere("name_tournament", Query::EQUAL, $name_tournament)
+                ->andWhere("id_format", Query::EQUAL, $pIdFormat)
+        )) {
             trace_r("Tournament already exists");
             return false;
         }
@@ -185,8 +193,9 @@ class MetagamerBot extends BotController
 
     public function parsePlayer ($pIdPlayer, $pUrl, $pParseMatchHistory = true) {
         $deck = $this->callUrl($pUrl);
-        preg_match_all('/<table[^>]*id="maindeck"[^>]*>.*cardname.*<\/table>/Uims', $deck, $output_array);
-        $decklist = $output_array[0][0];
+        preg_match_all('/<h1[^>]*>([^<]+)<\/h1>[^\}]+(<table[^>]*id="maindeck"[^>]*>.*cardname.*<\/table>)/Uims', $deck, $output_array);
+        $deck_name = $output_array[1][0];
+        $decklist = $output_array[2][0];
         $history = "";
         if ($pParseMatchHistory) {
             preg_match_all('/history.*<table[^>]*>.*opponent.*<\/table>/Uims', $deck, $output_array);
@@ -216,7 +225,8 @@ class MetagamerBot extends BotController
         $this->modelPlayer->updateById(
             $pIdPlayer,
             array(
-                "id_archetype"    => $id_archetype
+                "id_archetype" => $id_archetype,
+                "name_deck"    => $deck_name
             )
         );
 
@@ -273,6 +283,8 @@ class MetagamerBot extends BotController
                 trace_r($match);
                 continue;
             }
+            // TODO search by discord_id if player not found ?
+            // check if we can pass discord_id to function
             $opponent_arena_id = $output_array[1];
             $opponent_player_id = $this->modelPlayer->getPlayerIdByTournamentIdArenaId($this->tournament, $opponent_arena_id);
             if ($opponent_player_id) {
