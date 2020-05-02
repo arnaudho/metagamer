@@ -63,7 +63,7 @@ class MetagamerBot extends BotController
                 ->andWhere("name_tournament", Query::EQUAL, $name_tournament)
                 ->andWhere("id_format", Query::EQUAL, $pIdFormat)
         )) {
-            trace_r("Tournament does not exist");
+            trace_r("Tournament " . $name_tournament . " does not exist in format " . $pIdFormat);
             return false;
         }
         $this->tournament = $tournament['id_tournament'];
@@ -111,7 +111,7 @@ class MetagamerBot extends BotController
                 ->andWhere("name_tournament", Query::EQUAL, $name_tournament)
                 ->andWhere("id_format", Query::EQUAL, $pIdFormat)
         )) {
-            trace_r("Tournament already exists");
+            trace_r("Tournament " . $name_tournament . " already exists in format " . $pIdFormat);
             return false;
         }
         $mTournament->insert(
@@ -193,14 +193,14 @@ class MetagamerBot extends BotController
 
     public function parsePlayer ($pIdPlayer, $pUrl, $pParseMatchHistory = true) {
         $deck = $this->callUrl($pUrl);
-        preg_match_all('/<h1[^>]*>([^<]+)<\/h1>[^\}]+(<table[^>]*id="maindeck"[^>]*>.*cardname.*<\/table>)/Uims', $deck, $output_array);
+        preg_match_all('/<h1[^>]*>([^<]*)<\/h1>[^\}]+(<table[^>]*id="maindeck"[^>]*>.*cardname.*<\/table>)/Uims', $deck, $output_array);
         $deck_name = $output_array[1][0];
         $decklist = $output_array[2][0];
         $history = "";
         if ($pParseMatchHistory) {
             preg_match_all('/history.*<table[^>]*>.*opponent.*<\/table>/Uims', $deck, $output_array);
             if (!$output_array[0]) {
-                trace_r("Player " . $pIdPlayer . " ignored -- no match history");
+                trace_r("Player " . $pIdPlayer . " ignored -- no match history (check decklist for more details)");
                 return false;
             }
             $history = $output_array[0][0];
@@ -261,10 +261,12 @@ class MetagamerBot extends BotController
             switch ($match['result']) {
                 case "2-0":
                 case "2-1":
+                case "1-0":
                     $match['result'] = 1;
                     break;
                 case "0-2":
                 case "1-2":
+                case "0-1":
                     $match['result'] = 0;
                     break;
                 default:
