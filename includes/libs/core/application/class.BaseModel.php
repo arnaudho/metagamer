@@ -195,7 +195,7 @@ namespace core\application
 		 */
 		protected function prepareJoin(QuerySelect $pQuery)
 		{
-			if(count($this->joins))
+			if($this->joins && count($this->joins))
 			{
 				foreach($this->joins as $j)
 					$pQuery->join($j["table"], $j["type"], $j["on"]);
