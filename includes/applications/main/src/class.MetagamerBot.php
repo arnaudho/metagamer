@@ -42,31 +42,23 @@ class MetagamerBot extends BotController
      * Reevaluate archetypes for a given tournament
      */
     public function evaluateArchetypes ($pUrl, $pIdFormat) {
+        if (!preg_match('/^https?:\/\/my.cfbevents.com\/deck\/([\d]+)$/ix', $pUrl, $output_array)) {
+            trace_r("ERROR : URL " . $pUrl . " incorrect");
+            return false;
+        }
+        $this->tournament = $output_array[1];
+        $mTournament = new ModelTournament();
+
+        if (!$tournament = $mTournament->getTupleById($this->tournament)) {
+            trace_r("Tournament #" . $this->tournament . " does not exist");
+            return false;
+        }
+
         $data = $this->callUrl($pUrl);
         if (empty($data)) {
             trace_r("PARSING ERROR : URL " . $pUrl . " not found");
             return false;
         }
-
-        // get tournament name
-        preg_match_all('/<h1[^>]*>([^<]*)<.*Submitted decklists.*<\/h1>/Umis', $data, $output_array);
-        $name_tournament = trim($output_array[1][0]);
-        if (empty($name_tournament)) {
-            trace_r("Tournament name not found");
-            return false;
-        }
-
-        $mTournament = new ModelTournament();
-
-        if (!$tournament = $mTournament->one(
-            Query::condition()
-                ->andWhere("name_tournament", Query::EQUAL, $name_tournament)
-                ->andWhere("id_format", Query::EQUAL, $pIdFormat)
-        )) {
-            trace_r("Tournament " . $name_tournament . " does not exist in format " . $pIdFormat);
-            return false;
-        }
-        $this->tournament = $tournament['id_tournament'];
 
         $decklists = array();
         preg_match_all('/<tr[^>]*>[^<]*<td>([^<]*)<\/td>[^<]*<td>([^<]*)<\/td>[^<]*<td><a[^>]*href="([^"]*)"[^>]*>[^<]*<\/a><\/td>[^<]*<\/tr>/Usi', $data, $output_array);
@@ -90,6 +82,11 @@ class MetagamerBot extends BotController
     }
 
     public function parseDecklists ($pUrl, $pIdFormat) {
+        if (!preg_match('/^https?:\/\/my.cfbevents.com\/deck\/([\d]+)$/ix', $pUrl, $output_array)) {
+            trace_r("ERROR : URL " . $pUrl . " incorrect");
+            return false;
+        }
+        $this->tournament = $output_array[1];
         $data = $this->callUrl($pUrl);
         if (empty($data)) {
             trace_r("PARSING ERROR : URL " . $pUrl . " not found");
@@ -101,27 +98,25 @@ class MetagamerBot extends BotController
         $name_tournament = trim($output_array[1][0]);
         if (empty($name_tournament)) {
             trace_r("Tournament name not found");
-            return false;
+            $name_tournament = "Tournament #" . $this->tournament;
         }
 
         $mTournament = new ModelTournament();
 
         if ($mTournament->one(
             Query::condition()
-                ->andWhere("name_tournament", Query::EQUAL, $name_tournament)
-                ->andWhere("id_format", Query::EQUAL, $pIdFormat)
+                ->andWhere("id_tournament", Query::EQUAL, $this->tournament)
         )) {
-            trace_r("Tournament " . $name_tournament . " already exists in format " . $pIdFormat);
+            trace_r("Tournament " . $name_tournament . " (id #" . $this->tournament . ") already exists");
             return false;
         }
         $mTournament->insert(
             array(
+                "id_tournament"   => $this->tournament,
                 "name_tournament" => $name_tournament,
-                "id_format"       => $pIdFormat,
-                "url_tournament"  => $pUrl
+                "id_format"       => $pIdFormat
             )
         );
-        $this->tournament = $mTournament->getInsertId();
 
         $decklists = array();
         preg_match_all('/<tr[^>]*>[^<]*<td>([^<]*)<\/td>[^<]*<td>([^<]*)<\/td>[^<]*<td><a[^>]*href="([^"]*)"[^>]*>[^<]*<\/a><\/td>[^<]*<\/tr>/Usi', $data, $output_array);
@@ -200,7 +195,7 @@ class MetagamerBot extends BotController
         if ($pParseMatchHistory) {
             preg_match_all('/history.*<table[^>]*>.*opponent.*<\/table>/Uims', $deck, $output_array);
             if (!$output_array[0]) {
-                trace_r("Player " . $pIdPlayer . " ignored -- no match history (check decklist for more details)");
+                trace_r("Player " . $pIdPlayer . " ignored -- no match history (check <a href='$pUrl'>decklist</a> for more details)");
                 return false;
             }
             $history = $output_array[0][0];
