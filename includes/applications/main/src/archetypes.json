@@ -1,39 +1,46 @@
 {
-    "Monored":
-    {
-        "contains":
-        [
-            "Fervent Champion",
-            "Anax, Hardened in the Forge",
-            "Light up the Stage"
-        ],
-        "exclude":
-        [
-            "Gruul Spellbreaker"
-        ]
-    },
-    "Jeskai Control":
-    {
-        "contains":
-        [
-            "Absorb",
-            "Inspired Ultimatum"
-        ],
-        "exclude":
-        [
-            "Fires of Invention"
-        ]
-    },
     "Jeskai Fires":
     {
         "contains":
         [
             "Fires of Invention",
-            "Cavalier of Flame"
+            "Cavalier of Flame",
+            "Teferi, Time Raveler"
         ],
         "exclude":
         [
-            "Fae of Wishes"
+            "Fae of Wishes",
+            "Sarkhan the Masterless",
+            "Breeding Pool"
+        ]
+    },
+    "Gruul Fires":
+    {
+        "contains":
+        [
+            "Fires of Invention",
+            "Temple of Abandon"
+        ],
+        "exclude":
+        [
+            "Breeding Pool",
+            "Plains"
+        ]
+    },
+    "Lukka Yorion":
+    {
+        "contains":
+        [
+            "Lukka, Coppercoat Outcast",
+            "Agent of Treachery",
+            "Birth of Meletis"
+        ]
+    },
+    "4C Fires":
+    {
+        "contains":
+        [
+            "Fires of Invention"
         ]
     },
     "Temur Reclamation":
@@ -51,27 +58,88 @@
             "Uro, Titan of Nature",
             "Teferi, Time Raveler",
             "Elspeth Conquers Death"
+        ],
+        "exclude":
+        [
+            "Fires of Invention",
+            "Watery Grave"
+        ]
+    },
+    "Rakdos Sacrifice":
+    {
+        "contains":
+        [
+            "Cauldron Familiar",
+            "Mayhem Devil"
+        ],
+        "exclude":
+        [
+            "Gilded Goose",
+            "Godless Shrine"
+        ]
+    },
+    "Rakdos Lurrus":
+    {
+        "contains":
+        [
+            "Cauldron Familiar",
+            "Dreadhorde Butcher",
+            "Priest of Forgotten Gods"
+        ],
+        "exclude":
+        [
+            "Mayhem Devil",
+            "Godless Shrine"
+        ]
+    },
+    "Orzhov Sacrifice":
+    {
+        "contains":
+        [
+            "Cruel Celebrant"
+        ],
+        "exclude":
+        [
+            "Blood Crypt"
+        ]
+    },
+    "Jeskai Control":
+    {
+        "contains":
+        [
+            "Elspeth Conquers Death",
+            "Teferi, Time Raveler",
+            "Narset, Parter of Veils",
+            "Sacred Foundry"
+        ],
+        "exclude":
+        [
+            "Fires of Invention"
+        ]
+    },
+    "Monored":
+    {
+        "contains":
+        [
+            "Fervent Champion",
+            "Anax, Hardened in the Forge",
+            "Castle Embereth"
+        ],
+        "exclude":
+        [
+            "Gruul Spellbreaker"
         ]
     },
     "Sultai Midrange":
     {
         "contains":
         [
-            "Thought Erasure",
-            "Casulaties of War",
+            "Casualties of War",
             "Growth Spiral"
         ],
         "exclude":
         [
             "Niv-Mizzet Reborn"
-        ]
-    },
-    "Gyruda Combo":
-    {
-        "contains":
-        [
-            "Gyruda, Doom of Depths",
-            "Spark Double"
         ]
     },
     "Jeskai Winota":
@@ -86,44 +154,23 @@
     {
         "contains":
         [
-            "Dream Trawler",
-            "Absorb"
+            "Dream Trawler"
         ],
         "exclude":
         [
-            "Uro, Titan of Nature"
+            "Forest",
+            "Mountain",
+            "Swamp",
+            "Charming Prince",
+            "Golden Egg"
         ]
     },
-    "Orzhov Sacrifice":
+    "WRx Cycling":
     {
         "contains":
         [
-            "Cruel Celebrant"
-        ]
-    },
-    "Rakdos Sacrifice":
-    {
-        "contains":
-        [
-            "Cauldron Familiar",
-            "Mayhem Devil"
-        ],
-        "exclude":
-        [
-            "Gilded Goose"
-        ]
-    },
-    "Rakdos Lurrus":
-    {
-        "contains":
-        [
-            "Cauldron Familiar",
-            "Dreadhorde Butcher",
-            "Kroxa, Titan of Death"
-        ],
-        "exclude":
-        [
-            "Mayhem Devil"
+            "Flourishing Fox",
+            "Zenith Flare"
         ]
     },
     "_comment":
