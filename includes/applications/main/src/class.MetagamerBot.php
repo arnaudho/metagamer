@@ -38,6 +38,23 @@ class MetagamerBot extends BotController
         parent::__construct($pName);
     }
 
+    public function mapTournaments () {
+        $tournaments = array();
+        for ($id = 11000; $id < 11030; $id++) {
+            $pUrl = "https://my.cfbevents.com/deck/$id";
+            $data = $this->callUrl($pUrl);
+            preg_match_all('/<h1[^>]*>([^<]*)<.*Submitted decklists.*<\/h1>.*View decklist/Umis', $data, $output_array);
+            if (array_key_exists(0, $output_array[1])) {
+                $name_tournament = trim($output_array[1][0]);
+                $tournaments[$id] = $name_tournament;
+            }
+        }
+        foreach ($tournaments as $id => $tournament) {
+            trace_r("TOURNAMENT #$id : <a href='https://my.cfbevents.com/deck/$id'>$tournament</a>");
+        }
+        // if id tournament is not saved already, parse tournament decklists
+    }
+
     /*
      * Reevaluate archetypes for a given tournament
      */
