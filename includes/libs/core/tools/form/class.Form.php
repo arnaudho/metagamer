@@ -416,7 +416,7 @@ namespace core\tools\form
 					{
 						case "submit":
 							unset($this->post[$name]);
-							continue;
+							continue 2;
 							break;
 						case "checkbox":
 							if(!isset($this->post[$name])||$this->post[$name]!=$data["attributes"]["value"])

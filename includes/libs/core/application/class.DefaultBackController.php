@@ -101,7 +101,7 @@ namespace core\application
 
 		/**
 		 * Constructor
-		 * Se doit d'être appeler dans la classe fille
+		 * Se doit d'être appelé dans la classe fille
 		 * Vérifie si l'utilisateur est identifié
 		 * Définie le nom du controller (de la classe courante)
 		 */
