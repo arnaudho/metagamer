@@ -31,22 +31,43 @@ namespace app\main\controllers\front {
         public function index () {
             $this->addContent("list_formats", $this->modelFormat->all());
 
-            $format = $this->modelFormat->getTupleById($_GET['id_format']);
-            if ($format) {
-                $this->setTitle("Dashboard - " . $format['name_format']);
+            $format = array();
+            $tournament = array();
+            $dashboard_cond = null;
+            if ($_GET['id_format'] && $format = $this->modelFormat->getTupleById($_GET['id_format'])) {
+                $dashboard_cond = Query::condition()->andWhere("id_format", Query::EQUAL, $format['id_format']);
+            }
+            if ($format &&
+                $_GET['id_tournament'] &&
+                $tournament = $this->modelTournament->one(
+                    Query::condition()
+                        ->andWhere("id_tournament", Query::EQUAL, $_GET['id_tournament'])
+                        ->andWhere("id_format", Query::EQUAL, $format['id_format'])
+                )) {
+                $dashboard_cond = Query::condition()->andWhere("tournaments.id_tournament", Query::EQUAL, $tournament['id_tournament']);
+            }
+            if ($format && $dashboard_cond) {
+                $this->addContent("list_tournaments", $this->modelTournament->all(
+                    Query::condition()
+                        ->andWhere("id_format", Query::EQUAL, $format['id_format'])
+                ));
+                $title = "Dashboard - " . $format['name_format'];
+                if ($tournament) {
+                    $title .= " - " . $tournament['name_tournament'];
+                    $this->addContent("tournament", $tournament);
+                }
+                $this->setTitle($title);
                 $this->addContent("format", $format);
-
-                $format_cond = Query::condition()->andWhere("id_format", Query::EQUAL, $format['id_format']);
                 $data = array(
-                    "count_tournaments" => $this->modelTournament->count($format_cond),
-                    "count_players" => $this->modelPlayer->countPlayers($format_cond),
-                    "count_matches" => $this->modelMatches->countMatches($format_cond) / 2,
-                    "count_wins" => $this->modelMatches->countWins($format_cond) / 2
+                    "count_tournaments" => $this->modelTournament->count($dashboard_cond),
+                    "count_players" => $this->modelPlayer->countPlayers($dashboard_cond),
+                    "count_matches" => $this->modelMatches->countMatches($dashboard_cond) / 2,
+                    "count_wins" => $this->modelMatches->countWins($dashboard_cond) / 2
                 );
                 $data["percent"] = round(100 * $data['count_wins'] / $data['count_matches'], 2);
                 $this->addContent("data", $data);
 
-                $metagame = $this->modelPlayer->countArchetypes($format_cond);
+                $metagame = $this->modelPlayer->countArchetypes($dashboard_cond);
                 $this->addContent("metagame", $metagame);
                 if (empty($metagame)) {
                     $this->addMessage("No metagame data for selected format", self::MESSAGE_ERROR);
@@ -60,7 +81,7 @@ namespace app\main\controllers\front {
                 $archetypes = $metagame;
 
                 foreach ($archetypes as $key => $archetype) {
-                    $winrate = $this->modelMatches->getWinrateByArchetypeId($archetype['id_archetype'], $format_cond, $order_archetypes);
+                    $winrate = $this->modelMatches->getWinrateByArchetypeId($archetype['id_archetype'], $dashboard_cond, $order_archetypes);
                     foreach ($winrate as $m => $matchup) {
                         // divide mirror count
                         if ($matchup['id_archetype'] == $archetype['id_archetype']) {

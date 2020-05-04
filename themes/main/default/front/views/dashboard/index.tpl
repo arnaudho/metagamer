@@ -9,7 +9,7 @@
     </form>
 {/if}
 {if $content.format}
-    <h1>Dashboard - {$content.format.name_format}</h1>
+    <h1>{$content.format.name_format}{if $content.tournament} - {$content.tournament.name_tournament}{/if}</h1>
 {/if}
 
 {if $content.metagame}
@@ -18,7 +18,7 @@
             <tr>
                 <th>{$content.data.count_tournaments} tournaments</th>
                 <th>{$content.data.count_players} players</th>
-                <th>{$content.data.count_matches} matches ({$content.data.percent} %)</th>
+                <th title="{$content.data.percent} %">{$content.data.count_matches} matches</th>
             </tr>
         </tbody>
     </table>

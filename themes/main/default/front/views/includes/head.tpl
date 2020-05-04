@@ -13,11 +13,11 @@
 		<!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
 		{foreach from=$styles item=style}
-		<link type="text/css" rel="stylesheet" href="{$style}">
-{/foreach}
-{foreach from="$scripts" item=script}
-        <script type="text/javascript" src="{$script}"></script>
-{/foreach}
+			<link type="text/css" rel="stylesheet" href="{$style}">
+		{/foreach}
+		{foreach from="$scripts" item=script}
+			<script type="text/javascript" src="{$script}"></script>
+		{/foreach}
 	</head>
 	<body>
 		<div class="container">
