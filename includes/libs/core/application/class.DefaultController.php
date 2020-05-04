@@ -99,7 +99,6 @@ namespace core\application
 		 */
 		public function render($pDisplay = true)
 		{
-			Autoload::addComponent("Metagamer");
 			$conf = get_class_vars('core\application\Configuration');
             $terms = Dictionary::terms();
 			$globalVars = $this->getGlobalVars();
@@ -109,7 +108,7 @@ namespace core\application
 			{
                 $t->assign($n, $v);
 			}
-            $global = array('get'=>$_GET, 'post', $_POST);
+            $global = array('get'=>$_GET, 'post'=>$_POST);
             $t->assign('global', $global);
             $t->assign("dictionary", $terms);
             $t->assign("request_asyn", Core::$request_async);

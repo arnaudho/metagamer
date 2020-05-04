@@ -6,10 +6,10 @@ namespace app\main\controllers\front {
     use app\main\models\ModelPlayer;
     use app\main\models\ModelTournament;
     use app\main\src\MetagamerBot;
-    use core\application\DefaultController;
+    use core\application\DefaultFrontController;
     use core\db\Query;
 
-    class tournament extends DefaultController
+    class tournament extends DefaultFrontController
     {
         protected $modelTournament;
         protected $modelPlayer;
@@ -18,6 +18,7 @@ namespace app\main\controllers\front {
 
         public function __construct()
         {
+            parent::__construct();
             $this->modelTournament = new ModelTournament();
             $this->modelPlayer = new ModelPlayer();
             $this->modelMatch = new ModelMatch();

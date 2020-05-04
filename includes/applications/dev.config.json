@@ -10,7 +10,7 @@
 			"modules":{
 				"front": {
 					"useRoutingFile":true,
-					"defaultController":"core\\application\\DefaultController",
+					"defaultController":"core\\application\\DefaultFrontController",
 					"action404":"notFound"
 				},
 				"back": {

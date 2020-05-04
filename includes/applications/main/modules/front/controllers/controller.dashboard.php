@@ -6,11 +6,11 @@ namespace app\main\controllers\front {
     use app\main\models\ModelMatch;
     use app\main\models\ModelPlayer;
     use app\main\models\ModelTournament;
-    use core\application\DefaultController;
+    use core\application\DefaultFrontController;
     use core\db\Query;
     use core\utils\StatsUtils;
 
-    class dashboard extends DefaultController
+    class dashboard extends DefaultFrontController
     {
         protected $modelPlayer;
         protected $modelMatches;
@@ -20,6 +20,7 @@ namespace app\main\controllers\front {
 
         public function __construct()
         {
+            parent::__construct();
             $this->modelPlayer = new ModelPlayer();
             $this->modelMatches = new ModelMatch();
             $this->modelArchetypes = new ModelArchetype();

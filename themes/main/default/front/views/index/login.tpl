@@ -21,10 +21,13 @@
 </head>
 <body>
 <div class="container">
-<h1>Page introuvable !</h1>
-    <p>
-        La page demandée n'existe pas, <a href="/">Cliquez ici</a> pour revenir &agrave; l'accueil.
-    </p>
+	<div id="connexion">
+        <h1>Identification</h1>
+        {if $content.error!=""}
+            <div class='error'>{$content.error}</div>
+        {/if}
+        {form.login->display}
+	</div>
 </div>
 </body>
 </html>
