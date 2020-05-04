@@ -1,5 +1,9 @@
 {
 	"dev":[
 		"localhost"
+	],
+	"prod":[
+		"complots.org",
+		"comploz.cluster024.hosting.ovh.net"
 	]
 }
