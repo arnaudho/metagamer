@@ -571,10 +571,10 @@ namespace core\db
 		public function getWhere()
 		{
 			$where = "";
-			$ands = implode($this->ands," AND ");
-			$or = implode($this->or, " OR ");
-			$existAnds = implode($this->existAnds, " AND ");
-			$existOr = implode($this->existOr, " OR ");
+			$ands = implode(" AND ", $this->ands);
+			$or = implode(" OR ", $this->or);
+			$existAnds = implode(" AND ", $this->existAnds);
+			$existOr = implode(" OR ", $this->existOr);
 			if(!empty($ands))
 				$where .= " WHERE ".$ands;
 			if(!empty($or))
@@ -607,8 +607,8 @@ namespace core\db
 		public function getHaving()
 		{
 			$having = "";
-			$ands = implode($this->havingAnds," AND ");
-			$or = implode($this->havingOr, " OR ");
+			$ands = implode(" AND ", $this->havingAnds);
+			$or = implode(" OR ", $this->havingOr);
 			if(!empty($ands))
 				$having .= " HAVING ".$ands;
 			if(!empty($or))
@@ -917,8 +917,8 @@ namespace core\db
 		 */
 		public function get($pSemicolon = true)
 		{
-			$field = implode($this->fields, ",");
-			$table = implode($this->tables, ",");
+			$field = implode(",", $this->fields);
+			$table = implode(",", $this->tables);
 			$joins = $this->joins." ";
 			$condition = $this->getCondition()->get();
 			$union = "";
@@ -1011,7 +1011,7 @@ namespace core\db
 		 */
 		public function get()
 		{
-			$values = implode($this->values, ",");
+			$values = implode(",", $this->values);
 			return 'REPLACE INTO '.$this->table.' '.$this->fields.' VALUES '.$values.';';
 		}
 	}
@@ -1049,7 +1049,7 @@ namespace core\db
 		 */
 		public function get()
 		{
-			$values = implode($this->values, ",");
+			$values = implode(",", $this->values);
 			$condition = $this->getCondition()->get();
 			return "UPDATE ".$this->table." SET ".$values.$condition.";";
 		}
@@ -1114,7 +1114,7 @@ namespace core\db
 			$f = array();
 			foreach($pTuple as $field=>$value)
 				array_push($f, $field);
-			$this->fields = "(".implode($f, ",").")";
+			$this->fields = "(".implode(",", $f).")";
 		}
 
 		/**
@@ -1128,7 +1128,7 @@ namespace core\db
 			for($i = 0, $max = count($pTuples); $i<$max; $i++)
 			{
 				$pTuples[$i] = array_map("core\\db\\Query::escapeValue", $pTuples[$i]);
-				array_push($this->values, "(".implode($pTuples[$i], ",").")");
+				array_push($this->values, "(".implode(",", $pTuples[$i]).")");
 			}
 		}
 
@@ -1149,7 +1149,7 @@ namespace core\db
 		 */
 		public function get()
 		{
-			$values = implode($this->values, ",");
+			$values = implode(",", $this->values);
 			return "INSERT INTO ".$this->table." ".$this->fields." VALUES ".$values.";";
 		}
 	}
