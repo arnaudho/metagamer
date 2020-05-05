@@ -99,7 +99,10 @@ namespace core\application
 		 */
 		public function render($pDisplay = true)
 		{
-			$conf = get_class_vars('core\application\Configuration');
+			$conf = get_class_vars('core\\application\\Configuration');
+			$conf['server_url'] = Configuration::$server_url;
+			$conf['server_domain'] = Configuration::$server_domain;
+			$conf['server_folder'] = Configuration::$server_folder;
             $terms = Dictionary::terms();
 			$globalVars = $this->getGlobalVars();
             $t = new Template();
