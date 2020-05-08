@@ -39,11 +39,11 @@ namespace app\main\controllers\front {
             }
             if ($format &&
                 $_GET['id_tournament'] &&
-                $tournament = $this->modelTournament->one(
+                ($tournament = $this->modelTournament->one(
                     Query::condition()
                         ->andWhere("id_tournament", Query::EQUAL, $_GET['id_tournament'])
                         ->andWhere("id_format", Query::EQUAL, $format['id_format'])
-                )) {
+                ))) {
                 $dashboard_cond = Query::condition()->andWhere("tournaments.id_tournament", Query::EQUAL, $tournament['id_tournament']);
             }
             if ($format && $dashboard_cond) {
@@ -81,7 +81,7 @@ namespace app\main\controllers\front {
                 $archetypes = $metagame;
 
                 foreach ($archetypes as $key => $archetype) {
-                    $winrate = $this->modelMatches->getWinrateByArchetypeId($archetype['id_archetype'], $dashboard_cond, $order_archetypes);
+                    $winrate = $this->modelMatches->getFullWinrateByArchetypeId($archetype['id_archetype'], $dashboard_cond, $order_archetypes);
                     foreach ($winrate as $m => $matchup) {
                         // divide mirror count
                         if ($matchup['id_archetype'] == $archetype['id_archetype']) {

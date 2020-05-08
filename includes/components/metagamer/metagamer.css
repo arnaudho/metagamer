@@ -2,6 +2,7 @@
 .container .menu { background-color: #F4F4F4; display: flex; justify-content: start; font-size: 18px; margin-bottom: 6px;}
 .container .menu a { padding: 14px 20px;}
 .container .menu a:hover { background-color: #adddf9; text-decoration: none;}
+.container .archetypes-info { max-width: 600px;}
 .container p[class^="bg-"] { padding: 15px;}
 .strong {font-weight: bold;}
 table.table-matchups tbody tr td {text-align: center; vertical-align: middle;}
@@ -20,4 +21,5 @@ table th.rotated-text {height: 140px;white-space: nowrap;padding: 0 !important;v
 table th.rotated-text > div {transform:translate(13px, 0px)rotate(310deg);width: 30px;  }
 table th.rotated-text > div > span {padding: 5px 10px;}
 table.table-players tbody tr td {vertical-align: middle;}
+table td.highlight { font-weight: bold}
 .container form.loading { pointer-events: none; opacity: 0.6;}

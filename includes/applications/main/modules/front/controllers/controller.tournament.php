@@ -59,7 +59,7 @@ namespace app\main\controllers\front {
                     foreach ($metagame as $deck) {
                         $order_archetypes[] = $deck['id_archetype'];
                     }
-                    $winrates = $this->modelMatch->getWinrate($tournament_condition, $order_archetypes);
+                    $winrates = $this->modelMatch->getFullWinrate($tournament_condition, $order_archetypes);
                     foreach ($metagame as $key => &$deck) {
                         // add winrate to deck
                         $deck['winrate'] = $winrates[$key]['winrate'];

@@ -13,7 +13,31 @@ namespace app\main\models {
             parent::__construct("matches", "id_player");
         }
 
-        public function getWinrate ($pCondition = null, $order_archetypes = array()) {
+        /**
+         * Get global winrate for a given archetype
+         * @param $pIdArchetype
+         * @param null $pCondition
+         * @param bool $pExcludeMirrors
+         * @return mixed
+         */
+        public function getWinrateByArchetypeId ($pIdArchetype, $pCondition = null, $pExcludeMirrors = false) {
+            if(!$pCondition)
+                $pCondition = Query::condition();
+            $q = Query::select("ROUND(100*SUM(result_match)/COUNT(1), 2) AS winrate, COUNT(1) AS total", $this->table)
+                ->join("players p", Query::JOIN_INNER, "matches.id_player = p.id_player AND p.id_archetype = $pIdArchetype")
+                ->join("tournaments", Query::JOIN_INNER, "p.id_tournament = tournaments.id_tournament")
+                ->andCondition($pCondition);
+            if(strpos($pCondition->getWhere(), "id_card")) {
+                $q->join("player_card", Query::JOIN_INNER, "player_card.id_player = p.id_player");
+            }
+            if ($pExcludeMirrors) {
+                $q->join("players op", Query::JOIN_INNER, "matches.opponent_id_player = op.id_player AND op.id_archetype != $pIdArchetype");
+            }
+            $winrate = $q->execute($this->handler);
+            return $winrate[0];
+        }
+
+        public function getFullWinrate ($pCondition = null, $order_archetypes = array()) {
             if(!$pCondition)
                 $pCondition = Query::condition();
             $pArchetypeCondition = clone $pCondition;
@@ -34,7 +58,7 @@ namespace app\main\models {
             return $wins;
         }
 
-        public function getWinrateByArchetypeId ($pArchetypeId, $pCondition = null, $order_archetypes = array()) {
+        public function getFullWinrateByArchetypeId ($pArchetypeId, $pCondition = null, $order_archetypes = array()) {
             $data = array();
             if(!$pCondition)
                 $pCondition = Query::condition();
