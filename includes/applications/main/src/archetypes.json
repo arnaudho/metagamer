@@ -1,4 +1,12 @@
 {
+    "WRx Cycling":
+    {
+        "contains":
+        [
+            "Flourishing Fox",
+            "Zenith Flare"
+        ]
+    },
     "Jeskai Fires":
     {
         "contains":
@@ -92,31 +100,6 @@
             "Godless Shrine"
         ]
     },
-    "Orzhov Sacrifice":
-    {
-        "contains":
-        [
-            "Cruel Celebrant"
-        ],
-        "exclude":
-        [
-            "Blood Crypt"
-        ]
-    },
-    "Jeskai Control":
-    {
-        "contains":
-        [
-            "Elspeth Conquers Death",
-            "Teferi, Time Raveler",
-            "Narset, Parter of Veils",
-            "Sacred Foundry"
-        ],
-        "exclude":
-        [
-            "Fires of Invention"
-        ]
-    },
     "Monored":
     {
         "contains":
@@ -150,30 +133,61 @@
             "Agent of Treachery"
         ]
     },
-    "UW Control":
+    "Temur Adventures":
     {
         "contains":
         [
-            "Dream Trawler"
+            "Edgewall Innkeeper",
+            "Lucky Clover",
+            "Beanstalk Giant",
+            "Fae of Wishes"
         ],
         "exclude":
         [
-            "Forest",
-            "Mountain",
-            "Swamp",
-            "Charming Prince",
-            "Golden Egg"
-        ]
-    },
-    "WRx Cycling":
-    {
-        "contains":
-        [
-            "Flourishing Fox",
-            "Zenith Flare"
+            "Merfolk Secretkeeper"
         ]
     },
     "_comment":
     {
+        "UW Control":
+        {
+            "contains":
+            [
+                "Dream Trawler"
+            ],
+            "exclude":
+            [
+                "Forest",
+                "Mountain",
+                "Swamp",
+                "Charming Prince",
+                "Golden Egg"
+            ]
+        },
+        "Orzhov Sacrifice":
+        {
+            "contains":
+            [
+                "Cruel Celebrant"
+            ],
+            "exclude":
+            [
+                "Blood Crypt"
+            ]
+        },
+        "Jeskai Control":
+        {
+            "contains":
+            [
+                "Elspeth Conquers Death",
+                "Teferi, Time Raveler",
+                "Narset, Parter of Veils",
+                "Sacred Foundry"
+            ],
+            "exclude":
+            [
+                "Fires of Invention"
+            ]
+        }
     }
 }
