@@ -49,13 +49,19 @@ namespace app\main\models {
 
         public function getPlayerIdByTournamentIdArenaId ($pTournamentId, $pArenaId) {
             $id_player = Query::select("id_player", $this->table)
-                ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " . $pTournamentId . " AND people.arena_id = '" . $pArenaId . "'")
+                ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " .
+                    $pTournamentId . " AND people.arena_id = '" . $pArenaId . "'")
                 ->execute($this->handler);
             if (!$id_player) {
-                preg_match('/(#[0-9]+)/', $pArenaId, $output_array);
+                preg_match('/^([^#]+)#([0-9]+)/', $pArenaId, $output_array);
                 $id_player = Query::select("id_player", $this->table)
-                    ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " . $pTournamentId . " AND (people.arena_id LIKE '%" . $output_array[1] . "' OR people.discord_id = '" . $pArenaId . "')")
+                    ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " .
+                        $pTournamentId . " AND (people.arena_id LIKE '%#" . $output_array[2] . "' OR people.arena_id LIKE '" . $output_array[1] . "#%' OR people.discord_id = '" . $pArenaId . "')")
                     ->execute($this->handler);
+                // cancel if several players could match
+                if (count($id_player) > 1) {
+                    $id_player = array();
+                }
             }
             return $id_player ? $id_player[0]['id_player'] : null;
         }
