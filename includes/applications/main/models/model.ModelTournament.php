@@ -68,6 +68,13 @@ namespace app\main\models {
                         ->orWhere("opponent_id_player", Query::IN, $players, false)
                 )->execute($this->handler);
             Query::delete()
+                ->from("player_card")
+                ->andCondition(
+                    Query::condition()
+                        ->andWhere("id_player", Query::IN, $players, false)
+                )
+                ->execute($this->handler);
+            Query::delete()
                 ->from("players")
                 ->andCondition(
                     Query::condition()

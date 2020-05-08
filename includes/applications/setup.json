@@ -1,6 +1,7 @@
 {
 	"dev":[
-		"localhost"
+		"localhost",
+		"metagamer.local"
 	],
 	"prod":[
 		"complots.org",

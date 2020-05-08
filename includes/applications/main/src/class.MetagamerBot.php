@@ -2,6 +2,7 @@
 namespace app\main\src;
 
 use app\main\models\ModelArchetype;
+use app\main\models\ModelCard;
 use app\main\models\ModelMatch;
 use app\main\models\ModelPeople;
 use app\main\models\ModelPlayer;
@@ -31,10 +32,12 @@ class MetagamerBot extends BotController
 
     public $tournament;
     protected $modelPlayer;
+    protected $modelCard;
 
     public function __construct($pName)
     {
         $this->modelPlayer = new ModelPlayer();
+        $this->modelCard = new ModelCard();
         parent::__construct($pName);
     }
 
@@ -59,6 +62,8 @@ class MetagamerBot extends BotController
      * Reevaluate archetypes for a given tournament
      */
     public function evaluateArchetypes ($pUrl) {
+        return false;
+        // TODO - deprecated - rework decklist parsing with cards
         if (!preg_match('/^https?:\/\/my.cfbevents.com\/deck\/([\d]+)$/ix', $pUrl, $output_array)) {
             trace_r("ERROR : URL " . $pUrl . " incorrect");
             return false;
@@ -205,10 +210,17 @@ class MetagamerBot extends BotController
 
     public function parsePlayer ($pIdPlayer, $pUrl, $pParseMatchHistory = true, $pWrite = true) {
         $deck = $this->callUrl($pUrl);
-        preg_match_all('/<h1[^>]*>([^<]*)<\/h1>[^\}]+(<table[^>]*id="maindeck"[^>]*>.*cardname.*<\/table>)/Uims', $deck, $output_array);
+        preg_match_all('/<h1[^>]*>([^<]*)<\/h1>[^\}]+<table[^>]*id="maindeck"[^>]*>.*cardname(.*)<table[^>]*id="sideboard"[^>]*>.*cardname(.*)<\/table>/Uims', $deck, $output_array);
+        if (!array_key_exists(0, $output_array[1])) {
+            trace_r("ERROR Decklist parsing : no decklist found for url : " . $pUrl);
+            return false;
+        }
         $deck_name = $output_array[1][0];
-        $decklist = $output_array[2][0];
-        $name_archetype = ModelArchetype::decklistMapper($decklist);
+        $deck_main = $output_array[2][0];
+        $deck_side = $output_array[3][0];
+
+        $name_archetype = ModelArchetype::decklistMapper($deck_main);
+
         if ($pWrite) {
             // insert archetype if needed
             $mArchetype = new ModelArchetype();
@@ -232,6 +244,60 @@ class MetagamerBot extends BotController
                     "name_deck" => $deck_name
                 )
             );
+
+
+            // insert cards
+            $cards = array();
+            preg_match_all('/(<tr[^>]*>\s*<td[^>]*>([\d\s]+)<\/td>\s*<td[^>]*>([^<]+)<\/td>\s*<\/tr>\s*)+/Uims', $deck_main, $parsing_main);
+            if (!array_key_exists(0, $parsing_main[3])) {
+                trace_r("ERROR Decklist parsing : no maindeck found for url : " . $pUrl);
+                return false;
+            }
+            preg_match_all('/(<tr[^>]*>\s*<td[^>]*>([\d\s]+)<\/td>\s*<td[^>]*>([^<]+)<\/td>\s*<\/tr>\s*)+/Uims', $deck_side, $parsing_side);
+            if (!array_key_exists(0, $parsing_side[3])) {
+                trace_r("ERROR Decklist parsing : no sideboard found for url : " . $pUrl);
+                return false;
+            }
+            $full_deck = array_merge($parsing_main[3], $parsing_side[3]);
+            $this->modelCard->insertCards($full_deck);
+
+            // get cards ids
+            $id_cards = array();
+            $all_cards = $this->modelCard->all(
+                Query::condition()
+                    ->andWhere("name_card", Query::IN, '("' . implode('","', $full_deck) . '")', false),
+                "id_card, name_card");
+            foreach ($all_cards as $card) {
+                $id_cards[$card['name_card']] = $card['id_card'];
+            }
+            $deck_count = 0;
+            foreach ($parsing_main[3] as $key => $card_name) {
+                $cards[$card_name] = array(
+                    "id_player"  => $pIdPlayer,
+                    "id_card"    => $id_cards[$card_name],
+                    "count_main" => $parsing_main[2][$key],
+                    "count_side" => 0
+                );
+                $deck_count += $parsing_main[2][$key];
+            }
+            foreach ($parsing_side[3] as $key => $card_name) {
+                if (array_key_exists($card_name, $cards)) {
+                    $cards[$card_name]['count_side'] = $parsing_side[2][$key];
+                } else {
+                    $cards[$card_name] = array(
+                        "id_player"  => $pIdPlayer,
+                        "id_card"    => $id_cards[$card_name],
+                        "count_main" => 0,
+                        "count_side" => $parsing_side[2][$key]
+                    );
+                }
+            }
+            if ($deck_count < 60) {
+                trace_r("Deck < 60 cards for player $pIdPlayer ($pUrl)");
+            }
+            $cards = array_values($cards);
+            $this->modelCard->insertPlayerCards($cards);
+
 
             if ($pParseMatchHistory) {
                 preg_match_all('/history.*<table[^>]*>.*opponent.*<\/table>/Uims', $deck, $output_array);
