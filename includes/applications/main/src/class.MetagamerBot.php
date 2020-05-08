@@ -58,7 +58,7 @@ class MetagamerBot extends BotController
     /*
      * Reevaluate archetypes for a given tournament
      */
-    public function evaluateArchetypes ($pUrl, $pIdFormat) {
+    public function evaluateArchetypes ($pUrl) {
         if (!preg_match('/^https?:\/\/my.cfbevents.com\/deck\/([\d]+)$/ix', $pUrl, $output_array)) {
             trace_r("ERROR : URL " . $pUrl . " incorrect");
             return false;
@@ -203,49 +203,47 @@ class MetagamerBot extends BotController
         return true;
     }
 
-    public function parsePlayer ($pIdPlayer, $pUrl, $pParseMatchHistory = true) {
+    public function parsePlayer ($pIdPlayer, $pUrl, $pParseMatchHistory = true, $pWrite = true) {
         $deck = $this->callUrl($pUrl);
         preg_match_all('/<h1[^>]*>([^<]*)<\/h1>[^\}]+(<table[^>]*id="maindeck"[^>]*>.*cardname.*<\/table>)/Uims', $deck, $output_array);
         $deck_name = $output_array[1][0];
         $decklist = $output_array[2][0];
-        $history = "";
-        if ($pParseMatchHistory) {
-            preg_match_all('/history.*<table[^>]*>.*opponent.*<\/table>/Uims', $deck, $output_array);
-            if (!$output_array[0]) {
-                trace_r("Player " . $pIdPlayer . " ignored -- no match history (check <a href='$pUrl'>decklist</a> for more details)");
-                return false;
-            }
-            $history = $output_array[0][0];
-        }
         $name_archetype = ModelArchetype::decklistMapper($decklist);
+        if ($pWrite) {
+            // insert archetype if needed
+            $mArchetype = new ModelArchetype();
+            $archetype = $mArchetype->one(Query::condition()->andWhere("name_archetype", Query::EQUAL, $name_archetype));
+            if ($archetype) {
+                $id_archetype = $archetype['id_archetype'];
+            } else {
+                $mArchetype->insert(
+                    array(
+                        "name_archetype" => $name_archetype
+                    )
+                );
+                $id_archetype = $mArchetype->getInsertId();
+            }
 
-        // insert archetype if needed
-        $mArchetype = new ModelArchetype();
-        $archetype = $mArchetype->one(Query::condition()->andWhere("name_archetype", Query::EQUAL, $name_archetype));
-        if ($archetype) {
-            $id_archetype = $archetype['id_archetype'];
-        } else {
-            $mArchetype->insert(
+            // update player archetype
+            $this->modelPlayer->updateById(
+                $pIdPlayer,
                 array(
-                    "name_archetype" => $name_archetype
+                    "id_archetype" => $id_archetype,
+                    "name_deck" => $deck_name
                 )
             );
-            $id_archetype = $mArchetype->getInsertId();
-        }
 
-        // update player archetype
-        $this->modelPlayer->updateById(
-            $pIdPlayer,
-            array(
-                "id_archetype" => $id_archetype,
-                "name_deck"    => $deck_name
-            )
-        );
-
-        if ($pParseMatchHistory) {
-            $this->parseMatchHistory($pIdPlayer, $history);
+            if ($pParseMatchHistory) {
+                preg_match_all('/history.*<table[^>]*>.*opponent.*<\/table>/Uims', $deck, $output_array);
+                if (!$output_array[0]) {
+                    trace_r("Player " . $pIdPlayer . " ignored -- no match history (check <a href='$pUrl'>decklist</a> for more details)");
+                    return false;
+                }
+                $history = $output_array[0][0];
+                $this->parseMatchHistory($pIdPlayer, $history);
+            }
         }
-        return true;
+        return $name_archetype;
     }
 
     public function parseMatchHistory ($pIdPlayer, $pHistory) {

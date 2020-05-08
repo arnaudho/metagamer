@@ -2,6 +2,7 @@
 .container .menu { background-color: #F4F4F4; display: flex; justify-content: start; font-size: 18px; margin-bottom: 6px;}
 .container .menu a { padding: 14px 20px;}
 .container .menu a:hover { background-color: #adddf9; text-decoration: none;}
+.container p[class^="bg-"] { padding: 15px;}
 .strong {font-weight: bold;}
 table.table-matchups tbody tr td {text-align: center; vertical-align: middle;}
 table.table-matchups .matchup-deviation {font-size: 0.7em;}

@@ -1,5 +1,42 @@
 {if !$request_async}{include file="includes/head.tpl"}{/if}
 
+<h1>Archetypes mapping</h1>
+
+<p class="bg-info">
+    Archetypes order matter !<br /> A rule will only be tested if all previous archetypes did not match for a given decklist.
+</p>
+
+<table class="table table-hover table-condensed">
+    <thead>
+        <tr>
+            <th>Archetype</th>
+            <th>Must contain</th>
+            <th>Must not contain</th>
+        </tr>
+    </thead>
+    <tbody>
+        {foreach from=$content.archetypes key="archetype" item="rules"}
+            <tr>
+                <td>{$archetype}</td>
+                <td>
+                    {foreach from=$rules.contains item="card"}
+                        {$card}<br />
+                    {/foreach}
+                </td>
+                <td>
+                    {foreach from=$rules.exclude item="card"}
+                        {$card}<br />
+                    {/foreach}
+                </td>
+            </tr>
+        {/foreach}
+        <tr>
+            <td>Tier 3 - Other</td>
+            <td colspan="2">Everything else</td>
+        </tr>
+    </tbody>
+</table>
+{*
 {if $content.list_formats}
     <form class="form-inline">
         <div class="form-group">
@@ -38,5 +75,6 @@
         </tbody>
     </table>
 {/if}
+*}
 
 {if !$request_async}{include file="includes/footer.tpl"}{/if}

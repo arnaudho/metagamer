@@ -26,6 +26,20 @@ namespace app\main\models {
             return $archetypes;
         }
 
+        public function getArchetypesRules () {
+            $archetyes_file = Core::$path_to_application."/src/archetypes.json";
+
+            try
+            {
+                $mapping = SimpleJSON::import($archetyes_file);
+            }
+            catch(\Exception $e)
+            {
+                return null;
+            }
+            return $mapping;
+        }
+
         /**
          * Returns archetype according to cards found in decklist
          */

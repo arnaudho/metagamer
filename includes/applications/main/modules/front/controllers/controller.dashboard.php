@@ -106,6 +106,11 @@ namespace app\main\controllers\front {
         }
 
         public function archetypes () {
+            $archetypes = $this->modelArchetypes->getArchetypesRules();
+            $this->addContent("archetypes", $archetypes);
+
+            /*
+             * // lists do not display archetye name anymore
             $this->addContent("list_formats", $this->modelFormat->all());
             $format = $this->modelFormat->getTupleById($_GET['id_format']);
             if ($format) {
@@ -114,7 +119,7 @@ namespace app\main\controllers\front {
                 $archetypes = $this->modelArchetypes->getArchetypesGroupsByFormat($format['id_format']);
                 $this->addContent("archetypes", $archetypes);
             }
-
+*/
         }
     }
 }
