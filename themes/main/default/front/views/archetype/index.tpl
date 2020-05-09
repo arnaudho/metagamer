@@ -51,14 +51,17 @@
                             {if $card.winrate_main < $content.global.winrate}class="winrate-negative"{/if}>
                             {$card.winrate_main} %
                         </td>
-                        <td>{$card.deviation_down_main}% - {$card.deviation_up_main}%</td>
+                        <td class="confidence-interval">
+                            {if $card.deviation_down_main < 0}0{else}{$card.deviation_down_main}{/if}% -
+                            {if $card.deviation_up_main > 100}100{else}{$card.deviation_up_main}{/if}%
+                        </td>
                     </tr>
                 {/if}
             {/foreach}
         </tbody>
         <thead>
             <tr>
-                <th colspan="3">SIDEBOARDS</th>
+                <th colspan="4">SIDEBOARDS</th>
             </tr>
         </thead>
         <tbody>
@@ -71,7 +74,10 @@
                         {if $card.winrate_side < $content.global.winrate}class="winrate-negative"{/if}>
                         {$card.winrate_side} %
                     </td>
-                    <td>{$card.deviation_down_side}% - {$card.deviation_up_side}%</td>
+                    <td class="confidence-interval">
+                        {if $card.deviation_down_side < 0}0{else}{$card.deviation_down_side}{/if}% -
+                        {if $card.deviation_up_side > 100}100{else}{$card.deviation_up_side}{/if}%
+                    </td>
                 </tr>
             {/if}
         {/foreach}
