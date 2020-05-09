@@ -88,6 +88,10 @@ namespace core\db
 		/**
 		 * @var String
 		 */
+		const NOT_IN                =   " NOT IN ";
+		/**
+		 * @var String
+		 */
 		const MATCH             =   " MATCH ";
 
 		/**
@@ -473,23 +477,31 @@ namespace core\db
 
 		/**
 		 * Méthode d'ajout d'un HAVING 'OR' à l'instance de condition en cours
+		 * @param $pField
 		 * @param String $pField
 		 * @return QueryCondition
 		 */
-		public function orHaving($pField)
+		public function orHaving($pField, $pEscape = true)
 		{
-			array_push($this->havingOr, Query::escapeValue($pField));
+			if ($pEscape) {
+				$pField = Query::escapeValue($pField);
+			}
+			array_push($this->havingOr, $pField);
 			return $this;
 		}
 
 		/**
 		 * Méthode d'ajout d'un HAVING 'AND' à l'instance de condition en cours
-		 * @param String $pField
-		 * @return QueryCondition
+		 * @param $pField
+		 * @param bool $pEscape
+		 * @return $this
 		 */
-		public function andHaving($pField)
+		public function andHaving($pField, $pEscape = true)
 		{
-			array_push($this->havingAnds, Query::escapeValue($pField));
+			if ($pEscape) {
+				$pField = Query::escapeValue($pField);
+			}
+			array_push($this->havingAnds, $pField);
 			return $this;
 		}
 
@@ -651,31 +663,34 @@ namespace core\db
 
 		/**
 		 * @param $pField
+		 * @param bool $pEscape
 		 * @return QueryWithCondition
 		 */
-		public function having($pField)
+		public function having($pField, $pEscape = true)
 		{
-			$this->getCondition()->andHaving($pField);
+			$this->getCondition()->andHaving($pField, $pEscape);
 			return $this;
 		}
 
 		/**
 		 * @param $pField
+		 * @param bool $pEscape
 		 * @return QueryWithCondition
 		 */
-		public function andHaving($pField)
+		public function andHaving($pField, $pEscape = true)
 		{
-			$this->getCondition()->andHaving($pField);
+			$this->getCondition()->andHaving($pField, $pEscape);
 			return $this;
 		}
 
 		/**
 		 * @param $pField
-		 * @return QueryWithCondition
+		 * @param bool $pEscape
+		 * @return $this
 		 */
-		public function orHaving($pField)
+		public function orHaving($pField, $pEscape = true)
 		{
-			$this->getCondition()->orHaving($pField);
+			$this->getCondition()->orHaving($pField, $pEscape);
 			return $this;
 		}
 
