@@ -17,17 +17,22 @@ namespace app\main\models {
          * Get global winrate for a given archetype
          * @param $pIdArchetype
          * @param null $pFormatCondition
+         * @param null $pRulesCondition
          * @param null $pCardCondition
-         * @param array $pIncludedIdCards
-         * @param array $pExcludedIdCards
          * @param bool $pExcludeMirrors
          * @return mixed
          * @throws \Exception
          */
-        public function getWinrateByArchetypeId ($pIdArchetype, $pFormatCondition = null, $pCardCondition = null, $pIncludedIdCards = array(), $pExcludedIdCards = array(), $pExcludeMirrors = false) {
+        public function getWinrateByArchetypeId (
+            $pIdArchetype,
+            $pFormatCondition = null,
+            $pRulesCondition = null,
+            $pCardCondition = null,
+            $pExcludeMirrors = false
+        ) {
             if(!$pFormatCondition)
                 $pFormatCondition = Query::condition();
-            $q = Query::select("ROUND(100*SUM(result_match)/COUNT(1), 2) AS winrate, COUNT(1) AS total", $this->table)
+            $q = Query::select("ROUND(100*SUM(result_match)/COUNT(1), 2) AS winrate, SUM(result_match) AS wins, COUNT(1) AS total, COUNT(DISTINCT matches.id_player) AS count_players", $this->table)
                 ->join("players p", Query::JOIN_INNER, "matches.id_player = p.id_player AND p.id_archetype = $pIdArchetype")
                 ->join("tournaments", Query::JOIN_INNER, "p.id_tournament = tournaments.id_tournament")
                 ->andCondition($pFormatCondition);
@@ -38,63 +43,9 @@ namespace app\main\models {
             if ($pExcludeMirrors) {
                 $q->join("players op", Query::JOIN_INNER, "matches.opponent_id_player = op.id_player AND op.id_archetype != $pIdArchetype");
             }
-            if ($pIncludedIdCards) {
-                $count_cards = 0;
-                $cards_condition = Query::condition();
-                foreach ($pIncludedIdCards['main'] as $id_card) {
-                    $cards_condition->orCondition(
-                        Query::condition()
-                            ->andWhere("id_card", Query::EQUAL, $id_card)
-                            ->andWhere("count_main", Query::UPPER, 0, false)
-                    );
-                    $count_cards++;
-                }
-                foreach ($pIncludedIdCards['side'] as $id_card) {
-                    $cards_condition->orCondition(
-                        Query::condition()
-                            ->andWhere("id_card", Query::EQUAL, $id_card)
-                            ->andWhere("count_side", Query::UPPER, 0, false)
-                    );
-                    $count_cards++;
-                }
-                $included_query = Query::select("players.id_player", "player_card")
-                    ->join("players", Query::JOIN_INNER, "players.id_player = player_card.id_player AND players.id_archetype = $pIdArchetype")
-                    ->join("tournaments", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament")
-                    ->andCondition($pFormatCondition)
-                    ->andCondition($cards_condition)
-                    ->groupBy("players.id_player")
-                    ->andHaving("COUNT(1) >= $count_cards", false)
-                    ->get(false);
-                $q->andWhere("p.id_player", Query::IN, "(" . $included_query . ")", false);
-            }
-            if ($pExcludedIdCards) {
-                $count_cards = 0;
-                $cards_condition = Query::condition();
-                foreach ($pExcludedIdCards['main'] as $id_card) {
-                    $cards_condition->orCondition(
-                        Query::condition()
-                            ->andWhere("id_card", Query::EQUAL, $id_card)
-                            ->andWhere("count_main", Query::UPPER, 0, false)
-                    );
-                    $count_cards++;
-                }
-                foreach ($pExcludedIdCards['side'] as $id_card) {
-                    $cards_condition->orCondition(
-                        Query::condition()
-                            ->andWhere("id_card", Query::EQUAL, $id_card)
-                            ->andWhere("count_side", Query::UPPER, 0, false)
-                    );
-                    $count_cards++;
-                }
-                $included_query = Query::select("players.id_player", "player_card")
-                    ->join("players", Query::JOIN_INNER, "players.id_player = player_card.id_player AND players.id_archetype = $pIdArchetype")
-                    ->join("tournaments", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament")
-                    ->andCondition($pFormatCondition)
-                    ->andCondition($cards_condition)
-                    ->groupBy("players.id_player")
-                    ->andHaving("COUNT(1) >= $count_cards", false)
-                    ->get(false);
-                $q->andWhere("p.id_player", Query::NOT_IN, "(" . $included_query . ")", false);
+            if ($pRulesCondition) {
+                $rules_cond = clone $pRulesCondition;
+                $q->andCondition($rules_cond);
             }
             $winrate = $q->execute($this->handler);
             return $winrate[0];

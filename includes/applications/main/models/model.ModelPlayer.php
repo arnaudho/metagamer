@@ -66,15 +66,19 @@ namespace app\main\models {
             return $id_player ? $id_player[0]['id_player'] : null;
         }
 
-        public function countPlayers ($pCond = null) {
+        public function countPlayers ($pCond = null, $pRulesCondition = null) {
             if (!$pCond) {
                 $pCond = Query::condition();
             }
-            $q = Query::select("count(1) as nb", $this->table)
-                ->join("tournaments", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament")
-                ->setCondition($pCond)
-                ->execute($this->handler);
-            return $q[0]["nb"];
+            $q = Query::select("count(1) as nb", "players p")
+                ->join("tournaments", Query::JOIN_INNER, "p.id_tournament = tournaments.id_tournament")
+                ->setCondition(clone $pCond);
+            if ($pRulesCondition) {
+                $rules_cond = clone $pRulesCondition;
+                $q->andCondition($rules_cond);
+            }
+            $data = $q->execute($this->handler);
+            return $data[0]["nb"];
         }
     }
 }
