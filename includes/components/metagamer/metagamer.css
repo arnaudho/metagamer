@@ -2,6 +2,8 @@
 .container .menu { background-color: #F4F4F4; display: flex; justify-content: start; font-size: 18px; margin-bottom: 6px;}
 .container .menu a { padding: 14px 20px;}
 .container .menu a:hover { background-color: #adddf9; text-decoration: none;}
+.container .archetypes-info { max-width: 600px;}
+.container .archetypes-info .rule-remove { cursor: pointer;}
 .container p[class^="bg-"] { padding: 15px;}
 .strong {font-weight: bold;}
 table.table-matchups tbody tr td {text-align: center; vertical-align: middle;}
@@ -14,10 +16,14 @@ table td.matchup-negative {background-color: #ffb3b3;}
 table td.matchup-slightly-negative {background-color: #ffe6e6;}
 table td.matchup-positive {background-color: #99ff99;}
 table td.matchup-slightly-positive {background-color: #ccffcc;}
-table td.winrate-negative {color: red; font-weight: bold;}
-table td.winrate-positive {color: green; font-weight: bold;}
+.container .winrate-negative {color: red; font-weight: bold;}
+.container .winrate-positive {color: green; font-weight: bold;}
 table th.rotated-text {height: 140px;white-space: nowrap;padding: 0 !important;vertical-align: bottom !important;}
 table th.rotated-text > div {transform:translate(13px, 0px)rotate(310deg);width: 30px;  }
 table th.rotated-text > div > span {padding: 5px 10px;}
 table.table-players tbody tr td {vertical-align: middle;}
+table td.highlight { font-weight: bold}
+table.archetype-analysis .card-exclude { color: red; font-size: 1.2em; cursor: pointer;}
+table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor: pointer;}
 .container form.loading { pointer-events: none; opacity: 0.6;}
+.container .confidence-interval { font-size: 0.8em; font-style: italic;}

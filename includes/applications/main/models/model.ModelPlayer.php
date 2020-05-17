@@ -49,26 +49,36 @@ namespace app\main\models {
 
         public function getPlayerIdByTournamentIdArenaId ($pTournamentId, $pArenaId) {
             $id_player = Query::select("id_player", $this->table)
-                ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " . $pTournamentId . " AND people.arena_id = '" . $pArenaId . "'")
+                ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " .
+                    $pTournamentId . " AND people.arena_id = '" . $pArenaId . "'")
                 ->execute($this->handler);
             if (!$id_player) {
-                preg_match('/(#[0-9]+)/', $pArenaId, $output_array);
+                preg_match('/^([^#]+)#([0-9]+)/', $pArenaId, $output_array);
                 $id_player = Query::select("id_player", $this->table)
-                    ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " . $pTournamentId . " AND (people.arena_id LIKE '%" . $output_array[1] . "' OR people.discord_id = '" . $pArenaId . "')")
+                    ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " .
+                        $pTournamentId . " AND (people.arena_id LIKE '%#" . $output_array[2] . "' OR people.arena_id LIKE '" . $output_array[1] . "#%' OR people.discord_id = '" . $pArenaId . "')")
                     ->execute($this->handler);
+                // cancel if several players could match
+                if (count($id_player) > 1) {
+                    $id_player = array();
+                }
             }
             return $id_player ? $id_player[0]['id_player'] : null;
         }
 
-        public function countPlayers ($pCond = null) {
+        public function countPlayers ($pCond = null, $pRulesCondition = null) {
             if (!$pCond) {
                 $pCond = Query::condition();
             }
-            $q = Query::select("count(1) as nb", $this->table)
-                ->join("tournaments", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament")
-                ->setCondition($pCond)
-                ->execute($this->handler);
-            return $q[0]["nb"];
+            $q = Query::select("count(1) as nb", "players p")
+                ->join("tournaments", Query::JOIN_INNER, "p.id_tournament = tournaments.id_tournament")
+                ->setCondition(clone $pCond);
+            if ($pRulesCondition) {
+                $rules_cond = clone $pRulesCondition;
+                $q->andCondition($rules_cond);
+            }
+            $data = $q->execute($this->handler);
+            return $data[0]["nb"];
         }
     }
 }

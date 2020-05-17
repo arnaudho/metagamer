@@ -7,20 +7,14 @@
 			"duration":120
 		}
 	},
-	"Request":
-	{
-		"javascript":[
-			"https://dependencies.arnaud-nicolas.fr/?need=Request"
-		]
-	},
-    "M4Tween":
-    {
-        "javascript":[
-            "https://dependencies.arnaud-nicolas.fr/?need=M4Tween"
+    "Request": {
+        "javascript": [
+            "utils/Request.js"
         ]
     },
 	"Metagamer":
 	{
+        "need":["Request"],
 		"css":
 		[
 			"metagamer/metagamer.css"
