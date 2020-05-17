@@ -99,6 +99,14 @@ namespace app\main\controllers\front {
                         $deviation = StatsUtils::getStandardDeviation($stats_rules['winrate'], $stats_rules['total']);
                         $stats_rules['deviation_up']   = $stats_rules['winrate'] + $deviation;
                         $stats_rules['deviation_down'] = $stats_rules['winrate'] - $deviation;
+                        $stats_without_rules = array(
+                            'total' => $stats['total'] - $stats_rules['total']
+                        );
+                        $stats_without_rules['winrate'] = round(100*($stats['wins'] - $stats_rules['wins'])/$stats_without_rules['total'], 2);
+                        $deviation = StatsUtils::getStandardDeviation($stats_without_rules['winrate'], $stats_without_rules['total']);
+                        $stats_without_rules['deviation_up']   = $stats_without_rules['winrate'] + $deviation;
+                        $stats_without_rules['deviation_down'] = $stats_without_rules['winrate'] - $deviation;
+                        $this->addContent("global_without_rules", $stats_without_rules);
                     }
                     $this->addContent("global_rules", $stats_rules);
 

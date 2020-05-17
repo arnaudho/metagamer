@@ -32,12 +32,21 @@
         </div>
         {if $content.global_rules.count_players != $content.global.count_players}
             <div class="panel-body">
-                {$content.global_rules.count_players} lists -
-                winrate {$content.global_rules.winrate} %
-                <span class="confidence-interval">({if $content.global_rules.deviation_down < 0}0{else}{$content.global_rules.deviation_down}{/if}% -
-                {if $content.global_rules.deviation_up > 100}100{else}{$content.global_rules.deviation_up}{/if}%)</span>
-
-                {* TODO add winrate without rules *}
+                <p>
+                    {$content.global_rules.count_players} lists matching rules - winrate
+                    <span
+                        {if $content.global_rules.winrate > $content.global.winrate}class="winrate-positive"{/if}
+                        {if $content.global_rules.winrate < $content.global.winrate}class="winrate-negative"{/if}>
+                        {$content.global_rules.winrate} %
+                    </span>
+                    <span class="confidence-interval">({if $content.global_rules.deviation_down < 0}0{else}{$content.global_rules.deviation_down}{/if}% -
+                    {if $content.global_rules.deviation_up > 100}100{else}{$content.global_rules.deviation_up}{/if}%)</span>
+                </p>
+                <p>
+                    Lists without rules - winrate {$content.global_without_rules.winrate} %
+                    <span class="confidence-interval">({if $content.global_without_rules.deviation_down < 0}0{else}{$content.global_without_rules.deviation_down}{/if}% -
+                        {if $content.global_without_rules.deviation_up > 100}100{else}{$content.global_without_rules.deviation_up}{/if}%)</span>
+                </p>
 
             </div>
         {/if}
