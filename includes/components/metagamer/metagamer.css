@@ -23,7 +23,7 @@ table th.rotated-text > div {transform:translate(13px, 0px)rotate(310deg);width:
 table th.rotated-text > div > span {padding: 5px 10px;}
 table.table-players tbody tr td {vertical-align: middle;}
 table td.highlight { font-weight: bold}
-table .confidence-interval { font-size: 0.8em; font-style: italic;}
 table.archetype-analysis .card-exclude { color: red; font-size: 1.2em; cursor: pointer;}
 table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor: pointer;}
 .container form.loading { pointer-events: none; opacity: 0.6;}
+.confidence-interval { font-size: 0.8em; font-style: italic;}

@@ -103,8 +103,6 @@ namespace app\main\controllers\front {
                     $this->addContent("global_rules", $stats_rules);
 
                     foreach ($cards as &$card) {
-                        // TODO add winrate without this card
-
                         // avg_main|avg_side > 0 : to calculate only with main|side presence
                         if ($card['avg_main'] > 0) {
 
@@ -119,15 +117,17 @@ namespace app\main\controllers\front {
                             $card['winrate_main'] = $winrate['winrate'];
                             $card['total_main'] = $winrate['total'];
                             $card['count_players_main'] = $winrate['count_players'];
-                            // TODO add same for SB
-                            // check test -- need compare count_players -- only total ?
-                            if ($stats['count_players'] > $stats_rules['count_players'] && $stats_rules['total'] > $winrate['total']) {
-                                $card['winrate_without_main'] = round(100 * ($stats_rules['wins'] - $winrate['wins']) / ($stats_rules['total'] - $winrate['total']), 2);
-                            }
-                            $deviation = StatsUtils::getStandardDeviation($winrate['winrate'], $winrate['total']);
+                            $deviation = StatsUtils::getStandardDeviation($card['winrate_main'], $card['total_main']);
                             $card['deviation_up_main']   = $card['winrate_main'] + $deviation;
                             $card['deviation_down_main'] = $card['winrate_main'] - $deviation;
                             $card['display_actions_main'] = ($stats_rules['count_players'] > $card['count_players_main']) ? 1 : 0;
+                            // if we have less matches for current card than total for current rules
+                            if ($stats_rules['total'] > $card['total_main'] && $card['count_players_main'] < $stats_rules['count_players']) {
+                                $card['winrate_without_main'] = round(100 * ($stats_rules['wins'] - $winrate['wins']) / ($stats_rules['total'] - $card['total_main']), 2);
+                                $deviation = StatsUtils::getStandardDeviation($card['winrate_without_main'], $stats_rules['total'] - $card['total_main']);
+                                $card['deviation_up_without_main']   = $card['winrate_without_main'] + $deviation;
+                                $card['deviation_down_without_main'] = $card['winrate_without_main'] - $deviation;
+                            }
                         }
                         if ($card['avg_side'] > 0) {
                             $winrate = $this->modelMatch->getWinrateByArchetypeId(
@@ -145,6 +145,13 @@ namespace app\main\controllers\front {
                             $card['deviation_up_side']   = $card['winrate_side'] + $deviation;
                             $card['deviation_down_side'] = $card['winrate_side'] - $deviation;
                             $card['display_actions_side'] = ($stats_rules['count_players'] > $card['count_players_side']) ? 1 : 0;
+                            // if we have less matches for current card than total for current rules
+                            if ($stats_rules['total'] > $card['total_side'] && $card['count_players_side'] < $stats_rules['count_players']) {
+                                $card['winrate_without_side'] = round(100 * ($stats_rules['wins'] - $winrate['wins']) / ($stats_rules['total'] - $card['total_side']), 2);
+                                $deviation = StatsUtils::getStandardDeviation($card['winrate_without_side'], $stats_rules['total'] - $card['total_side']);
+                                $card['deviation_up_without_side']   = $card['winrate_without_side'] + $deviation;
+                                $card['deviation_down_without_side'] = $card['winrate_without_side'] - $deviation;
+                            }
                         }
                     }
                     $this->addContent("cards", $cards);

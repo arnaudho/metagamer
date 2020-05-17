@@ -25,8 +25,8 @@
         <div class="panel-heading">
             <h3 class="panel-title">{$content.global.count_players} lists -
                 winrate {$content.global.winrate} %
-                ({if $content.global.deviation_down < 0}0{else}{$content.global.deviation_down}{/if}% -
-                {if $content.global.deviation_up > 100}100{else}{$content.global.deviation_up}{/if}%),
+                <span class="confidence-interval">({if $content.global.deviation_down < 0}0{else}{$content.global.deviation_down}{/if}% -
+                {if $content.global.deviation_up > 100}100{else}{$content.global.deviation_up}{/if}%)</span>,
                 mirror matches included
             </h3>
         </div>
@@ -34,8 +34,8 @@
             <div class="panel-body">
                 {$content.global_rules.count_players} lists -
                 winrate {$content.global_rules.winrate} %
-                ({if $content.global_rules.deviation_down < 0}0{else}{$content.global_rules.deviation_down}{/if}% -
-                {if $content.global_rules.deviation_up > 100}100{else}{$content.global_rules.deviation_up}{/if}%)
+                <span class="confidence-interval">({if $content.global_rules.deviation_down < 0}0{else}{$content.global_rules.deviation_down}{/if}% -
+                {if $content.global_rules.deviation_up > 100}100{else}{$content.global_rules.deviation_up}{/if}%)</span>
 
                 {* TODO add winrate without rules *}
 
@@ -134,8 +134,9 @@
                 <th>Average # copies</th>
                 <th># lists</th>
                 <th>Winrate</th>
-                <th>Confidence interval</th>
-                <th>Winrate without</th>
+                <th>Confidence</th>
+                <th>W% without</th>
+                <th>Confidence</th>
             </tr>
         </thead>
         <tbody>
@@ -166,6 +167,17 @@
                                 ({if $card.deviation_down_main < 0}0{else}{$card.deviation_down_main}{/if}% -
                                 {if $card.deviation_up_main > 100}100{else}{$card.deviation_up_main}{/if}%)
                             </span>
+                        </td>
+                        <td>
+                            {if $card.winrate_without_main}{$card.winrate_without_main} %{/if}
+                        </td>
+                        <td>
+                            {if $card.winrate_without_main}
+                                <span class="confidence-interval">
+                                    ({if $card.deviation_down_without_main < 0}0{else}{$card.deviation_down_without_main}{/if}% -
+                                    {if $card.deviation_up_without_main > 100}100{else}{$card.deviation_up_without_main}{/if}%)
+                                </span>
+                            {/if}
                         </td>
                     </tr>
                 {/if}
@@ -200,6 +212,15 @@
                     <td class="confidence-interval">
                         {if $card.deviation_down_side < 0}0{else}{$card.deviation_down_side}{/if}% -
                         {if $card.deviation_up_side > 100}100{else}{$card.deviation_up_side}{/if}%
+                    </td>
+                    <td>
+                        {if $card.winrate_without_side}{$card.winrate_without_side} %{/if}
+                    </td>
+                    <td class="confidence-interval">
+                        {if $card.winrate_without_side}
+                            {if $card.deviation_down_without_side < 0}0{else}{$card.deviation_down_without_side}{/if}% -
+                            {if $card.deviation_up_without_side > 100}100{else}{$card.deviation_up_without_side}{/if}%
+                        {/if}
                     </td>
                 </tr>
             {/if}
