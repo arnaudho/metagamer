@@ -49,9 +49,12 @@ namespace app\main\controllers\front {
                     ->andWhere("id_format", Query::EQUAL, $format['id_format']);
                 $format_cond = Query::condition()
                     ->andWhere("id_format", Query::EQUAL, $format['id_format']);
+                $analysis_hash = md5("format-" . $format['id_format'] . "-archetype-" . $archetype['id_archetype']);
+                if ($_SESSION['analysis'] != $analysis_hash) {
+                    $this->cleanCardRules();
+                    $_SESSION['analysis'] = $analysis_hash;
+                }
             }
-
-            // TODO clean SESSION data when changing format / archetype
 
             if ($archetype && $format) {
                 $this->addContent("archetype", $archetype);
@@ -91,10 +94,8 @@ namespace app\main\controllers\front {
                     $stats['deviation_down'] = $stats['winrate'] - $deviation;
                     $this->addContent("global", $stats);
 
-                    $stats_rules = $this->modelMatch->getWinrateByArchetypeId(
-                        $archetype['id_archetype'],
-                        $format_cond,
-                        $rules_cond);
+                    $stats_rules = $this->modelMatch->getWinrateByArchetypeId($archetype['id_archetype'], $format_cond, $rules_cond);
+
                     if ($stats_rules['count_players'] > 0) {
                         $deviation = StatsUtils::getStandardDeviation($stats_rules['winrate'], $stats_rules['total']);
                         $stats_rules['deviation_up']   = $stats_rules['winrate'] + $deviation;
@@ -175,6 +176,7 @@ namespace app\main\controllers\front {
         protected function cleanCardRules () {
             $_SESSION['included'] = array("main" => array(), "side" => array());
             $_SESSION['excluded'] = array("main" => array(), "side" => array());
+            $_SESSION['analysis'] = "";
         }
 
         // TODO WIP
