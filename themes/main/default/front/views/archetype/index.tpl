@@ -41,6 +41,9 @@
                     </span>
                     <span class="confidence-interval">({if $content.global_rules.deviation_down < 0}0{else}{$content.global_rules.deviation_down}{/if}% -
                     {if $content.global_rules.deviation_up > 100}100{else}{$content.global_rules.deviation_up}{/if}%)</span>
+                    <a href="{$content.link_decklists}" class="btn btn-info" target="_blank">
+                        <span class="glyphicon glyphicon-duplicate"></span>
+                    </a>
                 </p>
                 <p>
                     Lists without rules - winrate {$content.global_without_rules.winrate} %

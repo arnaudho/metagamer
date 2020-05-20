@@ -35,6 +35,7 @@ namespace app\main\controllers\front {
                     if ($result) {
                         $id_tournament = $bot->tournament;
                         $data = $this->modelTournament->getTournamentData($id_tournament);
+                        $data['id_tournament'] = $id_tournament;
                         $this->addContent("data", $data);
                     }
                 } else {

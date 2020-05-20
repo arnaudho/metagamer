@@ -13,8 +13,8 @@ namespace app\main\models {
 
         public function searchPlayerByArenaId ($pArenaId) {
             $data = Query::select(
-                    "name_tournament, name_archetype, decklist_player, arena_id,
-                    discord_id, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins,
+                    "tournaments.id_tournament, name_tournament, id_format, name_archetype, decklist_player,
+                    arena_id, discord_id, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins,
                     IF(COUNT(1) IS NULL, 0, COUNT(1)) AS matches", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people AND arena_id LIKE '%" . $pArenaId . "%'")
                 ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype")
@@ -45,6 +45,14 @@ namespace app\main\models {
                 $d['percent'] = round(100*$d['count']/$sum, 1);
             }
             return $data;
+        }
+
+        public function getDecklists ($pCondition) {
+            return Query::select("*", "players p")
+                ->join("people", Query::JOIN_INNER, "people.id_people = p.id_people")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = p.id_tournament")
+                ->andCondition($pCondition)
+                ->execute($this->handler);
         }
 
         public function getPlayerIdByTournamentIdArenaId ($pTournamentId, $pArenaId) {

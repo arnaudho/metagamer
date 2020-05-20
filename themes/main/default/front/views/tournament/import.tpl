@@ -11,7 +11,7 @@
 
 {if $content.data!==null}
     <h3>Import successful !</h3>
-    <h4>{$content.data.name_tournament}</h4>
+    <h4>{$content.data.name_tournament} (id#{$content.data.id_tournament})</h4>
     <p>{$content.data.count_players} players imported</p>
     <p>{$content.data.count_matches} matches imported</p>
 {/if}

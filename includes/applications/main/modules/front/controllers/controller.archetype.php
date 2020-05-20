@@ -10,6 +10,7 @@ namespace app\main\controllers\front {
     use core\application\Core;
     use core\application\DefaultFrontController;
     use core\application\Go;
+    use core\application\routing\RoutingHandler;
     use core\db\Query;
     use core\utils\StatsUtils;
 
@@ -75,6 +76,17 @@ namespace app\main\controllers\front {
                 ) {
                     unset($_SESSION[$card_rule[1]][$card_rule[2]][$card_rule[3]]);
                 }
+                $link_decklists = RoutingHandler::rewrite(
+                    "archetype",
+                    "lists") . "?" . http_build_query(array(
+                        "id_archetype" => $archetype['id_archetype'],
+                        "id_format"    => $format['id_format'],
+                        "im"           => implode(":", array_flip($_SESSION['included']['main'])),
+                        "is"           => implode(":", array_flip($_SESSION['included']['side'])),
+                        "em"           => implode(":", array_flip($_SESSION['excluded']['main'])),
+                        "es"           => implode(":", array_flip($_SESSION['excluded']['side']))
+                    ));
+                $this->addContent("link_decklists", $link_decklists);
                 $this->addContent("included", $_SESSION['included']);
                 $this->addContent("excluded", $_SESSION['excluded']);
 
@@ -177,6 +189,52 @@ namespace app\main\controllers\front {
             $_SESSION['included'] = array("main" => array(), "side" => array());
             $_SESSION['excluded'] = array("main" => array(), "side" => array());
             $_SESSION['analysis'] = "";
+        }
+
+        public function lists () {
+            $included = array(
+                "main" => array(),
+                "side" => array()
+            );
+            $excluded = array(
+                "main" => array(),
+                "side" => array()
+            );
+            if ($_GET['im']) {
+                $_GET['im'] = explode(":", $_GET['im']);
+                foreach ($_GET['im'] as $id_card) {
+                    $included['main'][$id_card] = $id_card;
+                }
+            }
+            if ($_GET['is']) {
+                $_GET['is'] = explode(":", $_GET['is']);
+                foreach ($_GET['is'] as $id_card) {
+                    $included['side'][$id_card] = $id_card;
+                }
+            }
+            if ($_GET['em']) {
+                $_GET['em'] = explode(":", $_GET['em']);
+                foreach ($_GET['em'] as $id_card) {
+                    $excluded['main'][$id_card] = $id_card;
+                }
+            }
+            if ($_GET['es']) {
+                $_GET['es'] = explode(":", $_GET['es']);
+                foreach ($_GET['es'] as $id_card) {
+                    $excluded['side'][$id_card] = $id_card;
+                }
+            }
+            $format_cond = Query::condition()->andWhere("id_format", Query::EQUAL, $_GET['id_format']);
+            $rules_cond = $this->modelCard->getCardRuleCondition(
+                $_GET['id_archetype'],
+                $format_cond,
+                $included,
+                $excluded);
+            $format_cond
+                ->andWhere("id_archetype", Query::EQUAL, $_GET['id_archetype'])
+                ->andCondition($rules_cond);
+            $decklists = $this->modelPlayer->getDecklists($format_cond);
+            $this->addContent("decklists", $decklists);
         }
 
         // TODO WIP
