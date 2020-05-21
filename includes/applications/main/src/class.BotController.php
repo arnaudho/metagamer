@@ -29,10 +29,10 @@ class BotController extends DefaultController
         trace_r("Now running bot " . $this->name . "...");
     }
 
-    public function callUrl ($pUrl) {
+    public function callUrl ($pUrl, $pMethod = "GET") {
         $data = "";
         $r = new Request($pUrl);
-        $r->setMethod("GET");
+        $r->setMethod($pMethod);
         $r->setOption(CURLOPT_SSL_VERIFYPEER, false);
         try {
             $data = $r->execute();
