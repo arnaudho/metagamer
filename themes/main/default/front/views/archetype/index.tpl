@@ -138,16 +138,16 @@
             </table>
         {/if}
     </div>
-    <table class="table table-hover table-condensed archetype-analysis">
+    <table class="table table-hover table-condensed archetype-analysis" data-toggle="table" data-sort-name="winrate_with" data-sort-order="desc">
         <thead>
             <tr>
                 <th>Actions</th>
-                <th>Name</th>
-                <th>Average # copies</th>
-                <th># lists</th>
-                <th>Winrate</th>
+                <th data-field="name_card" data-sortable="true">Name</th>
+                <th data-field="count_copies" data-sortable="true">Average # copies</th>
+                <th data-field="count_lists" data-sortable="true"># lists</th>
+                <th data-field="winrate_with" data-sortable="true">Winrate</th>
                 <th>Confidence</th>
-                <th>W% without</th>
+                <th data-field="winrate_without" data-sortable="true">W% without</th>
                 <th>Confidence</th>
             </tr>
         </thead>
@@ -195,48 +195,58 @@
                 {/if}
             {/foreach}
         </tbody>
+    </table>
+    <h3>SIDEBOARDS</h3>
+    <table class="table table-hover table-condensed archetype-analysis" data-toggle="table" data-sort-name="winrate_with" data-sort-order="desc">
         <thead>
             <tr>
-                <th colspan="20">SIDEBOARDS</th>
+                <th>Actions</th>
+                <th data-field="name_card" data-sortable="true">Name</th>
+                <th data-field="count_copies" data-sortable="true">Average # copies</th>
+                <th data-field="count_lists" data-sortable="true"># lists</th>
+                <th data-field="winrate_with" data-sortable="true">Winrate</th>
+                <th>Confidence</th>
+                <th data-field="winrate_without" data-sortable="true">W% without</th>
+                <th>Confidence</th>
             </tr>
         </thead>
         <tbody>
-        {foreach from=$content.cards item="card"}
-            {if $card.avg_side > 0}
-                <tr>
-                    <td>
-                        {if $card.display_actions_side == 1}
-                            <span class="glyphicon glyphicon-plus-sign card-include"
-                                  data-card-id="included-side-{$card.id_card}"
-                                  title="Select only decklists containing this card"></span>
-                            <span class="glyphicon glyphicon-minus-sign card-exclude"
-                                  data-card-id="excluded-side-{$card.id_card}"
-                                  title="Exclude decklists containing this card"></span>
-                        {/if}
-                    </td>
-                    <td>{$card.name_card}</td>
-                    <td {if $card.avg_side == 4}class="highlight"{/if}>{$card.avg_side|floatval}</td>
-                    <td {if $content.global_rules.count_players == $card.count_players_side}class="strong"{/if}>{$card.count_players_side}</td>
-                    <td {if $card.winrate_side > $content.global_rules.winrate}class="winrate-positive"{/if}
-                        {if $card.winrate_side < $content.global_rules.winrate}class="winrate-negative"{/if}>
-                        {$card.winrate_side} %
-                    </td>
-                    <td class="confidence-interval">
-                        {if $card.deviation_down_side < 0}0{else}{$card.deviation_down_side}{/if}% -
-                        {if $card.deviation_up_side > 100}100{else}{$card.deviation_up_side}{/if}%
-                    </td>
-                    <td>
-                        {if $card.winrate_without_side}{$card.winrate_without_side} %{/if}
-                    </td>
-                    <td class="confidence-interval">
-                        {if $card.winrate_without_side}
-                            {if $card.deviation_down_without_side < 0}0{else}{$card.deviation_down_without_side}{/if}% -
-                            {if $card.deviation_up_without_side > 100}100{else}{$card.deviation_up_without_side}{/if}%
-                        {/if}
-                    </td>
-                </tr>
-            {/if}
-        {/foreach}
+            {foreach from=$content.cards item="card"}
+                {if $card.avg_side > 0}
+                    <tr>
+                        <td>
+                            {if $card.display_actions_side == 1}
+                                <span class="glyphicon glyphicon-plus-sign card-include"
+                                      data-card-id="included-side-{$card.id_card}"
+                                      title="Select only decklists containing this card"></span>
+                                <span class="glyphicon glyphicon-minus-sign card-exclude"
+                                      data-card-id="excluded-side-{$card.id_card}"
+                                      title="Exclude decklists containing this card"></span>
+                            {/if}
+                        </td>
+                        <td>{$card.name_card}</td>
+                        <td {if $card.avg_side == 4}class="highlight"{/if}>{$card.avg_side|floatval}</td>
+                        <td {if $content.global_rules.count_players == $card.count_players_side}class="strong"{/if}>{$card.count_players_side}</td>
+                        <td {if $card.winrate_side > $content.global_rules.winrate}class="winrate-positive"{/if}
+                            {if $card.winrate_side < $content.global_rules.winrate}class="winrate-negative"{/if}>
+                            {$card.winrate_side} %
+                        </td>
+                        <td class="confidence-interval">
+                            {if $card.deviation_down_side < 0}0{else}{$card.deviation_down_side}{/if}% -
+                            {if $card.deviation_up_side > 100}100{else}{$card.deviation_up_side}{/if}%
+                        </td>
+                        <td>
+                            {if $card.winrate_without_side}{$card.winrate_without_side} %{/if}
+                        </td>
+                        <td class="confidence-interval">
+                            {if $card.winrate_without_side}
+                                {if $card.deviation_down_without_side < 0}0{else}{$card.deviation_down_without_side}{/if}% -
+                                {if $card.deviation_up_without_side > 100}100{else}{$card.deviation_up_without_side}{/if}%
+                            {/if}
+                        </td>
+                    </tr>
+                {/if}
+            {/foreach}
         </tbody>
     </table>
 {/if}
