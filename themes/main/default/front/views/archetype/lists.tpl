@@ -7,6 +7,7 @@
             <tr>
                 <th>Arena ID</th>
                 <th>Tournament</th>
+                <th>Record</th>
                 <th>Decklist</th>
             </tr>
         </thead>
@@ -15,6 +16,7 @@
                 <tr>
                     <td><a href="player/?search={$decklist.arena_id}">{$decklist.arena_id}</a></td>
                     <td><a href="dashboard/?id_format={$decklist.id_format}&id_tournament={$decklist.id_tournament}">{$decklist.name_tournament}</a></td>
+                    <td>{$decklist.wins}-{$decklist.total-$decklist.wins}</td>
                     <td>
                         <a href="{$decklist.decklist_player}" class="btn btn-info" target="_blank">
                             <span class="glyphicon glyphicon-duplicate"></span>

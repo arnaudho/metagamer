@@ -42,16 +42,19 @@ namespace app\main\models {
                 $sum += $d['count'];
             }
             foreach ($data as &$d) {
-                $d['percent'] = round(100*$d['count']/$sum, 1);
+                $d['percent'] = round(100*$d['count']/$sum, 2);
             }
             return $data;
         }
 
         public function getDecklists ($pCondition) {
-            return Query::select("*", "players p")
+            // TODO check which fields we actually need
+            return Query::select("SUM(result_match) AS wins, COUNT(1) AS total, p.*, people.*, tournaments.*", "players p")
                 ->join("people", Query::JOIN_INNER, "people.id_people = p.id_people")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = p.id_tournament")
+                ->join("matches", Query::JOIN_INNER, "matches.id_player = p.id_player")
                 ->andCondition($pCondition)
+                ->groupBy("p.id_player")
                 ->execute($this->handler);
         }
 
