@@ -74,6 +74,16 @@ namespace core\application
 			return Query::insertMultiple($pValues)->into($this->table)->execute($this->handler);
 		}
 
+		/**
+		 * Méthode de replace multiple d'entrées pour un même model
+		 * @param array $pValues				Tableau multi-dimensionnel contenant les données &agrave; remplacer
+		 * @return resource
+		 */
+		public function replaceMultiple(array $pValues)
+		{
+			return Query::replaceMultiple($pValues)->into($this->table)->execute($this->handler);
+		}
+
 
 		/**
 		 * Méthode de modification d'une ou plusieurs entrées dans la table du modèle en cours

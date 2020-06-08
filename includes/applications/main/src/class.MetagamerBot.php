@@ -11,7 +11,6 @@ use core\db\Query;
 
 class MetagamerBot extends BotController
 {
-    CONST UPLOADS = 'files/uploads/';
     CONST BYE = "(Bye, or no result found)";
     CONST MAPPING_PAIRINGS = array(
         1 => "table",
@@ -43,12 +42,12 @@ class MetagamerBot extends BotController
 
     public function mapTournaments () {
         $tournaments = array();
-        for ($id = 11000; $id < 11030; $id++) {
+        for ($id = 10960; $id < 11000; $id++) {
             $pUrl = "https://my.cfbevents.com/deck/$id";
             $data = $this->callUrl($pUrl);
-            preg_match_all('/<h1[^>]*>([^<]*)<.*Submitted decklists.*<\/h1>.*View decklist/Umis', $data, $output_array);
+            preg_match_all('/(MagicFest Online Season \d).*<h1[^>]*>([^<]*)<.*Submitted decklists.*<\/h1>.*View decklist/Umis', $data, $output_array);
             if (array_key_exists(0, $output_array[1])) {
-                $name_tournament = trim($output_array[1][0]);
+                $name_tournament = trim($output_array[1][0]) . " - " . trim($output_array[2][0]);
                 $tournaments[$id] = $name_tournament;
             }
         }
@@ -219,6 +218,7 @@ class MetagamerBot extends BotController
         $deck_main = $output_array[2][0];
         $deck_side = $output_array[3][0];
 
+        // TODO remove this call, use mapping with cards instead
         $name_archetype = ModelArchetype::decklistMapper($deck_main);
 
         if ($pWrite) {
@@ -298,6 +298,7 @@ class MetagamerBot extends BotController
             $cards = array_values($cards);
             $this->modelCard->insertPlayerCards($cards);
 
+            // TODO evaluate player archetypes based on player_cards in DB
 
             if ($pParseMatchHistory) {
                 preg_match_all('/history.*<table[^>]*>.*opponent.*<\/table>/Uims', $deck, $output_array);
@@ -371,6 +372,12 @@ class MetagamerBot extends BotController
                     "opponent_id_player" => $opponent_player_id,
                     "result_match" => $match['result']
                 );
+                // insert opposing match as well
+                $insert_matches[] = array(
+                    "id_player" => $opponent_player_id,
+                    "opponent_id_player" => $pIdPlayer,
+                    "result_match" => intval(!$match['result'])
+                );
             } else {
                 trace_r("WARNING - player not found for tournament #" . $this->tournament . " : " . $opponent_arena_id);
                 trace_r($match);
@@ -378,7 +385,7 @@ class MetagamerBot extends BotController
         }
 
         if ($insert_matches) {
-            $mMatches->insertMultiple($insert_matches);
+            $mMatches->replaceMultiple($insert_matches);
         } else {
             trace_r("WARNING - No matches to insert for player " . $pIdPlayer);
         }
