@@ -101,6 +101,7 @@ namespace app\main\controllers\front {
                 if ($stats['count_players'] > 0) {
                     $cards = $this->modelCard->getPlayedCards($analysis_cond, $rules_cond);
 
+                    // TODO display standard deviation in grey shades
                     $deviation = StatsUtils::getStandardDeviation($stats['winrate'], $stats['total']);
                     $stats['deviation_up']   = $stats['winrate'] + $deviation;
                     $stats['deviation_down'] = $stats['winrate'] - $deviation;
@@ -124,9 +125,8 @@ namespace app\main\controllers\front {
                     $this->addContent("global_rules", $stats_rules);
 
                     foreach ($cards as &$card) {
-                        // avg_main|avg_side > 0 : to calculate only with main|side presence
-                        if ($card['avg_main'] > 0) {
-
+                        // count_total_main|count_total_side > 0 : to calculate only with main|side presence
+                        if ($card['count_total_main'] > 0) {
                             $winrate = $this->modelMatch->getWinrateByArchetypeId(
                                 $archetype['id_archetype'],
                                 $format_cond,
@@ -136,8 +136,10 @@ namespace app\main\controllers\front {
                                     ->andWhere("count_main", Query::UPPER, 0));
 
                             $card['winrate_main'] = $winrate['winrate'];
+                            // total matches count
                             $card['total_main'] = $winrate['total'];
                             $card['count_players_main'] = $winrate['count_players'];
+                            $card['avg_main'] = round($card['count_total_main']/$card['count_players_main'], 1);
                             $deviation = StatsUtils::getStandardDeviation($card['winrate_main'], $card['total_main']);
                             $card['deviation_up_main']   = $card['winrate_main'] + $deviation;
                             $card['deviation_down_main'] = $card['winrate_main'] - $deviation;
@@ -150,7 +152,7 @@ namespace app\main\controllers\front {
                                 $card['deviation_down_without_main'] = $card['winrate_without_main'] - $deviation;
                             }
                         }
-                        if ($card['avg_side'] > 0) {
+                        if ($card['count_total_side'] > 0) {
                             $winrate = $this->modelMatch->getWinrateByArchetypeId(
                                 $archetype['id_archetype'],
                                 $format_cond,
@@ -160,8 +162,10 @@ namespace app\main\controllers\front {
                                     ->andWhere("count_side", Query::UPPER, 0));
 
                             $card['winrate_side'] = $winrate['winrate'];
+                            // total matches count
                             $card['total_side'] = $winrate['total'];
                             $card['count_players_side'] = $winrate['count_players'];
+                            $card['avg_side'] = round($card['count_total_side']/$card['count_players_side'], 1);
                             $deviation = StatsUtils::getStandardDeviation($winrate['winrate'], $winrate['total']);
                             $card['deviation_up_side']   = $card['winrate_side'] + $deviation;
                             $card['deviation_down_side'] = $card['winrate_side'] - $deviation;

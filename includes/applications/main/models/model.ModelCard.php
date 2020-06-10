@@ -21,9 +21,7 @@ namespace app\main\models {
                 $pCondition = Query::condition();
             if(!$pRulesCondition)
                 $pRulesCondition = Query::condition();
-            $count_players = $this->modelPlayer->countPlayers(clone $pCondition, clone $pRulesCondition);
-            // TODO division here ?
-            $q = Query::select("cards.id_card, name_card, ROUND(SUM(count_main)/$count_players, 2) AS avg_main, ROUND(SUM(count_side)/$count_players, 2) AS avg_side", $this->tablePlayerCards)
+            $q = Query::select("cards.id_card, name_card, SUM(count_main) AS count_total_main, SUM(count_side) AS count_total_side", $this->tablePlayerCards)
                 ->join("players p", Query::JOIN_INNER, "p.id_player = player_card.id_player")
                 ->join($this->table, Query::JOIN_INNER, "cards.id_card = player_card.id_card")
                 ->join("tournaments", Query::JOIN_INNER, "p.id_tournament = tournaments.id_tournament")
