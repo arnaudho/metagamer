@@ -63,8 +63,7 @@ namespace app\main\models {
                 ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " .
                     $pTournamentId . " AND people.arena_id = '" . $pArenaId . "'")
                 ->execute($this->handler);
-            if (!$id_player) {
-                preg_match('/^([^#]+)#([0-9]+)/', $pArenaId, $output_array);
+            if (!$id_player && preg_match('/^([^#]+)#([0-9]+)/', $pArenaId, $output_array)) {
                 $id_player = Query::select("id_player", $this->table)
                     ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " .
                         $pTournamentId . " AND (people.arena_id LIKE '%#" . $output_array[2] . "' OR people.arena_id LIKE '" . $output_array[1] . "#%' OR people.discord_id = '" . $pArenaId . "')")
