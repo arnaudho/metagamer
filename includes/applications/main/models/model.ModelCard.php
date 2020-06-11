@@ -112,11 +112,11 @@ namespace app\main\models {
             if (empty($pCards)) {
                 return false;
             }
-            return Query::execute("INSERT IGNORE INTO " . $this->table . "(name_card) VALUES ('" . implode("'), ('", $pCards) . "')");
+            return Query::execute("INSERT IGNORE INTO " . $this->table . "(name_card) VALUES ('" . implode("'), ('", $pCards) . "')", $this->handler);
         }
 
         public function insertPlayerCards ($pCards = array()) {
-            return Query::insertMultiple($pCards)
+            return Query::replaceMultiple($pCards)
                 ->into($this->tablePlayerCards)
                 ->execute($this->handler);
         }

@@ -28,6 +28,7 @@ table.archetype-analysis .card-exclude { color: red; font-size: 1.2em; cursor: p
 table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor: pointer;}
 .container form.loading { pointer-events: none; opacity: 0.6;}
 .container .confidence-interval { font-size: 0.8em; font-style: italic;}
+#import-mtgmelee .form-group > * { display: block;}
 input#matchups-export-mode { cursor: pointer;}
 input#matchups-export-mode:checked ~ .table-matchups .matchup-deviation,
 input#matchups-export-mode:checked ~ .table-matchups .matchup-count,

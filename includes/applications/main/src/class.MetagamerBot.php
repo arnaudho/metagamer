@@ -245,7 +245,6 @@ class MetagamerBot extends BotController
                 )
             );
 
-
             // insert cards
             $cards = array();
             preg_match_all('/(<tr[^>]*>\s*<td[^>]*>([\d\s]+)<\/td>\s*<td[^>]*>([^<]+)<\/td>\s*<\/tr>\s*)+/Uims', $deck_main, $parsing_main);
@@ -259,6 +258,9 @@ class MetagamerBot extends BotController
                 return false;
             }
             $full_deck = array_merge($parsing_main[3], $parsing_side[3]);
+            foreach ($full_deck as &$card) {
+                $card = trim($card);
+            }
             $this->modelCard->insertCards($full_deck);
 
             // get cards ids
@@ -293,12 +295,12 @@ class MetagamerBot extends BotController
                 }
             }
             if ($deck_count < 60) {
-                trace_r("Deck < 60 cards for player $pIdPlayer ($pUrl)");
+                trace_r("Deck < 60 cards for player $pIdPlayer (<a href='$pUrl'>See decklist</a>)");
             }
             $cards = array_values($cards);
             $this->modelCard->insertPlayerCards($cards);
 
-            // TODO evaluate player archetypes based on player_cards in DB
+            // TODO evaluate player archetypes based on player_cards in SB
 
             if ($pParseMatchHistory) {
                 preg_match_all('/history.*<table[^>]*>.*opponent.*<\/table>/Uims', $deck, $output_array);

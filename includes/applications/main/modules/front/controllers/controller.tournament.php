@@ -6,7 +6,9 @@ namespace app\main\controllers\front {
     use app\main\models\ModelPlayer;
     use app\main\models\ModelTournament;
     use app\main\src\MetagamerBot;
+    use app\main\src\MtgMeleeBot;
     use core\application\DefaultFrontController;
+    use core\data\SimpleJSON;
     use core\db\Query;
 
     class tournament extends DefaultFrontController
@@ -26,22 +28,59 @@ namespace app\main\controllers\front {
         }
 
         public function import () {
-            $this->addContent("list_formats", $this->modelFormat->all());
-            $this->setTitle("Import tournament");
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                if ($_POST["url"] && $_POST["id_format"]) {
-                    $bot = new MetagamerBot("Roe (Online GP parser)");
-                    $result = $bot->parseDecklists($_POST['url'], $_POST['id_format']);
-                    if ($result) {
-                        $id_tournament = $bot->tournament;
-                        $data = $this->modelTournament->getTournamentData($id_tournament);
-                        $data['id_tournament'] = $id_tournament;
-                        $this->addContent("data", $data);
+                if ($_POST['import-cfb'] && $_POST['import-cfb']['url'] && $_POST['import-cfb']['id_format']) {
+                    $post_data = $_POST['import-cfb'];
+                    if (preg_match('/cfbevents/', $post_data['url'], $output_array)) {
+                        $bot = new MetagamerBot("Roe (CFB events tournament parser)");
+                    } elseif (preg_match('/mtgmelee/', $post_data['url'], $output_array)) {
+                        $bot = new MtgMeleeBot("Brad (MTG Melee tournament parser)");
+                    } else {
+                        $this->addMessage("Unknown tournament source : " . $post_data['url'], self::MESSAGE_ERROR);
+                    }
+                    if (isset($bot)) {
+                        $result = $bot->parseDecklists($post_data['url'], $post_data['id_format']);
+                        if ($result) {
+                            $id_tournament = $bot->tournament;
+                            $data = $this->modelTournament->getTournamentData($id_tournament);
+                            $data['id_tournament'] = $id_tournament;
+                            $this->addContent("data", $data);
+                        }
+                    }
+                } elseif ($_POST['import-mtgmelee'] && $_POST['import-mtgmelee']['data'] && $_POST['import-mtgmelee']['id_format']) {
+                    $bot = new MtgMeleeBot("Brad");
+                    $data = SimpleJSON::decode($_POST['import-mtgmelee']['data']);
+                    if ($data) {
+                        $result = $bot->parseRound($data);
+                        if ($result) {
+                            $id_tournament = $bot->tournament;
+                            $data = $this->modelTournament->getTournamentData($id_tournament);
+                            $data['id_tournament'] = $id_tournament;
+                            $this->addContent("data", $data);
+                        }
+                    } else {
+                        $this->addMessage("Empty or badly formated data", self::MESSAGE_ERROR);
+                    }
+                } elseif ($_POST['import-mtgmelee-decklists'] && $_POST['import-mtgmelee-decklists']['count']) {
+                    $count = $_POST['import-mtgmelee-decklists']['count'] > 100 ? 100 : intval($_POST['import-mtgmelee-decklists']['count']);
+                    $players = $this->modelPlayer->all(Query::condition()
+                        ->andWhere("id_archetype", Query::IS, "NULL", false)
+                        ->limit(0, $count),
+                        "id_player"
+                    );
+                    if (count($players) > 0) {
+                        $bot = new MtgMeleeBot("Test");
+                        foreach ($players as $player) {
+                            $bot->parseDecklist($player['id_player']);
+                        }
                     }
                 } else {
                     $this->addMessage("Missing data for import", self::MESSAGE_ERROR);
                 }
             }
+            $this->setTitle("Import tournament");
+            $this->addContent("list_formats", $this->modelFormat->all());
+            $this->addContent("count_waiting", $this->modelPlayer->countPlayersWithoutDecklist());
         }
 
         // TODO : filter by format first, then async load tournament list

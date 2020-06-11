@@ -76,6 +76,13 @@ namespace app\main\models {
             return $id_player ? $id_player[0]['id_player'] : null;
         }
 
+        public function countPlayersWithoutDecklist () {
+            return $this->count(
+                Query::condition()
+                    ->andWhere("id_archetype", Query::IS, "NULL", false)
+            );
+        }
+
         public function countPlayers ($pCond = null, $pRulesCondition = null) {
             if (!$pCond) {
                 $pCond = Query::condition();
