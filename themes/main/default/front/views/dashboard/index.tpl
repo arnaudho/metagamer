@@ -42,6 +42,8 @@
 {/if}
 {if $content.archetypes}
     <h2>Winrate by Archetype</h2>
+        <label for="matchups-export-mode">Export mode</label>
+        <input type="checkbox" name="matchups-export-mode" id="matchups-export-mode" />
     <table class="table table-hover table-condensed table-matchups">
         <tbody>
             <tr>
@@ -49,7 +51,7 @@
                 {foreach from=$content.archetypes item="archetype"}
                     <th class="rotated-text"><div><span>{$archetype.name_archetype}</span></div></th>
                 {/foreach}
-                <th class="rotated-text"><div><span>TOTAL</span></div></th>
+                <th class="rotated-text matchup-total"><div><span>TOTAL</span></div></th>
             </tr>
             {foreach from=$content.archetypes item="archetype"}
                 <tr>
