@@ -65,7 +65,7 @@ namespace core\utils
                         'soap:body'=>array(
                             'use'=>'encoded',
                             'namespace'=>$pNamespace,
-                            'encodingStyle'=>'http://schemas.xmlsoap.org/soap/encoding/'
+                            'encodingStyle'=>'https://schemas.xmlsoap.org/soap/encoding/'
                         )
                     ),
                     'output'=>array(
@@ -73,7 +73,7 @@ namespace core\utils
                             'parts'=>'return',
                             'use'=>'encoded',
                             'namespace'=>$pNamespace,
-                            'encodingStyle'=>'http://schemas.xmlsoap.org/soap/encoding/'
+                            'encodingStyle'=>'https://schemas.xmlsoap.org/soap/encoding/'
                         )
                     )
                 );
@@ -118,14 +118,14 @@ namespace core\utils
 
             $wsdl = array(
                 "definitions"=>array(
-                    'xmlns'=>'http://schemas.xmlsoap.org/wsdl/',
+                    'xmlns'=>'https://schemas.xmlsoap.org/wsdl/',
                     'name'=>$pServiceName,
                     'targetNamespace'=>$pNamespace,
                     'xmlns:tns'=>$pNamespace,
-                    'xmlns:xsd'=>'http://www.w3.org/2001/XMLSchema',
-                    'xmlns:soap'=>'http://schemas.xmlsoap.org/wsdl/soap/',
-                    'xmlns:soapenc'=>'http://schemas.xmlsoap.org/soap/encoding/',
-                    'xmlns:wsdl'=>'http://schemas.xmlsoap.org/wsdl/',
+                    'xmlns:xsd'=>'https://www.w3.org/2001/XMLSchema',
+                    'xmlns:soap'=>'https://schemas.xmlsoap.org/wsdl/soap/',
+                    'xmlns:soapenc'=>'https://schemas.xmlsoap.org/soap/encoding/',
+                    'xmlns:wsdl'=>'https://schemas.xmlsoap.org/wsdl/',
                     'portType'=>array(
                         'name'=>$pServiceName.'Type',
                         'operation'=>$operations
@@ -135,7 +135,7 @@ namespace core\utils
                         'type'=>'tns:'.$pServiceName.'Type',
                         'soap:binding'=>array(
                             'style'=>'rpc',
-                            'transport'=>'http://schemas.xmlsoap.org/soap/http'
+                            'transport'=>'https://schemas.xmlsoap.org/soap/http'
                         ),
                         'operation'=>$bindings
                     ),

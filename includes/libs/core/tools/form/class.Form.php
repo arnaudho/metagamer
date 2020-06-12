@@ -81,7 +81,7 @@ namespace core\tools\form
 		 * Expression régulière d'un url http://www.domain.ext/
 		 * @var String
 		 */
-		static public $regExp_Url = '/^http\:\/\/www\.[a-z0-9\_\-\?\&]\.[a-z]{2,3}\/$/';
+		static public $regExp_Url = '/^https?\:\/\/www\.[a-z0-9\_\-\?\&]\.[a-z]{2,3}\/$/';
 
 		/**
 		 * Expression régulière des chaines de caractéres interdisant le <html>

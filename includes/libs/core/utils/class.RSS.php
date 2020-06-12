@@ -47,7 +47,7 @@ namespace core\utils
 		 *
 		 * @var string[]
 		 */
-		public $namespaces = array("atom"=>"http://www.w3.org/2005/Atom");
+		public $namespaces = array("atom"=>"https://www.w3.org/2005/Atom");
 
 		/**
 		 *

@@ -159,7 +159,7 @@ namespace core\tools\debugger
 		 */
 		public function render($pDisplay = true, $pError = false)
 		{
-            $dir_to_theme = "http://".Configuration::$server_domain."/".(isset(Configuration::$server_folder)?Configuration::$server_folder."/":"")."includes/libs/core/tools/debugger";
+            $dir_to_theme = "https://".Configuration::$server_domain."/".(isset(Configuration::$server_folder)?Configuration::$server_folder."/":"")."includes/libs/core/tools/debugger";
             $ctx = new RenderingContext("includes/libs/core/tools/debugger/templates/template.debugger.php");
             $ctx->assign('is_error', $pError);
             $ctx->assign('dir_to_theme', $dir_to_theme);
@@ -267,7 +267,7 @@ namespace core\tools\debugger
 			$pErrorFile = pathinfo($pErrorFile);
 			$pErrorFile = $pErrorFile["basename"];
 			if(preg_match('/href=/', $pErrorMessage, $matches))
-				$pErrorMessage = preg_replace('/href=\'([a-z\.\-\_]*)\'/', 'href=\'http://www.php.net/$1\' target=\'_blank\'', $pErrorMessage);
+				$pErrorMessage = preg_replace('/href=\'([a-z\.\-\_]*)\'/', 'href=\'https://www.php.net/$1\' target=\'_blank\'', $pErrorMessage);
 			self::addToConsole($type, $pErrorMessage, $pErrorFile, $pErrorLine);
 			if($stopApplication)
 			{

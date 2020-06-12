@@ -91,7 +91,9 @@ namespace core\tools
 		 */
 		public function setOption($pCode, $pValue)
 		{
-			curl_setopt($this->curlResource, $pCode, $pValue);
+			curl_setopt($this->curlResource,
+				$pCode,
+				$pValue);
 		}
 
 		/**

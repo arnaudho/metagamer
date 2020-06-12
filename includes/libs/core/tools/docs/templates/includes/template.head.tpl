@@ -2,7 +2,7 @@
 <html>
     <head>
         <title></title>
-        <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
 
         {literal}
             <style>
