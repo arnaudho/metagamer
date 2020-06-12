@@ -170,8 +170,17 @@
                         </td>
                         <td {if $card.avg_main == 4}class="highlight"{/if}>{$card.avg_main|floatval}</td>
                         <td {if $content.global_rules.count_players == $card.count_players_main}class="strong"{/if}>{$card.count_players_main}</td>
-                        <td {if $card.winrate_main > $content.global_rules.winrate}class="winrate-positive"{/if}
-                            {if $card.winrate_main < $content.global_rules.winrate}class="winrate-negative"{/if}>
+                        <td {if $card.winrate_main > ($content.global_rules.winrate+5)}class="winrate-positive"
+                                {else}
+                                {if $card.winrate_main > $content.global_rules.winrate}class="winrate-slightly-positive"
+                                {else}
+                                    {if $card.winrate_main < ($content.global_rules.winrate-5)}class="winrate-negative"
+                                    {else}
+                                        {if $card.winrate_main < $content.global_rules.winrate}class="winrate-slightly-negative"
+                                        {/if}
+                                    {/if}
+                                {/if}
+                                {/if}>
                             {$card.winrate_main} %
                         </td>
                         <td>
@@ -227,8 +236,17 @@
                         <td>{$card.name_card}</td>
                         <td {if $card.avg_side == 4}class="highlight"{/if}>{$card.avg_side|floatval}</td>
                         <td {if $content.global_rules.count_players == $card.count_players_side}class="strong"{/if}>{$card.count_players_side}</td>
-                        <td {if $card.winrate_side > $content.global_rules.winrate}class="winrate-positive"{/if}
-                            {if $card.winrate_side < $content.global_rules.winrate}class="winrate-negative"{/if}>
+                        <td {if $card.winrate_side > ($content.global_rules.winrate+5)}class="winrate-positive"
+                            {else}
+                                {if $card.winrate_side > $content.global_rules.winrate}class="winrate-slightly-positive"
+                                {else}
+                                    {if $card.winrate_side < ($content.global_rules.winrate-5)}class="winrate-negative"
+                                    {else}
+                                        {if $card.winrate_side < $content.global_rules.winrate}class="winrate-slightly-negative"
+                                        {/if}
+                                    {/if}
+                                {/if}
+                            {/if}>
                             {$card.winrate_side} %
                         </td>
                         <td class="confidence-interval">

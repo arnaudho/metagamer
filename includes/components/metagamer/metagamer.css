@@ -17,7 +17,9 @@ table td.matchup-negative {background-color: #ffb3b3;}
 table td.matchup-slightly-negative {background-color: #ffe6e6;}
 table td.matchup-positive {background-color: #99ff99;}
 table td.matchup-slightly-positive {background-color: #ccffcc;}
+.container .winrate-slightly-negative {color: red;}
 .container .winrate-negative {color: red; font-weight: bold;}
+.container .winrate-slightly-positive {color: green;}
 .container .winrate-positive {color: green; font-weight: bold;}
 table th.rotated-text {height: 140px;white-space: nowrap;padding: 0 !important;vertical-align: bottom !important;}
 table th.rotated-text > div {transform:translate(13px, 0px)rotate(310deg);width: 30px;  }
