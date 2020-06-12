@@ -225,7 +225,7 @@ class MtgMeleeBot extends BotController
             $new_players_arena_ids = array_column($new_players, "arena_id");
             $all_people = $this->modelPeople->all(
                 Query::condition()
-                    ->andWhere("arena_id", Query::IN, '("' . implode('", "', $new_players_arena_ids) . '")', false),
+                    ->andWhere("arena_id", Query::IN, "('" . implode("', '", $new_players_arena_ids) . "')", false),
                 "id_people, arena_id"
             );
             foreach ($all_people as $people) {
@@ -246,7 +246,7 @@ class MtgMeleeBot extends BotController
             // get all people to insert in players
             $all_people = $this->modelPeople->all(
                 Query::condition()
-                    ->andWhere("arena_id", Query::IN, '("' . implode('", "', $new_players_arena_ids) . '")', false),
+                    ->andWhere("arena_id", Query::IN, "('" . implode("', '", $new_players_arena_ids) . "')", false),
                 "id_people, arena_id"
             );
 
