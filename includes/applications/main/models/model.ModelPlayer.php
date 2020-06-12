@@ -17,7 +17,7 @@ namespace app\main\models {
                     arena_id, discord_id, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins,
                     IF(COUNT(1) IS NULL, 0, COUNT(1)) AS matches", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people AND arena_id LIKE '%" . $pArenaId . "%'")
-                ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype")
+                ->join("archetypes", Query::JOIN_OUTER_LEFT, "archetypes.id_archetype = players.id_archetype")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
                 ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
                 ->groupBy("players.id_player")
