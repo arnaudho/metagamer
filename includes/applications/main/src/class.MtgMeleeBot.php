@@ -49,15 +49,17 @@ class MtgMeleeBot extends BotController
         }
 
         // PARSE decklist
-        preg_match_all('/<textarea[^>]+class="decklist-builder-copy-field[^>]+>[^<]*Deck([^<]*)Sideboard([^<]*)<\/textarea>/Uims', $data, $output_array);
+        preg_match_all('/<textarea[^>]+class="decklist-builder-copy-field[^>]+>[^<]*Deck([^<]*)(Sideboard([^<]*))?<\/textarea>/Uims', $data, $output_array);
 
         // TODO quickfix quote bug (&#039; on CFB / &#39; on MTGmelee)
         $deck_main = str_replace("&#39;", "&#039;", $output_array[1][0]);
-        $deck_side = str_replace("&#39;", "&#039;", $output_array[2][0]);
+        $deck_side = str_replace("&#39;", "&#039;", $output_array[3][0]);
 
         $name_archetype = ModelArchetype::decklistMapper($deck_main);
+        preg_match_all('/(\d+)\s+([&#;,\/\-\w ]+)(\r|\n)/Uims', $deck_main, $parsing_main);
 
-        if ($pWrite) {
+        // insert archetype only if cards found for decklist
+        if ($pWrite && array_key_exists(0, $parsing_main[2])) {
             // insert archetype if needed
             $archetype = $this->modelArchetype->one(Query::condition()->andWhere("name_archetype", Query::EQUAL, $name_archetype));
             if ($archetype) {
@@ -82,15 +84,13 @@ class MtgMeleeBot extends BotController
 
         // insert cards
         $cards = array();
-        preg_match_all('/(\d+)\s+([&#;,\/\-\w ]+)(\r|\n)/Uims', $deck_main, $parsing_main);
         if (!array_key_exists(0, $parsing_main[2])) {
-            trace_r("ERROR Decklist parsing : no maindeck found for url : " . $player['decklist_player']);
+            trace_r("ERROR Decklist parsing : no maindeck found for url : <a href='" . $player['decklist_player'] . "'>" . $player['decklist_player'] . "</a>");
             return false;
         }
         preg_match_all('/(\d+)\s+([&#;,\/\-\w ]+)(\r|\n)/Uims', $deck_side, $parsing_side);
-        if (!array_key_exists(0, $parsing_side[2])) {
+        if (!array_key_exists(0, $parsing_side[2]) || empty($deck_side)) {
             trace_r("ERROR Decklist parsing : no sideboard found for url : " . $player['decklist_player']);
-            return false;
         }
         $full_deck = array_merge($parsing_main[2], $parsing_side[2]);
         foreach ($full_deck as &$card) {
@@ -120,16 +120,18 @@ class MtgMeleeBot extends BotController
             );
             $deck_count += $parsing_main[1][$key];
         }
-        foreach ($parsing_side[2] as $key => $card_name) {
-            if (array_key_exists($card_name, $cards)) {
-                $cards[$card_name]['count_side'] = $parsing_side[1][$key];
-            } else {
-                $cards[$card_name] = array(
-                    "id_player"  => $pIdPlayer,
-                    "id_card"    => $id_cards[$card_name],
-                    "count_main" => 0,
-                    "count_side" => $parsing_side[1][$key]
-                );
+        if (array_key_exists(0, $parsing_side[2])) {
+            foreach ($parsing_side[2] as $key => $card_name) {
+                if (array_key_exists($card_name, $cards)) {
+                    $cards[$card_name]['count_side'] = $parsing_side[1][$key];
+                } else {
+                    $cards[$card_name] = array(
+                        "id_player" => $pIdPlayer,
+                        "id_card" => $id_cards[$card_name],
+                        "count_main" => 0,
+                        "count_side" => $parsing_side[1][$key]
+                    );
+                }
             }
         }
         if ($deck_count < 60) {
@@ -165,6 +167,15 @@ class MtgMeleeBot extends BotController
                     "id_format"       => $id_format
                 )
             );
+        }
+
+        foreach ($pData as $key => $pairing) {
+            if ($pairing['Player1']) {
+                $pData[$key]['Player1'] = htmlentities($pairing['Player1'], ENT_QUOTES);
+            }
+            if ($pairing['Player2']) {
+                $pData[$key]['Player2'] = htmlentities($pairing['Player2'], ENT_QUOTES);
+            }
         }
 
         $ids_people = array();
