@@ -112,18 +112,22 @@ class MtgMeleeBot extends BotController
         }
         $deck_count = 0;
         foreach ($parsing_main[2] as $key => $card_name) {
-            $cards[$card_name] = array(
-                "id_player"  => $pIdPlayer,
-                "id_card"    => $id_cards[$card_name],
-                "count_main" => $parsing_main[1][$key],
-                "count_side" => 0
-            );
+            if (array_key_exists($card_name, $cards)) {
+                $cards[$card_name]['count_main'] += $parsing_main[1][$key];
+            } else {
+                $cards[$card_name] = array(
+                    "id_player"  => $pIdPlayer,
+                    "id_card"    => $id_cards[$card_name],
+                    "count_main" => $parsing_main[1][$key],
+                    "count_side" => 0
+                );
+            }
             $deck_count += $parsing_main[1][$key];
         }
         if (array_key_exists(0, $parsing_side[2])) {
             foreach ($parsing_side[2] as $key => $card_name) {
                 if (array_key_exists($card_name, $cards)) {
-                    $cards[$card_name]['count_side'] = $parsing_side[1][$key];
+                    $cards[$card_name]['count_side'] += $parsing_side[1][$key];
                 } else {
                     $cards[$card_name] = array(
                         "id_player" => $pIdPlayer,
