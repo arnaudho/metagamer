@@ -76,6 +76,14 @@ namespace app\main\models {
             return $id_player ? $id_player[0]['id_player'] : null;
         }
 
+        public function getPlayerByFormatId ($pIdFormat, $pFIelds = "players.*") {
+            $players = Query::select($pFIelds, "players")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->andWhere("id_format", Query::EQUAL, $pIdFormat)
+                ->execute($this->handler);
+            return $players;
+        }
+
         public function countPlayersWithoutDecklist () {
             return $this->count(
                 Query::condition()

@@ -9,9 +9,13 @@ namespace app\main\models {
     class ModelArchetype extends BaseModel {
 
         CONST ARCHETYPE_OTHER = "Other";
+        protected $modelPlayer;
+        protected $modelCard;
 
         public function __construct()
         {
+            $this->modelPlayer = new ModelPlayer();
+            $this->modelCard = new ModelCard();
             parent::__construct("archetypes", "id_archetype");
         }
 
@@ -38,6 +42,51 @@ namespace app\main\models {
                 return null;
             }
             return $mapping;
+        }
+
+        public function evaluatePlayerArchetype ($pIdPlayer, $pWrite = true) {
+            $player = $this->modelPlayer->getTupleById($pIdPlayer);
+            if (!$player) {
+                trace_r("ERROR : Player $pIdPlayer not found");
+                return false;
+            }
+            $cards = $this->modelCard->getPlayedCards(Query::condition()->andWhere("player_card.id_player", Query::EQUAL, $pIdPlayer));
+
+            // TODO add : if no cards found, call URL to get deck details
+            if (!$cards) {
+                trace_r("ERROR : No cards found for player #$pIdPlayer");
+                return false;
+            }
+            $maindeck = "";
+            foreach ($cards as $card) {
+                if ($card['count_total_main'] > 0) {
+                    $maindeck .= $card['name_card'] . " 00 ";
+                }
+            }
+            $name_archetype = self::decklistMapper($maindeck);
+
+            if ($pWrite) {
+                // insert archetype if needed
+                $archetype = $this->one(Query::condition()->andWhere("name_archetype", Query::EQUAL, $name_archetype));
+                if ($archetype) {
+                    $id_archetype = $archetype['id_archetype'];
+                } else {
+                    $this->insert(
+                        array(
+                            "name_archetype" => $name_archetype
+                        )
+                    );
+                    $id_archetype = $this->getInsertId();
+                }
+                $this->modelPlayer->updateById(
+                    $pIdPlayer,
+                    array(
+                        "id_archetype" => $id_archetype
+                    )
+                );
+            }
+
+            return $name_archetype;
         }
 
         /**
