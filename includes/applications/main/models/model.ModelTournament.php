@@ -24,22 +24,20 @@ namespace app\main\models {
 
         public function getTournamentData ($pTournamentId) {
             $name = $this->getTupleById($pTournamentId, "name_tournament");
-            $players = Query::select("id_player", "players")
+            $players = Query::count(
+                "players",
+                Query::condition()
+                    ->andWhere("id_tournament", Query::EQUAL, $pTournamentId)
+            );
+            $matches = Query::select("COUNT(1) AS nb", "matches")
+                ->join("players", Query::JOIN_INNER, "matches.id_player = players.id_player")
                 ->andWhere("id_tournament", Query::EQUAL, $pTournamentId)
                 ->execute();
             $data = array(
                 "name_tournament" => $name['name_tournament'],
-                "count_players"   => count($players)
+                "count_players"   => $players,
+                "count_matches"   => $matches[0]['nb']
             );
-            $id_players = array_column($players, 'id_player');
-            $id_players = "('" . implode("', '", $id_players) . "')";
-            $matches = Query::count(
-                "matches",
-                Query::condition()->andWhere(
-                    "id_player", Query::IN, $id_players, false
-                )
-            );
-            $data['count_matches'] = $matches;
             return $data;
         }
 
