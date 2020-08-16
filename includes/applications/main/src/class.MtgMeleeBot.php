@@ -60,6 +60,7 @@ class MtgMeleeBot extends BotController
 
         // insert archetype only if cards found for decklist
         if ($pWrite && array_key_exists(0, $parsing_main[2])) {
+            // TODO use modelArchetype::evaluate instead
             // insert archetype if needed
             $archetype = $this->modelArchetype->one(Query::condition()->andWhere("name_archetype", Query::EQUAL, $name_archetype));
             if ($archetype) {
@@ -322,9 +323,9 @@ class MtgMeleeBot extends BotController
 
     public function getMatchResult ($pPlayer, $pOpponent, $pResult) {
         if (preg_match('/(.+)\sWon/i', $pResult, $output_array)) {
-            if ($output_array[1] == $pPlayer) {
+            if ($output_array[1] == $pPlayer || $output_array[1] == html_entity_decode($pPlayer)) {
                 return 1;
-            } elseif ($output_array[1] == $pOpponent) {
+            } elseif ($output_array[1] == $pOpponent || $output_array[1] == html_entity_decode($pOpponent)) {
                 return 0;
             }
         }
