@@ -152,17 +152,23 @@ class MtgMeleeBot extends BotController
     }
 
     // Parse round data (JSON)
-    public function parseRound ($pData) {
+    public function parseRound ($pData, $pFormat = null) {
         if (!$pData[0]['TournamentId']) {
+            // TODO display error message -- this->addMessage does not work
             trace_r("Tournament ID not found");
             return false;
         }
 
         // insert tournament if needed
         $this->tournament = $pData[0]['TournamentId'];
-        if (!$this->modelTournament->getTupleById($pData[0]['TournamentId'])) {
+        if (!$this->modelTournament->getTupleById($this->tournament)) {
             $mFormat = new ModelFormat();
-            $id_format = $mFormat->one(Query::condition()->order("id_format", "DESC")->limit(0, 1));
+            if (!$pFormat) {
+                // TODO display error message
+                trace_r("Please specify a format to create new tournament");
+                return false;
+            }
+            $id_format = $mFormat->getTupleById($pFormat);
             $id_format = $id_format['id_format'];
             // TODO handle tournaments from different sources - otherwise IDs could clash
             $this->modelTournament->insert(

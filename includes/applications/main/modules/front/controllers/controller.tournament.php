@@ -33,8 +33,6 @@ namespace app\main\controllers\front {
                     $post_data = $_POST['import-cfb'];
                     if (preg_match('/cfbevents/', $post_data['url'], $output_array)) {
                         $bot = new MetagamerBot("Roe (CFB events tournament parser)");
-                    } elseif (preg_match('/mtgmelee/', $post_data['url'], $output_array)) {
-                        $bot = new MtgMeleeBot("Brad (MTG Melee tournament parser)");
                     } else {
                         $this->addMessage("Unknown tournament source : " . $post_data['url'], self::MESSAGE_ERROR);
                     }
@@ -47,11 +45,11 @@ namespace app\main\controllers\front {
                             $this->addContent("data", $data);
                         }
                     }
-                } elseif ($_POST['import-mtgmelee'] && $_POST['import-mtgmelee']['data'] && $_POST['import-mtgmelee']['id_format']) {
-                    $bot = new MtgMeleeBot("Brad");
+                } elseif ($_POST['import-mtgmelee'] && $_POST['import-mtgmelee']['data']) {
+                    $bot = new MtgMeleeBot("Brad (MTG Melee tournament parser)");
                     $data = SimpleJSON::decode($_POST['import-mtgmelee']['data']);
                     if ($data) {
-                        $result = $bot->parseRound($data);
+                        $result = $bot->parseRound($data, $_POST['import-mtgmelee']['id_format']);
                         if ($result) {
                             $id_tournament = $bot->tournament;
                             $data = $this->modelTournament->getTournamentData($id_tournament);
@@ -59,7 +57,7 @@ namespace app\main\controllers\front {
                             $this->addContent("data", $data);
                         }
                     } else {
-                        $this->addMessage("Empty or badly formated data", self::MESSAGE_ERROR);
+                        $this->addMessage("Empty or badly formatted data", self::MESSAGE_ERROR);
                     }
                 } elseif ($_POST['import-mtgmelee-decklists'] && $_POST['import-mtgmelee-decklists']['count']) {
                     $count = $_POST['import-mtgmelee-decklists']['count'] > 100 ? 100 : intval($_POST['import-mtgmelee-decklists']['count']);
