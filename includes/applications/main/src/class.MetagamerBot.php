@@ -225,6 +225,7 @@ class MetagamerBot extends BotController
             // insert archetype if needed
             $mArchetype = new ModelArchetype();
             $archetype = $mArchetype->one(Query::condition()->andWhere("name_archetype", Query::EQUAL, $name_archetype));
+            // TODO use modelArchetype::evaluate instead
             if ($archetype) {
                 $id_archetype = $archetype['id_archetype'];
             } else {
@@ -247,7 +248,7 @@ class MetagamerBot extends BotController
 
             // insert cards
             $cards = array();
-            preg_match_all('/(<tr[^>]*>\s*<td[^>]*>([\d\s]+)<\/td>\s*<td[^>]*>([^<]+)<\/td>\s*<\/tr>\s*)+/Uims', $deck_main, $parsing_main);
+            preg_match_all('/(<tr[^>]*>\s*<td[^>]*>([\d\s]+)<\/td>\s*<td[^>]*>([^<]+)(\([^<]+)?<\/td>\s*<\/tr>\s*)+/Uims', $deck_main, $parsing_main);
             if (!array_key_exists(0, $parsing_main[3])) {
                 trace_r("ERROR Decklist parsing : no maindeck found for url : " . $pUrl);
                 return false;
