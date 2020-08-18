@@ -34,5 +34,13 @@ namespace core\application
         {
             return parent::render($pDisplay);
         }
+
+        /**
+         * Méthode de page introuvable
+         */
+        public function notFound()
+        {
+            $this->setTemplate(null, null, 'notFound.tpl');
+        }
     }
 }
