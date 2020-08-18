@@ -43,7 +43,7 @@ class BotController extends DefaultController
         }
         $end = microtime(true);
         $time = round($end - $start, 3);
-        trace("REST Request <b>[" . $r->getResponseHTTPCode() . "]</b> (".self::convertToOctets(mb_strlen($data, "UTF-8"))." - ".$time."s) : <a href='".$pUrl."' target='_blank'>".$pUrl.'</a>');
+        trace("REST Request <b>[" . $r->getResponseHTTPCode() . "]</b> (" . date("H:i:s", $start)." - ".self::convertToOctets(mb_strlen($data, "UTF-8"))." - ".$time."s) : <a href='".$pUrl."' target='_blank'>".$pUrl.'</a>');
         return $data;
     }
 
