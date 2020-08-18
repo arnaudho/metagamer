@@ -29,8 +29,9 @@
 
         <form class="form-inline" id="import-mtgmelee" method="post">
             <div class="form-group">
-                <h5>Enter tournament name and format for first round</h5>
+                <h5>Enter tournament name, date and format for first round</h5>
                 <input name="import-mtgmelee[tournament_name]" type="text" placeholder="Tournament name" class="form-control" />
+                <input name="import-mtgmelee[tournament_date]" type="date" class="form-control" />
                 <select name="import-mtgmelee[id_format]" class="form-control">
                     <option value="" disabled{if !$content.format} selected{/if}>Format</option>
                     {foreach from=$content.list_formats item="format"}

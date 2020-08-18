@@ -152,7 +152,7 @@ class MtgMeleeBot extends BotController
     }
 
     // Parse round data (JSON)
-    public function parseRound ($pData, $pFormat = null, $pTournamentName = null) {
+    public function parseRound ($pData, $pFormat = null, $pTournamentName = null, $pTournamentDate = null) {
         if (!$pData[0]['TournamentId']) {
             // TODO display error message -- this->addMessage does not work
             trace_r("Tournament ID not found");
@@ -170,14 +170,16 @@ class MtgMeleeBot extends BotController
             }
             $id_format = $mFormat->getTupleById($pFormat);
             $id_format = $id_format['id_format'];
-            // TODO handle tournaments from different sources - otherwise IDs could clash
-            $this->modelTournament->insert(
-                array(
-                    "id_tournament"   => $this->tournament,
-                    "name_tournament" => $pTournamentName ? $pTournamentName : "MTG Melee - Tournament #" . $this->tournament,
-                    "id_format"       => $id_format
-                )
+            $new_tournament = array(
+                "id_tournament"   => $this->tournament,
+                "name_tournament" => $pTournamentName ? $pTournamentName : "MTG Melee - Tournament #" . $this->tournament,
+                "id_format"       => $id_format
             );
+            if ($pTournamentDate) {
+                $new_tournament['date_tournament'] = $pTournamentDate;
+            }
+            // TODO handle tournaments from different sources - otherwise IDs could clash
+            $this->modelTournament->insert($new_tournament);
         }
 
         foreach ($pData as $key => $pairing) {
