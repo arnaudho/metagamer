@@ -145,8 +145,13 @@ namespace core\db\handler
 		 */
 		public function execute($pQuery)
 		{
-			Debugger::query($pQuery, "db", $this->bdd);
-			return $this->mysqliInstance->query($pQuery);
+			$time_start = microtime(true);
+			$res = $this->mysqliInstance->query($pQuery);
+			$time_end = microtime(true);
+			$execution_time = ($time_end - $time_start)/60;
+			$message = $pQuery . "<br/>execution time : <b>".(round($execution_time, 3))." sec</b>";
+			Debugger::query($message, "db", $this->bdd);
+			return $res;
 		}
 
 
