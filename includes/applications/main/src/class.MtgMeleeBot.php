@@ -152,7 +152,7 @@ class MtgMeleeBot extends BotController
     }
 
     // Parse round data (JSON)
-    public function parseRound ($pData, $pFormat = null) {
+    public function parseRound ($pData, $pFormat = null, $pTournamentName = null) {
         if (!$pData[0]['TournamentId']) {
             // TODO display error message -- this->addMessage does not work
             trace_r("Tournament ID not found");
@@ -174,7 +174,7 @@ class MtgMeleeBot extends BotController
             $this->modelTournament->insert(
                 array(
                     "id_tournament"   => $this->tournament,
-                    "name_tournament" => "MTG Melee - Tournament #" . $this->tournament,
+                    "name_tournament" => $pTournamentName ? $pTournamentName : "MTG Melee - Tournament #" . $this->tournament,
                     "id_format"       => $id_format
                 )
             );

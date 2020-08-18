@@ -29,12 +29,15 @@
 
         <form class="form-inline" id="import-mtgmelee" method="post">
             <div class="form-group">
+                <h5>Enter tournament name and format for first round</h5>
+                <input name="import-mtgmelee[tournament_name]" type="text" placeholder="Tournament name" class="form-control" />
                 <select name="import-mtgmelee[id_format]" class="form-control">
-                    <option value="" disabled{if !$content.format} selected{/if}>Format (leave empty if tournament already created)</option>
+                    <option value="" disabled{if !$content.format} selected{/if}>Format</option>
                     {foreach from=$content.list_formats item="format"}
                         <option value="{$format.id_format}"{if $content.format.id_format == $format.id_format} selected{/if}>{$format.name_format}</option>
                     {/foreach}
                 </select>
+                <hr />
                 <textarea name="import-mtgmelee[data]" class="form-control" rows="8" cols="40" placeholder="Paste pairings data here..."></textarea>
                 <button type="submit" class="btn btn-primary">Import</button>
             </div>

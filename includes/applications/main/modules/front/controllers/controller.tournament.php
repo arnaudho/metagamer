@@ -49,7 +49,7 @@ namespace app\main\controllers\front {
                     $bot = new MtgMeleeBot("Brad (MTG Melee tournament parser)");
                     $data = SimpleJSON::decode($_POST['import-mtgmelee']['data']);
                     if ($data) {
-                        $result = $bot->parseRound($data, $_POST['import-mtgmelee']['id_format']);
+                        $result = $bot->parseRound($data, $_POST['import-mtgmelee']['id_format'], $_POST['import-mtgmelee']['tournament_name']);
                         if ($result) {
                             $id_tournament = $bot->tournament;
                             $data = $this->modelTournament->getTournamentData($id_tournament);
