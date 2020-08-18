@@ -27,7 +27,7 @@
                 <td>{$player.wins}-{$player.matches-$player.wins}</td>
                 <td>{$player.name_archetype}</td>
                 <td>
-                    <a href="{$player.decklist_player}" class="btn btn-info" target="_blank">
+                    <a href="deck/id:{$player.id_player}/" class="btn btn-info" target="_blank">
                         <span class="glyphicon glyphicon-duplicate"></span>
                     </a>
                 </td>

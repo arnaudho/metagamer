@@ -29,7 +29,7 @@ namespace app\main\models {
 
         public function searchPlayerByArenaId ($pArenaId) {
             $data = Query::select(
-                    "tournaments.id_tournament, name_tournament, name_format, name_archetype, decklist_player,
+                    "players.id_player, tournaments.id_tournament, name_tournament, name_format, name_archetype,
                     arena_id, discord_id, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins,
                     IF(COUNT(1) IS NULL, 0, COUNT(1)) AS matches", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people AND arena_id LIKE '%" . $pArenaId . "%'")
