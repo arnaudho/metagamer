@@ -11,17 +11,34 @@ namespace app\main\models {
             parent::__construct("players", "id_player");
         }
 
+        public function getDataByPlayerId ($pIdPlayer) {
+            $data = Query::select(
+                "players.id_player, tournaments.id_tournament, name_tournament, name_format, name_archetype, decklist_player,
+                    arena_id, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins,
+                    IF(COUNT(1) IS NULL, 0, COUNT(1)) AS matches", $this->table)
+                ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people AND players.id_player = $pIdPlayer")
+                ->join("archetypes", Query::JOIN_OUTER_LEFT, "archetypes.id_archetype = players.id_archetype")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->join("formats", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
+                ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
+                ->groupBy("players.id_player")
+                ->limit(0, 1)
+                ->execute($this->handler);
+            return $data[0];
+        }
+
         public function searchPlayerByArenaId ($pArenaId) {
             $data = Query::select(
-                    "tournaments.id_tournament, name_tournament, id_format, name_archetype, decklist_player,
+                    "tournaments.id_tournament, name_tournament, name_format, name_archetype, decklist_player,
                     arena_id, discord_id, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins,
                     IF(COUNT(1) IS NULL, 0, COUNT(1)) AS matches", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people AND arena_id LIKE '%" . $pArenaId . "%'")
                 ->join("archetypes", Query::JOIN_OUTER_LEFT, "archetypes.id_archetype = players.id_archetype")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->join("formats", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
                 ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
                 ->groupBy("players.id_player")
-                ->order("arena_id, date_tournament")
+                ->order("formats.id_format DESC, arena_id, date_tournament")
                 ->limit(0, 100)
                 ->execute($this->handler);
             return $data;

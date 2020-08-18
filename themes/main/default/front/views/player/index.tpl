@@ -23,7 +23,7 @@
         {foreach from=$content.players item="player"}
             <tr>
                 <td class="strong">{$player.arena_id}</td>
-                <td><a href="dashboard/?id_format={$player.id_format}&id_tournament={$player.id_tournament}">{$player.name_tournament}</a></td>
+                <td><a href="dashboard/?id_format={$player.id_format}&id_tournament={$player.id_tournament}">{$player.name_tournament}</a> ({$player.name_format})</td>
                 <td>{$player.wins}-{$player.matches-$player.wins}</td>
                 <td>{$player.name_archetype}</td>
                 <td>

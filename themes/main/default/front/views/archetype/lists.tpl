@@ -18,7 +18,7 @@
                     <td><a href="dashboard/?id_format={$decklist.id_format}&id_tournament={$decklist.id_tournament}">{$decklist.name_tournament}</a></td>
                     <td>{$decklist.wins}-{$decklist.total-$decklist.wins}</td>
                     <td>
-                        <a href="{$decklist.decklist_player}" class="btn btn-info" target="_blank">
+                        <a href="deck/id:{$decklist.id_player}/" class="btn btn-info" target="_blank">
                             <span class="glyphicon glyphicon-duplicate"></span>
                         </a>
                     </td>
