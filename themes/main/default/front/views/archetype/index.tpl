@@ -3,13 +3,13 @@
 {if $content.list_archetypes}
     <form class="form-inline">
         <div class="form-group">
+            {include file="includes/list_formats.tpl"}
             <select name="id_archetype" id="archetype-select" class="form-control">
                 <option value="" disabled{if !$content.archetype} selected{/if}>Choose an archetype</option>
                 {foreach from=$content.list_archetypes item="archetype"}
                     <option value="{$archetype.id_archetype}"{if $content.archetype.id_archetype == $archetype.id_archetype} selected{/if}>{$archetype.name_archetype}</option>
                 {/foreach}
             </select>
-            {include file="includes/list_formats.tpl"}
             <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
         </div>
     </form>

@@ -33,8 +33,6 @@ namespace app\main\controllers\front {
         }
 
         public function index () {
-            $this->addContent("list_archetypes", $this->modelArchetype->all());
-            $this->addContent("list_formats", $this->modelFormat->all());
             $analysis_cond = Query::condition();
             $format_cond = Query::condition();
             $archetype = array();
@@ -187,6 +185,9 @@ namespace app\main\controllers\front {
             } else {
                 $this->cleanCardRules();
             }
+            $list_archetypes = $format ? $this->modelArchetype->allByFormat($format['id_format']) : $this->modelArchetype->all();
+            $this->addContent("list_archetypes", $list_archetypes);
+            $this->addContent("list_formats", $this->modelFormat->all());
         }
 
         protected function cleanCardRules () {

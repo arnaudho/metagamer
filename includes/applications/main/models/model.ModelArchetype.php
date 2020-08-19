@@ -89,6 +89,15 @@ namespace app\main\models {
             return $name_archetype;
         }
 
+        public function allByFormat ($pIdFormat) {
+            $archetypes = Query::select("DISTINCT archetypes.*", "archetypes")
+                ->join("players", Query::JOIN_INNER, "players.id_archetype = archetypes.id_archetype")
+                ->join("tournaments", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament AND id_format = $pIdFormat")
+                ->order("name_archetype")
+                ->execute();
+            return $archetypes;
+        }
+
         /**
          * Returns archetype according to cards found in decklist
          */

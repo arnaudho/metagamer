@@ -9,6 +9,18 @@
 				"action":"index"
 			}
 		},
+		"deck/id:{$id_player}/":
+		{
+			"parameters":
+			{
+				"id_player":"[0-9]+"
+			},
+			"GET":
+			{
+				"controller":"player",
+				"action":"display"
+			}
+		},
 		"{$controller}/":
 		{
 			"parameters":

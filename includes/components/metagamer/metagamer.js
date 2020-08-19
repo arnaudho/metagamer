@@ -1,4 +1,5 @@
 (function(){
+    // TODO separate components on different pages
     function init(){
         // init forms loader
         var forms = document.querySelectorAll('.container form');
@@ -31,6 +32,46 @@
                     postValue(id_card, "remove_rule");
                 });
             });
+        }
+
+        // load archetypes for selected format
+        window.select_format = document.querySelectorAll('.container #format-select');
+        window.select_archetypes = document.querySelectorAll('.container #archetype-select');
+
+        if (select_format[0] && select_archetypes[0]) {
+            select_format = select_format[0];
+            select_archetypes = select_archetypes[0];
+            select_format.addEventListener("change", function(pEvt) {
+                var id_format = pEvt.target.value;
+                Request.load(
+                    'dashboard/data/',
+                    {
+                        action: 'get_archetypes_by_format',
+                        id_format: id_format
+                    }, 'POST')
+                    .onComplete(populateArchetypesList);
+            });
+        }
+    }
+
+    function populateArchetypesList (pResponse) {
+        if (pResponse.responseJSON && pResponse.responseJSON.content && pResponse.responseJSON.content.archetypes) {
+            // clear select
+            if (select_archetypes) {
+                var archetypes = select_archetypes.querySelectorAll('option[value]:not([value=""])');
+                if (archetypes) {
+                    archetypes.forEach(function(pElt) {
+                        select_archetypes.removeChild(pElt);
+                    });
+                    pResponse.responseJSON.content.archetypes.forEach(function(pElt) {
+                        var opt = document.createElement('option');
+                        opt.setAttribute("value", pElt.id_archetype);
+                        opt.innerHTML = pElt.name_archetype;
+                        select_archetypes.appendChild(opt);
+                    });
+                }
+            }
+
         }
     }
 

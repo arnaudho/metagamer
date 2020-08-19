@@ -6,9 +6,13 @@ namespace app\main\controllers\front {
     use app\main\models\ModelMatch;
     use app\main\models\ModelPlayer;
     use app\main\models\ModelTournament;
+    use core\application\Core;
     use core\application\DefaultFrontController;
+    use core\application\Go;
+    use core\application\Header;
     use core\db\Query;
     use core\utils\StatsUtils;
+    use lib\core\tools\Http;
 
     class dashboard extends DefaultFrontController
     {
@@ -29,6 +33,9 @@ namespace app\main\controllers\front {
         }
 
         public function index () {
+            //
+            // TODO mirror matches excluded from global winrate in dashboard ?
+            //
             $this->addContent("list_formats", $this->modelFormat->all());
 
             $format = array();
@@ -103,6 +110,44 @@ namespace app\main\controllers\front {
             } else {
                 $this->setTitle("Dashboard");
             }
+        }
+
+        public function data () {
+            if (!Core::$request_async) {
+                Go::to404();
+            }
+
+            $http_version = Http::V_1_1;
+            $http_status = Http::CODE_200;
+
+            if (!isset($_POST['action']) || empty($_POST['action']) ) {
+                $http_status = Http::CODE_404;
+                $this->addContent('error', "Missing parameter : action");
+            } else {
+
+                $action = $_POST['action'];
+
+                switch($action) {
+                    case 'get_archetypes_by_format':
+                        if (isset($_POST['id_format']) && !empty($_POST['id_format'])) {
+                            $mArchetype = new ModelArchetype();
+                            $archetypes = $mArchetype->allByFormat($_POST['id_format']);
+                            $this->addContent("archetypes", $archetypes);
+                        } else {
+                            $http_status = Http::CODE_404;
+                            $this->addContent('error', "Missing parameter : id_format");
+                        }
+                        break;
+                    default:
+                        $http_status = Http::CODE_404;
+                        $this->addContent('error', "Invalid action specified");
+                        break;
+                }
+            }
+
+
+            Header::http("$http_version $http_status");
+            Header::status("$http_status");
         }
 
         public function archetypes () {
