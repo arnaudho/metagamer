@@ -83,6 +83,7 @@ namespace core\db\handler
          */
 		protected function connect()
 		{
+			// do NOT specify port in PROD environment
             $this->mysqliInstance = new mysqli($this->host, $this->user, $this->mdp, $this->bdd, 3308);
 			if($this->mysqliInstance->connect_error)
 				trigger_error("Connexion au serveur de gestion de base de données impossible", E_USER_ERROR);
@@ -149,8 +150,10 @@ namespace core\db\handler
 			$res = $this->mysqliInstance->query($pQuery);
 			$time_end = microtime(true);
 			$execution_time = ($time_end - $time_start)/60;
-			$message = $pQuery . "<br/>execution time : <b>".(round($execution_time, 3))." sec</b>";
-			Debugger::query($message, "db", $this->bdd);
+			if (round($execution_time, 3) != 0) {
+				$pQuery .= "<br/>execution time : <b>" . (round($execution_time, 3)) . " sec</b>";
+			}
+			Debugger::query($pQuery, "db", $this->bdd);
 			return $res;
 		}
 
