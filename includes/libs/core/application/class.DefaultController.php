@@ -45,7 +45,7 @@ namespace core\application
 		 * Tableau associatif des messages qu'on souhaite envoyer &agrave; la vue.
 		 * @var array
 		 */
-		private $messages = array();
+		protected $messages = array();
 
 
 		/**

@@ -40,11 +40,13 @@ class MtgMeleeBot extends BotController
         }
         if (!preg_match('/^https?:\/\/mtgmelee.com\/Decklist\/View\/([\d]+)$/ix', $player['decklist_player'], $output_array)) {
             trace_r("ERROR : incorrect decklist URL : " . $player['decklist_player']);
+            $this->addMessage("ERROR : incorrect decklist URL : " . $player['decklist_player'], self::MESSAGE_ERROR);
             return false;
         }
         $data = $this->callUrl($player['decklist_player']);
         if (empty($data)) {
             trace_r("PARSING ERROR : URL " . $player['decklist_player'] . " not found");
+            $this->addMessage("PARSING ERROR : URL " . $player['decklist_player'] . " not found", self::MESSAGE_ERROR);
             return false;
         }
 
@@ -87,11 +89,13 @@ class MtgMeleeBot extends BotController
         $cards = array();
         if (!array_key_exists(0, $parsing_main[2])) {
             trace_r("ERROR Decklist parsing : no maindeck found for url : <a href='" . $player['decklist_player'] . "'>" . $player['decklist_player'] . "</a>");
+            $this->addMessage("ERROR Decklist parsing : no maindeck found for url : <a href='" . $player['decklist_player'] . "' target='_blank'>" . $player['decklist_player'] . "</a>", self::MESSAGE_ERROR);
             return false;
         }
         preg_match_all('/(\d+)\s+([&#;,\/\-\w ]+)(\r|\n)/Uims', $deck_side, $parsing_side);
         if (!array_key_exists(0, $parsing_side[2]) || empty($deck_side)) {
             trace_r("ERROR Decklist parsing : no sideboard found for url : " . $player['decklist_player']);
+            $this->addMessage("ERROR Decklist parsing : no sideboard found for url : <a href='" . $player['decklist_player'] . "' target='_blank'>" . $player['decklist_player'] . "</a>", self::MESSAGE_ERROR);
         }
         $full_deck = array_merge($parsing_main[2], $parsing_side[2]);
         foreach ($full_deck as &$card) {
@@ -141,6 +145,7 @@ class MtgMeleeBot extends BotController
         }
         if ($deck_count < 60) {
             trace_r("Deck < 60 cards for player $pIdPlayer (<a href='" . $player['decklist_player'] . "'>See decklist</a>)");
+            $this->addMessage("Deck < 60 cards for player $pIdPlayer (<a href='" . $player['decklist_player'] . "' target='_blank'>See decklist</a>)", self::MESSAGE_ERROR);
         }
         $cards = array_values($cards);
 
@@ -154,8 +159,7 @@ class MtgMeleeBot extends BotController
     // Parse round data (JSON)
     public function parseRound ($pData, $pFormat = null, $pTournamentName = null, $pTournamentDate = null) {
         if (!$pData[0]['TournamentId']) {
-            // TODO display error message -- this->addMessage does not work
-            trace_r("Tournament ID not found");
+            $this->addMessage("Tournament ID not found", self::MESSAGE_ERROR);
             return false;
         }
 
@@ -164,8 +168,7 @@ class MtgMeleeBot extends BotController
         if (!$this->modelTournament->getTupleById($this->tournament)) {
             $mFormat = new ModelFormat();
             if (!$pFormat) {
-                // TODO display error message
-                trace_r("Please specify a format to create new tournament");
+                $this->addMessage("Please specify a format to create new tournament", self::MESSAGE_ERROR);
                 return false;
             }
             $id_format = $mFormat->getTupleById($pFormat);
@@ -207,7 +210,7 @@ class MtgMeleeBot extends BotController
             // SEARCH player2
             // same
         foreach ($pData as $pairing) {
-            if ($pairing['Player1']) {
+            if ($pairing['Player1'] && $pairing['Player1DecklistId']) {
                 $id_player = $this->modelPlayer->getPlayerIdByTournamentIdArenaId($this->tournament, $pairing['Player1']);
                 if ($id_player) {
                     $list_players[$pairing['Player1DecklistId']] = $id_player;
@@ -220,7 +223,7 @@ class MtgMeleeBot extends BotController
                     );
                 }
             }
-            if ($pairing['Player2']) {
+            if ($pairing['Player2'] && $pairing['Player2DecklistId']) {
                 // if Player1 has a bye, Player2 is null
                 $id_player = $this->modelPlayer->getPlayerIdByTournamentIdArenaId($this->tournament, $pairing['Player2']);
                 if ($id_player) {
@@ -305,7 +308,7 @@ class MtgMeleeBot extends BotController
             // INSERT match player2 vs player 1 (opposite result)
         foreach ($pData as $pairing) {
             $result_match = $this->getMatchResult($pairing['Player1'], $pairing['Player2'], $pairing['Result']);
-            if ($result_match !== false) {
+            if ($result_match !== false && $pairing['Player1DecklistId'] && $pairing['Player2DecklistId']) {
                 $insert_matches[] = array(
                     "id_player" => $list_players[$pairing['Player1DecklistId']],
                     "opponent_id_player" => $list_players[$pairing['Player2DecklistId']],
@@ -323,6 +326,7 @@ class MtgMeleeBot extends BotController
             $this->modelMatch->replaceMultiple($insert_matches);
         } else {
             trace_r("WARNING - No matches to insert for round " . $pairing['RoundNumber'] . "in tournament #" . $this->tournament);
+            $this->addMessage("WARNING - No matches to insert for round " . $pairing['RoundNumber'] . "in tournament #", self::MESSAGE_ERROR);
             return false;
         }
 

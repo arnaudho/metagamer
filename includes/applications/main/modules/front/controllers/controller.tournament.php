@@ -76,6 +76,11 @@ namespace app\main\controllers\front {
                     $this->addMessage("Missing data for import", self::MESSAGE_ERROR);
                 }
             }
+            if (isset($bot)) {
+                foreach ($bot->messages as $msg) {
+                    $this->addMessage($msg['message'], $msg['type']);
+                }
+            }
             $this->setTitle("Import tournament");
             $this->addContent("list_formats", $this->modelFormat->all());
             $this->addContent("count_waiting", $this->modelPlayer->countPlayersWithoutDecklist());
