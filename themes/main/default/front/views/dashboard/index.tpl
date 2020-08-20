@@ -58,7 +58,7 @@
                     <td class="strong">{$archetype.name_archetype}</td>
                     {foreach from=$archetype.winrates item="deck"}
                         <td class="
-                            {if $archetype.name_archetype==$deck.name_archetype} matchup-mirror{/if}
+                            {if $archetype.id_archetype==$deck.id_archetype} matchup-mirror{/if}
                             {if $deck.id_archetype==0} matchup-total{/if}
                             {if $deck.percent>50}{if $deck.percent>60}matchup-positive{else}matchup-slightly-positive{/if}{/if}
                             {if $deck.percent<50}{if $deck.percent<40}matchup-negative{else}matchup-slightly-negative{/if}{/if}

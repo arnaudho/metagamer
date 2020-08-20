@@ -135,7 +135,7 @@ namespace app\main\models {
                 trace_r("WARNING - no archetypes selected for metagame");
                 return array();
             }
-            $q2 = Query::select("archetypes.*, IF(wins IS NULL, 0, wins) AS wins", "(" . $q->get(false) . ") tmp")
+            $q2 = Query::select("archetypes.id_archetype, IF(wins IS NULL, 0, wins) AS wins", "(" . $q->get(false) . ") tmp")
                 ->join("archetypes", Query::JOIN_OUTER_RIGHT, "tmp.id_archetype = archetypes.id_archetype");
             if ($order_archetypes) {
                 $q2->andWhere("archetypes.id_archetype", Query::IN, "(" . implode(",", $order_archetypes) . ")", false)
