@@ -33,10 +33,16 @@ namespace app\main\controllers\front {
         }
 
         public function index () {
-            //
-            // TODO mirror matches excluded from global winrate in dashboard ?
-            //
             $this->addContent("list_formats", $this->modelFormat->all());
+
+            // handle tier1 archetypes selection
+            if (isset($_POST['archetypes-select'])) {
+                $_POST['archetypes-select'][] = ModelArchetype::ARCHETYPE_OTHER_ID;
+                $_SESSION['archetypes'] = array();
+                foreach ($_POST['archetypes-select'] as $id_archetype) {
+                    $_SESSION['archetypes'][$id_archetype] = $id_archetype;
+                }
+            }
 
             $format = array();
             $tournament = array();
@@ -80,15 +86,31 @@ namespace app\main\controllers\front {
                     $this->addMessage("No metagame data for selected format", self::MESSAGE_ERROR);
                 }
 
+                $archetypes = array();
+                $other_archetypes = array();
                 $order_archetypes = array();
                 foreach ($metagame as $deck) {
                     $order_archetypes[] = $deck['id_archetype'];
                 }
 
-                $archetypes = $metagame;
+
+                if (isset($_SESSION['archetypes']) && !empty($_SESSION['archetypes'])) {
+                    // filter archetypes
+                    foreach ($metagame as $archetype) {
+                        if (array_key_exists($archetype['id_archetype'], $_SESSION['archetypes'])) {
+                            $archetypes[] = $archetype;
+                        } else {
+                            $other_archetypes[$archetype['id_archetype']] = $archetype['id_archetype'];
+                        }
+                    }
+                }
+                $this->addContent("other_archetypes", $other_archetypes);
+                if (empty($archetypes)) {
+                    $archetypes = $metagame;
+                }
 
                 foreach ($archetypes as $key => $archetype) {
-                    $winrate = $this->modelMatches->getFullWinrateByArchetypeId($archetype['id_archetype'], $dashboard_cond, $order_archetypes);
+                    $winrate = $this->modelMatches->getFullWinrateByArchetypeId($archetype['id_archetype'], $dashboard_cond, $order_archetypes, $other_archetypes);
                     foreach ($winrate as $m => $matchup) {
                         // divide mirror count
                         if ($matchup['id_archetype'] == $archetype['id_archetype']) {
@@ -130,8 +152,7 @@ namespace app\main\controllers\front {
                 switch($action) {
                     case 'get_archetypes_by_format':
                         if (isset($_POST['id_format']) && !empty($_POST['id_format'])) {
-                            $mArchetype = new ModelArchetype();
-                            $archetypes = $mArchetype->allByFormat($_POST['id_format']);
+                            $archetypes = $this->modelArchetypes->allByFormat($_POST['id_format']);
                             $this->addContent("archetypes", $archetypes);
                         } else {
                             $http_status = Http::CODE_404;

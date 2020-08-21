@@ -13,6 +13,38 @@
 {/if}
 
 {if $content.metagame}
+
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingTwo">
+                    <h4 class="panel-title">
+                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Select which archetypes will be displayed in the winrates matrix
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                    <div class="panel-body">
+                        <form action="" method="post">
+                            {foreach from=$content.metagame item="deck"}
+                                {if $deck.name_archetype != "Other"}
+                                    <div class="checkbox">
+                                        <label>
+                                            <input name="archetypes-select[{$deck.id_archetype}]" type="checkbox" value="{$deck.id_archetype}"{if !$content.other_archetypes[$deck.id_archetype]} checked{/if}>
+                                            {$deck.name_archetype} <span class="small">({$deck.percent} %)</span>
+                                        </label>
+                                    </div>
+                                {/if}
+                            {/foreach}
+                            <button type="submit" class="btn btn-info">Update dashboard</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <table class="table table-hover table-condensed">
         <tbody>
             <tr>
@@ -52,6 +84,7 @@
                     <th class="rotated-text"><div><span>{$archetype.name_archetype}</span></div></th>
                 {/foreach}
                 <th class="rotated-text matchup-total"><div><span>TOTAL</span></div></th>
+                <th class="rotated-text matchup-total"><div><span>TOTAL + MIRROR</span></div></th>
             </tr>
             {foreach from=$content.archetypes item="archetype"}
                 <tr>

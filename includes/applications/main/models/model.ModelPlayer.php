@@ -47,12 +47,12 @@ namespace app\main\models {
         public function countArchetypes ($pCondition = null) {
             if(!$pCondition)
                 $pCondition = Query::condition();
-            $q = Query::select("archetypes.id_archetype, name_archetype, COUNT(*) AS count", $this->table)
+            $q = Query::select("archetypes.id_archetype, name_archetype, COUNT(1) AS count", $this->table)
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = " . $this->table . ".id_tournament")
                 ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = " . $this->table . ".id_archetype")
                 ->andCondition($pCondition)
                 ->groupBy("name_archetype")
-                ->order("COUNT(*)", "DESC");
+                ->order("FIELD (players.id_archetype, " . ModelArchetype::ARCHETYPE_OTHER_ID . "), COUNT(1)", "DESC");
             $data = $q->execute($this->handler);
             $sum = 0;
             foreach ($data as $d) {

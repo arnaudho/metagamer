@@ -12,7 +12,7 @@ table.table-matchups .matchup-deviation {font-size: 0.7em;}
 table.table-matchups .matchup-percent {font-size: 1.25em;}
 table.table-matchups .matchup-count {font-size: 0.8em; float: right;}
 table td.matchup-total {font-weight: bold; font-size: 1.05em;}
-table tr td.matchup-mirror {background-color: #DDDDDD;}
+table tr td.matchup-mirror {background-color: #EEEEEE;}
 table td.matchup-negative {background-color: #ffb3b3;}
 table td.matchup-slightly-negative {background-color: #ffe6e6;}
 table td.matchup-positive {background-color: #99ff99;}

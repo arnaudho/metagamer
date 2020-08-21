@@ -72,22 +72,44 @@ namespace app\main\models {
             return $wins;
         }
 
-        public function getFullWinrateByArchetypeId ($pArchetypeId, $pCondition = null, $order_archetypes = array()) {
+        /**
+         * @param $pArchetypeId
+         * @param null $pCondition
+         * @param array $order_archetypes
+         * @param array $other_archetypes
+         * @return array
+         */
+        public function getFullWinrateByArchetypeId ($pArchetypeId, $pCondition = null, $order_archetypes = array(), $other_archetypes = array()) {
             $data = array();
             if(!$pCondition)
                 $pCondition = Query::condition();
             $pArchetypeCondition = clone $pCondition;
-            $pArchetypeCondition->andCondition(Query::condition()->andWhere("p.id_archetype", Query::EQUAL, $pArchetypeId));
-            $wins = $this->countWinsByArchetype($pArchetypeCondition, $order_archetypes);
-            $matches = $this->countMatchesByArchetype($pArchetypeCondition, $order_archetypes);
+            if ($pArchetypeId == ModelArchetype::ARCHETYPE_OTHER_ID) {
+                $pArchetypeCondition->andCondition(Query::condition()->andWhere(
+                    "p.id_archetype",
+                    Query::IN,
+                    "(" . ModelArchetype::ARCHETYPE_OTHER_ID . ", " . implode(", ", $other_archetypes) . ")",
+                    false
+                ));
+            } else {
+                $pArchetypeCondition->andCondition(Query::condition()->andWhere("p.id_archetype", Query::EQUAL, $pArchetypeId));
+            }
+            // wins is returned for all opponents, matches only for those who are actually played
+            $wins = $this->countWinsByArchetype($pArchetypeCondition, $order_archetypes, $other_archetypes);
+            $matches = $this->countMatchesByArchetype($pArchetypeCondition, $order_archetypes, $other_archetypes);
 
             $total_wins = 0;
+            $total_wins_mirror = 0;
             $total_matches = 0;
+            $total_matches_mirror = 0;
             foreach ($wins as $win) {
                 $data[$win['id_archetype']] = $win;
                 // exclude mirror matches
                 if ($win['id_archetype'] != $pArchetypeId) {
                     $total_wins += $win['wins'];
+                    $total_wins_mirror += $win['wins'];
+                } else {
+                    $total_wins_mirror += $win['wins']/2;
                 }
             }
             foreach ($matches as $match) {
@@ -96,6 +118,9 @@ namespace app\main\models {
                 // exclude mirror matches
                 if ($match['id_archetype'] != $pArchetypeId) {
                     $total_matches += $match['count'];
+                    $total_matches_mirror += $match['count'];
+                } else {
+                    $total_matches_mirror += $match['count']/2;
                 }
             }
             // add total
@@ -103,7 +128,15 @@ namespace app\main\models {
                 "name_archetype" => "total",
                 "wins"           => $total_wins,
                 "count"          => $total_matches,
-                "percent"        => round((100*$total_wins/$total_matches), 2),
+                "percent"        => $total_matches == 0 ? '-' : round((100*$total_wins/$total_matches), 2),
+                "id_archetype"   => 0
+            );
+            // add total including mirror matches
+            $data[] = array(
+                "name_archetype" => "total_mirror",
+                "wins"           => $total_wins_mirror,
+                "count"          => $total_matches_mirror,
+                "percent"        => $total_matches_mirror == 0 ? '-' : round((100*$total_wins_mirror/$total_matches_mirror), 2),
                 "id_archetype"   => 0
             );
             return $data;
@@ -112,20 +145,26 @@ namespace app\main\models {
         /**
          * @param QueryCondition $pCondition
          * @param array $order_archetypes
+         * @param array $other_archetypes
          * @return array|resource
          * @throws \Exception
          */
-        public function countWinsByArchetype ($pCondition = null, $order_archetypes = array()) {
+        public function countWinsByArchetype ($pCondition = null, $order_archetypes = array(), $other_archetypes = array()) {
             if(!$pCondition)
                 $pCondition = Query::condition();
+            $select = "op.id_archetype AS id_archetype, SUM(matches.result_match) AS wins";
+            if ($other_archetypes) {
+                // group all specified archetypes in 'other' category
+                $select = "CASE WHEN op.id_archetype IN (" . implode(", ", $other_archetypes) . ") THEN " . ModelArchetype::ARCHETYPE_OTHER_ID . " ELSE op.id_archetype END AS id_archetype, SUM(matches.result_match) AS wins";
+            }
             /** @var QuerySelect $q */
-            $q = Query::select("op.id_archetype, SUM(matches.result_match) AS wins", $this->table)
+            $q = Query::select($select, $this->table)
                 ->join("players p", Query::JOIN_INNER, $this->table . ".id_player = p.id_player")
                 ->join("players op", Query::JOIN_INNER, $this->table . ".opponent_id_player = op.id_player")
 //                ->join("archetypes ap", Query::JOIN_INNER, "ap.id_archetype = p.id_archetype")
 //                ->join("archetypes aop", Query::JOIN_INNER, "aop.id_archetype = op.id_archetype")
                 ->andCondition($pCondition)
-                ->groupBy("op.id_archetype");
+                ->groupBy("id_archetype");
             if(strpos($pCondition->getWhere(), "tournaments") || strpos($pCondition->getWhere(), "format")) {
                 $q->join('tournaments', Query::JOIN_INNER, "tournaments.id_tournament = p.id_tournament");
             }
@@ -138,22 +177,44 @@ namespace app\main\models {
             $q2 = Query::select("archetypes.id_archetype, IF(wins IS NULL, 0, wins) AS wins", "(" . $q->get(false) . ") tmp")
                 ->join("archetypes", Query::JOIN_OUTER_RIGHT, "tmp.id_archetype = archetypes.id_archetype");
             if ($order_archetypes) {
-                $q2->andWhere("archetypes.id_archetype", Query::IN, "(" . implode(",", $order_archetypes) . ")", false)
-                    ->order("FIELD(archetypes.id_archetype, " . implode(",", $order_archetypes) . ")");
+                if ($other_archetypes) {
+                    // get only on archetypes which are not in 'Other' category
+                    $q2
+                        ->orWhere("archetypes.id_archetype", Query::EQUAL, ModelArchetype::ARCHETYPE_OTHER_ID)
+                        ->orCondition(
+                            Query::condition()
+                            ->andWhere("archetypes.id_archetype", Query::IN, "(" . implode(",", $order_archetypes) . ")", false)
+                            ->andWhere("archetypes.id_archetype", Query::NOT_IN, "(" . implode(",", $other_archetypes) . ")", false)
+                    );
+                } else {
+                    $q2->andWhere("archetypes.id_archetype", Query::IN, "(" . implode(",", $order_archetypes) . ")", false);
+                }
+                $q2->order("FIELD(archetypes.id_archetype, " . implode(",", $order_archetypes) . ")");
             }
             $data = $q2->execute($this->handler);
             return $data;
         }
 
-        public function countMatchesByArchetype ($pCondition = null, $order_archetypes = array()) {
+        /**
+         * @param QueryCondition $pCondition
+         * @param array $order_archetypes
+         * @param array $other_archetypes
+         * @return array|resource
+         */
+        public function countMatchesByArchetype ($pCondition = null, $order_archetypes = array(), $other_archetypes = array()) {
             if(!$pCondition)
                 $pCondition = Query::condition();
+            $select = "op.id_archetype AS id_archetype, COUNT(1) AS count";
+            if ($other_archetypes) {
+                // group all specified archetypes in 'other' category
+                $select = "CASE WHEN op.id_archetype IN (" . implode(", ", $other_archetypes) . ") THEN " . ModelArchetype::ARCHETYPE_OTHER_ID . " ELSE op.id_archetype END AS id_archetype, COUNT(1) AS count";
+            }
             /** @var QuerySelect $q */
-            $q = Query::select("op.id_archetype, COUNT(1) AS count", $this->table)
+            $q = Query::select($select, $this->table)
                 ->join("players p", Query::JOIN_INNER, $this->table . ".id_player = p.id_player")
                 ->join("players op", Query::JOIN_INNER, $this->table . ".opponent_id_player = op.id_player")
                 ->andCondition($pCondition)
-                ->groupBy("op.id_archetype");
+                ->groupBy("id_archetype");
             if(strpos($pCondition->getWhere(), "tournaments") || strpos($pCondition->getWhere(), "format")) {
                 $q->join('tournaments', Query::JOIN_INNER, "tournaments.id_tournament = p.id_tournament");
             }

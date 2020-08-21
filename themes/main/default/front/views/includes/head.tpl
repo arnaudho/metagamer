@@ -27,7 +27,7 @@
 				<a href="dashboard/"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a>
 				<a href="archetype/"><span class="glyphicon glyphicon-screenshot"></span> Analysis</a>
 				<a href="player/"><span class="glyphicon glyphicon-user"></span> Players</a>
-				<a href="tournament/import/"><span class="glyphicon glyphicon-save"></span> Import tournament</a>
+				<a href="tournament/import/"><span class="glyphicon glyphicon-save"></span> Import</a>
 				<a href="tournament/search/"><span class="glyphicon glyphicon-search"></span> Tournaments</a>
 				<a href="dashboard/archetypes/"><span class="glyphicon glyphicon-tasks"></span> Archetypes</a>
 				<a href="index/logout/"><span class="glyphicon glyphicon-log-out"></span> Log out</a>
