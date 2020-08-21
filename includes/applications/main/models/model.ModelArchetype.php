@@ -9,7 +9,7 @@ namespace app\main\models {
     class ModelArchetype extends BaseModel {
 
         CONST ARCHETYPE_OTHER = "Other";
-        CONST ARCHETYPE_OTHER_ID = 7;
+        CONST ARCHETYPE_OTHER_ID = 3;
         protected $modelPlayer;
         protected $modelCard;
 

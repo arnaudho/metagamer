@@ -84,7 +84,7 @@ namespace app\main\models {
             if(!$pCondition)
                 $pCondition = Query::condition();
             $pArchetypeCondition = clone $pCondition;
-            if ($pArchetypeId == ModelArchetype::ARCHETYPE_OTHER_ID) {
+            if ($other_archetypes && $pArchetypeId == ModelArchetype::ARCHETYPE_OTHER_ID) {
                 $pArchetypeCondition->andCondition(Query::condition()->andWhere(
                     "p.id_archetype",
                     Query::IN,
