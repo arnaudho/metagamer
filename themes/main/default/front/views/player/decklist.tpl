@@ -1,27 +1,37 @@
 {if !$request_async}{include file="includes/head.tpl"}{/if}
 
-<h2>{$content.player.name_archetype} by {$content.player.arena_id} ({$content.player.wins}-{$content.player.matches-$content.player.wins})</h2>
-<h3>{$content.player.name_tournament} ({$content.player.name_format})</h3>
-
 {if $content.cards!==null}
-    <div class="decklist">
-        <h5>Maindeck</h5>
-        <ul class="decklist-main">
+    <div class="decklist decklist-visual">
+        <h2>{$content.player.name_archetype} <small>by {$content.player.arena_id}</small></h2>
+        <h3>{$content.player.name_tournament}</h3>
+        <hr class="decklist-separator" />
+        <h5 class="decklist-title-main">Main deck</h5>
+        <div class="decklist-main">
             {foreach from=$content.cards item="card"}
-                {if $card.count_total_main > 0}
-                    <li>{$card.count_total_main} {$card.name_card}</li>
+                {if $card.count_main > 0}
+                    <div class="decklist-card">
+                        <img src="{$card.image_card}" />
+                        <span class="decklist-card-count">{$card.count_main}</span>
+                    </div>
                 {/if}
             {/foreach}
-        </ul>
-        <h5>Sideboard</h5>
-        <ul class="decklist-main">
+        </div>
+        <h5 class="decklist-title-side">Sideboard</h5>
+        <div class="decklist-side">
             {foreach from=$content.cards item="card"}
-                {if $card.count_total_side > 0}
-                    <li>{$card.count_total_side} {$card.name_card}</li>
+                {if $card.count_side > 0}
+                    <div class="decklist-card">
+                        <img src="{$card.image_card}" />
+                        <span class="decklist-card-count">{$card.count_side}</span>
+                    </div>
                 {/if}
             {/foreach}
-        </ul>
+        </div>
+        <div class="decklist-credits">
+            twitter <span class="credits-highlight">@mtg_data</span>
+        </div>
     </div>
+    <div class="overlay-twitter-size"></div>
 {/if}
 
 {if !$request_async}{include file="includes/footer.tpl"}{/if}

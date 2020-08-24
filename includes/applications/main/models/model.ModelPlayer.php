@@ -3,6 +3,7 @@ namespace app\main\models {
 
     use core\application\BaseModel;
     use core\db\Query;
+    use core\db\QuerySelect;
 
     class ModelPlayer extends BaseModel {
 
@@ -93,8 +94,8 @@ namespace app\main\models {
             return $id_player ? $id_player[0]['id_player'] : null;
         }
 
-        public function getPlayerByFormatId ($pIdFormat, $pFIelds = "players.*") {
-            $players = Query::select($pFIelds, "players")
+        public function getPlayerByFormatId ($pIdFormat, $pFields = "players.*") {
+            $players = Query::select($pFields, "players")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
                 ->andWhere("id_format", Query::EQUAL, $pIdFormat)
                 ->execute($this->handler);

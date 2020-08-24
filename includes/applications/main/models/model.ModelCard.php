@@ -36,6 +36,22 @@ namespace app\main\models {
         }
 
         /**
+         * get ordered decklist for visual display
+         * @param $pIdPlayer
+         * @return array|resource
+         */
+        // order is only made for maindeck cards, if needed use a different query for sideboard cards
+        public function getDecklistCards ($pIdPlayer) {
+            $q = Query::select("cards.id_card, cards.name_card, cards.image_card, count_main, count_side", $this->tablePlayerCards)
+                ->join($this->table, Query::JOIN_INNER, "cards.id_card = player_card.id_card AND id_player = $pIdPlayer")
+                ->groupBy("cards.id_card")
+                ->order(" CASE  WHEN type_card = 'Creature' THEN 1 WHEN type_card IN ('Instant', 'Sorcery') THEN 2
+                        WHEN type_card = 'Planeswalker' THEN 3 WHEN type_card = 'Land' THEN 10 ELSE 8 END ASC,
+                        cmc_card, count_main DESC, color_card", "");
+            return $q->execute($this->handler);
+        }
+
+        /**
          * @param $pIdArchetype
          * @param null $pFormatCondition
          * @param array $pIncludedIdCards
