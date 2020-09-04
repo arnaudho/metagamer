@@ -1,193 +1,287 @@
 {
-    "WRx Cycling":
-    {
-        "contains":
-        [
-            "Flourishing Fox",
-            "Zenith Flare"
-        ]
-    },
-    "Jeskai Fires":
-    {
-        "contains":
-        [
-            "Fires of Invention",
-            "Cavalier of Flame",
-            "Teferi, Time Raveler"
-        ],
-        "exclude":
-        [
-            "Fae of Wishes",
-            "Sarkhan the Masterless",
-            "Breeding Pool"
-        ]
-    },
-    "Gruul Fires":
-    {
-        "contains":
-        [
-            "Fires of Invention",
-            "Temple of Abandon"
-        ],
-        "exclude":
-        [
-            "Breeding Pool",
-            "Plains"
-        ]
-    },
-    "Lukka Yorion":
-    {
-        "contains":
-        [
-            "Lukka, Coppercoat Outcast",
-            "Agent of Treachery",
-            "Birth of Meletis"
-        ]
-    },
-    "4C Fires":
-    {
-        "contains":
-        [
-            "Fires of Invention"
-        ]
-    },
-    "Temur Reclamation":
-    {
-        "contains":
-        [
-            "Wilderness Reclamation",
-            "Expansion"
-        ]
-    },
-    "Bant Ramp":
+    "Sultai Midrange":
     {
         "contains":
         [
             "Uro, Titan of Nature",
-            "Teferi, Time Raveler",
-            "Elspeth Conquers Death"
-        ],
-        "exclude":
-        [
-            "Fires of Invention",
-            "Watery Grave"
+            "Overgrown Tomb"
         ]
     },
-    "Rakdos Sacrifice":
+    "WRx Cycling":
     {
         "contains":
         [
-            "Cauldron Familiar",
-            "Mayhem Devil"
+            "Zenith Flare"
         ],
         "exclude":
         [
-            "Gilded Goose",
-            "Godless Shrine"
+            "Yidaro",
+            "Jolrael"
         ]
     },
-    "Rakdos Lurrus":
+    "Sacrifice":
     {
         "contains":
         [
-            "Cauldron Familiar",
-            "Dreadhorde Butcher",
-            "Priest of Forgotten Gods"
-        ],
-        "exclude":
-        [
-            "Mayhem Devil",
-            "Godless Shrine"
+            "Priest of Forgotten Gods",
+            "Blood Crypt"
         ]
     },
     "Monored":
     {
         "contains":
         [
-            "Fervent Champion",
-            "Anax, Hardened in the Forge",
-            "Castle Embereth"
-        ],
-        "exclude":
-        [
-            "Gruul Spellbreaker"
+            "Torbran, Thane of Red Fell",
+            "Embercleave"
         ]
     },
-    "Sultai Midrange":
+    "Gyruda Combo":
     {
         "contains":
         [
-            "Casualties of War",
-            "Growth Spiral"
-        ],
-        "exclude":
-        [
-            "Niv-Mizzet Reborn"
+            "Gyruda, Doom of Depths"
         ]
     },
-    "Jeskai Winota":
+    "Grixis Control":
     {
         "contains":
         [
-            "Winota, Joiner of Forces",
-            "Agent of Treachery"
+            "Nicol Bolas, Dragon-God"
         ]
     },
     "Temur Adventures":
     {
         "contains":
         [
-            "Edgewall Innkeeper",
             "Lucky Clover",
-            "Beanstalk Giant",
-            "Fae of Wishes"
+            "Breeding Pool"
+        ]
+    },
+    "Abzan Midrange":
+    {
+        "contains":
+        [
+            "Indatha Triome",
+            "Overgrown Tomb",
+            "Temple Garden"
+        ]
+    },
+    "Mono blue":
+    {
+        "contains":
+        [
+            "Brineborn Cutthroat"
         ],
         "exclude":
         [
-            "Merfolk Secretkeeper"
+            "Breeding Pool",
+            "Steam Vents"
+        ]
+    },
+    "Mono green":
+    {
+        "contains":
+        [
+            "Pelt Collector"
+        ],
+        "exclude":
+        [
+            "Stomping Ground",
+            "Plains",
+            "Uro, TItan"
+        ]
+    },
+    "Temur Elementals":
+    {
+        "contains":
+        [
+            "Omnath, Locus of the Roil"
+        ]
+    },
+    "Temur Flash":
+    {
+        "contains":
+        [
+            "Nightpack Ambusher",
+            "Frilled Mystic",
+            "Steam Vents"
+        ]
+    },
+    "Temur Midrange":
+    {
+        "contains":
+        [
+            "Uro, Titan of Nature",
+            "Steam Vents"
+        ]
+    },
+    "Bant Midrange":
+    {
+        "contains":
+        [
+            "Uro, Titan of Nature",
+            "Temple Garden"
+        ]
+    },
+    "Simic Flash":
+    {
+        "contains":
+        [
+            "Nightpack Ambusher"
+        ],
+        "exclude":
+        [
+            "Steam Vents"
+        ]
+    },
+    "Simic Ramp":
+    {
+        "contains":
+        [
+            "Nissa, Who Shakes the World",
+            "Breeding Pool"
+        ],
+        "exclude":
+        [
+            "Stomping Ground",
+            "Temple Garden",
+            "Overgrown Tomb"
+        ]
+    },
+    "Gruul Aggro":
+    {
+        "contains":
+        [
+            "Questing Beast",
+            "Stomping Ground"
+        ]
+    },
+    "Mono W life":
+    {
+        "contains":
+        [
+            "Pridemate",
+            "Godless Shrine"
+        ]
+    },
+    "Mono W aggro":
+    {
+        "contains":
+        [
+            "Giant Killer",
+            "Venerated Loxodon"
+        ],
+        "exclude":
+        [
+            "Pridemate"
+        ]
+    },
+    "Orzhov Yorion":
+    {
+        "contains":
+        [
+            "Burglar Rat",
+            "Yorion, Sky Nomad"
+        ]
+    },
+    "Mono B aggro":
+    {
+        "contains":
+        [
+            "Knight of the Ebon Legion"
+        ],
+        "exclude":
+        [
+            "Godless Shrine",
+            "Blood Crypt"
+        ]
+    },
+    "Gates":
+    {
+        "contains":
+        [
+            "Gate Colossus"
+        ]
+    },
+    "Gruul Adventures":
+    {
+        "contains":
+        [
+            "Edgewall Inkeeper",
+            "Pelt Collector"
+        ]
+    },
+    "Izzet Flash":
+    {
+        "contains":
+        [
+            "Sprite Dragon",
+            "Brineborn Cutthroat"
+        ]
+    },
+    "Izzet Tempo":
+    {
+        "contains":
+        [
+            "Sprite Dragon"
+        ]
+    },
+    "Jeskai Control":
+    {
+        "contains":
+        [
+            "Shatter the Sky",
+            "Steam Vents"
+        ]
+    },
+    "UW Control":
+    {
+        "contains":
+        [
+            "Shatter the Sky",
+            "Hallowed Fountain"
+        ],
+        "exclude":
+        [
+            "Breeding Pool",
+            "Watery Grave"
+        ]
+    },
+    "Mardu Knights":
+    {
+        "contains":
+        [
+            "Tournament Grounds",
+            "Sacred Foundry"
+        ]
+    },
+    "Rakdos Knights":
+    {
+        "contains":
+        [
+            "Tournament Grounds"
+        ]
+    },
+    "Mardu Winota":
+    {
+        "contains":
+        [
+            "Winota, Joiner of Forces",
+            "Blood Crypt"
+        ]
+    },
+    "Boros Winota":
+    {
+        "contains":
+        [
+            "Winota, Joiner of Forces"
+        ],
+        "exclude":
+        [
+            "Stomping Ground"
         ]
     },
     "_comment":
     {
-        "UW Control":
-        {
-            "contains":
-            [
-                "Dream Trawler"
-            ],
-            "exclude":
-            [
-                "Forest",
-                "Mountain",
-                "Swamp",
-                "Charming Prince",
-                "Golden Egg"
-            ]
-        },
-        "Orzhov Sacrifice":
-        {
-            "contains":
-            [
-                "Cruel Celebrant"
-            ],
-            "exclude":
-            [
-                "Blood Crypt"
-            ]
-        },
-        "Jeskai Control":
-        {
-            "contains":
-            [
-                "Elspeth Conquers Death",
-                "Teferi, Time Raveler",
-                "Narset, Parter of Veils",
-                "Sacred Foundry"
-            ],
-            "exclude":
-            [
-                "Fires of Invention"
-            ]
-        }
     }
 }
