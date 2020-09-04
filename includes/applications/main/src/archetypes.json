@@ -1,283 +1,115 @@
 {
-    "Sultai Midrange":
+    "Sultai Ramp":
     {
         "contains":
         [
             "Uro, Titan of Nature",
-            "Overgrown Tomb"
-        ]
-    },
-    "WRx Cycling":
-    {
-        "contains":
-        [
-            "Zenith Flare"
+            "Thoughtseize"
         ],
         "exclude":
         [
-            "Yidaro",
-            "Jolrael"
+            "Niv-Mizzet"
         ]
     },
-    "Sacrifice":
-    {
-        "contains":
-        [
-            "Priest of Forgotten Gods",
-            "Blood Crypt"
-        ]
-    },
-    "Monored":
-    {
-        "contains":
-        [
-            "Torbran, Thane of Red Fell",
-            "Embercleave"
-        ]
-    },
-    "Gyruda Combo":
-    {
-        "contains":
-        [
-            "Gyruda, Doom of Depths"
-        ]
-    },
-    "Grixis Control":
-    {
-        "contains":
-        [
-            "Nicol Bolas, Dragon-God"
-        ]
-    },
-    "Temur Adventures":
-    {
-        "contains":
-        [
-            "Lucky Clover",
-            "Breeding Pool"
-        ]
-    },
-    "Abzan Midrange":
-    {
-        "contains":
-        [
-            "Indatha Triome",
-            "Overgrown Tomb",
-            "Temple Garden"
-        ]
-    },
-    "Mono blue":
-    {
-        "contains":
-        [
-            "Brineborn Cutthroat"
-        ],
-        "exclude":
-        [
-            "Breeding Pool",
-            "Steam Vents"
-        ]
-    },
-    "Mono green":
-    {
-        "contains":
-        [
-            "Pelt Collector"
-        ],
-        "exclude":
-        [
-            "Stomping Ground",
-            "Plains",
-            "Uro, TItan"
-        ]
-    },
-    "Temur Elementals":
-    {
-        "contains":
-        [
-            "Omnath, Locus of the Roil"
-        ]
-    },
-    "Temur Flash":
-    {
-        "contains":
-        [
-            "Nightpack Ambusher",
-            "Frilled Mystic",
-            "Steam Vents"
-        ]
-    },
-    "Temur Midrange":
+    "Bant Ramp":
     {
         "contains":
         [
             "Uro, Titan of Nature",
-            "Steam Vents"
-        ]
-    },
-    "Bant Midrange":
-    {
-        "contains":
-        [
-            "Uro, Titan of Nature",
-            "Temple Garden"
-        ]
-    },
-    "Simic Flash":
-    {
-        "contains":
-        [
-            "Nightpack Ambusher"
-        ],
-        "exclude":
-        [
-            "Steam Vents"
+            "Teferi, Hero of Dominaria"
         ]
     },
     "Simic Ramp":
     {
         "contains":
         [
-            "Nissa, Who Shakes the World",
-            "Breeding Pool"
+            "Uro, Titan of Nature"
         ],
         "exclude":
         [
-            "Stomping Ground",
-            "Temple Garden",
-            "Overgrown Tomb"
+            "Steam Vents",
+            "Watery Grave",
+            "Hallowed Fountain"
         ]
     },
-    "Gruul Aggro":
+    "Random Uro":
     {
         "contains":
         [
-            "Questing Beast",
-            "Stomping Ground"
-        ]
-    },
-    "Mono W life":
-    {
-        "contains":
-        [
-            "Pridemate",
-            "Godless Shrine"
-        ]
-    },
-    "Mono W aggro":
-    {
-        "contains":
-        [
-            "Giant Killer",
-            "Venerated Loxodon"
-        ],
-        "exclude":
-        [
-            "Pridemate"
-        ]
-    },
-    "Orzhov Yorion":
-    {
-        "contains":
-        [
-            "Burglar Rat",
-            "Yorion, Sky Nomad"
-        ]
-    },
-    "Mono B aggro":
-    {
-        "contains":
-        [
-            "Knight of the Ebon Legion"
-        ],
-        "exclude":
-        [
-            "Godless Shrine",
-            "Blood Crypt"
-        ]
-    },
-    "Gates":
-    {
-        "contains":
-        [
-            "Gate Colossus"
-        ]
-    },
-    "Gruul Adventures":
-    {
-        "contains":
-        [
-            "Edgewall Inkeeper",
-            "Pelt Collector"
-        ]
-    },
-    "Izzet Flash":
-    {
-        "contains":
-        [
-            "Sprite Dragon",
-            "Brineborn Cutthroat"
-        ]
-    },
-    "Izzet Tempo":
-    {
-        "contains":
-        [
-            "Sprite Dragon"
-        ]
-    },
-    "Jeskai Control":
-    {
-        "contains":
-        [
-            "Shatter the Sky",
-            "Steam Vents"
+            "Uro, Titan of Nature"
         ]
     },
     "UW Control":
     {
         "contains":
         [
-            "Shatter the Sky",
-            "Hallowed Fountain"
-        ],
-        "exclude":
-        [
-            "Breeding Pool",
-            "Watery Grave"
+            "Wrath of God",
+            "Teferi, Hero of Dominaria"
         ]
     },
-    "Mardu Knights":
+    "Rakdos Goblins":
     {
         "contains":
         [
-            "Tournament Grounds",
-            "Sacred Foundry"
-        ]
-    },
-    "Rakdos Knights":
-    {
-        "contains":
-        [
-            "Tournament Grounds"
-        ]
-    },
-    "Mardu Winota":
-    {
-        "contains":
-        [
-            "Winota, Joiner of Forces",
+            "Muxus, Goblin Grandee",
             "Blood Crypt"
         ]
     },
-    "Boros Winota":
+    "Monored Goblins":
     {
         "contains":
         [
-            "Winota, Joiner of Forces"
+            "Muxus, Goblin Grandee"
         ],
         "exclude":
         [
+            "Stomping Ground",
+            "Steam Vents",
+            "Sacred Foundry"
+        ]
+    },
+    "Random Goblins":
+    {
+        "contains":
+        [
+            "Muxus, Goblin Grandee"
+        ]
+    },
+    "Black GPG":
+    {
+        "contains":
+        [
+            "God-Pharaoh",
+            "Fiend Artisan"
+        ]
+    },
+    "Wx Auras":
+    {
+        "contains":
+        [
+            "Kor Spiritdancer"
+        ]
+    },
+    "Rakdos Lurrus":
+    {
+        "contains":
+        [
+            "Lurrus of the Dream-Den",
+            "Young Pyromancer"
+        ],
+        "exclude":
+        [
+            "Stomping Ground",
+            "Steam Vents",
+            "Sacred Foundry"
+        ]
+    },
+    "Jund Citadel":
+    {
+        "contains":
+        [
+            "Bolas&#039;s Citadel",
+            "Collected Company",
             "Stomping Ground"
         ]
     },
