@@ -58,13 +58,11 @@ namespace app\main\models {
                 trace_r("ERROR : No cards found for player #$pIdPlayer");
                 return false;
             }
-            $maindeck = "";
+            $deck = "";
             foreach ($cards as $card) {
-                if ($card['count_total_main'] > 0) {
-                    $maindeck .= $card['name_card'] . " 00 ";
-                }
+                $deck .= $card['name_card'] . " 00 ";
             }
-            $name_archetype = self::decklistMapper($maindeck);
+            $name_archetype = self::decklistMapper($deck);
 
             if ($pWrite) {
                 // insert archetype if needed
