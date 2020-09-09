@@ -3,9 +3,11 @@ namespace core\application
 {
 	use core\tools\form\Form;
     use core\application\event\EventDispatcher;
-    use core\tools\template\Template;
+	use core\tools\Request;
+	use core\tools\template\Template;
+	use core\utils\StringUtils;
 
-    /**
+	/**
 	 * Controller de base
 	 *
 	 * @author Arnaud NICOLAS <arno06@gmail.com>
@@ -91,6 +93,23 @@ namespace core\application
             $this->setTemplate(null, null, 'notFound.tpl');
         }
 
+		public function callUrl ($pUrl, $pMethod = "GET") {
+			$data = "";
+			$start = microtime(true);
+			$r = new Request($pUrl);
+			$r->setMethod($pMethod);
+			$r->setOption(CURLOPT_SSL_VERIFYPEER, false);
+			try {
+				$data = $r->execute();
+			} catch (\Exception $e) {
+				$msg = $e->getMessage();
+				trace_r($msg);
+			}
+			$end = microtime(true);
+			$time = round($end - $start, 3);
+			trace("REST Request <b>[" . $r->getResponseHTTPCode() . "]</b> (" . date("H:i:s", $start)." - ".StringUtils::convertToOctets(mb_strlen($data, "UTF-8"))." - ".$time."s) : <a href='".$pUrl."' target='_blank'>".$pUrl.'</a>');
+			return $data;
+		}
 
 		/**
 		 * Méthode public de rendu de la page en cours
