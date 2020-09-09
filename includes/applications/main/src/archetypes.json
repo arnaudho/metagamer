@@ -23,7 +23,7 @@
     {
         "contains":
         [
-            "Uro, Titan of Nature"
+            "Uro, Titan of Nature's Wrath"
         ],
         "exclude":
         [
@@ -36,7 +36,7 @@
     {
         "contains":
         [
-            "Uro, Titan of Nature"
+            "Uro, Titan of Nature's Wrath"
         ]
     },
     "UW Control":
@@ -108,7 +108,7 @@
     {
         "contains":
         [
-            "Bolas&#039;s Citadel",
+            "Bolas's Citadel",
             "Collected Company",
             "Stomping Ground"
         ]

@@ -3,13 +3,13 @@
 <h1>Import tournament</h1>
 
 <ul class="nav nav-tabs">
-    <li class="active"><a data-toggle="tab" href="#cfb">CFB Events</a></li>
-    <li><a data-toggle="tab" href="#mtgmelee">MTG Melee</a></li>
+    <li><a data-toggle="tab" href="#cfb">CFB Events</a></li>
+    <li class="active"><a data-toggle="tab" href="#mtgmelee">MTG Melee</a></li>
     <li><a data-toggle="tab" href="#mtgmelee_decklists">MTG Melee - decklists</a></li>
 </ul>
 
 <div class="tab-content">
-    <div id="cfb" class="tab-pane fade in active">
+    <div id="cfb" class="tab-pane fade">
         <h3>CFB Events</h3>
         <form class="form-inline" method="post">
             <div class="form-group">
@@ -24,7 +24,7 @@
             </div>
         </form>
     </div>
-    <div id="mtgmelee" class="tab-pane fade">
+    <div id="mtgmelee" class="tab-pane fade in active">
         <h3>MTG Melee</h3>
 
         <form class="form-inline" id="import-mtgmelee" method="post">

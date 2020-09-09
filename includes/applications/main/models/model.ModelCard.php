@@ -46,7 +46,7 @@ namespace app\main\models {
                 ->join($this->table, Query::JOIN_INNER, "cards.id_card = player_card.id_card AND id_player = $pIdPlayer")
                 ->groupBy("cards.id_card")
                 ->order(" CASE  WHEN type_card = 'Creature' THEN 1 WHEN type_card IN ('Instant', 'Sorcery') THEN 2
-                        WHEN type_card = 'Planeswalker' THEN 3 WHEN type_card = 'Land' THEN 10 ELSE 8 END ASC,
+                        WHEN type_card = 'Planeswalker' THEN 3 WHEN type_card = 'Land' THEN 9 WHEN type_card = 'Basic Land' THEN 10 ELSE 8 END ASC,
                         cmc_card, count_main DESC, color_card", "");
             return $q->execute($this->handler);
         }
@@ -128,7 +128,10 @@ namespace app\main\models {
             if (empty($pCards)) {
                 return false;
             }
-            return Query::execute("INSERT IGNORE INTO " . $this->table . "(name_card) VALUES ('" . implode("'), ('", $pCards) . "')", $this->handler);
+            foreach ($pCards as $key => $card) {
+                $pCards[$key] = Query::escapeValue($card);
+            }
+            return Query::execute("INSERT IGNORE INTO " . $this->table . "(name_card) VALUES (" . implode("), (", $pCards) . ")", $this->handler);
         }
 
         public function insertPlayerCards ($pCards = array()) {

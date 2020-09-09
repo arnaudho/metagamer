@@ -53,37 +53,11 @@ class MtgMeleeBot extends BotController
         // PARSE decklist
         preg_match_all('/<textarea[^>]+class="decklist-builder-copy-field[^>]+>[^<]*Deck([^<]*)(Sideboard([^<]*))?<\/textarea>/Uims', $data, $output_array);
 
-        // TODO quickfix quote bug (&#039; on CFB / &#39; on MTGmelee)
-        $deck_main = str_replace("&#39;", "&#039;", $output_array[1][0]);
-        $deck_side = str_replace("&#39;", "&#039;", $output_array[3][0]);
+        // quickfix quote bug (&#039; on CFB / &#39; on MTGmelee)
+        $deck_main = html_entity_decode($output_array[1][0]);
+        $deck_side = html_entity_decode($output_array[3][0]);
 
-        $name_archetype = ModelArchetype::decklistMapper($deck_main);
-        preg_match_all('/(\d+)\s+([&#;,\/\-\w ]+)(\r|\n)/Uims', $deck_main, $parsing_main);
-
-        // insert archetype only if cards found for decklist
-        if ($pWrite && array_key_exists(0, $parsing_main[2])) {
-            // TODO use modelArchetype::evaluate instead
-            // insert archetype if needed
-            $archetype = $this->modelArchetype->one(Query::condition()->andWhere("name_archetype", Query::EQUAL, $name_archetype));
-            if ($archetype) {
-                $id_archetype = $archetype['id_archetype'];
-            } else {
-                $this->modelArchetype->insert(
-                    array(
-                        "name_archetype" => $name_archetype
-                    )
-                );
-                $id_archetype = $this->modelArchetype->getInsertId();
-            }
-
-            // update player archetype
-            $this->modelPlayer->updateById(
-                $pIdPlayer,
-                array(
-                    "id_archetype" => $id_archetype
-                )
-            );
-        }
+        preg_match_all("/(\d+)\s+([&#;,'\/\-\w ]+)(\r|\n)/Uims", $deck_main, $parsing_main);
 
         // insert cards
         $cards = array();
@@ -92,18 +66,21 @@ class MtgMeleeBot extends BotController
             $this->addMessage("ERROR Decklist parsing : no maindeck found for url : <a href='" . $player['decklist_player'] . "' target='_blank'>" . $player['decklist_player'] . "</a>", self::MESSAGE_ERROR);
             return false;
         }
-        preg_match_all('/(\d+)\s+([&#;,\/\-\w ]+)(\r|\n)/Uims', $deck_side, $parsing_side);
+        preg_match_all("/(\d+)\s+([&#;,'\/\-\w ]+)(\r|\n)/Uims", $deck_side, $parsing_side);
         if (!array_key_exists(0, $parsing_side[2]) || empty($deck_side)) {
             trace_r("ERROR Decklist parsing : no sideboard found for url : " . $player['decklist_player']);
             $this->addMessage("ERROR Decklist parsing : no sideboard found for url : <a href='" . $player['decklist_player'] . "' target='_blank'>" . $player['decklist_player'] . "</a>", self::MESSAGE_ERROR);
         }
-        $full_deck = array_merge($parsing_main[2], $parsing_side[2]);
-        foreach ($full_deck as &$card) {
-            $card = trim($card);
-        }
 
-        if ($pWrite) {
-            $this->modelCard->insertCards($full_deck);
+        foreach ($parsing_main as $key => $card) {
+            $parsing_main[$key] = str_replace("&#39;", "'", $card);
+        }
+        foreach ($parsing_side as $key => $card) {
+            $parsing_side[$key] = str_replace("&#39;", "'", $card);
+        }
+        $full_deck = array_unique(array_merge($parsing_main[2], $parsing_side[2]));
+        foreach ($full_deck as $key => $card) {
+            $full_deck[$key] = trim($card);
         }
 
         // get cards ids
@@ -114,6 +91,25 @@ class MtgMeleeBot extends BotController
             "id_card, name_card");
         foreach ($all_cards as $card) {
             $id_cards[$card['name_card']] = $card['id_card'];
+        }
+
+        // check if we have the correct count of cards in DB, if not search for split cards
+        // (MTG Melee clean decklist does not display second part of Adventure cards)
+        if (count($id_cards) != count($full_deck)) {
+            foreach ($full_deck as $card) {
+                if (!array_key_exists($card, $id_cards)) {
+                    if ($c = $this->modelCard->one(
+                        Query::condition()
+                            ->andWhere("name_card", Query::LIKE, "$card%"),
+                        "id_card, name_card"
+                    )) {
+                        $id_cards[$card] = $c['id_card'];
+                    } else {
+                        trace_r("WARNING : Unknown card in decklist : $card");
+                        $this->addMessage("WARNING : Unknown card in decklist : $card (<a href='" . $player['decklist_player'] . "' target='_blank'>See decklist</a>)", self::MESSAGE_ERROR);
+                    }
+                }
+            }
         }
         $deck_count = 0;
         foreach ($parsing_main[2] as $key => $card_name) {
@@ -153,6 +149,7 @@ class MtgMeleeBot extends BotController
             $this->modelCard->insertPlayerCards($cards);
         }
 
+        $this->modelArchetype->evaluatePlayerArchetype($pIdPlayer, $pWrite);
         return true;
     }
 
