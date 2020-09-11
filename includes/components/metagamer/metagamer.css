@@ -7,16 +7,21 @@
 .container .archetypes-info .rule-remove { cursor: pointer;}
 .container p[class^="bg-"] { padding: 15px;}
 .strong {font-weight: bold;}
-table.table-matchups tbody tr td {text-align: center; vertical-align: middle;}
+table.table-matchups {border-collapse: separate; border-spacing: 2px; table-layout: fixed;}
+table.table-matchups tbody tr td {text-align: center; vertical-align: middle; border-top: 0; border-radius: 4px; height: 100px;}
 table.table-matchups .matchup-deviation {font-size: 0.7em;}
-table.table-matchups .matchup-percent {font-size: 1.25em;}
-table.table-matchups .matchup-count {font-size: 0.8em; float: right;}
-table td.matchup-total {font-weight: bold; font-size: 1.05em;}
-table tr td.matchup-mirror {background-color: #EEEEEE;}
-table td.matchup-negative {background-color: #ffb3b3;}
-table td.matchup-slightly-negative {background-color: #ffe6e6;}
-table td.matchup-positive {background-color: #99ff99;}
-table td.matchup-slightly-positive {background-color: #ccffcc;}
+table.table-matchups .matchup-percent {font-size: 1.25em; border-bottom: 1px solid #55555570; margin-bottom: 3px;}
+table.table-matchups .matchup-count {font-size: 0.8em;}
+table td.matchup-total {font-size: 1.05em;}
+table td.matchup-total .matchup-percent {font-weight: bold;}
+table.table-matchups tbody tr td.matchup-negative {background-color: #DD3232; color: white; border: 2px solid #712B2B;}
+table.table-matchups tbody tr td.matchup-slightly-negative {background-color: #FF8181; border: 2px solid #AC5656;}
+table.table-matchups tbody tr td.matchup-positive {background-color: #77C47B; color: white; border: 2px solid #2B712E;}
+table.table-matchups tbody tr td.matchup-slightly-positive {background-color: #ACF2AF; border: 2px solid #56AC59;}
+table.table-matchups tbody tr td.matchup-even {background-color: white; border: 2px solid #B5B5B5;}
+table.table-matchups tbody tr td.matchup-mirror {background-color: #AFAFAF; border: 2px solid #939393;}
+table.table-matchups tbody tr td.matchup-mirror * {display: none;}
+table.table-matchups tbody tr th {text-align: center; vertical-align: bottom;}
 .container .winrate-slightly-negative {color: red;}
 .container .winrate-negative {color: red; font-weight: bold;}
 .container .winrate-slightly-positive {color: green;}
@@ -35,20 +40,24 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 .container .decklist * { font-family: "Gill Sans MT", Calibri, serif; }
 .container .decklist h2 { text-transform: uppercase; font-size: 50px; margin-top: 0;}
 .container .decklist h2 small { text-transform: none; }
-.container .decklist h3 { color: #555555; margin: 10px 0 25px; text-transform: uppercase;}
+.container .decklist h3 { color: #555555; margin: 10px 0 25px; text-transform: uppercase; transform: scale(1, 1.15);}
 .container .decklist ul {list-style-type: none; padding-left: 0;}
 .container .decklist .decklist-separator { border-color: black; width: 100px; margin-left: 0;}
+.container .decklist .decklist-main-container { vertical-align: top; width: 75%; display: inline-block;}
+.container .decklist .decklist-side-container { vertical-align: top; display: inline-block; width: 200px; padding-left: 16px;}
+.container .decklist .decklist-side-container .decklist-card { top: 0;}
 .container .decklist h5 { text-transform: uppercase; color: white; background-color: grey;
     padding: 10px 18px; font-size: 18px; display: inline-block;
     margin-bottom: 12px; border-top-right-radius: 16px;}
 .container .decklist h5.decklist-title-main { background-color: #f5875e; margin-top: 6px;}
 .container .decklist .decklist-card { position: relative; z-index: 10; display: inline-block; margin-bottom: 5px; margin-right: -2px;}
-.container .decklist .decklist-card img { width: 139px;}
-.container .decklist .decklist-card .decklist-card-count { position: absolute; bottom: 15px; right: 10px; z-index: 20;
+.container .decklist .decklist-card img { width: 160px;}
+.container .decklist .decklist-card .decklist-card-count { position: absolute; top: 21px; right: 10px; z-index: 20;
     color: white; font-size: 22px; width: 38px; height: 36px; background-color: rgba(150, 150, 150, 0.8);
     padding: 4px 12px; border-radius: 4px; font-weight: bold;}
-.container .decklist .decklist-credits { font-family: Cambria, serif; margin: 0 auto; width: 200px; margin-top: 10px;}
-.container .decklist .decklist-credits .credits-highlight { color: grey;}
+.container .decklist .decklist-credits { margin: 0 auto; width: 200px; margin-top: 10px; font-weight: bold;
+    color: grey; font-size: 32px; font-family: "Gill Sans MT", Calibri, serif; transform: scale(1, 1.15);}
+.container .decklist .decklist-credits .credits-highlight { color: #faa574;}
 .container .overlay-twitter-size {    position: fixed; border: 1px solid red; height: 928px; width: 1650px;
     top: 5px; left: 10px; box-sizing: content-box;}
 #import-mtgmelee .form-group > * { display: block;}

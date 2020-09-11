@@ -81,10 +81,10 @@
             <tr>
                 <th></th>
                 {foreach from=$content.archetypes item="archetype"}
-                    <th class="rotated-text"><div><span>{$archetype.name_archetype}</span></div></th>
+                    <th class="{*rotated-text*}"><div><span>{$archetype.name_archetype}</span></div></th>
                 {/foreach}
-                <th class="rotated-text matchup-total"><div><span>TOTAL</span></div></th>
-                <th class="rotated-text matchup-total"><div><span>TOTAL + MIRROR</span></div></th>
+                <th class="matchup-total"><div><span>TOTAL</span></div></th>
+                <th class="matchup-total"><div><span>TOTAL + MIRROR</span></div></th>
             </tr>
             {foreach from=$content.archetypes item="archetype"}
                 <tr>
@@ -94,13 +94,14 @@
                             {if $deck.percent!==null}
                                 {if $archetype.id_archetype==$deck.id_archetype} matchup-mirror{/if}
                                 {if $deck.id_archetype==0} matchup-total{/if}
+                                {if $deck.percent==50} matchup-even{/if}
                                 {if $deck.percent>50}{if $deck.percent>60}matchup-positive{else}matchup-slightly-positive{/if}{/if}
                                 {if $deck.percent<50}{if $deck.percent<40}matchup-negative{else}matchup-slightly-negative{/if}{/if}
                             {/if}
                         ">
                             {if $deck.percent!==null}
-                                <span class="matchup-deviation">{$deck.deviation_down}%-{$deck.deviation_up}%</span>
-                                <div class="matchup-percent">{$deck.percent}</div>
+                                <span class="matchup-deviation">{$deck.deviation_down}<sup>%</sup>-{$deck.deviation_up}<sup>%</sup></span>
+                                <div class="matchup-percent">{$deck.percent}<sup>%</sup></div>
                                 <span class="matchup-count">{$deck.count}</span>
                             {else}
                                 -
