@@ -136,10 +136,13 @@
         {/if}
     </div>
     <div>
-        <a href="{$content.link_decklists}" class="btn btn-info" target="_blank">
+        <a href="{$content.link_decklists}" class="btn btn-info link-decklists" target="_blank">
             <span class="glyphicon glyphicon-duplicate"></span> Browse all decklists with those filters
         </a>
     </div>
+    {if $content.confidence}
+        <p>Confidence level : {$content.confidence}</p>
+    {/if}
     <table class="table table-hover table-condensed archetype-analysis" data-toggle="table" data-sort-name="winrate_with" data-sort-order="desc">
         <thead>
             <tr>

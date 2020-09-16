@@ -116,7 +116,7 @@ namespace app\main\controllers\front {
                         if ($matchup['id_archetype'] == $archetype['id_archetype']) {
                             $winrate[$m]['count'] = ceil($matchup['count'] / 2);
                         }
-                        $deviation = StatsUtils::getStandardDeviation($matchup['percent'], $matchup['count']);
+                        $deviation = StatsUtils::getStandardDeviation($matchup['percent'], $matchup['count'], StatsUtils::Z95);
                         $winrate[$m]['deviation_up'] = round($matchup['percent'] + $deviation);
                         if ($winrate[$m]['deviation_up'] > 100) {
                             $winrate[$m]['deviation_up'] = 100;
@@ -129,6 +129,7 @@ namespace app\main\controllers\front {
                     $archetypes[$key]['winrates'] = $winrate;
                 }
                 $this->addContent("archetypes", $archetypes);
+                $this->addContent("confidence", "0.95");
             } else {
                 $this->setTitle("Dashboard");
             }

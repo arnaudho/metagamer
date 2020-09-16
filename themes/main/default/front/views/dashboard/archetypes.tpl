@@ -6,7 +6,7 @@
     Archetypes order matter !<br /> A rule will only be tested if all previous archetypes did not match for a given decklist.
 </p>
 
-<table class="table table-hover table-condensed">
+<table class="table table-hover table-condensed table-archetypes">
     <thead>
         <tr>
             <th>Archetype</th>
