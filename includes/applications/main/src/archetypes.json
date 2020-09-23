@@ -1,60 +1,4 @@
 {
-    "Sultai Ramp":
-    {
-        "contains":
-        [
-            "Uro, Titan of Nature",
-            "Thoughtseize"
-        ],
-        "exclude":
-        [
-            "Niv-Mizzet"
-        ]
-    },
-    "Bant Ramp":
-    {
-        "contains":
-        [
-            "Uro, Titan of Nature",
-            "Teferi, Hero of Dominaria"
-        ]
-    },
-    "Simic Ramp":
-    {
-        "contains":
-        [
-            "Uro, Titan of Nature's Wrath"
-        ],
-        "exclude":
-        [
-            "Steam Vents",
-            "Watery Grave",
-            "Hallowed Fountain"
-        ]
-    },
-    "Random Uro":
-    {
-        "contains":
-        [
-            "Uro, Titan of Nature's Wrath"
-        ]
-    },
-    "UW Control":
-    {
-        "contains":
-        [
-            "Wrath of God",
-            "Teferi, Hero of Dominaria"
-        ]
-    },
-    "Rakdos Goblins":
-    {
-        "contains":
-        [
-            "Muxus, Goblin Grandee",
-            "Blood Crypt"
-        ]
-    },
     "Monored Goblins":
     {
         "contains":
@@ -63,54 +7,156 @@
         ],
         "exclude":
         [
-            "Stomping Ground",
-            "Steam Vents",
-            "Sacred Foundry"
+            "Blood Crypt"
         ]
     },
-    "Random Goblins":
+    "Kethis Combo":
     {
         "contains":
         [
-            "Muxus, Goblin Grandee"
+            "Mox Amber",
+            "Diligent Excavator"
         ]
     },
-    "Black GPG":
+    "Sultai Midrange":
     {
         "contains":
         [
-            "God-Pharaoh",
-            "Fiend Artisan"
+            "Uro, Titan of Nature",
+            "Overgrown Tomb"
+        ],
+        "exclude":
+        [
+            "Niv-Mizzet",
+            "Nightpack Ambusher"
         ]
     },
-    "Wx Auras":
+    "Rakdos Sacrifice":
+    {
+        "contains":
+        [
+            "Mayhem Devil"
+        ],
+        "exclude":
+        [
+            "Stomping Ground"
+        ]
+    },
+    "Jund Sacrifice":
+    {
+        "contains":
+        [
+            "Mayhem Devil",
+            "Collected Company"
+        ],
+        "exclude":
+        [
+            "Trail of Crumbs"
+        ]
+    },
+    "Jund Food":
+    {
+        "contains":
+        [
+            "Trail of Crumbs"
+        ]
+    },
+    "Rakdos Goblins":
+    {
+        "contains":
+        [
+            "Muxus, Goblin Grandee",
+            "Thoughtseize"
+        ]
+    },
+    "Bant Control":
+    {
+        "contains":
+        [
+            "Uro, Titan of Nature",
+            "Hallowed Fountain"
+        ]
+    },
+    "Mono-Black Gift":
+    {
+        "contains":
+        [
+            "God-Pharaoh's Gift",
+            "Stitcher's Supplier",
+            "Cryptbreaker"
+        ]
+    },
+    "Rakdos Arcanist":
+    {
+        "contains":
+        [
+            "Dreadhorde Arcanist",
+            "Lurrus of the Dream-Den"
+        ]
+    },
+    "Azorius Control":
+    {
+        "contains":
+        [
+            "Wrath of God",
+            "Teferi, Hero of Dominaria"
+        ],
+        "exclude":
+        [
+            "Godless Shrine"
+        ]
+    },
+    "Azorius Auras":
     {
         "contains":
         [
             "Kor Spiritdancer"
         ]
     },
-    "Rakdos Lurrus":
+    "Gruul Aggro":
     {
         "contains":
         [
-            "Lurrus of the Dream-Den",
-            "Young Pyromancer"
+            "Pelt Collector",
+            "Gruul Spellbreaker"
+        ]
+    },
+    "Mono Red Aggro":
+    {
+        "contains":
+        [
+            "Ramunap Ruins"
+        ]
+    },
+    "Simic Ramp":
+    {
+        "contains":
+        [
+            "Cultivate",
+            "Ugin, the Spirit Dragon"
         ],
         "exclude":
         [
-            "Stomping Ground",
+            "Overgrown Tomb",
             "Steam Vents",
-            "Sacred Foundry"
+            "Hallowed Fountain"
         ]
     },
-    "Jund Citadel":
+    "Mono Green Ramp":
     {
         "contains":
         [
-            "Bolas's Citadel",
-            "Collected Company",
-            "Stomping Ground"
+            "Llanowar Elves",
+            "Vivien, Arkbow Ranger",
+            "Castle Garenbrig"
+        ]
+    },
+    "Temur Flash":
+    {
+        "contains":
+        [
+            "Nightpack Ambusher",
+            "Steam Vents"
         ]
     },
     "_comment":
