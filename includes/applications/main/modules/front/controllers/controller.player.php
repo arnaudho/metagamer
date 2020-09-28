@@ -38,10 +38,26 @@ namespace app\main\controllers\front {
             if (!$player) {
                 Go::to404();
             }
+            $player['arena_id'] = ucwords($player['arena_id']);
             $cards = $this->modelCard->getDecklistCards($player['id_player']);
             // TODO reorder sideboard cards by CMC / #copies ?
             // filter lands by set ? to group bilands & basics
             trace_r($cards);
+
+            // display sideboard cards
+            $count_side = 0;
+            foreach ($cards as $key => $card) {
+                if ($card['count_side'] > 0) {
+                    $count_side++;
+                    $cards[$key]['side_margin'] = $count_side;
+                }
+            }
+            foreach ($cards as $key => $card) {
+                if ($card['count_side'] > 0) {
+                    $cards[$key]['side_margin'] = ($cards[$key]['side_margin']-1)*(222-(450/$count_side));
+                }
+            }
+
             $this->setTemplate("player", "decklist");
             $this->addContent("player", $player);
             $this->addContent("cards", $cards);
