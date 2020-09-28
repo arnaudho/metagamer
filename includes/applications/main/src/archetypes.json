@@ -1,21 +1,22 @@
 {
-    "Monored Goblins":
+    "Temur & 4C Adventures":
     {
         "contains":
         [
-            "Muxus, Goblin Grandee"
+            "Edgewall Innkeeper",
+            "Lucky Clover"
+        ]
+    },
+    "4-Color Omnath":
+    {
+        "contains":
+        [
+            "Lotus Cobra",
+            "Omnath, Locus of Creation"
         ],
         "exclude":
         [
-            "Blood Crypt"
-        ]
-    },
-    "Kethis Combo":
-    {
-        "contains":
-        [
-            "Mox Amber",
-            "Diligent Excavator"
+            "Swamp"
         ]
     },
     "Sultai Midrange":
@@ -23,140 +24,140 @@
         "contains":
         [
             "Uro, Titan of Nature",
-            "Overgrown Tomb"
+            "Swamp"
         ],
         "exclude":
         [
-            "Niv-Mizzet",
-            "Nightpack Ambusher"
+            "Plains",
+            "Mountain"
         ]
     },
-    "Rakdos Sacrifice":
+    "Dimir Control":
     {
         "contains":
         [
-            "Mayhem Devil"
+            "Neutralize",
+            "Shark Typhoon",
+            "Clearwater Pathway"
         ],
         "exclude":
         [
-            "Stomping Ground"
+            "Forest"
         ]
     },
-    "Jund Sacrifice":
+    "Dimir Rogues":
     {
         "contains":
         [
-            "Mayhem Devil",
-            "Collected Company"
+            "Soaring Thought-Thief",
+            "Clearwater Pathway"
+        ]
+    },
+    "Dimir Tempo":
+    {
+        "contains":
+        [
+            "Cunning Nightbonder"
+        ]
+    },
+    "Dimir Mill":
+    {
+        "contains":
+        [
+            "Ruin Crab",
+            "Clearwater Pathway"
+        ]
+    },
+    "Naya Winota":
+    {
+        "contains":
+        [
+            "Winota",
+            "Lotus Cobra"
+        ]
+    },
+    "Mono-blue Devotion":
+    {
+        "contains":
+        [
+            "Nyx Lotus",
+            "Island"
+        ]
+    },
+    "Mono-red Aggro":
+    {
+        "contains":
+        [
+            "Embercleave",
+            "Castle Embereth"
         ],
         "exclude":
         [
-            "Trail of Crumbs"
+            "Forest"
         ]
     },
-    "Jund Food":
+    "Mono-green Aggro":
     {
         "contains":
         [
-            "Trail of Crumbs"
-        ]
-    },
-    "Rakdos Goblins":
-    {
-        "contains":
-        [
-            "Muxus, Goblin Grandee",
-            "Thoughtseize"
-        ]
-    },
-    "Bant Control":
-    {
-        "contains":
-        [
-            "Uro, Titan of Nature",
-            "Hallowed Fountain"
-        ]
-    },
-    "Mono-Black Gift":
-    {
-        "contains":
-        [
-            "God-Pharaoh's Gift",
-            "Stitcher's Supplier",
-            "Cryptbreaker"
-        ]
-    },
-    "Rakdos Arcanist":
-    {
-        "contains":
-        [
-            "Dreadhorde Arcanist",
-            "Lurrus of the Dream-Den"
-        ]
-    },
-    "Azorius Control":
-    {
-        "contains":
-        [
-            "Wrath of God",
-            "Teferi, Hero of Dominaria"
+            "Questing Beast"
         ],
         "exclude":
         [
-            "Godless Shrine"
+            "Mountain",
+            "Plains"
         ]
     },
-    "Azorius Auras":
+    "Selesnya Counters":
     {
         "contains":
         [
-            "Kor Spiritdancer"
+            "Conclave Mentor"
+        ]
+    },
+    "Rakdos Midrange":
+    {
+        "contains":
+        [
+            "Kroxa, Titan of Death"
+        ]
+    },
+    "Orzhov Lifegain":
+    {
+        "contains":
+        [
+            "Archfiend's Vessel",
+            "Cleric of Life's Bond"
+        ]
+    },
+    "Gruul Adventures":
+    {
+        "contains":
+        [
+            "Edgewall Innkeeper",
+            "Questing Beast"
         ]
     },
     "Gruul Aggro":
     {
         "contains":
         [
-            "Pelt Collector",
-            "Gruul Spellbreaker"
-        ]
-    },
-    "Mono Red Aggro":
-    {
-        "contains":
-        [
-            "Ramunap Ruins"
+            "Cragcrown Pathway",
+            "Embercleave"
         ]
     },
     "Simic Ramp":
     {
         "contains":
         [
-            "Cultivate",
-            "Ugin, the Spirit Dragon"
+            "Lotus Cobra",
+            "Uro, Titan of Nature"
         ],
         "exclude":
         [
-            "Overgrown Tomb",
-            "Steam Vents",
-            "Hallowed Fountain"
-        ]
-    },
-    "Mono Green Ramp":
-    {
-        "contains":
-        [
-            "Llanowar Elves",
-            "Vivien, Arkbow Ranger",
-            "Castle Garenbrig"
-        ]
-    },
-    "Temur Flash":
-    {
-        "contains":
-        [
-            "Nightpack Ambusher",
-            "Steam Vents"
+            "Swamp",
+            "Moutain",
+            "Plains"
         ]
     },
     "_comment":
