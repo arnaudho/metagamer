@@ -74,25 +74,28 @@
 {/if}
 {if $content.archetypes}
     <h2>Winrate by Archetype</h2>
-        <label for="matchups-export-mode">Export mode</label>
-        <input type="checkbox" name="matchups-export-mode" id="matchups-export-mode" />
-    <table class="table table-hover table-condensed table-matchups">
+    {if $content.confidence}
+        <p>Confidence level : {$content.confidence}</p>
+    {/if}
+    <label for="matchups-export-mode">Export mode</label>
+    <input type="checkbox" name="matchups-export-mode" id="matchups-export-mode" />
+    <table class="table table-condensed table-matchups">
         <tbody>
             <tr>
                 <th></th>
                 {foreach from=$content.archetypes item="archetype"}
-                    <th class="{*rotated-text*}"><div><span>{$archetype.name_archetype}</span></div></th>
+                    <th class="{*rotated-text*}"><div><span class="matchup-archetype-name">{$archetype.name_archetype}</span></div></th>
                 {/foreach}
+                <th class="matchup-total"><div><span>TOTAL w/o mirror</span></div></th>
                 <th class="matchup-total"><div><span>TOTAL</span></div></th>
-                <th class="matchup-total"><div><span>TOTAL + MIRROR</span></div></th>
             </tr>
             {foreach from=$content.archetypes item="archetype"}
                 <tr>
-                    <td class="strong">{$archetype.name_archetype}</td>
+                    <td class="strong matchup-archetype-name">{$archetype.name_archetype}</td>
                     {foreach from=$archetype.winrates item="deck"}
                         <td class="
+                            {if $archetype.id_archetype==$deck.id_archetype} matchup-mirror{/if}
                             {if $deck.percent!==null}
-                                {if $archetype.id_archetype==$deck.id_archetype} matchup-mirror{/if}
                                 {if $deck.id_archetype==0} matchup-total{/if}
                                 {if $deck.percent==50} matchup-even{/if}
                                 {if $deck.percent>50}{if $deck.percent>60}matchup-positive{else}matchup-slightly-positive{/if}{/if}
@@ -104,7 +107,7 @@
                                 <div class="matchup-percent">{$deck.percent}<sup>%</sup></div>
                                 <span class="matchup-count">{$deck.count}</span>
                             {else}
-                                -
+                                <span>-</span>
                             {/if}
                         </td>
                     {/foreach}
@@ -112,6 +115,23 @@
             {/foreach}
         </tbody>
     </table>
+    <table class="table table-matchups" style="width: auto;">
+        <tbody>
+            <tr>
+                <td class="matchup-slightly-positive">
+                    <span class="matchup-deviation">Confidence interval</span>
+                    <div class="matchup-percent">Winrate<sup>%</sup></div>
+                    <span class="matchup-count">Sample size</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="credits">
+        MTG <span class="credits-highlight">DATA</span>
+    </div>
+    {if $content.confidence}
+        <p>Confidence level : {$content.confidence}</p>
+    {/if}
 {/if}
 
 {if !$request_async}{include file="includes/footer.tpl"}{/if}
