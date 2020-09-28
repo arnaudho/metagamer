@@ -49,13 +49,14 @@ namespace core\data
 		}
 
 		/**
-		 * Méthode d'encodage d'un String en Tableau
-		 * @param array $pArray				Tableau &agrave; encoder
-		 * @return String
+		 * Méthode d'encodage d'un Tableau en String
+		 * @param array $pArray
+		 * @param int $pOptions
+		 * @return string
 		 */
-		static public function encode(array $pArray)
+		static public function encode(array $pArray, $pOptions = 0)
 		{
-			return json_encode(self::parseToNumericEntities($pArray));
+			return json_encode(self::parseToNumericEntities($pArray), $pOptions);
 		}
 
 		/**
