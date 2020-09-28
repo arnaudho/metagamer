@@ -21,11 +21,12 @@ namespace app\main\controllers\front {
         {
             $this->setTemplate("index", "index");
 
+            $basics = array("Plains", "Island", "Swamp", "Mountain", "Forest");
             $sets = array(
                 // HISTORIC
-                "XLN", "RIX", "DOM", "M19", "HA1", "HA2", "HA3", "JMP", "AKR",
+                "XLN", "RIX", "DOM", "M19", "GNR", "RNA", "WAR", "M20", "HA1", "HA2", "HA3", "JMP", "AKR",
                 // STANDARD
-                "RNA", "GRN", "WAR", "M20", "ELD", "THB", "IKO", "M21"
+                "ELD", "THB", "IKO", "M21", "ZNR"
             );
             $set = strtoupper($_GET['set']);
 
@@ -49,6 +50,9 @@ namespace app\main\controllers\front {
                 trace_r("Importing set '$set' -- " . count($cards) . " cards");
 
                 foreach ($cards as $card) {
+                    if (in_array($card['name'], $basics)) {
+                        continue;
+                    }
                     $exists = $this->modelCard->one(Query::condition()
                         ->andWhere("name_card", Query::EQUAL, $card['name'])
                     );
@@ -59,9 +63,23 @@ namespace app\main\controllers\front {
                         "color_card" => implode("", $card['colors']),
                         "type_card" => trim($type_card[0]),
                         "cmc_card" => $card['cmc'],
-                        "set_card" => $card['set'],
-                        "image_card" => $card['image_uris']['png']
+                        "set_card" => $card['set']
                     );
+
+                    if (isset($card['image_uris'])) {
+                        $card_data["image_card"] = $card['image_uris']['png'];
+                    } elseif (isset($card['card_faces'])) {
+                        if (array_key_exists('mana_cost', $card['card_faces'][0])) {
+                            $card_data["mana_cost_card"] = $card['card_faces'][0]['mana_cost'];
+                        }
+                        $card_data["image_card"] = $card['card_faces'][0]['image_uris']['png'];
+                        $card_data["color_card"] = implode("", $card['card_faces'][0]['colors']);
+                        $type_card = explode("—", $card['card_faces'][0]['type_line']);
+                        $card_data["type_card"] = trim($type_card[0]);
+                    } else {
+                        trace_r("No image for card " . $card['name']);
+                        trace_r($card);
+                    }
                     if (isset($card['produced_mana'])) {
                         $card_data['produced_mana_card'] = implode("", $card['produced_mana']);
                     }
