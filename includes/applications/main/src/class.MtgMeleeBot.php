@@ -51,7 +51,7 @@ class MtgMeleeBot extends BotController
         }
 
         // PARSE decklist
-        preg_match_all('/<textarea[^>]+class="decklist-builder-copy-field[^>]+>[^<]*Deck([^<]*)(Sideboard([^<]*))?<\/textarea>/Uims', $data, $output_array);
+        preg_match_all('/<textarea[^>]+class="decklist-builder-[^>]+>[^<]*Deck([^<]*)(Sideboard([^<]*))?<\/textarea>/Uims', $data, $output_array);
 
         // quickfix quote bug (&#039; on CFB / &#39; on MTGmelee)
         $deck_main = html_entity_decode($output_array[1][0]);

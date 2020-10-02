@@ -30,7 +30,7 @@
                     {if $card.count_side > 0}
                         <div class="decklist-card" style="top: -{$card.side_margin}px;">
                             <img src="{$card.image_card}" />
-                            <span class="decklist-card-count">{$card.count_side}</span>x
+                            <span class="decklist-card-count">{$card.count_side}</span>
                         </div>
                     {/if}
                 {/foreach}
