@@ -116,5 +116,11 @@ namespace core\application
 		{
 			header("HTTP/".$pValue);
 		}
+
+        public static function set($pHeader) {
+            if (!empty($pHeader)) {
+                header($pHeader);
+            }
+        }
 	}
 }

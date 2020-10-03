@@ -70,6 +70,8 @@ namespace app\main\controllers\front {
                         $bot = new MtgMeleeBot("Test");
                         foreach ($players as $player) {
                             $bot->parseDecklist($player['id_player']);
+                            // wait 2 seconds to prevent HTTP 429
+                            sleep(2);
                         }
                     }
                 } else {
