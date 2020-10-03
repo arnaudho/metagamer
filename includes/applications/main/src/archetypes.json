@@ -1,17 +1,34 @@
 {
-    "Temur & 4C Adventures":
+    "Temur Adventures":
     {
         "contains":
         [
-            "Edgewall Innkeeper",
             "Lucky Clover"
+        ],
+        "exclude":
+        [
+            "Plains"
+        ]
+    },
+    "4C Adventures":
+    {
+        "contains":
+        [
+            "Lucky Clover"
+        ]
+    },
+    "4C Crab Omnath":
+    {
+        "contains":
+        [
+            "Ruin Crab",
+            "Omnath, Locus of Creation"
         ]
     },
     "4-Color Omnath":
     {
         "contains":
         [
-            "Lotus Cobra",
             "Omnath, Locus of Creation"
         ],
         "exclude":
@@ -19,30 +36,39 @@
             "Swamp"
         ]
     },
-    "Sultai Midrange":
+    "Mono-red Aggro":
     {
         "contains":
         [
-            "Uro, Titan of Nature",
-            "Swamp"
+            "Embercleave"
         ],
         "exclude":
         [
-            "Plains",
-            "Mountain"
+            "Forest",
+            "Swamp"
         ]
     },
-    "Dimir Control":
+    "Gruul Adventures":
     {
         "contains":
         [
-            "Neutralize",
-            "Shark Typhoon",
-            "Clearwater Pathway"
-        ],
-        "exclude":
+            "Edgewall Innkeeper",
+            "Cragcrown Pathway"
+        ]
+    },
+    "Gruul Aggro":
+    {
+        "contains":
         [
-            "Forest"
+            "Cragcrown Pathway",
+            "Embercleave"
+        ]
+    },
+    "Mono-green Aggro":
+    {
+        "contains":
+        [
+            "Yorvo, Lord of Garenbrig"
         ]
     },
     "Dimir Rogues":
@@ -50,30 +76,36 @@
         "contains":
         [
             "Soaring Thought-Thief",
-            "Clearwater Pathway"
-        ]
-    },
-    "Dimir Tempo":
-    {
-        "contains":
-        [
-            "Cunning Nightbonder"
+            "Thieves' Guild Enforcer"
         ]
     },
     "Dimir Mill":
     {
         "contains":
         [
-            "Ruin Crab",
-            "Clearwater Pathway"
+            "Merfolk Secretkeeper",
+            "Ruin Crab"
         ]
     },
-    "Naya Winota":
+    "Dimir Control":
     {
         "contains":
         [
-            "Winota",
-            "Lotus Cobra"
+            "Mazemind Tome",
+            "Clearwater Pathway"
+        ],
+        "exclude":
+        [
+            "Mountain",
+            "Temple of Mystery"
+        ]
+    },
+    "Azorius Control":
+    {
+        "contains":
+        [
+            "Shatter the Sky",
+            "Temple of Enlightenment"
         ]
     },
     "Mono-blue Devotion":
@@ -81,31 +113,53 @@
         "contains":
         [
             "Nyx Lotus",
-            "Island"
+            "Gadwick, the Wizened"
         ]
     },
-    "Mono-red Aggro":
+    "Izzet Tempo":
     {
         "contains":
         [
-            "Embercleave",
-            "Castle Embereth"
-        ],
-        "exclude":
-        [
-            "Forest"
+            "Sprite Dragon"
         ]
     },
-    "Mono-green Aggro":
+    "Mono-black Aggro":
     {
         "contains":
         [
-            "Questing Beast"
-        ],
-        "exclude":
+            "Ayara, First of Locthwain"
+        ]
+    },
+    "Knights Aggro":
+    {
+        "contains":
         [
-            "Mountain",
-            "Plains"
+            "Tournament Grounds"
+        ]
+    },
+    "White Weenie":
+    {
+        "contains":
+        [
+            "Seasoned Hallowblade",
+            "Venerable Knight",
+            "Selfless Savior"
+        ]
+    },
+    "Esper Foretold":
+    {
+        "contains":
+        [
+            "Doom Foretold",
+            "Confounding Conundrum"
+        ]
+    },
+    "Grixis Midrange":
+    {
+        "contains":
+        [
+            "Negate",
+            "Kroxa"
         ]
     },
     "Selesnya Counters":
@@ -119,44 +173,13 @@
     {
         "contains":
         [
-            "Kroxa, Titan of Death"
-        ]
-    },
-    "Orzhov Lifegain":
-    {
-        "contains":
-        [
-            "Archfiend's Vessel",
-            "Cleric of Life's Bond"
-        ]
-    },
-    "Gruul Adventures":
-    {
-        "contains":
-        [
-            "Edgewall Innkeeper",
-            "Questing Beast"
-        ]
-    },
-    "Gruul Aggro":
-    {
-        "contains":
-        [
-            "Cragcrown Pathway",
-            "Embercleave"
-        ]
-    },
-    "Simic Ramp":
-    {
-        "contains":
-        [
-            "Lotus Cobra",
-            "Uro, Titan of Nature"
+            "Temple of Malice",
+            "Kroxa"
         ],
         "exclude":
         [
-            "Swamp",
-            "Moutain",
+            "Island",
+            "Forest",
             "Plains"
         ]
     },
