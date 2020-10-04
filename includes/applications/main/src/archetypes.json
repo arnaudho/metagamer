@@ -68,7 +68,14 @@
     {
         "contains":
         [
-            "Yorvo, Lord of Garenbrig"
+            "Castle Garenbrig"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Mountain",
+            "Swamp",
+            "Plains"
         ]
     },
     "Dimir Rogues":
@@ -108,12 +115,26 @@
             "Temple of Enlightenment"
         ]
     },
+    "UG Mutate":
+    {
+        "contains":
+        [
+            "Auspicious Starrix"
+        ]
+    },
     "Mono-blue Devotion":
     {
         "contains":
         [
             "Nyx Lotus",
             "Gadwick, the Wizened"
+        ]
+    },
+    "Boros Cycling":
+    {
+        "contains":
+        [
+            "Zenith Flare"
         ]
     },
     "Izzet Tempo":
