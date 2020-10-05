@@ -1,6 +1,7 @@
 <?php
 namespace app\main\controllers\front {
 
+    use app\main\models\ModelArchetype;
     use app\main\models\ModelFormat;
     use app\main\models\ModelMatch;
     use app\main\models\ModelPlayer;
@@ -14,6 +15,7 @@ namespace app\main\controllers\front {
     class tournament extends DefaultFrontController
     {
         protected $modelTournament;
+        protected $modelArchetype;
         protected $modelPlayer;
         protected $modelMatch;
         protected $modelFormat;
@@ -22,6 +24,7 @@ namespace app\main\controllers\front {
         {
             parent::__construct();
             $this->modelTournament = new ModelTournament();
+            $this->modelArchetype = new ModelArchetype();
             $this->modelPlayer = new ModelPlayer();
             $this->modelMatch = new ModelMatch();
             $this->modelFormat = new ModelFormat();
@@ -96,6 +99,21 @@ namespace app\main\controllers\front {
             if (isset($_GET['id'])) {
                 $tournament = $this->modelTournament->getTupleById($_GET['id']);
                 if ($tournament) {
+                    if (isset($_POST['refresh'])) {
+                        $count_refresh = 0;
+                        // Refresh tournament archetypes
+                        $players = $this->modelPlayer->all(Query::condition()->andWhere("id_tournament", Query::EQUAL, $tournament['id_tournament']));
+                        foreach ($players as $player) {
+                            $archetype = $player['id_archetype'];
+                            $new_archetype = $this->modelArchetype->evaluatePlayerArchetype($player['id_player']);
+                            if ($new_archetype && $archetype != $new_archetype['id_archetype']) {
+                                trace_r("Update : $archetype => " . $new_archetype['name_archetype']);
+                                $count_refresh++;
+                            }
+                        }
+                        trace_r("Refresh tournament archetypes : $count_refresh");
+                    }
+
                     $tournament_condition = Query::condition()->andWhere("tournaments.id_tournament", Query::EQUAL, $tournament['id_tournament']);
                     $metagame = $this->modelPlayer->countArchetypes($tournament_condition);
                     $count_players = $this->modelTournament->countPlayers($tournament_condition);

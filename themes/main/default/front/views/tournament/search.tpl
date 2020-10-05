@@ -38,6 +38,10 @@
         {/foreach}
         </tbody>
     </table>
+    <form method="post" action="">
+        <input type="hidden" name="refresh" value="1" />
+        <button type="submit" class="btn btn-info">Re-evaluate archetypes</button>
+    </form>
 {/if}
 
 {if !$request_async}{include file="includes/footer.tpl"}{/if}
