@@ -309,12 +309,14 @@ class MtgMeleeBot extends BotController
                 $insert_matches[] = array(
                     "id_player" => $list_players[$pairing['Player1DecklistId']],
                     "opponent_id_player" => $list_players[$pairing['Player2DecklistId']],
-                    "result_match" => $result_match
+                    "result_match" => $result_match,
+                    "round_number" => $pairing['RoundNumber']
                 );
                 $insert_matches[] = array(
                     "id_player" => $list_players[$pairing['Player2DecklistId']],
                     "opponent_id_player" => $list_players[$pairing['Player1DecklistId']],
-                    "result_match" => intval(!$result_match)
+                    "result_match" => intval(!$result_match),
+                    "round_number" => $pairing['RoundNumber']
                 );
             }
         }

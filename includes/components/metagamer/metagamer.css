@@ -8,7 +8,7 @@
 .container .link-decklists { margin-bottom: 12px;}
 .container p[class^="bg-"] { padding: 15px;}
 .strong {font-weight: bold;}
-table.table-matchups {border-collapse: separate; border-spacing: 2px; table-layout: fixed; width: 1600px;}
+table.table-matchups {border-collapse: separate; border-spacing: 2px; table-layout: fixed; width: 1650px; padding-right: 50px;}
 table.table-matchups tbody tr td {text-align: center; vertical-align: middle; border-top: 0; border-radius: 4px;
     height: 100px; padding-top: 10px;}
 table.table-matchups .matchup-deviation {font-size: 1.2em;}
