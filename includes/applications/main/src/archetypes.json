@@ -1,6 +1,7 @@
 {
     "Temur Adventures":
     {
+        "image": "Lucky Clover",
         "contains":
         [
             "Lucky Clover"
@@ -10,15 +11,17 @@
             "Plains"
         ]
     },
-    "4C Adventures":
+    "4-color Adventures":
     {
+        "image": "Beanstalk Giant",
         "contains":
         [
             "Lucky Clover"
         ]
     },
-    "4C Crab Omnath":
+    "4-color Crab Omnath":
     {
+        "image": "Ruin Crab",
         "contains":
         [
             "Ruin Crab",
@@ -27,6 +30,7 @@
     },
     "4-Color Omnath":
     {
+        "image": "Omnath, Locus of Creation",
         "contains":
         [
             "Omnath, Locus of Creation"
@@ -38,6 +42,7 @@
     },
     "Mono-red Aggro":
     {
+        "image": "Torbran, Thane of Red Fell",
         "contains":
         [
             "Embercleave"
@@ -50,6 +55,7 @@
     },
     "Gruul Adventures":
     {
+        "image": "Edgewall Innkeeper",
         "contains":
         [
             "Edgewall Innkeeper",
@@ -66,6 +72,7 @@
     },
     "Mono-green Aggro":
     {
+        "image": "Gemrazer",
         "contains":
         [
             "Castle Garenbrig"
@@ -80,6 +87,7 @@
     },
     "Dimir Rogues":
     {
+        "image": "Soaring Thought-Thief",
         "contains":
         [
             "Soaring Thought-Thief",
@@ -96,6 +104,7 @@
     },
     "Dimir Control":
     {
+        "image": "Mazemind Tome",
         "contains":
         [
             "Mazemind Tome",
@@ -104,6 +113,7 @@
         "exclude":
         [
             "Mountain",
+            "Plains",
             "Temple of Mystery"
         ]
     },
@@ -124,6 +134,7 @@
     },
     "Mono-blue Devotion":
     {
+        "image": "Nyx Lotus",
         "contains":
         [
             "Nyx Lotus",
@@ -132,6 +143,7 @@
     },
     "Boros Cycling":
     {
+        "image": "Zenith Flare",
         "contains":
         [
             "Zenith Flare"
@@ -192,6 +204,7 @@
     },
     "Rakdos Midrange":
     {
+        "image": "Kroxa, Titan of Death's Hunger",
         "contains":
         [
             "Temple of Malice",
