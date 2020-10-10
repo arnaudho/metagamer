@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "Metropolis";
+    src: url("fonts/Metropolis/Metropolis-Regular.otf") format("opentype");
+}
+
 #messages p { padding: 15px; font-size: 16px; border-radius: 3px;}
 .container { margin-bottom: 20px;}
 .container .menu { background-color: #F4F4F4; display: flex; justify-content: start; font-size: 18px; margin-bottom: 6px;}
@@ -8,30 +13,51 @@
 .container .link-decklists { margin-bottom: 12px;}
 .container p[class^="bg-"] { padding: 15px;}
 .strong {font-weight: bold;}
-table.table-matchups {border-collapse: separate; border-spacing: 2px; table-layout: fixed; width: 1650px; padding-right: 50px;}
-table.table-matchups tbody tr td {text-align: center; vertical-align: middle; border-top: 0; border-radius: 4px;
-    height: 100px; padding-top: 10px;}
-table.table-matchups .matchup-deviation {font-size: 1.2em;}
-table.table-matchups .matchup-percent {font-size: 2.5em; border-bottom: 1px solid #55555529; margin-bottom: 3px;}
+.container .matchups-container { padding: 30px; background: url("imgs/marble-white.png"); background-repeat: no-repeat;
+    width: fit-content;}
+table.table-matchups {border-collapse: separate; border-spacing: 0 17px; table-layout: fixed; color: #555C70;}
+table.table-matchups tbody * {font-family: "Metropolis", Cambria, serif;}
+table.table-matchups tbody tr th {border-top: 0; text-align: center; vertical-align: bottom;}
+table.table-matchups tbody tr td {text-align: center; vertical-align: middle; height: 80px; padding-top: 10px;
+    border-style: solid; border-color: #9DA7C4; border-width: 1px 0 1px 0; background-color: white;}
+table.table-matchups tbody tr td:first-of-type { border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-left-width: 1px;}
+table.table-matchups tbody tr td:last-of-type { border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-right-width: 1px;}
+table.table-matchups .matchup-deviation {font-size: 1em; border-top: 1px solid #55555529; padding-top: 8px; color: #919191;}
+table.table-matchups .matchup-percent {font-size: 2.1em; margin: auto; margin-bottom: 5px; width: 80%; font-weight: bold;}
 table.table-matchups .matchup-count {font-size: 1.3em;}
-table td.matchup-total .matchup-percent {font-weight: bold;}
-table.table-matchups th.matchup-total, table.table-matchups .matchup-archetype-name { font-size: 20px;}
-table.table-matchups tbody tr td.matchup-negative {background-color: #ffb3b3; border: 3px solid #f09a9a;}
-table.table-matchups tbody tr td.matchup-slightly-negative {background-color: #ffe6e6; border: 3px solid #fcc2c2;}
-table.table-matchups tbody tr td.matchup-positive {background-color: #99ff99; border: 3px solid #86db8a;}
-table.table-matchups tbody tr td.matchup-slightly-positive {background-color: #ccffcc; border: 3px solid #abecae;}
-table.table-matchups tbody tr td.matchup-even {background-color: white; border: 3px solid #cbcbcb;}
-table.table-matchups tbody tr td.matchup-mirror {background-color: #AFAFAF; border: 3px solid #9b9b9b;}
-table.table-matchups tbody tr td.matchup-mirror * {display: none;}
-/* Margin before matchup-total : insert a hidden td with specific width, remove table-layout fixed and set default td width */
-table.table-matchups tbody tr th {text-align: center; vertical-align: bottom;}
+table td.matchup-total .matchup-percent { font-size: 2.3em; color: #222222;}
+table.table-matchups th.matchup-archetype-image { width: 124px;}
+table.table-matchups th.matchup-archetype-name { width: 180px;}
+table.table-matchups th.matchup-total { width: 150px; font-size: 20px;}
+table.table-matchups th.matchup-total .matchup-total-cell { color: white; background-color: #F5875E;
+    border-radius: 6px 6px 0 0; border-width: 0; text-transform: uppercase; height: 100%; top: 8px; padding-top: 16px;}
+table th.matchup-detail { width: 140px;}
+table.table-matchups tbody .matchup-total { position: relative;}
+table.table-matchups .matchup-total .matchup-total-cell { position: absolute; top: -10px; left: 0; width: 100%; height: calc(100% + 21px);
+    padding-top: 20px; background-color: white; border: 2px solid #555C70AC;}
+table.table-matchups .matchup-archetype-image { height: 80px; background-position: top -30px right 50%;}
+table.table-matchups .matchup-archetype-name { font-size: 20px;}
+table.table-matchups td.matchup-archetype-name { text-align: left; padding-left: 14px;}
+table.table-matchups td.matchup-archetype-name .archetype-name { text-transform: uppercase; font-weight: bold;
+    font-size: 1.05em; line-height: normal;}
+table.table-matchups td.matchup-archetype-name .archetype-count { color: #9197a8; font-size: 0.9em;}
+table.table-matchups tbody tr td:nth-child(2n+5) {background-color: #F7F5F5;}
+table.table-matchups tbody tr td.matchup-negative {color: #C75C5C;}
+table.table-matchups tbody tr td.matchup-positive {color: #56AC59;}
+table.table-matchups tbody tr td.matchup-positive.matchup-highlighted,
+table.table-matchups tbody tr td.matchup-positive.matchup-highlighted .matchup-total-cell {background-color: #EBF6E5;}
+table.table-matchups tbody tr td.matchup-negative.matchup-highlighted,
+table.table-matchups tbody tr td.matchup-negative.matchup-highlighted .matchup-total-cell {background-color: #F8EAEA;}
+table.table-matchups tbody tr td.matchup-even { color: #5B6275;}
+/*table.table-matchups tbody tr td[class*="matchup-"]:not(.matchup-archetype-name) {border-width: 3px; border-style: solid;}*/
+table.table-matchups .round-dot { height: 32px; width: 32px; background-color: #D0D5E3; border-radius: 50%; display: inline-block;}
+table.table-matchups.table-legend td { width: 210px; height: 120px;}
+table.table-archetypes th.archetype-image { width: 160px;}
+table.table-archetypes td.archetype-image { height: 116px;}
 .container .winrate-slightly-negative {color: red;}
 .container .winrate-negative {color: red; font-weight: bold;}
 .container .winrate-slightly-positive {color: green;}
 .container .winrate-positive {color: green; font-weight: bold;}
-table th.rotated-text {height: 140px;white-space: nowrap;padding: 0 !important;vertical-align: bottom !important;}
-table th.rotated-text > div {transform:translate(13px, 0px)rotate(310deg);width: 30px;  }
-table th.rotated-text > div > span {padding: 5px 10px;}
 table.table-players tbody tr td {vertical-align: middle;}
 table td.highlight { font-weight: bold}
 table.archetype-analysis .card-exclude { color: red; font-size: 1.2em; cursor: pointer;}
@@ -45,7 +71,7 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 .container .decklist h2 small { text-transform: none; }
 .container .decklist h3 { color: #555555; margin: 10px 0 10px; text-transform: uppercase; transform: scale(1, 1.15);}
 .container .decklist ul {list-style-type: none; padding-left: 0;}
-.container .decklist .decklist-separator { border-color: black; width: 100px; margin-left: 0; margin-top: 10px;}
+.container .decklist .decklist-separator { border-color: black; width: 80px; margin-left: 0; margin-top: 10px;}
 .container .decklist .decklist-main-container { vertical-align: top; width: 87%; display: inline-block;}
 .container .decklist .decklist-side-container { vertical-align: top; display: inline-block; width: 200px; padding-left: 16px; margin-top: -4px;}
 .container .decklist .decklist-side-container .decklist-card { top: 0;}
@@ -59,9 +85,7 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
     color: white; font-size: 23px; width: 37px; height: 36px; background-color: rgba(150, 150, 150, 0.8);
     padding: 2px 12px; border-radius: 4px; font-weight: bold;}
 .container .decklist .decklist-side .decklist-card .decklist-card-count { top: 6px; right: 38px;}
-.container .credits { margin: 0 auto; float: right; width: 200px; margin-top: 10px; font-weight: bold;
-    color: grey; font-size: 32px; font-family: "Gill Sans MT", Calibri, serif; transform: scale(1, 1.15);}
-.container .credits .credits-highlight { color: #faa574;}
+.container .logo { margin: 0 auto; float: right; width: 240px; margin-top: 10px; background: center /100% no-repeat url("imgs/logo.png"); height: 50px;}
 .container .overlay-twitter-size { position: fixed; border: 1px solid red; border-bottom-width: 0; height: 928px; width: 1650px;
     top: 5px; left: 10px; box-sizing: content-box;}
 #import-mtgmelee .form-group > * { display: block;}

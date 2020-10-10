@@ -124,21 +124,22 @@ namespace app\main\models {
                 }
             }
             // add total
-            $data[] = array(
+            array_unshift($data, array(
                 "name_archetype" => "total",
                 "wins"           => $total_wins,
                 "count"          => $total_matches,
-                "percent"        => $total_matches == 0 ? '-' : round((100*$total_wins/$total_matches), 2),
+                "percent"        => $total_matches == 0 ? '-' : round((100*$total_wins/$total_matches), 1),
                 "id_archetype"   => 0
-            );
+            ));
             // add total including mirror matches
+            /*
             $data[] = array(
                 "name_archetype" => "total_mirror",
                 "wins"           => $total_wins_mirror,
                 "count"          => $total_matches_mirror,
-                "percent"        => $total_matches_mirror == 0 ? '-' : round((100*$total_wins_mirror/$total_matches_mirror), 2),
+                "percent"        => $total_matches_mirror == 0 ? '-' : round((100*$total_wins_mirror/$total_matches_mirror), 1),
                 "id_archetype"   => 0
-            );
+            );*/
             return $data;
         }
 

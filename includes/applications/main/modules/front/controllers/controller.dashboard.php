@@ -2,6 +2,7 @@
 namespace app\main\controllers\front {
 
     use app\main\models\ModelArchetype;
+    use app\main\models\ModelCard;
     use app\main\models\ModelFormat;
     use app\main\models\ModelMatch;
     use app\main\models\ModelPlayer;
@@ -21,6 +22,7 @@ namespace app\main\controllers\front {
         protected $modelArchetypes;
         protected $modelTournament;
         protected $modelFormat;
+        protected $modelCard;
 
         public function __construct()
         {
@@ -30,6 +32,7 @@ namespace app\main\controllers\front {
             $this->modelArchetypes = new ModelArchetype();
             $this->modelTournament = new ModelTournament();
             $this->modelFormat = new ModelFormat();
+            $this->modelCard = new ModelCard();
         }
 
         public function index () {
@@ -117,6 +120,7 @@ namespace app\main\controllers\front {
                             $winrate[$m]['count'] = ceil($matchup['count'] / 2);
                         }
                         $deviation = StatsUtils::getStandardDeviation($matchup['percent'], $matchup['count'], StatsUtils::Z95);
+                        $winrate[$m]['deviation'] = $deviation;
                         $winrate[$m]['deviation_up'] = round($matchup['percent'] + $deviation);
                         if ($winrate[$m]['deviation_up'] > 100) {
                             $winrate[$m]['deviation_up'] = 100;
@@ -173,7 +177,33 @@ namespace app\main\controllers\front {
         }
 
         public function archetypes () {
+            // update archetypes images
+
             $archetypes = $this->modelArchetypes->getArchetypesRules();
+            foreach ($archetypes as $archetype_name => $archetype) {
+                if (isset($archetype['image']) && $card = $this->modelCard->one(Query::condition()->andWhere("name_card", Query::LIKE, $archetype['image'] . "%"), "image_card")) {
+                    // get archetype by name
+                    $arch = $this->modelArchetypes->one(Query::condition()->andWhere("name_archetype", Query::EQUAL, $archetype_name));
+                    if ($arch) {
+                        $this->modelArchetypes->updateById(
+                            $arch['id_archetype'],
+                            array(
+                                "image_archetype" => $card['image_card']
+                            )
+                        );
+                    } else {
+                        $this->modelArchetypes->insert(
+                            array(
+                                "name_archetype" => $archetype_name,
+                                "image_archetype" => $card['image_card']
+                            )
+                        );
+                    }
+                    $archetypes[$archetype_name]['image_card'] = $card['image_card'];
+                } else {
+                    trace_r("ERROR : image not found for archetype $archetype_name");
+                }
+            }
             $this->addContent("archetypes", $archetypes);
 
             /*

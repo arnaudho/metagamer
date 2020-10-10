@@ -9,6 +9,7 @@
 <table class="table table-hover table-condensed table-archetypes">
     <thead>
         <tr>
+            <th class="archetype-image">Image</th>
             <th>Archetype</th>
             <th>Must contain</th>
             <th>Must not contain</th>
@@ -17,6 +18,7 @@
     <tbody>
         {foreach from=$content.archetypes key="archetype" item="rules"}
             <tr>
+                <td class="archetype-image" style="background: no-repeat  top -32px right 50%/120% url({$rules.image_card});"></td>
                 <td>{$archetype}</td>
                 <td>
                     {foreach from=$rules.contains item="card"}

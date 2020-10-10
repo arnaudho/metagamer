@@ -2,9 +2,7 @@
 
 {if $content.cards!==null}
     <div class="decklist decklist-visual">
-        <div class="credits">
-            MTG <span class="credits-highlight">DATA</span>
-        </div>
+        <div class="logo"></div>
         <h2>{$content.player.name_archetype} <small>by {$content.player.arena_id}</small></h2>
         <h3>{$content.player.name_tournament}</h3>
         <hr class="decklist-separator" />

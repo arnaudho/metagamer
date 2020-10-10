@@ -85,7 +85,10 @@ namespace app\main\models {
                 );
             }
 
-            return $name_archetype;
+            return array(
+                "id_archetype" => $id_archetype,
+                "name_archetype" => $name_archetype
+            );
         }
 
         public function allByFormat ($pIdFormat) {
