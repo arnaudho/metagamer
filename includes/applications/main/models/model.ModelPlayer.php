@@ -123,5 +123,14 @@ namespace app\main\models {
             $data = $q->execute($this->handler);
             return $data[0]["nb"];
         }
+
+        public function countDuplicatePlayers ($pIdTournament) {
+            $duplicates = Query::select("id_player", $this->table)
+                ->andWhere("id_tournament", Query::EQUAL, $pIdTournament)
+                ->groupBy("decklist_player")
+                ->having("COUNT(1) > 1", false)
+            ->execute($this->handler);
+            return count($duplicates);
+        }
     }
 }
