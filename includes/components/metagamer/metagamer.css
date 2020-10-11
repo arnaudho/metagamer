@@ -13,7 +13,7 @@
 .container .link-decklists { margin-bottom: 12px;}
 .container p[class^="bg-"] { padding: 15px;}
 .strong {font-weight: bold;}
-.container .matchups-container { padding: 30px; background: url("imgs/marble-white.png"); background-repeat: no-repeat;
+.container .matchups-container { padding: 30px 50px 30px; background: url("imgs/marble-white.png"); background-repeat: no-repeat;
     width: fit-content;}
 table.table-matchups {border-collapse: separate; border-spacing: 0 17px; table-layout: fixed; color: #555C70;}
 table.table-matchups tbody * {font-family: "Metropolis", Cambria, serif;}
@@ -27,17 +27,17 @@ table.table-matchups .matchup-percent {font-size: 2.1em; margin: auto; margin-bo
 table.table-matchups .matchup-count {font-size: 1.3em;}
 table td.matchup-total .matchup-percent { font-size: 2.3em; color: #222222;}
 table.table-matchups th.matchup-archetype-image { width: 124px;}
-table.table-matchups th.matchup-archetype-name { width: 180px;}
-table.table-matchups th.matchup-total { width: 150px; font-size: 20px;}
+table.table-matchups th.matchup-archetype-name { width: 200px;}
+table.table-matchups th.matchup-total { width: 160px; font-size: 20px;}
 table.table-matchups th.matchup-total .matchup-total-cell { color: white; background-color: #F5875E;
     border-radius: 6px 6px 0 0; border-width: 0; text-transform: uppercase; height: 100%; top: 8px; padding-top: 16px;}
-table th.matchup-detail { width: 140px;}
+table th.matchup-detail { width: 150px;}
 table.table-matchups tbody .matchup-total { position: relative;}
 table.table-matchups .matchup-total .matchup-total-cell { position: absolute; top: -10px; left: 0; width: 100%; height: calc(100% + 21px);
     padding-top: 20px; background-color: white; border: 2px solid #555C70AC;}
 table.table-matchups .matchup-archetype-image { height: 80px; background-position: top -30px right 50%;}
 table.table-matchups .matchup-archetype-name { font-size: 20px;}
-table.table-matchups td.matchup-archetype-name { text-align: left; padding-left: 14px;}
+table.table-matchups td.matchup-archetype-name { text-align: left; padding-left: 14px; padding-right: 20px;}
 table.table-matchups td.matchup-archetype-name .archetype-name { text-transform: uppercase; font-weight: bold;
     font-size: 1.05em; line-height: normal;}
 table.table-matchups td.matchup-archetype-name .archetype-count { color: #9197a8; font-size: 0.9em;}
@@ -51,9 +51,21 @@ table.table-matchups tbody tr td.matchup-negative.matchup-highlighted .matchup-t
 table.table-matchups tbody tr td.matchup-even { color: #5B6275;}
 /*table.table-matchups tbody tr td[class*="matchup-"]:not(.matchup-archetype-name) {border-width: 3px; border-style: solid;}*/
 table.table-matchups .round-dot { height: 32px; width: 32px; background-color: #D0D5E3; border-radius: 50%; display: inline-block;}
-table.table-matchups.table-legend td { width: 210px; height: 120px;}
+table.table-matchups.table-legend { position: relative; border-spacing: 0; margin-right: 50px;}
+table.table-matchups.table-legend:before { content: "*"; top: -10px; left: -23px; position: absolute; font-size: 4em;}
+table.table-matchups.table-legend td { width: 170px; height: 100px;}
 table.table-archetypes th.archetype-image { width: 160px;}
 table.table-archetypes td.archetype-image { height: 116px;}
+.container .matchups-container .legend-container { display: flex;}
+.container .matchups-container .legend { margin-right: 10px;}
+.container .matchups-container .legend * { font-family: Metropolis, Arial, serif;}
+.container .matchups-container .legend .matchup-highlighted { height: 40px; width: 46px; border-radius: 4px;
+    border: 1px solid #555C70AC; margin-right: 6px; display: inline-block;}
+.container .matchups-container .legend .matchup-positive { background-color: #EBF6E5;}
+.container .matchups-container .legend .matchup-negative { background-color: #F8EAEA;}
+.container .matchups-container h1 { font-family: "Gill Sans MT", Arial, serif; font-size: 5em; text-transform: uppercase;}
+.container .matchups-container h3 { font-family: "Metropolis", Arial, serif; margin-top: 10px; font-size: 2.2em;}
+.container .matchups-container hr { width: 5%; border-color: black; margin: 12px 0 10px;}
 .container .winrate-slightly-negative {color: red;}
 .container .winrate-negative {color: red; font-weight: bold;}
 .container .winrate-slightly-positive {color: green;}

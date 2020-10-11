@@ -80,6 +80,9 @@
     <label for="matchups-export-mode">Export mode</label>
     <input type="checkbox" name="matchups-export-mode" id="matchups-export-mode" />
     <div class="matchups-container">
+        <h1>{$content.format.name_format}</h1>
+        <h3>Format Standard - 10-11 Oct 2020 </h3>
+        <hr width="10%" />
         <table class="table table-condensed table-matchups">
             <tbody>
                 <tr>
@@ -130,20 +133,27 @@
             </tbody>
         </table>
         <div class="logo"></div>
-        <table class="table table-matchups table-legend" style="width: auto;">
-            <tbody>
-            <tr>
-                <td class="">
-                    <div class="matchup-percent">Winrate<sup>%</sup></div>
-                    <span class="matchup-deviation">Confidence interval</span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="legend-container">
+            <table class="table table-matchups table-legend" style="width: auto;">
+                <tbody>
+                <tr>
+                    <td class="">
+                        <div class="matchup-percent">Winrate<sup>%</sup></div>
+                        <span class="matchup-deviation">Confidence interval</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="legend">
+                <div class="matchup-positive matchup-highlighted"></div>
+                <div class="matchup-negative matchup-highlighted"></div>
+            </div>
+            <div class="legend">
+                <p>Highlighted matchups are the ones with the strongest sample sizes <br />with as much as -10%/+10% confidence intervals</p>
+                <p>Sample size : {$content.data.count_matches} matches | Confidence level : {$content.confidence} | Winrates do not include mirror matches</p>
+            </div>
+        </div>
     </div>
-    {if $content.confidence}
-        <p>Confidence level : {$content.confidence}</p>
-    {/if}
 {/if}
 
 {if !$request_async}{include file="includes/footer.tpl"}{/if}
