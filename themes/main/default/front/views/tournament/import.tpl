@@ -5,7 +5,8 @@
 <ul class="nav nav-tabs">
     <li><a data-toggle="tab" href="#cfb">CFB Events</a></li>
     <li class="active"><a data-toggle="tab" href="#mtgmelee">MTG Melee</a></li>
-    <li><a data-toggle="tab" href="#mtgmelee_decklists">MTG Melee - decklists</a></li>
+    <li><a data-toggle="tab" href="#mtgmelee_decklists">MTG Melee - decklists (paste)</a></li>
+    <li><a data-toggle="tab" href="#mtgmelee_decklists_old">MTG Melee - decklists (old)</a></li>
 </ul>
 
 <div class="tab-content">
@@ -45,6 +46,20 @@
         </form>
     </div>
     <div id="mtgmelee_decklists" class="tab-pane fade">
+        <h3>MTG Melee - Parse decklists</h3>
+
+        {if $content.count_waiting}
+            <p>{$content.count_waiting} decklists without archetype</p>
+        {/if}
+        <form class="form-inline" method="post">
+            <div class="form-group">
+                <textarea name="import-mtgmelee-decklists[data-raw]" class="form-control" rows="8" cols="40" placeholder="Paste decklists data here..."></textarea>
+                <hr />
+                <button type="submit" class="btn btn-primary">Import</button>
+            </div>
+        </form>
+    </div>
+    <div id="mtgmelee_decklists_old" class="tab-pane fade">
         <h3>MTG Melee - Parse decklists</h3>
 
         {if $content.count_waiting}

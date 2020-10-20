@@ -33,31 +33,40 @@ class MtgMeleeBot extends BotController
     }
 
     // Parse decklist by player ID
-    public function parseDecklist ($pIdPlayer, $pWrite = true) {
+    public function parseDecklist ($pIdPlayer, $pDecklistData = null, $pWrite = true) {
         $player = $this->modelPlayer->getTupleById($pIdPlayer);
         if (!$player) {
             return false;
         }
-        if (!preg_match('/^https?:\/\/mtgmelee.com\/Decklist\/View\/([\d]+)$/ix', $player['decklist_player'], $output_array)) {
-            trace_r("ERROR : incorrect decklist URL : " . $player['decklist_player']);
-            $this->addMessage("ERROR : incorrect decklist URL : " . $player['decklist_player'], self::MESSAGE_ERROR);
-            return false;
+        if ($pDecklistData) {
+            preg_match_all('/Deck(.*)(Sideboard(.*))?\z/Uims', $pDecklistData, $output_array);
+            $deck_main = $output_array[1][0];
+            $deck_side = $output_array[3][0];
+        } else {
+            if (!preg_match('/^https?:\/\/mtgmelee.com\/Decklist\/View\/([\d]+)$/ix', $player['decklist_player'], $output_array)) {
+                trace_r("ERROR : incorrect decklist URL : " . $player['decklist_player']);
+                $this->addMessage("ERROR : incorrect decklist URL : " . $player['decklist_player'], self::MESSAGE_ERROR);
+                return false;
+            }
+            $data = $this->callUrl($player['decklist_player']);
+            if (empty($data)) {
+                trace_r("PARSING ERROR : URL " . $player['decklist_player'] . " not found");
+                $this->addMessage("PARSING ERROR : URL " . $player['decklist_player'] . " not found", self::MESSAGE_ERROR);
+                return false;
+            }
+
+            // handle different MDFC format
+            $data = str_replace("///", "//", $data);
+
+            // PARSE decklist
+            preg_match_all('/<textarea[^>]+class="decklist-builder-[^>]+>[^<]*Deck([^<]*)(Sideboard([^<]*))?<\/textarea>/Uims', $data, $output_array);
+
+            // quickfix quote bug (&#039; on CFB / &#39; on MTGmelee)
+            $deck_main = html_entity_decode($output_array[1][0]);
+            $deck_side = html_entity_decode($output_array[3][0]);
         }
-        $data = $this->callUrl($player['decklist_player']);
-        if (empty($data)) {
-            trace_r("PARSING ERROR : URL " . $player['decklist_player'] . " not found");
-            $this->addMessage("PARSING ERROR : URL " . $player['decklist_player'] . " not found", self::MESSAGE_ERROR);
-            return false;
-        }
 
-        // PARSE decklist
-        preg_match_all('/<textarea[^>]+class="decklist-builder-[^>]+>[^<]*Deck([^<]*)(Sideboard([^<]*))?<\/textarea>/Uims', $data, $output_array);
-
-        // quickfix quote bug (&#039; on CFB / &#39; on MTGmelee)
-        $deck_main = html_entity_decode($output_array[1][0]);
-        $deck_side = html_entity_decode($output_array[3][0]);
-
-        preg_match_all("/(\d+)\s+([&#;,'\/\-\w ]+)(\r|\n)/Uims", $deck_main, $parsing_main);
+        preg_match_all("/(\d+)\s+([&#;,'\/\-\w ]+)(\r|\n)*/ims", $deck_main, $parsing_main);
 
         // insert cards
         $cards = array();

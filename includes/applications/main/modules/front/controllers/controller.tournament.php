@@ -62,6 +62,29 @@ namespace app\main\controllers\front {
                     } else {
                         $this->addMessage("Empty or badly formatted data", self::MESSAGE_ERROR);
                     }
+                } elseif ($_POST['import-mtgmelee-decklists'] && $_POST['import-mtgmelee-decklists']['data-raw']) {
+                    $data = SimpleJSON::decode($_POST['import-mtgmelee-decklists']['data-raw']);
+                    $decklists = array();
+                    $decklists_data = array();
+                    $count_players = 0;
+                    foreach ($data as $decklist) {
+                        if (isset($decklist['ID']) && isset($decklist['Deck'])) {
+                            $decklists[] = "https://mtgmelee.com/Decklist/View/" . $decklist['ID'];
+                            $decklists_data["https://mtgmelee.com/Decklist/View/" . $decklist['ID']] = $decklist['Deck'];
+                        }
+                    }
+                    $players = $this->modelPlayer->all(Query::condition()
+                        ->andWhere("decklist_player", Query::IN, "('" . implode("', '", $decklists) . "')", false),
+                        "players.id_player, decklist_player"
+                    );
+                    $bot = new MtgMeleeBot("Parse decklists");
+                    foreach ($players as $player) {
+                        if (array_key_exists($player['decklist_player'], $decklists_data)) {
+                            $bot->parseDecklist($player['id_player'], $decklists_data[$player['decklist_player']]);
+                        }
+                        $count_players++;
+                    }
+                    $this->addMessage("$count_players decklists imported", self::MESSAGE_INFO);
                 } elseif ($_POST['import-mtgmelee-decklists'] && $_POST['import-mtgmelee-decklists']['count']) {
                     $count = $_POST['import-mtgmelee-decklists']['count'] > 100 ? 100 : intval($_POST['import-mtgmelee-decklists']['count']);
                     $players = $this->modelPlayer->all(Query::condition()
@@ -70,7 +93,7 @@ namespace app\main\controllers\front {
                         "id_player"
                     );
                     if (count($players) > 0) {
-                        $bot = new MtgMeleeBot("Test");
+                        $bot = new MtgMeleeBot("Parse decklists with crawler");
                         foreach ($players as $player) {
                             $bot->parseDecklist($player['id_player']);
                             // wait 2 seconds to prevent HTTP 429
