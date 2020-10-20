@@ -178,6 +178,7 @@ namespace app\main\controllers\front {
                         }
                     }
                     $this->addContent("cards", $cards);
+                    $this->addContent("confidence", "0.90");
                 } else {
                     $this->addMessage("No decklist found", self::MESSAGE_ERROR);
                 }
@@ -238,7 +239,7 @@ namespace app\main\controllers\front {
             $format_cond
                 ->andWhere("id_archetype", Query::EQUAL, $_GET['id_archetype'])
                 ->andCondition($rules_cond);
-            $decklists = $this->modelPlayer->getDecklists($format_cond);
+            $decklists = $this->modelPlayer->getDecklists($format_cond, $_GET['id_archetype'] == ModelArchetype::ARCHETYPE_OTHER_ID);
             $this->addContent("decklists", $decklists);
         }
 

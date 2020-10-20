@@ -52,6 +52,8 @@ namespace app\main\models {
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = " . $this->table . ".id_tournament")
                 ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = " . $this->table . ".id_archetype")
                 ->andCondition($pCondition)
+                // exclude archetypes from dashboard
+                //->andWhere("archetypes.id_archetype", Query::NOT_IN, "(13, 73, 77, 83, 84, 92, 93, 94)", false)
                 ->groupBy("name_archetype")
                 ->order("FIELD (players.id_archetype, " . ModelArchetype::ARCHETYPE_OTHER_ID . "), COUNT(1)", "DESC");
             $data = $q->execute($this->handler);
@@ -65,9 +67,12 @@ namespace app\main\models {
             return $data;
         }
 
-        public function getDecklists ($pCondition) {
-            // TODO check which fields we actually need
-            return Query::select("SUM(result_match) AS wins, COUNT(1) AS total, p.*, people.*, tournaments.*", "players p")
+        public function getDecklists ($pCondition, $pDecklistNames = false) {
+            $fields = "SUM(result_match) AS wins, COUNT(1) AS total, p.id_player, people.arena_id, tournaments.id_format, tournaments.id_tournament, name_tournament";
+            if ($pDecklistNames) {
+                $fields .= ", p.name_deck";
+            }
+            return Query::select($fields, "players p")
                 ->join("people", Query::JOIN_INNER, "people.id_people = p.id_people")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = p.id_tournament")
                 ->join("matches", Query::JOIN_INNER, "matches.id_player = p.id_player")

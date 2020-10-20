@@ -7,6 +7,9 @@
             <tr>
                 <th>Arena ID</th>
                 <th>Tournament</th>
+                {if $content.decklists[0][name_deck]}
+                    <th>Deck name</th>
+                {/if}
                 <th>Record</th>
                 <th>Decklist</th>
             </tr>
@@ -16,6 +19,9 @@
                 <tr>
                     <td><a href="player/?search={$decklist.arena_id}">{$decklist.arena_id}</a></td>
                     <td><a href="dashboard/?id_format={$decklist.id_format}&id_tournament={$decklist.id_tournament}">{$decklist.name_tournament}</a></td>
+                    {if $decklist.name_deck}
+                        <td>{$decklist.name_deck}</td>
+                    {/if}
                     <td>{$decklist.wins}-{$decklist.total-$decklist.wins}</td>
                     <td>
                         <a href="deck/id:{$decklist.id_player}/" class="btn btn-info" target="_blank">
