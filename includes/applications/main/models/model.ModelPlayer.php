@@ -129,9 +129,10 @@ namespace app\main\models {
             return $data[0]["nb"];
         }
 
-        public function countDuplicatePlayers ($pIdTournament) {
+        public function countDuplicatePlayers ($pCondition) {
             $duplicates = Query::select("id_player", $this->table)
-                ->andWhere("id_tournament", Query::EQUAL, $pIdTournament)
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->andCondition($pCondition)
                 ->groupBy("decklist_player")
                 ->having("COUNT(1) > 1", false)
             ->execute($this->handler);

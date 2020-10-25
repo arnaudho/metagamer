@@ -63,6 +63,16 @@ namespace app\main\controllers\front {
                 $dashboard_cond = Query::condition()->andWhere("tournaments.id_tournament", Query::EQUAL, $tournament['id_tournament']);
             }
             if ($format && $dashboard_cond) {
+                // check if duplicate players
+                $count_duplicates = $this->modelPlayer->countDuplicatePlayers(
+                    Query::condition()
+                        ->andWhere("tournaments.id_format", Query::EQUAL, $format['id_format'])
+                );
+
+                if ($count_duplicates != 0) {
+                    $this->addMessage("$count_duplicates duplicates decklists found", self::MESSAGE_ERROR);
+                }
+
                 $this->addContent("list_tournaments", $this->modelTournament->all(
                     Query::condition()
                         ->andWhere("id_format", Query::EQUAL, $format['id_format'])

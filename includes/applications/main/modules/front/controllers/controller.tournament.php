@@ -137,14 +137,14 @@ namespace app\main\controllers\front {
                         trace_r("Refresh tournament archetypes : $count_refresh");
                     }
 
+                    $tournament_condition = Query::condition()->andWhere("tournaments.id_tournament", Query::EQUAL, $tournament['id_tournament']);
                     // check if duplicate player
-                    $count_duplicates = $this->modelPlayer->countDuplicatePlayers($tournament['id_tournament']);
+                    $count_duplicates = $this->modelPlayer->countDuplicatePlayers($tournament_condition);
 
                     if ($count_duplicates != 0) {
                         $this->addMessage("$count_duplicates duplicates decklists found", self::MESSAGE_ERROR);
                     }
 
-                    $tournament_condition = Query::condition()->andWhere("tournaments.id_tournament", Query::EQUAL, $tournament['id_tournament']);
                     $metagame = $this->modelPlayer->countArchetypes($tournament_condition);
                     $count_players = $this->modelTournament->countPlayers($tournament_condition);
 

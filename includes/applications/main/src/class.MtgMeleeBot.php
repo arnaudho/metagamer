@@ -77,8 +77,8 @@ class MtgMeleeBot extends BotController
         }
         preg_match_all("/(\d+)\s+([&#;,'\/\-\w ]+)(\r|\n)/Uims", $deck_side, $parsing_side);
         if (!array_key_exists(0, $parsing_side[2]) || empty($deck_side)) {
-            trace_r("ERROR Decklist parsing : no sideboard found for url : " . $player['decklist_player']);
-            $this->addMessage("ERROR Decklist parsing : no sideboard found for url : <a href='" . $player['decklist_player'] . "' target='_blank'>" . $player['decklist_player'] . "</a>", self::MESSAGE_ERROR);
+            trace_r("WARNING Decklist parsing : no sideboard found for url : " . $player['decklist_player']);
+            $this->addMessage("WARNING : Decklist parsing : no sideboard found for url : <a href='" . $player['decklist_player'] . "' target='_blank'>" . $player['decklist_player'] . "</a>", self::MESSAGE_WARNING);
         }
 
         foreach ($parsing_main as $key => $card) {
