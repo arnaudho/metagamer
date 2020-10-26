@@ -13,8 +13,6 @@
 .container .link-decklists { margin-bottom: 12px;}
 .container p[class^="bg-"] { padding: 15px;}
 .strong {font-weight: bold;}
-.container .matchups-container { padding: 30px 50px 30px; background: url("imgs/marble-white.png"); background-repeat: no-repeat;
-    width: fit-content;}
 table.table-matchups {border-collapse: separate; border-spacing: 0 17px; table-layout: fixed; color: #555C70;}
 table.table-matchups tbody * {font-family: "Metropolis", Cambria, serif;}
 table.table-matchups tbody tr th {border-top: 0; text-align: center; vertical-align: bottom;}
@@ -22,7 +20,7 @@ table.table-matchups tbody tr td {text-align: center; vertical-align: middle; he
     border-style: solid; border-color: #9DA7C4; border-width: 1px 0 1px 0; background-color: white;}
 table.table-matchups tbody tr td:first-of-type { border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-left-width: 1px;}
 table.table-matchups tbody tr td:last-of-type { border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-right-width: 1px;}
-table.table-matchups .matchup-deviation {font-size: 1em; border-top: 1px solid #55555529; padding-top: 8px; color: #919191;}
+table.table-matchups .matchup-deviation {font-size: 1.3em; line-height: 1em; border-top: 1px solid #55555529; padding-top: 8px; color: #919191;}
 table.table-matchups .matchup-percent {font-size: 2.1em; margin: auto; margin-bottom: 5px; width: 80%; font-weight: bold;}
 table.table-matchups .matchup-count {font-size: 1.3em;}
 table td.matchup-total .matchup-percent { font-size: 2.3em; color: #222222;}
@@ -52,12 +50,15 @@ table.table-matchups tbody tr td.matchup-even { color: #5B6275;}
 /*table.table-matchups tbody tr td[class*="matchup-"]:not(.matchup-archetype-name) {border-width: 3px; border-style: solid;}*/
 table.table-matchups .round-dot { height: 32px; width: 32px; background-color: #D0D5E3; border-radius: 50%; display: inline-block;}
 table.table-matchups.table-legend { position: relative; border-spacing: 0; margin-right: 50px;}
-table.table-matchups.table-legend:before { content: "*"; top: -10px; left: -23px; position: absolute; font-size: 4em;}
 table.table-matchups.table-legend td { width: 170px; height: 100px;}
 table.table-archetypes th.archetype-image { width: 160px;}
 table.table-archetypes td.archetype-image { height: 116px;}
+table.table-archetypes td.archetype-name { font-weight: bold; font-size: 18px; text-transform: uppercase;}
+table.table-archetypes * { font-family: Metropolis, serif;}
+.container .matchups-container { padding: 30px 50px 30px; background: 0 0 /100% url("imgs/marble-white.png"); background-repeat: no-repeat;
+    width: fit-content;}
 .container .matchups-container .legend-container { display: flex;}
-.container .matchups-container .legend { margin-right: 10px;}
+.container .matchups-container .legend { margin-right: 10px; font-size: 1.3em;}
 .container .matchups-container .legend * { font-family: Metropolis, Arial, serif;}
 .container .matchups-container .legend .matchup-highlighted { height: 40px; width: 46px; border-radius: 4px;
     border: 1px solid #555C70AC; margin-right: 6px; display: inline-block;}

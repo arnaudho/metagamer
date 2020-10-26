@@ -194,8 +194,8 @@ namespace app\main\controllers\front {
 
         public function archetypes () {
             // update archetypes images
-
             $archetypes = $this->modelArchetypes->getArchetypesRules();
+            $archetype_cards = array();
             foreach ($archetypes as $archetype_name => $archetype) {
                 if (isset($archetype['image']) && $card = $this->modelCard->one(Query::condition()->andWhere("name_card", Query::LIKE, $archetype['image'] . "%"), "image_card")) {
                     // get archetype by name
@@ -219,7 +219,27 @@ namespace app\main\controllers\front {
                 } else {
                     trace_r("ERROR : image not found for archetype $archetype_name");
                 }
+
+                $archetype_cards = array_merge($archetype_cards, $archetype['contains']);
+                if (isset($archetype['exclude'])) {
+                    $archetype_cards = array_merge($archetype_cards, $archetype['exclude']);
+                }
             }
+
+            // check card names
+            $archetype_cards = array_unique($archetype_cards);
+            $subquery = '(SELECT "' . implode('" AS name_card UNION ALL SELECT "', $archetype_cards) . '") c1';
+            $not_found = Query::execute("SELECT name_card FROM (SELECT c1.name_card, coalesce(cards.id_card, 'NOT FOUND') AS found FROM " . $subquery . " LEFT JOIN cards ON cards.name_card = c1.name_card) tmp WHERE found = 'NOT FOUND'");
+            // TODO check with LIKE '$card_name%'
+            if ($not_found) {
+                $message = "Cards not found : <ul>";
+                foreach ($not_found as $card) {
+                    $message .= "<li>" . $card['name_card'] . "</li>";
+                }
+                $message .= "</ul>";
+                $this->addMessage($message);
+            }
+
             $this->addContent("archetypes", $archetypes);
 
             /*

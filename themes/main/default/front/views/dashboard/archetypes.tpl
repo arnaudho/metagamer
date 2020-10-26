@@ -19,7 +19,7 @@
         {foreach from=$content.archetypes key="archetype" item="rules"}
             <tr>
                 <td class="archetype-image" style="background: no-repeat  top -32px right 50%/120% url({$rules.image_card});"></td>
-                <td>{$archetype}</td>
+                <td class="archetype-name">{$archetype}</td>
                 <td>
                     {foreach from=$rules.contains item="card"}
                         {$card}<br />
