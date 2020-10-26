@@ -122,6 +122,7 @@ namespace app\main\controllers\front {
             if (isset($_GET['id'])) {
                 $tournament = $this->modelTournament->getTupleById($_GET['id']);
                 if ($tournament) {
+                    $tournament_condition = Query::condition()->andWhere("tournaments.id_tournament", Query::EQUAL, $tournament['id_tournament']);
                     if (isset($_POST['refresh'])) {
                         $count_refresh = 0;
                         // Refresh tournament archetypes
@@ -136,13 +137,17 @@ namespace app\main\controllers\front {
                         }
                         trace_r("Refresh tournament archetypes : $count_refresh");
                     }
+                    if (isset($_POST['duplicates'])) {
+                        $cleaned_duplicates = $this->modelPlayer->cleanDuplicatePlayers($tournament_condition);
+                        trace_r("Clean duplicate decklists : $cleaned_duplicates");
+                    }
 
-                    $tournament_condition = Query::condition()->andWhere("tournaments.id_tournament", Query::EQUAL, $tournament['id_tournament']);
                     // check if duplicate player
                     $count_duplicates = $this->modelPlayer->countDuplicatePlayers($tournament_condition);
 
                     if ($count_duplicates != 0) {
                         $this->addMessage("$count_duplicates duplicates decklists found", self::MESSAGE_ERROR);
+                        $this->addContent("clean_duplicates", 1);
                     }
 
                     $metagame = $this->modelPlayer->countArchetypes($tournament_condition);

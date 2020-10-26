@@ -16,6 +16,13 @@
 {if $content.tournament}
     <hr />
     <h2>{$content.tournament.name_tournament} ({$content.tournament.count_players} players)</h2>
+
+    {if $content.clean_duplicates == 1}
+        <form method="post" action="">
+            <input type="hidden" name="duplicates" value="1" />
+            <button type="submit" class="btn btn-warning">Clean duplicate decklists</button>
+        </form>
+    {/if}
 {/if}
 
 {if $content.metagame}

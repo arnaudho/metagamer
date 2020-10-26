@@ -52,6 +52,11 @@ namespace app\main\controllers\front {
             $dashboard_cond = null;
             if ($_GET['id_format'] && $format = $this->modelFormat->getTupleById($_GET['id_format'])) {
                 $dashboard_cond = Query::condition()->andWhere("id_format", Query::EQUAL, $format['id_format']);
+
+                if (isset($_POST['duplicates'])) {
+                    $cleaned_duplicates = $this->modelPlayer->cleanDuplicatePlayers($dashboard_cond);
+                    trace_r("Clean duplicate decklists : $cleaned_duplicates");
+                }
             }
             if ($format &&
                 $_GET['id_tournament'] &&
@@ -71,6 +76,7 @@ namespace app\main\controllers\front {
 
                 if ($count_duplicates != 0) {
                     $this->addMessage("$count_duplicates duplicates decklists found", self::MESSAGE_ERROR);
+                    $this->addContent("clean_duplicates", 1);
                 }
 
                 $this->addContent("list_tournaments", $this->modelTournament->all(

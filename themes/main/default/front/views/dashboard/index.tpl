@@ -10,6 +10,13 @@
 {/if}
 {if $content.format}
     <h1>{$content.format.name_format}{if $content.tournament} - {$content.tournament.name_tournament}{/if}</h1>
+
+    {if $content.clean_duplicates == 1}
+        <form method="post" action="">
+            <input type="hidden" name="duplicates" value="1" />
+            <button type="submit" class="btn btn-warning">Clean duplicate decklists</button>
+        </form>
+    {/if}
 {/if}
 
 {if $content.metagame}
@@ -138,7 +145,7 @@
                 <tbody>
                 <tr>
                     <td class="">
-                        <div class="matchup-percent">Winrate<sup>%</sup></div>
+                        <div class="matchup-percent">Winrate</div>
                         <span class="matchup-deviation">Confidence interval</span>
                     </td>
                 </tr>
