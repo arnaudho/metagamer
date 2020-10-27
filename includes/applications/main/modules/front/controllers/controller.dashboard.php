@@ -112,14 +112,23 @@ namespace app\main\controllers\front {
                     $order_archetypes[] = $deck['id_archetype'];
                 }
 
-
+                $count_other = 0;
                 if (isset($_SESSION['archetypes']) && !empty($_SESSION['archetypes'])) {
                     // filter archetypes
                     foreach ($metagame as $archetype) {
                         if (array_key_exists($archetype['id_archetype'], $_SESSION['archetypes'])) {
                             $archetypes[] = $archetype;
                         } else {
+                            $count_other += $archetype['count'];
                             $other_archetypes[$archetype['id_archetype']] = $archetype['id_archetype'];
+                        }
+                    }
+                }
+                // add correct count to 'Other' archetype
+                if ($count_other > 0) {
+                    foreach ($archetypes as $key => $archetype) {
+                        if ($archetype['id_archetype'] == ModelArchetype::ARCHETYPE_OTHER_ID) {
+                            $archetypes[$key]['count'] += $count_other;
                         }
                     }
                 }

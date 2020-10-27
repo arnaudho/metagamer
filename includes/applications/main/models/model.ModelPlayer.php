@@ -158,7 +158,7 @@ namespace app\main\models {
             $duplicates = $this->getDuplicatePlayers($pCondition);
             $delete_players = array();
             foreach ($duplicates as $duplicate) {
-                if (!array_key_exists($duplicate['decklist_player'], $delete_players) || $delete_players[$duplicate['decklist_player']]['count'] < $duplicate['count']) {
+                if (!array_key_exists($duplicate['decklist_player'], $delete_players) || $delete_players[$duplicate['decklist_player']]['count'] > $duplicate['count']) {
                     $delete_players[$duplicate['decklist_player']] = array(
                         "id_player" => $duplicate['id_player'],
                         "count"     => $duplicate['count']
