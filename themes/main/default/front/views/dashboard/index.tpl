@@ -97,7 +97,7 @@
                     <th class="matchup-archetype-name"></th>
                     <th class="matchup-total"><div class="matchup-total-cell">WINRATE vs. Metagame</div></th>
                     {foreach from=$content.archetypes item="archetype"}
-                        <th class="matchup-detail"><div><span class="matchup-archetype-name">{$archetype.name_archetype}</span></div></th>
+                        <th class="matchup-detail"><div>vs <span class="matchup-archetype-name">{$archetype.name_archetype}</span></div></th>
                     {/foreach}
                 </tr>
                 {foreach from=$content.archetypes item="archetype"}
@@ -105,7 +105,7 @@
                         <td class="matchup-archetype-image" style="background: no-repeat top -25px right 50%/119% url({$archetype.image_archetype});"></td>
                         <td class="matchup-archetype-name">
                             <div class="archetype-name">{$archetype.name_archetype}</div>
-                            <div class="archetype-count">{$archetype.count} decks</div>
+                            <div class="archetype-count">{$archetype.count} decks ({$archetype.percent} %)</div>
                         </td>
                         {foreach from=$archetype.winrates item="deck"}
                             <td class="

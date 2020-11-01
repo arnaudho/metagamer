@@ -7,6 +7,9 @@ namespace app\main\models {
 
     class ModelPlayer extends BaseModel {
 
+        CONST TAG_MPL = "mpl";
+        CONST TAG_RIVALS = "rivals";
+
         public function __construct()
         {
             parent::__construct("players", "id_player");
@@ -62,7 +65,7 @@ namespace app\main\models {
                 $sum += $d['count'];
             }
             foreach ($data as &$d) {
-                $d['percent'] = round(100*$d['count']/$sum, 2);
+                $d['percent'] = round(100*$d['count']/$sum, 1);
             }
             return $data;
         }

@@ -129,6 +129,7 @@ namespace app\main\controllers\front {
                     foreach ($archetypes as $key => $archetype) {
                         if ($archetype['id_archetype'] == ModelArchetype::ARCHETYPE_OTHER_ID) {
                             $archetypes[$key]['count'] += $count_other;
+                            $archetypes[$key]['percent'] = round(100 * $archetypes[$key]['count'] / $data['count_players'], 1);
                         }
                     }
                 }
