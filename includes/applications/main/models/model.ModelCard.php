@@ -35,6 +35,14 @@ namespace app\main\models {
             return $q->execute($this->handler);
         }
 
+        public function countSideboardCardsByIdPlayer ($pIdPlayer) {
+            $q = Query::select("SUM(count_side) AS count", $this->tablePlayerCards)
+                ->andWhere("id_player", Query::EQUAL, $pIdPlayer)
+                ->groupBy("id_player")
+                ->execute($this->handler);
+            return $q[0]['count'];
+        }
+
         /**
          * get ordered decklist for visual display
          * @param $pIdPlayer

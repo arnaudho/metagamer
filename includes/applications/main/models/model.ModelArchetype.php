@@ -51,18 +51,22 @@ namespace app\main\models {
                 trace_r("ERROR : Player $pIdPlayer not found");
                 return false;
             }
-            $cards = $this->modelCard->getPlayedCards(Query::condition()->andWhere("player_card.id_player", Query::EQUAL, $pIdPlayer));
+            $name_archetype = self::ARCHETYPE_OTHER;
+            // deck without sideboard : archetype 'Other'
+            if ($this->modelCard->countSideboardCardsByIdPlayer($pIdPlayer)) {
+                $cards = $this->modelCard->getPlayedCards(Query::condition()->andWhere("player_card.id_player", Query::EQUAL, $pIdPlayer));
 
-            // TODO add : if no cards found, call URL to get deck details
-            if (!$cards) {
-                trace_r("ERROR : No cards found for player #$pIdPlayer");
-                return false;
+                // TODO add : if no cards found, call URL to get deck details
+                if (!$cards) {
+                    trace_r("ERROR : No cards found for player #$pIdPlayer");
+                    return false;
+                }
+                $deck = "";
+                foreach ($cards as $card) {
+                    $deck .= $card['name_card'] . " 00 ";
+                }
+                $name_archetype = self::decklistMapper($deck);
             }
-            $deck = "";
-            foreach ($cards as $card) {
-                $deck .= $card['name_card'] . " 00 ";
-            }
-            $name_archetype = self::decklistMapper($deck);
 
             if ($pWrite) {
                 // insert archetype if needed
