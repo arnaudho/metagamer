@@ -240,7 +240,13 @@ namespace app\main\controllers\front {
             $archetype_cards = array_unique($archetype_cards);
             $subquery = '(SELECT "' . implode('" AS name_card UNION ALL SELECT "', $archetype_cards) . '") c1';
             $not_found = Query::execute("SELECT name_card FROM (SELECT c1.name_card, coalesce(cards.id_card, 'NOT FOUND') AS found FROM " . $subquery . " LEFT JOIN cards ON cards.name_card = c1.name_card) tmp WHERE found = 'NOT FOUND'");
-            // TODO check with LIKE '$card_name%'
+            if ($not_found) {
+                foreach ($not_found as $key => $card) {
+                    if ($this->modelCard->count(Query::condition()->andWhere('name_card', Query::LIKE, $card['name_card'] . '%'))) {
+                        unset($not_found[$key]);
+                    }
+                }
+            }
             if ($not_found) {
                 $message = "Cards not found : <ul>";
                 foreach ($not_found as $card) {
