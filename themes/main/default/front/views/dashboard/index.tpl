@@ -63,15 +63,21 @@
     </table>
     <h2>Metagame breakdown</h2>
     <table class="table table-hover table-condensed">
-        <tbody>
+        <thead>
             <tr>
                 <th>Archetype</th>
                 <th>Count</th>
                 <th>%</th>
             </tr>
+        </thead>
+        <tbody>
             {foreach from=$content.metagame item="deck"}
                 <tr{if $deck.name_archetype == "Other"} class="active"{/if}>
-                    <td>{$deck.name_archetype}</td>
+                    <td>
+                        <a href="archetype/lists/?id_archetype={$deck.id_archetype}&id_format={$content.format.id_format}" class="" target="_blank">
+                            {$deck.name_archetype}
+                        </a>
+                    </td>
                     <td>{$deck.count}</td>
                     <td>{$deck.percent} %</td>
                 </tr>
