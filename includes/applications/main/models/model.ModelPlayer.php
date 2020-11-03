@@ -81,6 +81,7 @@ namespace app\main\models {
                 ->join("matches", Query::JOIN_INNER, "matches.id_player = p.id_player")
                 ->andCondition($pCondition)
                 ->groupBy("p.id_player")
+                ->order("name_deck")
                 ->execute($this->handler);
         }
 
