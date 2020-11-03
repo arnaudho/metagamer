@@ -110,7 +110,7 @@ namespace app\main\controllers\front {
                 }
             }
             $this->setTitle("Import tournament");
-            $this->addContent("list_formats", $this->modelFormat->all());
+            $this->addContent("list_formats", $this->modelFormat->allOrdered());
             $this->addContent("count_waiting", $this->modelPlayer->countPlayersWithoutDecklist());
         }
 

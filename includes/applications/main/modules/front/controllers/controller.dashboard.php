@@ -36,7 +36,7 @@ namespace app\main\controllers\front {
         }
 
         public function index () {
-            $this->addContent("list_formats", $this->modelFormat->all());
+            $this->addContent("list_formats", $this->modelFormat->allOrdered());
 
             // handle tier1 archetypes selection
             if (isset($_POST['archetypes-select'])) {
