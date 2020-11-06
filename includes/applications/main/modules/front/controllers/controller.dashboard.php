@@ -165,6 +165,13 @@ namespace app\main\controllers\front {
             }
         }
 
+        public function leaderboard () {
+            $mpl = $this->modelPlayer->getLeaderboard(ModelPlayer::TAG_MPL);
+            $rivals = $this->modelPlayer->getLeaderboard(ModelPlayer::TAG_RIVALS);
+            $this->addContent("mpl", $mpl);
+            $this->addContent("rivals", $rivals);
+        }
+
         public function data () {
             if (!Core::$request_async) {
                 Go::to404();
