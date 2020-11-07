@@ -7,7 +7,7 @@
             <tr>
                 <th>Arena ID</th>
                 <th>Tournament</th>
-                {if $content.decklists[0][name_deck]}
+                {if $content.decklists[0]['name_deck']}
                     <th>Deck name</th>
                 {/if}
                 <th>Record</th>

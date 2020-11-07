@@ -78,7 +78,7 @@ namespace app\main\models {
             return Query::select($fields, "players p")
                 ->join("people", Query::JOIN_INNER, "people.id_people = p.id_people")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = p.id_tournament")
-                ->join("matches", Query::JOIN_INNER, "matches.id_player = p.id_player")
+                ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = p.id_player")
                 ->andCondition($pCondition)
                 ->groupBy("p.id_player")
                 ->order("name_deck")
@@ -90,9 +90,9 @@ namespace app\main\models {
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
                 ->join("matches", Query::JOIN_INNER, "matches.id_player = players.id_player")
                 ->join("player_tag", Query::JOIN_INNER, "player_tag.id_people = people.id_people AND tag_player = '" . $pTag . "'")
-                ->andWhere("id_tournament", Query::IN, "(15128, 15129, 15130)", false)
+                ->andWhere("id_tournament", Query::IN, "(15128, 15133)", false)
                 ->groupBy("players.id_player")
-                ->order("wins_matches DESC, total_matches")
+                ->order("wins_matches DESC, total_matches, arena_id")
                 ->execute($this->handler);
             $position = 0;
             $tie_position = 0;
