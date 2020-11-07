@@ -21,7 +21,7 @@ class MetagamerBot extends BotController
     CONST MAPPING_DECKLISTS = array(
         1 => "arenaid",
         2 => "discordid",
-        3 => "url"
+        5 => "url"
     );
     CONST MAPPING_HISTORY = array(
         1 => "round",
@@ -140,11 +140,13 @@ class MetagamerBot extends BotController
         );
 
         $decklists = array();
-        preg_match_all('/<tr[^>]*>[^<]*<td>([^<]*)<\/td>[^<]*<td>([^<]*)<\/td>[^<]*<td><a[^>]*href="([^"]*)"[^>]*>[^<]*<\/a><\/td>[^<]*<\/tr>/Usi', $data, $output_array);
+        preg_match_all('/<tr[^>]*>[^<]*<td>([^<]*)<\/td>[^<]*<td>([^<]*)<\/td>[^<]*(<td>([^<]*)<\/td>[^<]*)?<td>[^<]*<a[^>]*href="([^"]*)"[^>]*>[^<]*<\/a>[^<]*<\/td>[^<]*<\/tr>/Usi', $data, $output_array);
         unset($output_array[0]);
         foreach ($output_array as $key => $element) {
-            foreach ($element as $num => $player) {
-                $decklists[$num][self::MAPPING_DECKLISTS[$key]] = $player;
+            if (array_key_exists($key, self::MAPPING_DECKLISTS)) {
+                foreach ($element as $num => $player) {
+                    $decklists[$num][self::MAPPING_DECKLISTS[$key]] = $player;
+                }
             }
         }
 
@@ -152,6 +154,14 @@ class MetagamerBot extends BotController
         $mPeople = new ModelPeople();
         $insert_people = array();
         $list_people = array();
+
+        // TODO MPL + Rivals League Weekends : name + firstname
+
+        foreach ($decklists as $key => $decklist) {
+            $decklists[$key]["arenaid"]   = $decklist['discordid'] . ' ' . $decklist['arenaid'];
+            $decklists[$key]["discordid"] = $decklist['discordid'] . ' ' . $decklist['arenaid'];
+        }
+
         foreach ($decklists as $decklist) {
             $list_people[] = $decklist['arenaid'];
             if (!$mPeople->count(Query::condition()->andWhere("arena_id", Query::EQUAL, $decklist['arenaid']))) {
@@ -192,7 +202,6 @@ class MetagamerBot extends BotController
 
         // get player archetypes & match history
         foreach ($decklists as $player) {
-            // TODO fix : Undefined index: id_player (reimport tournament #65 to debug)
             if (!array_key_exists('id_player', $player)) {
                 trace_r("WARNING - undefined id_player for tournament #" . $this->tournament);
                 trace_r($player);
@@ -200,7 +209,8 @@ class MetagamerBot extends BotController
             }
             if (!$this->parsePlayer($player['id_player'], $player['url'])) {
                 // remove player from DB
-                $this->modelPlayer->deleteById($player['id_player']);
+                // TODO MPL + Rivals League Weekends : no match history given
+//                $this->modelPlayer->deleteById($player['id_player']);
             }
         }
 
@@ -222,10 +232,13 @@ class MetagamerBot extends BotController
         $name_archetype = ModelArchetype::decklistMapper($deck_main);
 
         if ($pWrite) {
+            // quickfix quote bug (&#039; on CFB / &#39; on MTGmelee)
+            $deck_main = str_replace("&#039;", "'", $deck_main);
+            $deck_side = str_replace("&#039;", "'", $deck_side);
             // insert archetype if needed
             $mArchetype = new ModelArchetype();
             $archetype = $mArchetype->one(Query::condition()->andWhere("name_archetype", Query::EQUAL, $name_archetype));
-            // TODO use modelArchetype::evaluate instead
+            // TODO use modelArchetype::evaluatePlayerArchetype instead, after cards are inserted
             if ($archetype) {
                 $id_archetype = $archetype['id_archetype'];
             } else {
@@ -262,7 +275,6 @@ class MetagamerBot extends BotController
             foreach ($full_deck as &$card) {
                 $card = trim($card);
             }
-            $this->modelCard->insertCards($full_deck);
 
             // get cards ids
             $id_cards = array();
