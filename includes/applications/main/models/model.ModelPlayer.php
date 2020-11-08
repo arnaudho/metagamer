@@ -19,7 +19,7 @@ namespace app\main\models {
             $data = Query::select(
                 "players.id_player, tournaments.id_tournament, name_tournament, name_format, name_archetype, decklist_player,
                     arena_id, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins,
-                    IF(COUNT(1) IS NULL, 0, COUNT(1)) AS matches", $this->table)
+                    COUNT(result_match) AS matches", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people AND players.id_player = $pIdPlayer")
                 ->join("archetypes", Query::JOIN_OUTER_LEFT, "archetypes.id_archetype = players.id_archetype")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
@@ -35,7 +35,7 @@ namespace app\main\models {
             $data = Query::select(
                     "players.id_player, tournaments.id_tournament, name_tournament, name_format, name_archetype,
                     arena_id, discord_id, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins,
-                    IF(COUNT(1) IS NULL, 0, COUNT(1)) AS matches", $this->table)
+                    COUNT(result_match) AS matches", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people AND arena_id LIKE '%" . $pArenaId . "%'")
                 ->join("archetypes", Query::JOIN_OUTER_LEFT, "archetypes.id_archetype = players.id_archetype")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
@@ -71,7 +71,7 @@ namespace app\main\models {
         }
 
         public function getDecklists ($pCondition, $pDecklistNames = false) {
-            $fields = "SUM(result_match) AS wins, COUNT(1) AS total, p.id_player, people.arena_id, tournaments.id_format, tournaments.id_tournament, name_tournament";
+            $fields = "SUM(result_match) AS wins, COUNT(result_match) AS total, p.id_player, people.arena_id, tournaments.id_format, tournaments.id_tournament, name_tournament";
             if ($pDecklistNames) {
                 $fields .= ", p.name_deck";
             }
@@ -86,7 +86,7 @@ namespace app\main\models {
         }
 
         public function getLeaderboard ($pTag = ModelPlayer::TAG_MPL) {
-            $players = Query::select("people.id_people, players.id_player, tag_player, arena_id AS name_player, SUM(result_match) AS wins_matches, COUNT(1) AS total_matches", $this->table)
+            $players = Query::select("people.id_people, players.id_player, tag_player, arena_id AS name_player, SUM(result_match) AS wins_matches, COUNT(result_match) AS total_matches", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
                 ->join("matches", Query::JOIN_INNER, "matches.id_player = players.id_player")
                 ->join("player_tag", Query::JOIN_INNER, "player_tag.id_people = people.id_people AND tag_player = '" . $pTag . "'")

@@ -32,7 +32,7 @@ namespace app\main\models {
         ) {
             if(!$pFormatCondition)
                 $pFormatCondition = Query::condition();
-            $q = Query::select("ROUND(100*SUM(result_match)/COUNT(1), 2) AS winrate, SUM(result_match) AS wins, COUNT(1) AS total, COUNT(DISTINCT matches.id_player) AS count_players", $this->table)
+            $q = Query::select("ROUND(100*SUM(result_match)/COUNT(result_match), 2) AS winrate, SUM(result_match) AS wins, COUNT(result_match) AS total, COUNT(DISTINCT matches.id_player) AS count_players", $this->table)
                 ->join("players p", Query::JOIN_INNER, "matches.id_player = p.id_player AND p.id_archetype = $pIdArchetype")
                 ->join("tournaments", Query::JOIN_INNER, "p.id_tournament = tournaments.id_tournament")
                 ->andCondition($pFormatCondition);
