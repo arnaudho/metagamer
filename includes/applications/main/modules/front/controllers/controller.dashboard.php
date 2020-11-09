@@ -168,6 +168,12 @@ namespace app\main\controllers\front {
         public function leaderboard () {
             $mpl = $this->modelPlayer->getLeaderboard(ModelPlayer::TAG_MPL);
             $rivals = $this->modelPlayer->getLeaderboard(ModelPlayer::TAG_RIVALS);
+            foreach ($mpl as &$player) {
+                $player['name_player'] = mb_strtoupper($player['name_player']);
+            }
+            foreach ($rivals as &$player) {
+                $player['name_player'] = mb_strtoupper($player['name_player']);
+            }
             $this->addContent("mpl", $mpl);
             $this->addContent("rivals", $rivals);
         }

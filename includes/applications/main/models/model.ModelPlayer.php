@@ -91,7 +91,7 @@ namespace app\main\models {
                 ->join("matches", Query::JOIN_INNER, "matches.id_player = players.id_player")
                 ->join("player_tag", Query::JOIN_INNER, "player_tag.id_people = people.id_people AND tag_player = '" . $pTag . "'")
                 ->andWhere("id_tournament", Query::IN, "(15128, 15133)", false)
-                ->groupBy("players.id_player")
+                ->groupBy("people.id_people")
                 ->order("wins_matches DESC, total_matches, arena_id")
                 ->execute($this->handler);
             $position = 0;
