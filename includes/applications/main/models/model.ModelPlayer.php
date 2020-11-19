@@ -85,7 +85,7 @@ namespace app\main\models {
                 ->execute($this->handler);
         }
 
-        public function getLeaderboard ($pTag = ModelPlayer::TAG_MPL) {
+        public function getLeaderboard ($pTag = ModelPlayer::TAG_MPL, $pDetailed = true) {
             $players = Query::select("people.id_people, players.id_player, tag_player, arena_id AS name_player, SUM(result_match) AS wins_matches, COUNT(result_match) AS total_matches", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
                 ->join("matches", Query::JOIN_INNER, "matches.id_player = players.id_player")
@@ -94,11 +94,12 @@ namespace app\main\models {
                 ->groupBy("people.id_people")
                 ->order("wins_matches DESC, total_matches, arena_id")
                 ->execute($this->handler);
+
             $position = 0;
             $tie_position = 0;
-            $record = "0";
+            $record = 0;
             foreach ($players as $key => $player) {
-                $player_record = $player['wins_matches'] . '-' . $player['total_matches'];
+                $player_record = $player['wins_matches'];
                 $position++;
                 if ($record != $player_record) {
                     $tie_position = $position;
@@ -106,6 +107,29 @@ namespace app\main\models {
                 $record = $player_record;
                 $players[$key]['rank_player'] = $tie_position;
             }
+            if ($pDetailed) {
+                // players points behind
+                $levels = $pTag == ModelPlayer::TAG_RIVALS ?
+                    array(1, 4, 20, 32, 36) :
+                    array(1, 4, 12, 16);
+                $levels_points = array();
+                foreach ($levels as $level) {
+                    $levels_points[] = $players[($level-1)]['wins_matches'];
+                }
+                $levels_points[] = 0;
+                foreach ($players as $key => $player) {
+                    // find next level
+                    $last_level = 0;
+                    foreach ($levels_points as $level_point) {
+                        if ($player['wins_matches'] > $level_point) {
+                            $players[$key]['points_behind'] = $last_level - $player['wins_matches'];
+                            break;
+                        }
+                        $last_level = $level_point;
+                    }
+                }
+            }
+
             return $players;
         }
 

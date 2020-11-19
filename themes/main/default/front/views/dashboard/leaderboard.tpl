@@ -17,6 +17,7 @@
                         <th>Name</th>
                         <th>Total points</th>
                         <th>Matches played</th>
+                        <th>Points behind</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,6 +27,7 @@
                             <td>{$player.name_player}</td>
                             <td>{$player.wins_matches}</td>
                             <td>{$player.total_matches}</td>
+                            <td>{$player.points_behind}</td>
                         </tr>
                     {/foreach}
                 </tbody>
@@ -41,6 +43,7 @@
                     <th>Name</th>
                     <th>Total points</th>
                     <th>Matches played</th>
+                    <th>Points behind</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -50,6 +53,7 @@
                         <td>{$player.name_player}</td>
                         <td>{$player.wins_matches}</td>
                         <td>{$player.total_matches}</td>
+                        <td>{$player.points_behind}</td>
                     </tr>
                 {/foreach}
                 </tbody>
