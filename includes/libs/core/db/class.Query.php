@@ -468,7 +468,7 @@ namespace core\db
 					if ($i < $max-1) $against .= " ";
 				}
 
-			if ($pValue{strlen($pValue)-1} != " ")
+			if ($pValue[strlen($pValue)-1] != " ")
 				$against .= "*";
 			array_push($this->ands, " MATCH(".$pField.") AGAINST(".Query::escapeValue($against)." IN BOOLEAN MODE)");
 			return $this;
