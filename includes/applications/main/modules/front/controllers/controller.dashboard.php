@@ -68,6 +68,9 @@ namespace app\main\controllers\front {
                 $dashboard_cond = Query::condition()->andWhere("tournaments.id_tournament", Query::EQUAL, $tournament['id_tournament']);
             }
             if ($format && $dashboard_cond) {
+                // TODO auto-generate format dates :
+                // monday to sunday, including all tournaments
+
                 // check if duplicate players
                 $count_duplicates = $this->modelPlayer->countDuplicatePlayers(
                     Query::condition()
@@ -101,6 +104,9 @@ namespace app\main\controllers\front {
 
                 $metagame = $this->modelPlayer->countArchetypes($dashboard_cond);
                 $this->addContent("metagame", $metagame);
+                $condensed_metagame = $this->round_metagame($metagame);
+                $this->addContent("condensed_metagame", $condensed_metagame);
+
                 if (empty($metagame)) {
                     $this->addMessage("No metagame data for selected format", self::MESSAGE_ERROR);
                 }
@@ -163,6 +169,33 @@ namespace app\main\controllers\front {
             } else {
                 $this->setTitle("Dashboard");
             }
+        }
+
+        private function round_metagame ($pMetagame, $pMaxArchetypes = 7) {
+            $other_id = null;
+            $count_archetypes = 1;
+            $metagame = array();
+            $sum_other = 0;
+            $percent_other = 0;
+            foreach ($pMetagame as $key => $archetype) {
+                if ($archetype['id_archetype'] == ModelArchetype::ARCHETYPE_OTHER_ID) {
+                    $other_id = $key;
+                } else {
+                    if ($count_archetypes < $pMaxArchetypes) {
+                        $metagame[] = $archetype;
+                        $count_archetypes++;
+                        $percent_other += $archetype['percent'];
+                    } else {
+                        $sum_other += $archetype['count'];
+                    }
+                }
+            }
+            $pMetagame[$other_id]['count'] += $sum_other;
+            $pMetagame[$other_id]['percent'] = 100 - $percent_other;
+            if ($other_id) {
+                $metagame[] = $pMetagame[$other_id];
+            }
+            return $metagame;
         }
 
         public function leaderboard () {

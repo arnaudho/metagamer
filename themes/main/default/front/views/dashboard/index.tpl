@@ -61,7 +61,52 @@
             </tr>
         </tbody>
     </table>
-    <h2>Metagame breakdown</h2>
+    <h2>Metagame breakdown <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseMetagame" aria-expanded="false" aria-controls="collapseMetagame">
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-th-list"></span></button></a></h2>
+    <div id="collapseMetagame" class="panel-collapse collapse table-metagame-container" role="tabpanel">
+        <div class="background-placeholder"></div>
+        <h2>{$content.format.name_format}</h2>
+        <h3>METAGAME BREAKDOWN</h3>
+        <hr width="10%" />
+        <table class="table-metagame">
+            <tbody>
+                <tr class="metagame-deck-name">
+                    <td></td>
+                    {foreach from=$content.condensed_metagame item="deck"}
+                        <td>{$deck.name_archetype}</td>
+                    {/foreach}
+                </tr>
+                <tr>
+                    <td></td>
+                    {foreach from=$content.condensed_metagame item="deck"}
+                        <td class="metagame-deck-image">
+                            <div class="deck-image"
+                                style="background: no-repeat top -52px right 50%/{if $deck.id_archetype==3}140%{else}258%{/if}
+                                        url({$deck.image_archetype});"></div></td>
+                    {/foreach}
+                </tr>
+                <tr class="metagame-deck-percent">
+                    <td class="deck-legend">% Field</td>
+                    {foreach from=$content.condensed_metagame item="deck"}
+                        <td>{$deck.percent}<sup>%</sup></td>
+                    {/foreach}
+                </tr>
+                <tr class="metagame-deck-count">
+                    <td class="deck-legend">Copies played</td>
+                    {foreach from=$content.condensed_metagame item="deck"}
+                        <td>{$deck.count}</td>
+                    {/foreach}
+                </tr>
+            </tbody>
+        </table>
+        <div class="legend-container">
+            <div class="logo"></div>
+            <div class="legend">
+                <p>Format : Historic - 20-22 Nov 2020</p>
+                <p>Data source : <img src="https://mtgmelee.com/images/logo.png" style="width: 100px; display: inline-block;" /></p>
+            </div>
+        </div>
+    </div>
     <table class="table table-hover table-condensed">
         <thead>
             <tr>
@@ -145,7 +190,6 @@
                 {/foreach}
             </tbody>
         </table>
-        <div class="logo"></div>
         <div class="legend-container">
             <table class="table table-matchups table-legend" style="width: auto;">
                 <tbody>
@@ -161,9 +205,15 @@
                 <div class="matchup-positive matchup-highlighted"></div>
                 <div class="matchup-negative matchup-highlighted"></div>
             </div>
-            <div class="legend">
+            <div class="legend" style="flex-grow: 2;">
                 <p>Highlighted matchups are the ones with the strongest sample sizes <br />with as much as -10%/+10% confidence intervals</p>
                 <p>Sample size : {$content.data.count_matches} matches | Confidence level : {$content.confidence} | Winrates do not include mirror matches</p>
+            </div>
+            <div class="legend" style="text-align: right;">
+                <div class="">
+                    <p style="display: inline-block;">Data source : <img src="https://mtgmelee.com/images/logo.png" style="width: 100px; display: inline-block;" /></p>
+                </div>
+                <div class="logo"></div>
             </div>
         </div>
     </div>

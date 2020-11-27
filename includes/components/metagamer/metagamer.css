@@ -48,9 +48,11 @@ table.table-matchups tbody tr td.matchup-negative.matchup-highlighted,
 table.table-matchups tbody tr td.matchup-negative.matchup-highlighted .matchup-total-cell {background-color: #F8EAEA;}
 table.table-matchups tbody tr td.matchup-even { color: #5B6275;}
 /*table.table-matchups tbody tr td[class*="matchup-"]:not(.matchup-archetype-name) {border-width: 3px; border-style: solid;}*/
-table.table-matchups .round-dot { height: 32px; width: 32px; background-color: #D0D5E3; border-radius: 50%; display: inline-block;}
+table.table-matchups .round-dot { height: 32px; width: 32px; background-color: #DADEE8; border-radius: 50%; display: inline-block;}
 table.table-matchups.table-legend { position: relative; border-spacing: 0; margin-right: 50px;}
 table.table-matchups.table-legend td { width: 170px; height: 100px;}
+table.table-matchups.table-legend .matchup-percent { border-bottom: 1px solid #55555529;}
+table.table-matchups.table-legend .matchup-deviation { border-top: 0;}
 table.table-archetypes th.archetype-image { width: 160px;}
 table.table-archetypes td.archetype-image { height: 116px;}
 table.table-archetypes td.archetype-name { font-weight: bold; font-size: 18px; text-transform: uppercase;}
@@ -77,11 +79,41 @@ table.archetype-analysis .card-exclude { color: red; font-size: 1.2em; cursor: p
 table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor: pointer;}
 .container form.loading { pointer-events: none; opacity: 0.6;}
 .container .confidence-interval { font-size: 0.8em; font-style: italic;}
+
+/* METAGAME */
+.table-metagame-container .background-placeholder { background: 0 0 /100% url("imgs/marble-white.png");
+    background-repeat: no-repeat; position: absolute; top: 0; bottom: 0; left: 0; right: 0; opacity: 0.4; z-index: -1;}
+.table-metagame-container { border: 1px solid red; width: 1160px; height: 580px; padding: 14px 24px; position: relative;}
+.table-metagame-container h2 { font-family: "Gill Sans MT", Arial, serif; font-size: 3.3em; text-transform: uppercase;
+    margin-top: 0; margin-bottom: 5px;}
+.table-metagame-container h3 { font-family: "Metropolis", Arial, serif; margin-top: 5px; font-size: 1.6em;}
+.table-metagame-container hr { text-align: left; border-top-color: #000000; margin: 0;}
+.table-metagame-container .legend p { font-family: 'Metropolis', Arial, serif; margin-bottom: 0;}
+.table-metagame-container .legend-container .logo { width: 160px; margin-top: 0;}
+.table-metagame-container .table-metagame { margin-bottom: 20px; margin-top: 8px;}
+.table-metagame-container .table-metagame td { text-align: center; font-size: 20px; font-family: 'Gill Sans MT', Arial, serif;}
+.table-metagame-container .table-metagame tr.metagame-deck-count { background-color: #EFEFEF;}
+.table-metagame-container .table-metagame tr td.deck-legend { text-align: left; color: #9DA7C4; font-size: 12px; width: 90px;}
+.table-metagame-container .table-metagame tr.metagame-deck-percent td,
+.table-metagame-container .table-metagame tr.metagame-deck-count td { padding: 10px 20px;}
+.table-metagame-container .table-metagame tr.metagame-deck-percent td:not(.deck-legend) { color: #EF845C; font-size: 23px; font-weight: bold;}
+.table-metagame-container .table-metagame tr.metagame-deck-count td:not(.deck-legend) { font-weight: bold; font-size: 23px; }
+.table-metagame-container .table-metagame td.metagame-deck-image { width: 150px; padding: 10px;}
+.table-metagame-container .table-metagame td.metagame-deck-image div.deck-image { border-radius: 30px 30px 80px 80px;
+    margin: 0 auto; width: 126px; height: 200px;
+    -webkit-box-shadow: 1px 0px 8px 0px rgba(0,0,0,0.52);
+    -moz-box-shadow: 1px 0px 8px 0px rgba(0,0,0,0.52);
+    box-shadow: 1px 0px 8px 0px rgba(0,0,0,0.52);}
+.table-metagame-container .table-metagame tr.metagame-deck-name td { font-family: 'Metropolis', serif; text-transform: uppercase;
+    font-size: 19px; max-width: 120px; text-align: center; font-weight: bold; padding-top: 10px; padding-bottom: 10px;
+    vertical-align: bottom; transform: scale(1, 1.05);}
+
+/* DECKLIST */
 .container .decklist { padding: 34px 40px 60px 60px; background: url("imgs/marble-white.png"); background-repeat: no-repeat; }
 .container .decklist.decklist-visual { position: fixed; top: 0; left: 0; width: 1670px; }
 .container .decklist * { font-family: "Gill Sans MT", Calibri, serif; }
 .container .decklist h2 { text-transform: uppercase; font-size: 50px; margin-top: 0;}
-.container .decklist h2 small { text-transform: none; }
+.container .decklist h2 small { text-transform: none;}
 .container .decklist h3 { color: #555555; margin: 10px 0 10px; text-transform: uppercase; transform: scale(1, 1.15);}
 .container .decklist ul {list-style-type: none; padding-left: 0;}
 .container .decklist .decklist-separator { border-color: black; width: 80px; margin-left: 0; margin-top: 10px;}
