@@ -67,7 +67,7 @@
         <div class="background-placeholder"></div>
         <h2>{$content.format.name_format}</h2>
         <h3>METAGAME BREAKDOWN</h3>
-        <hr width="10%" />
+        <hr width="9%" />
         <table class="table-metagame">
             <tbody>
                 <tr class="metagame-deck-name">
@@ -81,7 +81,7 @@
                     {foreach from=$content.condensed_metagame item="deck"}
                         <td class="metagame-deck-image">
                             <div class="deck-image"
-                                style="background: no-repeat top -52px right 50%/{if $deck.id_archetype==3}140%{else}258%{/if}
+                                style="background: no-repeat top {if $deck.id_archetype==3}0{else}-52px{/if} right 50%/270%
                                         url({$deck.image_archetype});"></div></td>
                     {/foreach}
                 </tr>
@@ -156,7 +156,7 @@
                         <td class="matchup-archetype-image" style="background: no-repeat top -25px right 50%/119% url({$archetype.image_archetype});"></td>
                         <td class="matchup-archetype-name">
                             <div class="archetype-name">{$archetype.name_archetype}</div>
-                            <div class="archetype-count">{$archetype.count} decks ({$archetype.percent} %)</div>
+                            <div class="archetype-count">{$archetype.count} decks ({$archetype.percent}<sup>%</sup>)</div>
                         </td>
                         {foreach from=$archetype.winrates item="deck"}
                             <td class="
