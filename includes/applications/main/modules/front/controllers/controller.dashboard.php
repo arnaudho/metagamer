@@ -105,6 +105,11 @@ namespace app\main\controllers\front {
                 $metagame = $this->modelPlayer->countArchetypes($dashboard_cond);
                 $this->addContent("metagame", $metagame);
                 $condensed_metagame = $this->round_metagame($metagame);
+                foreach ($condensed_metagame as $key => $deck) {
+                    if (substr_count($deck['name_archetype'], ' ') == 1) {
+                        $condensed_metagame[$key]['name_archetype'] = str_replace(' ', '<br />', $deck['name_archetype']);
+                    }
+                }
                 $this->addContent("condensed_metagame", $condensed_metagame);
 
                 if (empty($metagame)) {

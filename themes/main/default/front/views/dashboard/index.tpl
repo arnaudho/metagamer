@@ -81,14 +81,14 @@
                     {foreach from=$content.condensed_metagame item="deck"}
                         <td class="metagame-deck-image">
                             <div class="deck-image"
-                                style="background: no-repeat top {if $deck.id_archetype==3}0{else}-52px{/if} right 50%/270%
+                                style="background: no-repeat top {if $deck.id_archetype==3}0{else}-52px{/if} right 50%/273%
                                         url({$deck.image_archetype});"></div></td>
                     {/foreach}
                 </tr>
                 <tr class="metagame-deck-percent">
                     <td class="deck-legend">% Field</td>
                     {foreach from=$content.condensed_metagame item="deck"}
-                        <td>{$deck.percent}<sup>%</sup></td>
+                        <td><sup class="percent-placeholder">%</sup>{$deck.percent}<sup>%</sup></td>
                     {/foreach}
                 </tr>
                 <tr class="metagame-deck-count">
