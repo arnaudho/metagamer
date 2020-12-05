@@ -6,6 +6,7 @@ namespace app\main\controllers\front {
     use app\main\models\ModelMatch;
     use app\main\models\ModelPlayer;
     use app\main\models\ModelTournament;
+    use app\main\src\BattlefyBot;
     use app\main\src\MetagamerBot;
     use app\main\src\MtgMeleeBot;
     use core\application\DefaultFrontController;
@@ -100,6 +101,51 @@ namespace app\main\controllers\front {
                             sleep(2);
                         }
                     }
+                } elseif ($_POST['import-battlefy'] && $_POST['import-battlefy']['data']) {
+                    $bot = new BattlefyBot("Carlos (Battlefy tournament parser)");
+                    $data = SimpleJSON::decode($_POST['import-battlefy']['data']);
+                    if ($data) {
+                        // Quickfix add LATAM Challenge ID
+                        $data[0]['TournamentId'] = 4089;
+
+                        $result = $bot->parseRound($data, $_POST['import-battlefy']['id_format'], $_POST['import-battlefy']['tournament_name'], $_POST['import-battlefy']['tournament_date']);
+                        if ($result) {
+                            $id_tournament = $bot->tournament;
+                            $data = $this->modelTournament->getTournamentData($id_tournament);
+                            $data['id_tournament'] = $id_tournament;
+                            $this->addContent("data", $data);
+                        }
+                    } else {
+                        $this->addMessage("Empty or badly formatted data", self::MESSAGE_ERROR);
+                    }
+                } elseif ($_POST['import-battlefy-decklists'] && $_POST['import-battlefy-decklists']['data-raw']) {
+                    $data = SimpleJSON::decode($_POST['import-battlefy-decklists']['data-raw']);
+                    $decklists_data = array();
+                    $count_players = 0;
+                    foreach ($data as $decklist) {
+                        if (isset($decklist['name_player']) && array_key_exists('raw_decklist', $decklist)) {
+                            $decklists_data[$decklist['name_player']] = $decklist;
+                        }
+                    }
+                    $players = $this->modelPlayer->all(Query::condition()
+                        ->andWhere("decklist_player", Query::IN, "('" . implode("', '", array_keys($decklists_data)) . "')", false),
+                        "players.id_player, decklist_player"
+                    );
+                    $bot = new BattlefyBot("Parse decklists");
+
+                    foreach ($players as $player) {
+                        if (array_key_exists($player['decklist_player'], $decklists_data)) {
+                            $bot->parseDecklist(
+                                $player['id_player'],
+                                $decklists_data[$player['decklist_player']]['raw_decklist'],
+                                $decklists_data[$player['decklist_player']]['uri_decklist'],
+                                $decklists_data[$player['decklist_player']]['name_archetype'],
+                                $decklists_data[$player['decklist_player']]['username_player']
+                            );
+                        }
+                        $count_players++;
+                    }
+                    $this->addMessage("$count_players decklists imported", self::MESSAGE_INFO);
                 } else {
                     $this->addMessage("Missing data for import", self::MESSAGE_ERROR);
                 }

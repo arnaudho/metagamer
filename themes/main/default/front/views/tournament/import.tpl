@@ -7,6 +7,8 @@
     <li class="active"><a data-toggle="tab" href="#mtgmelee">MTG Melee</a></li>
     <li><a data-toggle="tab" href="#mtgmelee_decklists">MTG Melee - decklists (paste)</a></li>
     <li><a data-toggle="tab" href="#mtgmelee_decklists_old">MTG Melee - decklists (old)</a></li>
+    <li><a data-toggle="tab" href="#battlefy">Battlefy</a></li>
+    <li><a data-toggle="tab" href="#battlefy_decklists">Battlefy - decklists</a></li>
 </ul>
 
 <div class="tab-content">
@@ -68,6 +70,40 @@
         <form class="form-inline" method="post">
             <div class="form-group">
                 <input type="text" value="{if $content.count_waiting == 0}0{else}50{/if}" name="import-mtgmelee-decklists[count]" class="form-control">
+                <button type="submit" class="btn btn-primary">Import</button>
+            </div>
+        </form>
+    </div>
+    <div id="battlefy" class="tab-pane fade">
+        <h3>Battlefy - Round data</h3>
+
+        <form class="form-inline" id="import-battlefy" method="post">
+            <div class="form-group">
+                <h5>Enter tournament name, date and format for first round</h5>
+                <input name="import-battlefy[tournament_name]" type="text" placeholder="Tournament name" class="form-control" />
+                <input name="import-battlefy[tournament_date]" type="date" class="form-control" />
+                <select name="import-battlefy[id_format]" class="form-control">
+                    <option value="" disabled{if !$content.format} selected{/if}>Format</option>
+                    {foreach from=$content.list_formats item="format"}
+                        <option value="{$format.id_format}"{if $content.format.id_format == $format.id_format} selected{/if}>{$format.name_format}</option>
+                    {/foreach}
+                </select>
+                <hr />
+                <textarea name="import-battlefy[data]" class="form-control" rows="8" cols="40" placeholder="Paste pairings data here..."></textarea>
+                <button type="submit" class="btn btn-primary">Import</button>
+            </div>
+        </form>
+    </div>
+    <div id="battlefy_decklists" class="tab-pane fade">
+        <h3>Battlefy - Decklists</h3>
+
+        {if $content.count_waiting}
+            <p>{$content.count_waiting} decklists without archetype</p>
+        {/if}
+        <form class="form-inline" method="post">
+            <div class="form-group">
+                <textarea name="import-battlefy-decklists[data-raw]" class="form-control" rows="8" cols="40" placeholder="Paste decklists data here..."></textarea>
+                <hr />
                 <button type="submit" class="btn btn-primary">Import</button>
             </div>
         </form>
