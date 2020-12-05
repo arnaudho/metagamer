@@ -40,7 +40,16 @@ namespace app\main\models {
                 ->andWhere("id_player", Query::EQUAL, $pIdPlayer)
                 ->groupBy("id_player")
                 ->execute($this->handler);
-            return $q[0]['count'];
+            return array_key_exists(0, $q) ? $q[0]['count'] : 0;
+        }
+
+        public function getTotalCopiesByCardId ($pIdCard, $pIdArchetype, $pIdFormat, $pMainDeck = true) {
+            $fields = $pMainDeck ? "SUM(count_main) AS total" : "SUM(count_side) AS total";
+            $total = Query::select($fields, "players")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament AND id_format = $pIdFormat AND players.id_archetype = $pIdArchetype")
+                ->join("player_card", Query::JOIN_INNER, "players.id_player = player_card.id_player AND id_card = $pIdCard")
+                ->execute($this->handler);
+            return $total[0]['total'];
         }
 
         /**
@@ -50,7 +59,7 @@ namespace app\main\models {
          */
         // order is only made for maindeck cards, if needed use a different query for sideboard cards
         public function getDecklistCards ($pIdPlayer) {
-            $q = Query::select("cards.id_card, cards.name_card, cards.image_card, count_main, count_side", $this->tablePlayerCards)
+            $q = Query::select("cards.id_card, cards.name_card, cards.mana_cost_card, cards.type_card, cards.image_card, count_main, count_side", $this->tablePlayerCards)
                 ->join($this->table, Query::JOIN_INNER, "cards.id_card = player_card.id_card AND id_player = $pIdPlayer")
                 ->groupBy("cards.id_card")
                 ->order(" CASE  WHEN type_card LIKE '%Creature%' THEN 1 WHEN type_card IN ('Instant', 'Sorcery') THEN 2

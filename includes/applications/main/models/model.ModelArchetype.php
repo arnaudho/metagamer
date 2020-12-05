@@ -31,6 +31,17 @@ namespace app\main\models {
             return $archetypes;
         }
 
+        public function getFullWinrateByIdCardIdArchetype ($pIdCard, $pIdArchetype, $pIdFormat) {
+            $winrates = Query::select("op.id_archetype, count_main, COUNT(1) AS total, SUM(result_match) AS wins", "players")
+                ->join("player_card", Query::JOIN_OUTER_LEFT, "players.id_player = player_card.id_player AND id_card = $pIdCard")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament AND id_format = $pIdFormat AND players.id_archetype = $pIdArchetype")
+                ->join("matches", Query::JOIN_INNER, "matches.id_player = players.id_player")
+                ->join("players op", Query::JOIN_INNER, "matches.opponent_id_player = op.id_player")
+                ->groupBy("op.id_archetype, count_main")
+                ->execute($this->handler);
+            return $winrates;
+        }
+
         public function getArchetypesRules () {
             $archetyes_file = Core::$path_to_application."/src/archetypes.json";
 
