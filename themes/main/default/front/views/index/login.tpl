@@ -21,13 +21,22 @@
 </head>
 <body>
 <div class="container">
-	<div id="connexion">
-        <h1>Identification</h1>
-        {if $content.error!=""}
-            <div class='error'>{$content.error}</div>
-        {/if}
-        {form.login->display}
-	</div>
+    <div class="login-wrap">
+        <div class="login-html">
+            <div class="form-title">
+                <h3>Sign in</h3>
+            </div>
+            {if $content.error!=""}
+                <div class='error'>{$content.error}</div>
+            {/if}
+            <div class="login-form">
+                <div class="sign-in-htm">
+                    {form.login->display}
+                    <div class="hr"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

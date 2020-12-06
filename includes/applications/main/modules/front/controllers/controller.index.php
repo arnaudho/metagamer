@@ -45,7 +45,7 @@ namespace app\main\controllers\front
                 else
                 {
                     Logs::write("Tentative de connexion <".$data["login"].":".$data["mdp"].">", Logs::WARNING);
-                    $this->addContent("error", "Le login ou le mot de passe est incorrect");
+                    $this->addContent("error", "Incorrect login or password");
                 }
             }
             else

@@ -1,7 +1,90 @@
 *{font-family: Arial, sans-serif;}
 body{margin:0; padding:0;}
 
+/* LOGIN FORM */
+.container .login-wrap {
+    font:600 16px/18px 'Open Sans',sans-serif;
+}
+.container .login-wrap .input input {
+    border: none;
+    padding: 15px 20px;
+    border-radius: 25px;
+    color: #EEEEEE;
+    background: rgba(255,255,255,.1);
+    width: -webkit-fill-available;
+}
+.container .login-wrap .input input[type='submit']{
+    background-color: #1161ee;
+    text-transform: uppercase;
+    color: white;
+}
+.container .login-wrap .error {
+    color: #d56076;
+}
+.container .login-wrap .mandatory {
+    display: none;
+}
+
+*,:after,:before{box-sizing:border-box}
+.clearfix:after,.clearfix:before{content:'';display:table}
+.clearfix:after{clear:both;display:block}
+a{color:inherit;text-decoration:none}
+
+.login-wrap{
+    width:100%;
+    margin:auto;
+    margin-top: 100px;
+    max-width:525px;
+    min-height:650px;
+    position:relative;
+    background:url(https://raw.githubusercontent.com/khadkamhn/day-01-login-form/master/img/bg.jpg) no-repeat center;
+    box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
+}
+.login-html{
+    width:100%;
+    height:100%;
+    position:absolute;
+    padding:90px 70px 50px 70px;
+    background:rgba(40,57,101,.9);
+}
+.login-html .sign-in-htm,
+.login-html .sign-up-htm{
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    position:absolute;
+    backface-visibility:hidden;
+    transition:all .4s linear;
+}
+.login-html .tab,
+.login-form .group .label,
+.login-form .group .button{
+    text-transform:uppercase;
+}
+.login-html .form-title h3 {
+    color:#fff;
+    font-size: 22px;
+    text-transform: uppercase;
+    font-weight: bold;
+    width: fit-content;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #1161ee;
+}
+.login-form{
+    min-height:345px;
+    position:relative;
+    perspective:1000px;
+    transform-style:preserve-3d;
+}
+.hr{
+    height:2px;
+    margin:60px 0 50px 0;
+    background:rgba(255,255,255,.2);
+}
+
 @media screen and (max-width: 550px){
+    .login-wrap{ margin-top: 0;}
     /* MOBILE DEBUGGER */
     div#debug.fullscreen { display: flex; flex-flow: column; }
     div#debug .debug_content .debug_vars pre { overflow: scroll; }

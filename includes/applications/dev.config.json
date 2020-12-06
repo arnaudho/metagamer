@@ -5,8 +5,8 @@
         {
 			"theme":"default",
 			"multiLanguage": false,
-			"defaultLanguage": "fr",
-			"currentLanguage": "fr",
+			"defaultLanguage": "en",
+			"currentLanguage": "en",
 			"modules":{
 				"front": {
 					"useRoutingFile":true,
@@ -16,6 +16,20 @@
 				"back": {
 					"useRoutingFile":false,
 					"defaultController":"core\\application\\DefaultBackController",
+					"action404":"notFound"
+				}
+			}
+        },
+        "api":
+        {
+			"theme":"default",
+			"multiLanguage": false,
+			"defaultLanguage": "en",
+			"currentLanguage": "en",
+			"modules":{
+				"front": {
+					"useRoutingFile":true,
+					"defaultController":"core\\application\\DefaultController",
 					"action404":"notFound"
 				}
 			}
