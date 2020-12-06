@@ -139,7 +139,7 @@
     <input type="checkbox" name="matchups-export-mode" id="matchups-export-mode" />
     <div class="matchups-container">
         <h1>{$content.format.name_format}</h1>
-        <h3>Format Standard - 10-11 Oct 2020 </h3>
+        <h3>{$content.date_format}</h3>
         <hr width="10%" />
         <table class="table table-condensed table-matchups">
             <tbody>
@@ -159,7 +159,7 @@
                             <div class="archetype-count">{$archetype.count} decks ({$archetype.percent}<sup>%</sup>)</div>
                         </td>
                         {foreach from=$archetype.winrates item="deck"}
-                            <td class="
+                            <td title="{$deck.count} matches" class="
                                 {if $archetype.id_archetype==$deck.id_archetype}matchup-mirror {else}
                                     {if $deck.deviation <= 10}matchup-highlighted{/if}
                                 {/if}

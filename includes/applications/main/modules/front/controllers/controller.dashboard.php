@@ -82,10 +82,29 @@ namespace app\main\controllers\front {
                     $this->addContent("clean_duplicates", 1);
                 }
 
-                $this->addContent("list_tournaments", $this->modelTournament->all(
+                $list_tournaments = $this->modelTournament->all(
                     Query::condition()
-                        ->andWhere("id_format", Query::EQUAL, $format['id_format'])
-                ));
+                        ->andWhere("id_format", Query::EQUAL, $format['id_format']),
+                    "id_tournament, name_tournament, date_tournament"
+                );
+
+                // get format dates
+                $dates = array();
+                foreach ($list_tournaments as $one_tournament) {
+                    $dates[] = $one_tournament['date_tournament'];
+                }
+
+                $dates_time = array_map('strtotime', $dates);
+                $max_date = max($dates_time);
+                $min_date = min($dates_time);
+                if (date('M', $min_date) == date('M', $max_date)) {
+                    $date_format = date('j', $min_date) . "-" . date('j M Y', $max_date);
+                } else {
+                    $date_format = date('j M', $min_date) . " - " . date('j M Y', $max_date);
+                }
+                $this->addContent("date_format", $date_format);
+
+                $this->addContent("list_tournaments", $list_tournaments);
                 $title = "Dashboard - " . $format['name_format'];
                 if ($tournament) {
                     $title .= " - " . $tournament['name_tournament'];
