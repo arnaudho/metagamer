@@ -34,10 +34,12 @@ namespace app\main\controllers\front {
                         "opened"          => $count_open-- > 0 ? 1 : 0
                     );
                 }
-                $formats[$tournament['id_format']]['tournaments'][$tournament['id_tournament']] = array(
-                    "name_tournament" => $tournament['name_tournament'],
-                    "count_players"   => $tournament['count_players']
-                );
+                if ($tournament['id_tournament']) {
+                    $formats[$tournament['id_format']]['tournaments'][$tournament['id_tournament']] = array(
+                        "name_tournament" => $tournament['name_tournament'],
+                        "count_players" => $tournament['count_players']
+                    );
+                }
             }
             $this->addContent("formats", $formats);
 

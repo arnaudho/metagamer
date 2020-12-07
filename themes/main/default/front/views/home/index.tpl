@@ -18,7 +18,12 @@
                 <div class="collapse {if $format.opened==1}in{/if}" id="collapse-format-{$id_format}">
                     <ul>
                         {foreach from=$format.tournaments key="id_tournament" item="tournament"}
-                            <li><span class="tournament-count-players"><span class="glyphicon glyphicon-user"></span> {$tournament.count_players}</span>{$tournament.name_tournament}</li>
+                            <li>
+                                <span class="tournament-count-players"><span class="glyphicon glyphicon-user"></span> {$tournament.count_players}</span>
+                                <span>{$tournament.name_tournament}</span>
+                            </li>
+                        {foreachelse}
+                            <li class="format-empty">No tournaments</li>
                         {/foreach}
                     </ul>
                 </div>
