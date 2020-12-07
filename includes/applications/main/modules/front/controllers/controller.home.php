@@ -29,7 +29,7 @@ namespace app\main\controllers\front {
                 if (!array_key_exists($tournament['id_format'], $formats)) {
                     $formats[$tournament['id_format']] = array(
                         "name_format" => $tournament['name_format'],
-                        "link_format" => RoutingHandler::rewrite("dashboard", "", array("id_format" => $tournament['id_format'])),
+                        "link_format" => RoutingHandler::rewrite("dashboard", "") . "?id_format=" . $tournament['id_format'],
                         "tournaments" => array(),
                         "opened"          => $count_open-- > 0 ? 1 : 0
                     );
