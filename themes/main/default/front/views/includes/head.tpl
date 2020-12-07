@@ -24,6 +24,7 @@
 	<body>
 		<div class="container">
 			<div class="menu">
+				<a href="home/"><span class="glyphicon glyphicon-home"></span></a>
 				<a href="dashboard/"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a>
 				<a href="dashboard/leaderboard/"><span class="glyphicon glyphicon-stats"></span> MPL</a>
 				<a href="archetype/"><span class="glyphicon glyphicon-screenshot"></span> Analysis</a>

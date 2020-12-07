@@ -109,6 +109,23 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
     font-size: 17px; max-width: 120px; text-align: center; font-weight: bold; padding-top: 10px; padding-bottom: 10px;
     vertical-align: bottom; transform: scale(1, 1.05); line-height: 1.3em;}
 
+/* HOME FORMATS*/
+.formats-container .format { display: inline-block; padding: 8px 16px; background-color: #F8F8F8; border-radius: 4px;
+    vertical-align: top; margin-bottom: 10px; min-width: 370px;}
+.formats-container .format { font-family: Metropolis, Arial, serif; font-size: 14px;}
+.formats-container .format h4 a { font-family: Metropolis, Arial, serif; font-size: 16px; color: initial; text-decoration: none;}
+.formats-container .format h4 a[data-toggle="collapse"] span.format-icon { display: none; margin-right: 10px;}
+.formats-container .format h4 a[aria-expanded="true"] span.glyphicon-folder-open { display: inline;}
+.formats-container .format h4 a[aria-expanded="false"] span.glyphicon-folder-close { display: inline;}
+.formats-container .format h4 a:hover { color: #23527c;}
+.formats-container .format ul { padding-left: 10px; list-style-type: none;}
+.formats-container .format ul li { padding: 5px; font-family: Metropolis, Arial, serif; color: #444444;}
+.formats-container .format ul li:hover { background-color: #E2E2E2;}
+.formats-container .format .link-dashboard { float: right; margin-top: 10px; font-size: 1.4em;}
+.formats-container .format .link-dashboard span.glyphicon { border-radius: 10px; transition: background-color ease 1s;}
+.formats-container .format .link-dashboard:hover span.glyphicon { color: black; background-color: #ffacac;}
+.formats-container .format .tournament-count-players { width: 80px; display: inline-block;}
+
 /* DECKLIST */
 .container .decklist { padding: 34px 40px 60px 60px; background: url("imgs/marble-white.png"); background-repeat: no-repeat; }
 .container .decklist.decklist-visual { position: fixed; top: 0; left: 0; width: 1670px; }

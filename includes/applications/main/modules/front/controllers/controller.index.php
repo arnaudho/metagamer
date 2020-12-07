@@ -23,7 +23,7 @@ namespace app\main\controllers\front
                 Go::to("index", "login");
             }
 
-            Go::to("dashboard", "index");
+            Go::to("home");
         }
 
         public function login()

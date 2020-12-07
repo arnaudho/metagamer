@@ -21,6 +21,18 @@
 				"action":"display"
 			}
 		},
+		"dashboard/id_format:{$id_format}/":
+		{
+			"parameters":
+			{
+				"id_format":"[0-9]+"
+			},
+			"GET":
+			{
+				"controller":"dashboard",
+				"action":"index"
+			}
+		},
 		"{$controller}/":
 		{
 			"parameters":

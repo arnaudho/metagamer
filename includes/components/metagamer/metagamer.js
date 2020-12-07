@@ -89,4 +89,7 @@
     }
 
     window.addEventListener('DOMContentLoaded', init, false);
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 })();

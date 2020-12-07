@@ -13,7 +13,7 @@
 		"regExp":"TextNoHtml",
 		"tag":"input",
 		"attributes":{
-            "placeholder":"Mot de passe",
+            "placeholder":"Password",
 			"type":"password"
 		}
 	},
@@ -21,7 +21,7 @@
 		"tag":"input",
 		"attributes":{
 			"type":"submit",
-			"value":"Login",
+			"value":"Sign in",
 			"class":"button"
 		}
 	}

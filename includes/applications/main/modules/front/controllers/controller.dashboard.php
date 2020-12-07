@@ -68,9 +68,6 @@ namespace app\main\controllers\front {
                 $dashboard_cond = Query::condition()->andWhere("tournaments.id_tournament", Query::EQUAL, $tournament['id_tournament']);
             }
             if ($format && $dashboard_cond) {
-                // TODO auto-generate format dates :
-                // monday to sunday, including all tournaments
-
                 // check if duplicate players
                 $count_duplicates = $this->modelPlayer->countDuplicatePlayers(
                     Query::condition()

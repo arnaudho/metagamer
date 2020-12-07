@@ -41,6 +41,20 @@ namespace app\main\models {
             return $data;
         }
 
+        public function allOrdered ($pCondition = null) {
+            $cond = Query::condition();
+            if ($pCondition) {
+                $cond = clone $pCondition;
+            }
+            $cond->order("id_format", "DESC");
+            return Query::select("tournaments.*, formats.*, COUNT(1) AS count_players", $this->table)
+                ->join("formats", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
+                ->join("players", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->andCondition($cond)
+                ->groupBy("tournaments.id_tournament")
+                ->execute($this->handler);
+        }
+
         /**
          * Delete tournament data, players & matches
          * @param $pIdTournament
