@@ -15,7 +15,7 @@ docker run \
   --volume ${PWD}/schema.sql:/docker-entrypoint-initdb.d/00-schema.sql \
   --volume ${PWD}/users.sql:/docker-entrypoint-initdb.d/10-users.sql \
   --detach \
-  mysql:5
+  mysql:5.7
 ```
 
 Then, build and start metagamer container
