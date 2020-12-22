@@ -175,36 +175,40 @@
                         </td>
                         <td {if $card.avg_main == 4}class="highlight"{/if}>{$card.avg_main|floatval}</td>
                         <td {if $content.global_rules.count_players == $card.count_players_main}class="strong"{/if}>{$card.count_players_main}</td>
-                        <td {if $card.winrate_main > ($content.global_rules.winrate+5)}class="winrate-positive"
-                                {else}
-                                {if $card.winrate_main > $content.global_rules.winrate}class="winrate-slightly-positive"
-                                {else}
-                                    {if $card.winrate_main < ($content.global_rules.winrate-5)}class="winrate-negative"
+                        {if $card.winrate_main}
+                            <td {if $card.winrate_main > ($content.global_rules.winrate+5)}class="winrate-positive"
                                     {else}
-                                        {if $card.winrate_main < $content.global_rules.winrate}class="winrate-slightly-negative"
+                                    {if $card.winrate_main > $content.global_rules.winrate}class="winrate-slightly-positive"
+                                    {else}
+                                        {if $card.winrate_main < ($content.global_rules.winrate-5)}class="winrate-negative"
+                                        {else}
+                                            {if $card.winrate_main < $content.global_rules.winrate}class="winrate-slightly-negative"
+                                            {/if}
                                         {/if}
                                     {/if}
-                                {/if}
-                                {/if}>
-                            {$card.winrate_main} %
-                        </td>
-                        <td>
+                                    {/if}>
+                                {$card.winrate_main} %
+                            </td>
+                            <td>
                             <span class="confidence-interval">
                                 ({if $card.deviation_down_main < 0}0{else}{$card.deviation_down_main}{/if}% -
                                 {if $card.deviation_up_main > 100}100{else}{$card.deviation_up_main}{/if}%)
                             </span>
-                        </td>
-                        <td>
-                            {if $card.winrate_without_main}{$card.winrate_without_main} %{/if}
-                        </td>
-                        <td>
-                            {if $card.winrate_without_main}
-                                <span class="confidence-interval">
+                            </td>
+                            <td>
+                                {if $card.winrate_without_main}{$card.winrate_without_main} %{/if}
+                            </td>
+                            <td>
+                                {if $card.winrate_without_main}
+                                    <span class="confidence-interval">
                                     ({if $card.deviation_down_without_main < 0}0{else}{$card.deviation_down_without_main}{/if}% -
-                                    {if $card.deviation_up_without_main > 100}100{else}{$card.deviation_up_without_main}{/if}%)
+                                        {if $card.deviation_up_without_main > 100}100{else}{$card.deviation_up_without_main}{/if}%)
                                 </span>
-                            {/if}
-                        </td>
+                                {/if}
+                            </td>
+                        {else}
+                            <td colspan="4"></td>
+                        {/if}
                     </tr>
                 {/if}
             {/foreach}
@@ -241,32 +245,36 @@
                         <td>{$card.name_card}</td>
                         <td {if $card.avg_side == 4}class="highlight"{/if}>{$card.avg_side|floatval}</td>
                         <td {if $content.global_rules.count_players == $card.count_players_side}class="strong"{/if}>{$card.count_players_side}</td>
-                        <td {if $card.winrate_side > ($content.global_rules.winrate+5)}class="winrate-positive"
-                            {else}
-                                {if $card.winrate_side > $content.global_rules.winrate}class="winrate-slightly-positive"
+                        {if $card.winrate_side}
+                            <td {if $card.winrate_side > ($content.global_rules.winrate+5)}class="winrate-positive"
                                 {else}
-                                    {if $card.winrate_side < ($content.global_rules.winrate-5)}class="winrate-negative"
+                                    {if $card.winrate_side > $content.global_rules.winrate}class="winrate-slightly-positive"
                                     {else}
-                                        {if $card.winrate_side < $content.global_rules.winrate}class="winrate-slightly-negative"
+                                        {if $card.winrate_side < ($content.global_rules.winrate-5)}class="winrate-negative"
+                                        {else}
+                                            {if $card.winrate_side < $content.global_rules.winrate}class="winrate-slightly-negative"
+                                            {/if}
                                         {/if}
                                     {/if}
+                                {/if}>
+                                {$card.winrate_side} %
+                            </td>
+                            <td class="confidence-interval">
+                                {if $card.deviation_down_side < 0}0{else}{$card.deviation_down_side}{/if}% -
+                                {if $card.deviation_up_side > 100}100{else}{$card.deviation_up_side}{/if}%
+                            </td>
+                            <td>
+                                {if $card.winrate_without_side}{$card.winrate_without_side} %{/if}
+                            </td>
+                            <td class="confidence-interval">
+                                {if $card.winrate_without_side}
+                                    {if $card.deviation_down_without_side < 0}0{else}{$card.deviation_down_without_side}{/if}% -
+                                    {if $card.deviation_up_without_side > 100}100{else}{$card.deviation_up_without_side}{/if}%
                                 {/if}
-                            {/if}>
-                            {$card.winrate_side} %
-                        </td>
-                        <td class="confidence-interval">
-                            {if $card.deviation_down_side < 0}0{else}{$card.deviation_down_side}{/if}% -
-                            {if $card.deviation_up_side > 100}100{else}{$card.deviation_up_side}{/if}%
-                        </td>
-                        <td>
-                            {if $card.winrate_without_side}{$card.winrate_without_side} %{/if}
-                        </td>
-                        <td class="confidence-interval">
-                            {if $card.winrate_without_side}
-                                {if $card.deviation_down_without_side < 0}0{else}{$card.deviation_down_without_side}{/if}% -
-                                {if $card.deviation_up_without_side > 100}100{else}{$card.deviation_up_without_side}{/if}%
-                            {/if}
-                        </td>
+                            </td>
+                        {else}
+                            <td colspan="4"></td>
+                        {/if}
                     </tr>
                 {/if}
             {/foreach}

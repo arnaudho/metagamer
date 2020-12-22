@@ -16,18 +16,20 @@ namespace app\main\models {
             parent::__construct("cards", "id_card");
         }
 
-        public function getPlayedCards ($pCondition = null, $pRulesCondition = null) {
+        public function getPlayedCards ($pCondition = null, $pRulesCondition = null, $pOrder = "name_card", $pType = "ASC") {
             if(!$pCondition)
                 $pCondition = Query::condition();
             if(!$pRulesCondition)
                 $pRulesCondition = Query::condition();
-            $q = Query::select("cards.id_card, name_card, SUM(count_main) AS count_total_main, SUM(count_side) AS count_total_side", $this->tablePlayerCards)
+            $q = Query::select("cards.id_card, name_card,
+                COUNT(IF(count_main = 0, NULL, count_main)) AS count_players_main, COUNT(IF(count_side = 0, NULL, count_side)) AS count_players_side,
+                SUM(count_main) AS count_total_main, SUM(count_side) AS count_total_side", $this->tablePlayerCards)
                 ->join("players p", Query::JOIN_INNER, "p.id_player = player_card.id_player")
                 ->join($this->table, Query::JOIN_INNER, "cards.id_card = player_card.id_card")
                 ->join("tournaments", Query::JOIN_INNER, "p.id_tournament = tournaments.id_tournament")
                 ->andCondition(clone $pCondition)
                 ->groupBy("cards.id_card")
-                ->order("name_card");
+                ->order($pOrder, $pType);
             if ($pRulesCondition) {
                 $rules_cond = clone $pRulesCondition;
                 $q->andCondition($rules_cond);
@@ -50,6 +52,21 @@ namespace app\main\models {
                 ->join("player_card", Query::JOIN_INNER, "players.id_player = player_card.id_player AND id_card = $pIdCard")
                 ->execute($this->handler);
             return $total[0]['total'];
+        }
+
+        public function getDecklistCardsByIdPlayer ($pIdPlayer) {
+            $c = Query::select("cards.name_card, player_card.count_main", $this->tablePlayerCards)
+                ->join($this->table, Query::JOIN_INNER, "cards.id_card = player_card.id_card AND id_player = $pIdPlayer")
+                ->andWhere("count_main", Query::NOT_EQUAL, 0)
+                ->order("cards.name_card")
+                ->execute($this->handler);
+            $cards = array();
+            foreach ($c as $card) {
+                for ($i = 1; $i <= $card['count_main']; $i++) {
+                    $cards[] = $card['name_card'];
+                }
+            }
+            return $cards;
         }
 
         /**
