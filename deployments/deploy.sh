@@ -6,6 +6,7 @@ DEPLOYMENT_NAME=${1}
 shift
 
 cp -r ${SCRIPT_DIR}/*.yml ${TEMP_DIR}
+cp -r ${SCRIPT_DIR}/../*.sql ${TEMP_DIR}
 cd ${TEMP_DIR}
 
 cat <<EOF >${TEMP_DIR}/host_patch.json
