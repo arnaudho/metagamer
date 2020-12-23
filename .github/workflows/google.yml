@@ -12,7 +12,7 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: my-first-cluster-1
   GKE_ZONE: us-central1-c
-  DEPLOYMENT_NAME: metagamer-dev
+  DEPLOYMENT_NAME: metagamer-deployment
   IMAGE: mtg-data/metagamer
   MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
 

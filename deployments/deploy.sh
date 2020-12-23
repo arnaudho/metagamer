@@ -36,11 +36,12 @@ kubectl create configmap sql-init \
   --from-file=users.sql \
   --namespace ${GITHUB_RUN_ID}
 kubectl create secret generic mysql-secret \
-  --from-literal=ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+  --from-literal=ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} \
+  --namespace ${GITHUB_RUN_ID}
 
 alias kustomize="${SCRIPT_DIR}/../kustomize"
 kustomize edit set namespace ${GITHUB_RUN_ID}
 kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
 kustomize build . | kubectl apply -f -
-kubectl rollout status deployment/$DEPLOYMENT_NAME
-kubectl get services -o wide
+kubectl rollout status deployment/$DEPLOYMENT_NAME --namespace ${GITHUB_RUN_ID}
+kubectl get services -o wide --namespace ${GITHUB_RUN_ID}
