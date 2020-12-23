@@ -50,7 +50,7 @@ POD_NAME=$(kubectl get pod -n ${GITHUB_RUN_ID} | awk '/mysql-deployment/ { print
 
 set +e
 for i in $(seq 5); do
-  kubectl exec -n ${GITHUB_RUN_ID} -it ${POD_NAME} -- mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -D metagamer -e '\q'
+  kubectl exec -n ${GITHUB_RUN_ID} -i ${POD_NAME} -- mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -D metagamer -e '\q'
 
   if [ ${?} == 0 ]; then
     break
@@ -58,5 +58,6 @@ for i in $(seq 5); do
   sleep 15
 done
 
+sleep 30
 set -e
-kubectl exec -n ${GITHUB_RUN_ID} -it ${POD_NAME} -- mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -D metagamer < data.sql
+kubectl exec -n ${GITHUB_RUN_ID} ${POD_NAME} -i -- mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -D metagamer < data.sql
