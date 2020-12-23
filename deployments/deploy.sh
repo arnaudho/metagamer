@@ -42,6 +42,7 @@ kubectl create secret generic mysql-secret \
 alias kustomize="${SCRIPT_DIR}/../kustomize"
 kustomize edit set namespace ${GITHUB_RUN_ID}
 kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
-kustomize build . | kubectl apply -f -
-kubectl rollout status deployment/$DEPLOYMENT_NAME
-kubectl get services -o wide
+kustomize build .
+# kustomize build . | kubectl apply -f -
+# kubectl rollout status deployment/$DEPLOYMENT_NAME
+# kubectl get services -o wide
