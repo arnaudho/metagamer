@@ -44,5 +44,17 @@ kustomize edit set namespace ${GITHUB_RUN_ID}
 kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
 kustomize build . | kubectl apply -f -
 
-#kubectl rollout status deployment/metagamer-deployment --namespace ${GITHUB_RUN_ID}
-#kubectl get services -o wide --namespace ${GITHUB_RUN_ID}
+# Load data into mysql
+curl https://gentux.s3.eu-west-2.amazonaws.com/mtg-data/data.sql > data.sql
+POD_NAME=$(kubectl get pod -n ${GITHUB_RUN_ID} | awk '/mysql-deployment/ { print $1; }')
+
+for i in $(seq 5); do
+  kubectl exec -n ${GITHUB_RUN_ID} -it ${POD_NAME} -- mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -D metagamer -e '\q'
+
+  if [ ${?} == 0 ]; then
+    break
+  fi
+  sleep 5
+done
+
+kubectl exec -n ${GITHUB_RUN_ID} -it ${POD_NAME} -- mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -D metagamer < data.sql
