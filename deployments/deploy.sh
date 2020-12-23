@@ -55,7 +55,7 @@ for i in $(seq 5); do
   if [ ${?} == 0 ]; then
     break
   fi
-  sleep 5
+  sleep 15
 done
 
 set -e
