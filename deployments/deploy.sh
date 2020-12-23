@@ -48,6 +48,7 @@ kustomize build . | kubectl apply -f -
 curl https://gentux.s3.eu-west-2.amazonaws.com/mtg-data/data.sql > data.sql
 POD_NAME=$(kubectl get pod -n ${GITHUB_RUN_ID} | awk '/mysql-deployment/ { print $1; }')
 
+set +e
 for i in $(seq 5); do
   kubectl exec -n ${GITHUB_RUN_ID} -it ${POD_NAME} -- mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -D metagamer -e '\q'
 
@@ -57,4 +58,5 @@ for i in $(seq 5); do
   sleep 5
 done
 
+set -e
 kubectl exec -n ${GITHUB_RUN_ID} -it ${POD_NAME} -- mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -D metagamer < data.sql
