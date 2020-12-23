@@ -38,7 +38,7 @@
       "handler":"core\\db\\handler\\MysqliHandler",
       "host":"mysql-service",
       "user":"root",
-      "password":"Tai1ohsoNg0io",
+      "password":"MYSQL_PASSWORD",
       "name":"metagamer"
     }
   },
