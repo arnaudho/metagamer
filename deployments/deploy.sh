@@ -48,7 +48,7 @@ if [ ${INIT_ENV} == 1 ]; then
     --from-file=users.sql \
     --namespace ${DEPLOYMENT_NAME}
   kubectl create secret generic mysql-secret \
-    --from-literal=ROOT_PASSWORD=${MYSQL_ROOT_PASSWORDTH} \
+    --from-literal=ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} \
     --namespace ${DEPLOYMENT_NAME}
 fi
 set -e

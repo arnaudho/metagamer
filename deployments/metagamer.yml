@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: metagamer
-          image: eu.gcr.io/silent-blade-237413/mtg-data/metagamer:latest
+          image: gcr.io/PROJECT_ID/IMAGE:TAG
           imagePullPolicy: Always
           ports:
             - containerPort: 80
