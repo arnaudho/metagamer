@@ -61,14 +61,26 @@ metadata:
     cert-manager.io/cluster-issuer: "metagame-ca-prod-issuer"
 spec:
   rules:
-  - host: mtg.kub.soufflet.io
+  - host: mtg-back.kub.soufflet.io
     http:
       paths:
       - path: /
         backend:
           serviceName: metagamer-service
           servicePort: 80
+  - host: mtg.kub.soufflet.io
+    http:
+      paths:
+      - path: /api
+        backend:
+          serviceName: metagamer-service
+          servicePort: 80
+      - path: /
+        backend:
+          serviceName: website-service
+          servicePort: 5000
   tls:
   - hosts:
     - mtg.kub.soufflet.io
+    - mtg-back.kub.soufflet.io
     secretName: mtg-kub-soufflet-io-crt

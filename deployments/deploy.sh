@@ -14,16 +14,24 @@ cat <<EOF >${TEMP_DIR}/host_patch.json
   {
     "op": "replace",
     "path": "/spec/rules/0/host",
+    "value": "${DEPLOYMENT_NAME}-back.kub.soufflet.io"
+  }, {
+    "op": "replace",
+    "path": "/spec/rules/1/host",
     "value": "${DEPLOYMENT_NAME}.kub.soufflet.io"
   }, {
     "op": "replace",
     "path": "/spec/tls/0/hosts/0",
+    "value": "${DEPLOYMENT_NAME}-back.kub.soufflet.io"
+  }, {
+    "op": "replace",
+    "path": "/spec/tls/0/hosts/1",
     "value": "${DEPLOYMENT_NAME}.kub.soufflet.io"
   }
 ]
 EOF
 
-sed "s/mtg.kub.soufflet.io/${DEPLOYMENT_NAME}.kub.soufflet.io/g" ${SCRIPT_DIR}/../includes/applications/setup.json > metagamer_setup.json
+sed "s/mtg.kub.soufflet.io/${DEPLOYMENT_NAME}-back.kub.soufflet.io/g" ${SCRIPT_DIR}/../includes/applications/setup.json > metagamer_setup.json
 sed "s/MYSQL_PASSWORD/${MYSQL_ROOT_PASSWORD}/g" ${SCRIPT_DIR}/../includes/applications/kube.config.json > metagamer_config.json
 
 set +e
