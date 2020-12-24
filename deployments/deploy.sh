@@ -26,6 +26,7 @@ EOF
 sed "s/mtg.kub.soufflet.io/${DEPLOYMENT_NAME}.kub.soufflet.io/g" ${SCRIPT_DIR}/../includes/applications/setup.json > metagamer_setup.json
 sed "s/MYSQL_PASSWORD/${MYSQL_ROOT_PASSWORD}/g" ${SCRIPT_DIR}/../includes/applications/kube.config.json > metagamer_config.json
 
+set +e
 kubectl get namespace | grep -w mtg-dev
 INIT_ENV=${?}
 if [ ${INIT_ENV} == 1 ]; then
@@ -42,6 +43,7 @@ if [ ${INIT_ENV} == 1 ]; then
     --from-literal=ROOT_PASSWORD=${MYSQL_ROOT_PASSWORDTH} \
     --namespace ${DEPLOYMENT_NAME}
 fi
+set -e
 
 alias kustomize="${SCRIPT_DIR}/../kustomize"
 kustomize edit set namespace ${DEPLOYMENT_NAME}
