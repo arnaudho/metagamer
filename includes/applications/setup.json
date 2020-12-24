@@ -5,6 +5,7 @@
 	],
 	"kube":[
 		"mtg.kub.soufflet.io",
+		"mtg-back.kub.soufflet.io",
 		"kub.soufflet.io"
 	],
 	"prod":[
