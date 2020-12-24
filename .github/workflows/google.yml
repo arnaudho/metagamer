@@ -63,7 +63,7 @@ jobs:
 
     # Deploy the Docker image to the GKE cluster
     - name: Deploy
-      run: ./deployments/deploy.sh $GITHUB_RUN_ID
+      run: ./deployments/deploy.sh mtg-dev
 
 # Test if mysql runs
 # k exec -n $(cat /tmp/latest/release) -it $(k get pod -n $(cat /tmp/latest/release) | awk '/mysql-deployment/ { print $1; }') -- mysql -u root --password="$(cat /tmp/latest/password)" -D metagamer -e '\q' 2>/dev/null 1>/dev/null

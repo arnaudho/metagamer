@@ -26,38 +26,46 @@ EOF
 sed "s/mtg.kub.soufflet.io/${DEPLOYMENT_NAME}.kub.soufflet.io/g" ${SCRIPT_DIR}/../includes/applications/setup.json > metagamer_setup.json
 sed "s/MYSQL_PASSWORD/${MYSQL_ROOT_PASSWORD}/g" ${SCRIPT_DIR}/../includes/applications/kube.config.json > metagamer_config.json
 
-kubectl create namespace ${GITHUB_RUN_ID}
-kubectl create configmap metagamer-config \
-  --from-file=metagamer_setup.json \
-  --from-file=metagamer_config.json \
-  --namespace ${GITHUB_RUN_ID}
-kubectl create configmap sql-init \
-  --from-file=schema.sql \
-  --from-file=users.sql \
-  --namespace ${GITHUB_RUN_ID}
-kubectl create secret generic mysql-secret \
-  --from-literal=ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} \
-  --namespace ${GITHUB_RUN_ID}
+kubectl get namespace | grep -w mtg-dev
+INIT_ENV=${?}
+if [ ${INIT_ENV} == 1 ]; then
+  kubectl create namespace ${DEPLOYMENT_NAME}
+  kubectl create configmap metagamer-config \
+    --from-file=metagamer_setup.json \
+    --from-file=metagamer_config.json \
+    --namespace ${DEPLOYMENT_NAME}
+  kubectl create configmap sql-init \
+    --from-file=schema.sql \
+    --from-file=users.sql \
+    --namespace ${DEPLOYMENT_NAME}
+  kubectl create secret generic mysql-secret \
+    --from-literal=ROOT_PASSWORD=${MYSQL_ROOT_PASSWORDTH} \
+    --namespace ${DEPLOYMENT_NAME}
+fi
 
 alias kustomize="${SCRIPT_DIR}/../kustomize"
-kustomize edit set namespace ${GITHUB_RUN_ID}
+kustomize edit set namespace ${DEPLOYMENT_NAME}
 kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
 kustomize build . | kubectl apply -f -
 
-# Load data into mysql
-curl https://gentux.s3.eu-west-2.amazonaws.com/mtg-data/data.sql > data.sql
-POD_NAME=$(kubectl get pod -n ${GITHUB_RUN_ID} | awk '/mysql-deployment/ { print $1; }')
+if [ ${INIT_ENV} == 1 ]; then
+  # Load data into mysql
+  curl https://gentux.s3.eu-west-2.amazonaws.com/mtg-data/data.sql > data.sql
+  POD_NAME=$(kubectl get pod -n ${DEPLOYMENT_NAME} | awk '/mysql-deployment/ { print $1; }')
 
-set +e
-for i in $(seq 5); do
-  kubectl exec -n ${GITHUB_RUN_ID} -i ${POD_NAME} -- mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -D metagamer -e '\q'
+  set +e
+  for i in $(seq 5); do
+    kubectl exec -n ${DEPLOYMENT_NAME} -i ${POD_NAME} -- mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -D metagamer -e '\q'
 
-  if [ ${?} == 0 ]; then
-    break
-  fi
-  sleep 15
-done
+    if [ ${?} == 0 ]; then
+      break
+    fi
+    sleep 15
+  done
 
-sleep 30
-set -e
-kubectl exec -n ${GITHUB_RUN_ID} ${POD_NAME} -i -- mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -D metagamer < data.sql
+  sleep 30
+  set -e
+  kubectl exec -n ${DEPLOYMENT_NAME} ${POD_NAME} -i -- mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -D metagamer < data.sql
+fi
+
+echo "Visit https://${DEPLOYMENT_NAME}.kub.soufflet.io"
