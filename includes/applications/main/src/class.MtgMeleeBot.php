@@ -39,6 +39,8 @@ class MtgMeleeBot extends BotController
             return false;
         }
         if ($pDecklistData) {
+            // handle different MDFC format
+            $pDecklistData = str_replace("///", "//", $pDecklistData);
             preg_match_all('/Deck(.*)(Sideboard(.*))?\z/Uims', $pDecklistData, $output_array);
             $deck_main = $output_array[1][0];
             $deck_side = $output_array[3][0];
@@ -81,6 +83,7 @@ class MtgMeleeBot extends BotController
             $this->addMessage("WARNING : Decklist parsing : no sideboard found for url : <a href='" . $player['decklist_player'] . "' target='_blank'>" . $player['decklist_player'] . "</a>", self::MESSAGE_WARNING);
         }
 
+        // TODO cards are in $parsing_main[2] ?
         foreach ($parsing_main as $key => $card) {
             $parsing_main[$key] = str_replace("&#39;", "'", $card);
         }
@@ -122,29 +125,39 @@ class MtgMeleeBot extends BotController
         }
         $deck_count = 0;
         foreach ($parsing_main[2] as $key => $card_name) {
-            if (array_key_exists($card_name, $cards)) {
-                $cards[$card_name]['count_main'] += $parsing_main[1][$key];
+            $card_name = trim($card_name);
+            if (array_key_exists($card_name, $id_cards)) {
+                if (array_key_exists($card_name, $cards)) {
+                    $cards[$card_name]['count_main'] += $parsing_main[1][$key];
+                } else {
+                    $cards[$card_name] = array(
+                        "id_player"  => $pIdPlayer,
+                        "id_card"    => $id_cards[$card_name],
+                        "count_main" => $parsing_main[1][$key],
+                        "count_side" => 0
+                    );
+                }
+                $deck_count += $parsing_main[1][$key];
             } else {
-                $cards[$card_name] = array(
-                    "id_player"  => $pIdPlayer,
-                    "id_card"    => $id_cards[$card_name],
-                    "count_main" => $parsing_main[1][$key],
-                    "count_side" => 0
-                );
+                trace_r("CARD NOT FOUND : $card_name");
             }
-            $deck_count += $parsing_main[1][$key];
         }
         if (array_key_exists(0, $parsing_side[2])) {
             foreach ($parsing_side[2] as $key => $card_name) {
-                if (array_key_exists($card_name, $cards)) {
-                    $cards[$card_name]['count_side'] += $parsing_side[1][$key];
+                $card_name = trim($card_name);
+                if (array_key_exists($card_name, $id_cards)) {
+                    if (array_key_exists($card_name, $cards)) {
+                        $cards[$card_name]['count_side'] += $parsing_side[1][$key];
+                    } else {
+                        $cards[$card_name] = array(
+                            "id_player" => $pIdPlayer,
+                            "id_card" => $id_cards[$card_name],
+                            "count_main" => 0,
+                            "count_side" => $parsing_side[1][$key]
+                        );
+                    }
                 } else {
-                    $cards[$card_name] = array(
-                        "id_player" => $pIdPlayer,
-                        "id_card" => $id_cards[$card_name],
-                        "count_main" => 0,
-                        "count_side" => $parsing_side[1][$key]
-                    );
+                    trace_r("CARD NOT FOUND : $card_name");
                 }
             }
         }
