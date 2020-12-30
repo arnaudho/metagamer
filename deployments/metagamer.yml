@@ -58,7 +58,7 @@ metadata:
   namespace: default
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: "metagame-ca-prod-issuer"
+    cert-manager.io/cluster-issuer: "metagame-ca-staging-issuer"
 spec:
   rules:
   - host: mtg-back.kub.soufflet.io
