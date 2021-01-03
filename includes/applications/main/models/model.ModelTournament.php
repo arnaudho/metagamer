@@ -11,6 +11,18 @@ namespace app\main\models {
             parent::__construct("tournaments", "id_tournament");
         }
 
+        public function getTupleById($pId, $pFields = "*")
+        {
+            $res = Query::select($pFields, $this->table)
+                ->join("formats", Query::JOIN_INNER, "formats.id_format = tournaments.id_format")
+                ->andWhere($this->id, Query::EQUAL, $pId)
+                ->limit(0, 1)
+                ->execute($this->handler);
+            if(!isset($res[0]))
+                return null;
+            return $res[0];
+        }
+
         public function countPlayers ($pCondition = null) {
             if (!$pCondition) {
                 $pCondition = Query::condition();

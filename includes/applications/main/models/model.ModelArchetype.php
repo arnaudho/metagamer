@@ -42,8 +42,13 @@ namespace app\main\models {
             return $winrates;
         }
 
-        public function getArchetypesRules () {
-            $archetyes_file = Core::$path_to_application."/src/archetypes.json";
+        static public function getArchetypesRules ($pIdTypeFormat = ModelFormat::TYPE_FORMAT_STANDARD_ID) {
+            if (array_key_exists($pIdTypeFormat, ModelFormat::MAPPING_TYPE_FORMAT)) {
+                $archetyes_file = Core::$path_to_application."/src/archetypes_" . ModelFormat::MAPPING_TYPE_FORMAT[$pIdTypeFormat] . ".json";
+            } else {
+                trace_r("Incorrect format specified for archetypes rules");
+                return false;
+            }
 
             try
             {
@@ -56,7 +61,7 @@ namespace app\main\models {
             return $mapping;
         }
 
-        public function evaluatePlayerArchetype ($pIdPlayer, $pWrite = true) {
+        public function evaluatePlayerArchetype ($pIdPlayer, $pIdTypeFormat, $pWrite = true) {
             $player = $this->modelPlayer->getTupleById($pIdPlayer);
             if (!$player) {
                 trace_r("ERROR : Player $pIdPlayer not found");
@@ -76,7 +81,7 @@ namespace app\main\models {
                 foreach ($cards as $card) {
                     $deck .= $card['name_card'] . " 00 ";
                 }
-                $name_archetype = self::decklistMapper($deck);
+                $name_archetype = self::decklistMapper($deck, $pIdTypeFormat);
             }
 
             if ($pWrite) {
@@ -111,24 +116,18 @@ namespace app\main\models {
                 ->join("players", Query::JOIN_INNER, "players.id_archetype = archetypes.id_archetype")
                 ->join("tournaments", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament AND id_format = $pIdFormat")
                 ->order("name_archetype")
-                ->execute();
+                ->execute($this->handler);
             return $archetypes;
         }
 
         /**
          * Returns archetype according to cards found in decklist
+         * @param $pDecklist
+         * @param $pIdTypeFormat
+         * @return int|null|string
          */
-        static public function decklistMapper ($pDecklist) {
-            $archetyes_file = Core::$path_to_application."/src/archetypes.json";
-
-            try
-            {
-                $mapping = SimpleJSON::import($archetyes_file);
-            }
-            catch(\Exception $e)
-            {
-                return null;
-            }
+        static public function decklistMapper ($pDecklist, $pIdTypeFormat) {
+            $mapping = self::getArchetypesRules($pIdTypeFormat);
             $archetype = self::ARCHETYPE_OTHER;
             foreach ($mapping as $name => $deck) {
                 if (!array_key_exists('contains', $deck)) {

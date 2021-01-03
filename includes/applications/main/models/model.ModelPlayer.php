@@ -15,6 +15,35 @@ namespace app\main\models {
             parent::__construct("players", "id_player");
         }
 
+        public function getPlayerWithTypeFormatById ($pId, $pFields = "players.*, id_type_format")
+        {
+            $res = Query::select($pFields, $this->table)
+                ->join("tournaments", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament")
+                ->join("formats", Query::JOIN_INNER, "formats.id_format = tournaments.id_format")
+                ->andWhere($this->id, Query::EQUAL, $pId)
+                ->limit(0, 1)
+                ->execute($this->handler);
+            if(!isset($res[0]))
+                return null;
+            return $res[0];
+        }
+
+        public function allByFormat ($pIdFormat, $pCond = null) {
+            if (!$pCond) {
+                $cond = Query::condition();
+            } else {
+                $cond = clone $pCond;
+            }
+            $players = Query::select("players.id_player, SUM(result_match) AS wins, COUNT(result_match) AS total", $this->table)
+                ->join("tournaments", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament AND id_format = $pIdFormat")
+                ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
+                ->andCondition($cond)
+                ->groupBy("players.id_player")
+                ->order("players.id_player")
+                ->execute($this->handler);
+            return $players;
+        }
+
         public function getDataByPlayerId ($pIdPlayer) {
             $data = Query::select(
                 "players.id_player, tournaments.id_tournament, name_tournament, name_format, name_archetype, decklist_player,

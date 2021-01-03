@@ -18,6 +18,7 @@ class MtgMeleeBot extends BotController
     protected $modelArchetype;
     protected $modelPeople;
     protected $modelPlayer;
+    protected $modelFormat;
     protected $modelMatch;
     protected $modelCard;
 
@@ -27,6 +28,7 @@ class MtgMeleeBot extends BotController
         $this->modelArchetype = new ModelArchetype();
         $this->modelPeople = new ModelPeople();
         $this->modelPlayer = new ModelPlayer();
+        $this->modelFormat = new ModelFormat();
         $this->modelMatch = new ModelMatch();
         $this->modelCard = new ModelCard();
         parent::__construct($pName);
@@ -34,7 +36,7 @@ class MtgMeleeBot extends BotController
 
     // Parse decklist by player ID
     public function parseDecklist ($pIdPlayer, $pDecklistData = null, $pWrite = true) {
-        $player = $this->modelPlayer->getTupleById($pIdPlayer);
+        $player = $this->modelPlayer->getPlayerWithTypeFormatById($pIdPlayer);
         if (!$player) {
             return false;
         }
@@ -77,19 +79,16 @@ class MtgMeleeBot extends BotController
             $this->addMessage("ERROR Decklist parsing : no maindeck found for url : <a href='" . $player['decklist_player'] . "' target='_blank'>" . $player['decklist_player'] . "</a>", self::MESSAGE_ERROR);
             return false;
         }
-        preg_match_all("/(\d+)\s+([&#;,'\/\-\w ]+)(\r|\n)/Uims", $deck_side, $parsing_side);
+        preg_match_all("/(\d+)\s+([&#;,'\/\-\w ]+)(\r|\n)*/ims", $deck_side, $parsing_side);
         if (!array_key_exists(0, $parsing_side[2]) || empty($deck_side)) {
             trace_r("WARNING Decklist parsing : no sideboard found for url : " . $player['decklist_player']);
             $this->addMessage("WARNING : Decklist parsing : no sideboard found for url : <a href='" . $player['decklist_player'] . "' target='_blank'>" . $player['decklist_player'] . "</a>", self::MESSAGE_WARNING);
         }
 
-        // TODO cards are in $parsing_main[2] ?
-        foreach ($parsing_main as $key => $card) {
-            $parsing_main[$key] = str_replace("&#39;", "'", $card);
-        }
-        foreach ($parsing_side as $key => $card) {
-            $parsing_side[$key] = str_replace("&#39;", "'", $card);
-        }
+        // Fix quotes encoding
+        $parsing_main[2] = str_replace("&#39;", "'", $parsing_main[2]);
+        $parsing_side[2] = str_replace("&#39;", "'", $parsing_side[2]);
+
         $full_deck = array_unique(array_merge($parsing_main[2], $parsing_side[2]));
         foreach ($full_deck as $key => $card) {
             $full_deck[$key] = trim($card);
@@ -171,7 +170,7 @@ class MtgMeleeBot extends BotController
             $this->modelCard->insertPlayerCards($cards);
         }
 
-        $this->modelArchetype->evaluatePlayerArchetype($pIdPlayer, $pWrite);
+        $this->modelArchetype->evaluatePlayerArchetype($pIdPlayer, $player['id_type_format'], $pWrite);
         return true;
     }
 
@@ -185,12 +184,11 @@ class MtgMeleeBot extends BotController
         // insert tournament if needed
         $this->tournament = $pData[0]['TournamentId'];
         if (!$this->modelTournament->getTupleById($this->tournament)) {
-            $mFormat = new ModelFormat();
             if (!$pFormat) {
                 $this->addMessage("Please specify a format to create new tournament", self::MESSAGE_ERROR);
                 return false;
             }
-            $id_format = $mFormat->getTupleById($pFormat);
+            $id_format = $this->modelFormat->getTupleById($pFormat);
             $id_format = $id_format['id_format'];
             $new_tournament = array(
                 "id_tournament"   => $this->tournament,

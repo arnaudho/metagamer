@@ -34,10 +34,9 @@ class BattlefyBot extends BotController
         parent::__construct($pName);
     }
 
-
     // Parse decklist by player ID
     public function parseDecklist ($pIdPlayer, $pDecklistData, $pUriDecklist = null, $pDecklistName = null, $pUserName = null, $pWrite = true) {
-        $player = $this->modelPlayer->getTupleById($pIdPlayer);
+        $player = $this->modelPlayer->getPlayerWithTypeFormatById($pIdPlayer);
         if (!$player) {
             return false;
         }
@@ -163,7 +162,7 @@ class BattlefyBot extends BotController
         }
 
         // TODO set decklist url as well
-        $this->modelArchetype->evaluatePlayerArchetype($pIdPlayer, $pWrite);
+        $this->modelArchetype->evaluatePlayerArchetype($pIdPlayer, $player['id_type_format'], $pWrite);
         return true;
     }
 

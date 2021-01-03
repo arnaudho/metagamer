@@ -61,6 +61,8 @@ CREATE TABLE IF NOT EXISTS `formats` (
   PRIMARY KEY (`id_format`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+ALTER TABLE `formats` ADD `id_type_format` INT(1) NOT NULL AFTER `name_format`;
+
 -- --------------------------------------------------------
 
 --

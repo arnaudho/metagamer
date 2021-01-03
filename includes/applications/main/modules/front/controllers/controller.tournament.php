@@ -175,7 +175,7 @@ namespace app\main\controllers\front {
                         $players = $this->modelPlayer->all(Query::condition()->andWhere("id_tournament", Query::EQUAL, $tournament['id_tournament']));
                         foreach ($players as $player) {
                             $archetype = $player['id_archetype'];
-                            $new_archetype = $this->modelArchetype->evaluatePlayerArchetype($player['id_player']);
+                            $new_archetype = $this->modelArchetype->evaluatePlayerArchetype($player['id_player'], $tournament['id_type_format']);
                             if ($new_archetype && $archetype != $new_archetype['id_archetype']) {
                                 trace_r("Update : $archetype => " . $new_archetype['name_archetype']);
                                 $count_refresh++;

@@ -270,72 +270,67 @@ namespace app\main\controllers\front {
         }
 
         public function archetypes () {
-            // update archetypes images
-            $archetypes = $this->modelArchetypes->getArchetypesRules();
-            $archetype_cards = array();
-            foreach ($archetypes as $archetype_name => $archetype) {
-                if (isset($archetype['image']) && $card = $this->modelCard->one(Query::condition()->andWhere("name_card", Query::LIKE, $archetype['image'] . "%"), "image_card")) {
-                    // get archetype by name
-                    $arch = $this->modelArchetypes->one(Query::condition()->andWhere("name_archetype", Query::EQUAL, $archetype_name));
-                    if ($arch) {
-                        $this->modelArchetypes->updateById(
-                            $arch['id_archetype'],
-                            array(
-                                "image_archetype" => $card['image_card']
-                            )
-                        );
+            $formats = array();
+            foreach (ModelFormat::MAPPING_TYPE_FORMAT as $idTypeFormat => $typeFormat) {
+                $archetypes = ModelArchetype::getArchetypesRules($idTypeFormat);
+                $archetype_cards = array();
+                // update archetypes images
+                foreach ($archetypes as $archetype_name => $archetype) {
+                    if (isset($archetype['image']) && $card = $this->modelCard->one(Query::condition()->andWhere("name_card", Query::LIKE, $archetype['image'] . "%"), "image_card")) {
+                        // get archetype by name
+                        $arch = $this->modelArchetypes->one(Query::condition()->andWhere("name_archetype", Query::EQUAL, $archetype_name));
+                        if ($arch) {
+                            $this->modelArchetypes->updateById(
+                                $arch['id_archetype'],
+                                array(
+                                    "image_archetype" => $card['image_card']
+                                )
+                            );
+                        } else {
+                            $this->modelArchetypes->insert(
+                                array(
+                                    "name_archetype" => $archetype_name,
+                                    "image_archetype" => $card['image_card']
+                                )
+                            );
+                        }
+                        $archetypes[$archetype_name]['image_card'] = $card['image_card'];
                     } else {
-                        $this->modelArchetypes->insert(
-                            array(
-                                "name_archetype" => $archetype_name,
-                                "image_archetype" => $card['image_card']
-                            )
-                        );
+                        trace_r("ERROR : image not found for archetype $archetype_name");
                     }
-                    $archetypes[$archetype_name]['image_card'] = $card['image_card'];
-                } else {
-                    trace_r("ERROR : image not found for archetype $archetype_name");
-                }
 
-                $archetype_cards = array_merge($archetype_cards, $archetype['contains']);
-                if (isset($archetype['exclude'])) {
-                    $archetype_cards = array_merge($archetype_cards, $archetype['exclude']);
-                }
-            }
-
-            // check card names
-            $archetype_cards = array_unique($archetype_cards);
-            $subquery = '(SELECT "' . implode('" AS name_card UNION ALL SELECT "', $archetype_cards) . '") c1';
-            $not_found = Query::execute("SELECT name_card FROM (SELECT c1.name_card, coalesce(cards.id_card, 'NOT FOUND') AS found FROM " . $subquery . " LEFT JOIN cards ON cards.name_card = c1.name_card) tmp WHERE found = 'NOT FOUND'");
-            if ($not_found) {
-                foreach ($not_found as $key => $card) {
-                    if ($this->modelCard->count(Query::condition()->andWhere('name_card', Query::LIKE, $card['name_card'] . '%'))) {
-                        unset($not_found[$key]);
+                    $archetype_cards = array_merge($archetype_cards, $archetype['contains']);
+                    if (isset($archetype['exclude'])) {
+                        $archetype_cards = array_merge($archetype_cards, $archetype['exclude']);
                     }
                 }
-            }
-            if ($not_found) {
-                $message = "Cards not found : <ul>";
-                foreach ($not_found as $card) {
-                    $message .= "<li>" . $card['name_card'] . "</li>";
+
+                // check card names
+                $archetype_cards = array_unique($archetype_cards);
+                $subquery = '(SELECT "' . implode('" AS name_card UNION ALL SELECT "', $archetype_cards) . '") c1';
+                $not_found = Query::execute("SELECT name_card FROM (SELECT c1.name_card, coalesce(cards.id_card, 'NOT FOUND') AS found FROM " . $subquery . " LEFT JOIN cards ON cards.name_card = c1.name_card) tmp WHERE found = 'NOT FOUND'");
+                if ($not_found) {
+                    foreach ($not_found as $key => $card) {
+                        if ($this->modelCard->count(Query::condition()->andWhere('name_card', Query::LIKE, $card['name_card'] . '%'))) {
+                            unset($not_found[$key]);
+                        }
+                    }
                 }
-                $message .= "</ul>";
-                $this->addMessage($message);
+                if ($not_found) {
+                    $message = "Cards not found : <ul>";
+                    foreach ($not_found as $card) {
+                        $message .= "<li>" . $card['name_card'] . "</li>";
+                    }
+                    $message .= "</ul>";
+                    $this->addMessage($message);
+                }
+                $formats[$idTypeFormat] = array(
+                    "name_format" => ucfirst($typeFormat),
+                    "archetypes"  => $archetypes
+                );
             }
 
-            $this->addContent("archetypes", $archetypes);
-
-            /*
-             * // lists do not display archetye name anymore
-            $this->addContent("list_formats", $this->modelFormat->all());
-            $format = $this->modelFormat->getTupleById($_GET['id_format']);
-            if ($format) {
-                $this->setTitle("Dashboard - " . $format['name_format']);
-                $this->addContent("format", $format);
-                $archetypes = $this->modelArchetypes->getArchetypesGroupsByFormat($format['id_format']);
-                $this->addContent("archetypes", $archetypes);
-            }
-*/
+            $this->addContent("formats", $formats);
         }
     }
 }

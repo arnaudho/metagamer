@@ -42,7 +42,6 @@ namespace app\main\controllers\front {
             $cards = $this->modelCard->getDecklistCards($player['id_player']);
             // TODO reorder sideboard cards by CMC / #copies ?
             // filter lands by set ? to group bilands & basics
-            trace_r($cards);
 
             // display sideboard cards
             $count_side = 0;
