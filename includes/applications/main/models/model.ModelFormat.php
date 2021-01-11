@@ -33,5 +33,17 @@ namespace app\main\models {
             $cond->order("id_format", "DESC");
             return $this->all($cond, $pFields);
         }
+
+        // TODO order by most recent tournament ?
+        public function searchFormatByName ($pName, $pCount = false, $pLimit = 10) {
+            $q = Query::select(($pCount ? "COUNT(1) AS count" : "*"), $this->table)
+                ->andWhere("formats.name_format", Query::LIKE, "'%" . $pName . "%'", false)
+                ->order("formats.id_format", "DESC");
+            if (!$pCount) {
+                $q->limit(0, $pLimit);
+            }
+            $data = $q->execute($this->handler);
+            return $pCount ? $data[0]['count'] : $data;
+        }
     }
 }

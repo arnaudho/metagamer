@@ -3,7 +3,6 @@ namespace app\main\models {
 
     use core\application\BaseModel;
     use core\db\Query;
-    use core\db\QuerySelect;
 
     class ModelPlayer extends BaseModel {
 
@@ -58,6 +57,23 @@ namespace app\main\models {
                 ->limit(0, 1)
                 ->execute($this->handler);
             return $data[0];
+        }
+
+        public function searchPlayerByDecklistName ($pName, $pCount = false, $pLimit = 10) {
+            $q = Query::select("name_archetype, name_format, image_archetype, COUNT(1) AS count", $this->table)
+                ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->join("formats", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
+                ->andWhere("archetypes.name_archetype", Query::LIKE, "'%" . $pName . "%'", false)
+                ->groupBy("archetypes.id_archetype, formats.id_format")
+                ->order("COUNT(1)", "DESC");
+            if ($pCount) {
+                $q = Query::select("COUNT(1) AS count", "(" . $q->get(false) . ") tmp");
+            } else {
+                $q->limit(0, $pLimit);
+            }
+            $data = $q->execute($this->handler);
+            return $pCount ? $data[0]['count'] : $data;
         }
 
         public function searchPlayerByArenaId ($pArenaId) {

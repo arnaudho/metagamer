@@ -68,6 +68,17 @@ namespace app\main\models {
                 ->execute($this->handler);
         }
 
+        public function searchTournamentsByName ($pName, $pCount = false, $pLimit = 10) {
+            $q = Query::select(($pCount ? "COUNT(1) AS count" : "*"), $this->table)
+                ->andWhere("tournaments.name_tournament", Query::LIKE, "'%" . $pName . "%'", false)
+                ->order("tournaments.date_tournament", "DESC");
+            if (!$pCount) {
+                $q->limit(0, $pLimit);
+            }
+            $data = $q->execute($this->handler);
+            return $pCount ? $data[0]['count'] : $data;
+        }
+
         /**
          * Delete tournament data, players & matches
          * @param $pIdTournament

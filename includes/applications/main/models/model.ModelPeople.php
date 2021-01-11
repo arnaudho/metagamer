@@ -19,5 +19,17 @@ namespace app\main\models {
                 ->execute($this->handler);
             return $people[0] ? $people[0] : null;
         }
+
+        // TODO order by most matches played ?
+        public function searchPeopleByName ($pName, $pCount = false, $pLimit = 10) {
+            $q = Query::select(($pCount ? "COUNT(1) AS count" : "*"), $this->table)
+                ->andWhere("people.arena_id", Query::LIKE, "'%" . $pName . "%'", false)
+                ->order("arena_id");
+            if (!$pCount) {
+                $q->limit(0, $pLimit);
+            }
+            $data = $q->execute($this->handler);
+            return $pCount ? $data[0]['count'] : $data;
+        }
     }
 }

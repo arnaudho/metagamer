@@ -80,6 +80,16 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 .container form.loading { pointer-events: none; opacity: 0.6;}
 .container .confidence-interval { font-size: 0.8em; font-style: italic;}
 
+/* SEARCH FORM */
+.container #search-form { margin-top: 40px; margin-bottom: 20px;}
+.container #search-form .form-group { position: relative; width: 100%;}
+.container #search-form input[type='text'] { padding: 30px 20px; font-size: 30px; font-weight: bold; color: #666666;
+    padding-right: 60px; width: 100%;}
+.container #search-form button[type='submit'] { position: absolute; right: 6px; top: 5px; font-size: 32px;
+    background-color: transparent; color: #ff8d00; border: 0 solid transparent;}
+.container #search-form button[type='submit']:focus {border: 0 solid transparent;}
+.container #search-form button[type='submit']:active {box-shadow: none;}
+
 /* METAGAME */
 .table-metagame-container .background-placeholder { background: 0 0 /100% url("imgs/marble-white.png");
     background-repeat: no-repeat; position: absolute; top: 0; bottom: 0; left: 0; right: 0; opacity: 0.4; z-index: -1;}

@@ -158,6 +158,17 @@ namespace app\main\models {
             return $q;
         }
 
+        public function searchCardsByName ($pName, $pCount = false, $pLimit = 10) {
+            $q = Query::select(($pCount ? "COUNT(1) AS count" : "*"), $this->table)
+                ->andWhere("cards.name_card", Query::LIKE, "'%" . $pName . "%'", false)
+                ->order("cards.name_card");
+            if (!$pCount) {
+                $q->limit(0, $pLimit);
+            }
+            $data = $q->execute($this->handler);
+            return $pCount ? $data[0]['count'] : $data;
+        }
+
         public function insertCards ($pCards) {
             if (empty($pCards)) {
                 return false;
