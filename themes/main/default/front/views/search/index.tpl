@@ -36,7 +36,7 @@
                                 <span class="small">{$item.elements[$i]['mana_cost_card']}</span>
                             {/if}
                             {if $item.label == "Players"}
-                                {$item.elements[$i]['arena_id']}
+                                <a href="player/?search={$item.elements[$i]['arena_id']}">{$item.elements[$i]['arena_id']}</a>
                             {/if}
                         {/if}
                     </td>
@@ -54,6 +54,5 @@
         </tr>
     </table>
 {/if}
-{*<a href="player/"><span class="glyphicon glyphicon-user"></span> Player search</a>*}
 
 {if !$request_async}{include file="includes/footer.tpl"}{/if}
