@@ -6,6 +6,9 @@ namespace app\main\models {
 
     class ModelTournament extends BaseModel {
 
+        CONST LEAGUE_TOURNAMENT_IDS = array(15128, 12133, 15143);
+        CONST PT_TOURNAMENT_IDS = array(4090);
+
         public function __construct()
         {
             parent::__construct("tournaments", "id_tournament");
@@ -21,6 +24,16 @@ namespace app\main\models {
             if(!isset($res[0]))
                 return null;
             return $res[0];
+        }
+
+        public function getProTournamentLabels () {
+            $labels = $this->all(
+                Query::condition()
+                    ->orWhere("id_tournament", Query::IN, "(" . implode(", ", self::LEAGUE_TOURNAMENT_IDS) . ")", false)
+                    ->orWhere("id_tournament", Query::IN, "(" . implode(", ", self::PT_TOURNAMENT_IDS) . ")", false)
+                    ->order("date_tournament")
+            );
+            return $labels;
         }
 
         public function countPlayers ($pCondition = null) {

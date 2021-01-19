@@ -17,7 +17,13 @@
                         <th>Name</th>
                         <th>Total points</th>
                         <th>Matches played</th>
+                        <th>Winrate</th>
                         <th>Points behind</th>
+                        {if $content.tournament_labels}
+                            {foreach from=$content.tournament_labels item="tournament"}
+                                <th>{$tournament.name_tournament}</th>
+                            {/foreach}
+                        {/if}
                     </tr>
                 </thead>
                 <tbody>
@@ -25,9 +31,15 @@
                         <tr>
                             <td>{$player.rank_player}</td>
                             <td>{$player.name_player}</td>
-                            <td>{$player.wins_matches}</td>
+                            <td>{$player.points_player}</td>
                             <td>{$player.total_matches}</td>
+                            <td>{$player.winrate} %</td>
                             <td>{$player.points_behind}</td>
+                            {if $content.tournament_labels}
+                                {foreach from=$content.tournament_labels item="tournament"}
+                                    <td>{$player.detail[$tournament.id_tournament]}</td>
+                                {/foreach}
+                            {/if}
                         </tr>
                     {/foreach}
                 </tbody>
@@ -43,7 +55,13 @@
                     <th>Name</th>
                     <th>Total points</th>
                     <th>Matches played</th>
+                    <th>Winrate</th>
                     <th>Points behind</th>
+                    {if $content.tournament_labels}
+                        {foreach from=$content.tournament_labels item="tournament"}
+                            <th>{$tournament.name_tournament}</th>
+                        {/foreach}
+                    {/if}
                 </tr>
                 </thead>
                 <tbody>
@@ -51,9 +69,15 @@
                     <tr>
                         <td>{$player.rank_player}</td>
                         <td>{$player.name_player}</td>
-                        <td>{$player.wins_matches}</td>
+                        <td>{$player.points_player}</td>
                         <td>{$player.total_matches}</td>
+                        <td>{$player.winrate} %</td>
                         <td>{$player.points_behind}</td>
+                        {if $content.tournament_labels}
+                            {foreach from=$content.tournament_labels item="tournament"}
+                                <td>{$player.detail[$tournament.id_tournament]}</td>
+                            {/foreach}
+                        {/if}
                     </tr>
                 {/foreach}
                 </tbody>

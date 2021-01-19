@@ -220,6 +220,8 @@ namespace app\main\controllers\front {
         }
 
         public function leaderboard () {
+            $labels = $this->modelTournament->getProTournamentLabels();
+            $this->addContent("tournament_labels", $labels);
             $mpl = $this->modelPlayer->getLeaderboard(ModelPlayer::TAG_MPL);
             $rivals = $this->modelPlayer->getLeaderboard(ModelPlayer::TAG_RIVALS);
             foreach ($mpl as &$player) {

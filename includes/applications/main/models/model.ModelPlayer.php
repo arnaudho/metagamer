@@ -130,21 +130,75 @@ namespace app\main\models {
                 ->execute($this->handler);
         }
 
+        public function getProLeaguePointsByEvent ($pTag = ModelPlayer::TAG_MPL, $pIdTournament = null) {
+            $players = array();
+            $player_points = array();
+            if (is_null($pIdTournament) || in_array($pIdTournament, ModelTournament::LEAGUE_TOURNAMENT_IDS)) {
+                $league_weekend_ids = implode(", ", ModelTournament::LEAGUE_TOURNAMENT_IDS);
+                if (in_array($pIdTournament, ModelTournament::LEAGUE_TOURNAMENT_IDS)) {
+                    $league_weekend_ids = $pIdTournament;
+                }
+                $fields = "people.id_people, players.id_player, tag_player, arena_id AS name_player,
+                    SUM(result_match) AS points_player, COUNT(result_match) AS total_matches";
+                if (is_null($pIdTournament)) {
+                    $fields .= ", ROUND(SUM(result_match)/COUNT(result_match)*100, 2) AS winrate";
+                }
+                $result = Query::select($fields, $this->table)
+                    ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
+                    ->join("matches", Query::JOIN_INNER, "matches.id_player = players.id_player")
+                    ->join("player_tag", Query::JOIN_INNER, "player_tag.id_people = people.id_people AND tag_player = '" . $pTag . "'")
+                    ->andWhere("id_tournament", Query::IN, "($league_weekend_ids)", false)
+                    ->groupBy("people.id_people")
+                    ->order("points_player DESC, total_matches, arena_id")
+                    ->execute($this->handler);
+                foreach ($result as $player) {
+                    $players[$player['id_people']] = $player;
+                }
+            }
+
+            if (is_null($pIdTournament) || in_array($pIdTournament, ModelTournament::PT_TOURNAMENT_IDS)) {
+                $tournament_ids = implode(", ", ModelTournament::PT_TOURNAMENT_IDS);
+                if (in_array($pIdTournament, ModelTournament::PT_TOURNAMENT_IDS)) {
+                    $tournament_ids = $pIdTournament;
+                }
+                $result = Query::select("people.id_people, tag_player, arena_id AS name_player, SUM(points_player) AS points_player", "player_points")
+                    ->join("people", Query::JOIN_INNER, "people.id_people = player_points.id_people")
+                    ->join("player_tag", Query::JOIN_INNER, "player_tag.id_people = people.id_people AND tag_player = '" . $pTag . "'")
+                    ->andWhere("id_tournament", Query::IN, "($tournament_ids)", false)
+                    ->groupBy("people.id_people")
+                    ->execute($this->handler);
+                foreach ($result as $player) {
+                    $player_points[$player['id_people']] = $player;
+                }
+            }
+
+            if (empty($players)) {
+                $players = $player_points;
+            } elseif (!empty($player_points)) {
+                // SUM player_points with league weekend results
+                foreach ($player_points as $player_point) {
+                    if (array_key_exists($player_point['id_people'], $players)) {
+                        $players[$player_point['id_people']]['points_player'] += $player_point['points'];
+                    } else {
+                        trace_r("ERROR : player " . $player_point['id_people'] . " not found");
+                        trace_r($players);
+                    }
+                }
+                // sort again by points_player
+                uasort($players, array($this, "sortPlayerByPoints"));
+            }
+
+            return $players;
+        }
+
         public function getLeaderboard ($pTag = ModelPlayer::TAG_MPL, $pDetailed = true) {
-            $players = Query::select("people.id_people, players.id_player, tag_player, arena_id AS name_player, SUM(result_match) AS wins_matches, COUNT(result_match) AS total_matches", $this->table)
-                ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
-                ->join("matches", Query::JOIN_INNER, "matches.id_player = players.id_player")
-                ->join("player_tag", Query::JOIN_INNER, "player_tag.id_people = people.id_people AND tag_player = '" . $pTag . "'")
-                ->andWhere("id_tournament", Query::IN, "(15128, 15133)", false)
-                ->groupBy("people.id_people")
-                ->order("wins_matches DESC, total_matches, arena_id")
-                ->execute($this->handler);
+            $players = $this->getProLeaguePointsByEvent($pTag);
 
             $position = 0;
             $tie_position = 0;
             $record = 0;
             foreach ($players as $key => $player) {
-                $player_record = $player['wins_matches'];
+                $player_record = $player['points_player'];
                 $position++;
                 if ($record != $player_record) {
                     $tie_position = $position;
@@ -153,21 +207,41 @@ namespace app\main\models {
                 $players[$key]['rank_player'] = $tie_position;
             }
             if ($pDetailed) {
+                // get wins by player by tournament
+                foreach (ModelTournament::LEAGUE_TOURNAMENT_IDS as $id_tournament) {
+                    $detail = $this->getProLeaguePointsByEvent($pTag, $id_tournament);
+                    foreach ($detail as $pl) {
+                        $players[$pl['id_people']]['detail'][$id_tournament] = $pl['points_player'] . "-" . ($pl['total_matches'] - $pl['points_player']);
+                    }
+                }
+                foreach (ModelTournament::PT_TOURNAMENT_IDS as $id_tournament) {
+                    $detail = $this->getProLeaguePointsByEvent($pTag, $id_tournament);
+                    foreach ($detail as $pl) {
+                        $players[$pl['id_people']]['detail'][$id_tournament] = $pl['points_player'];
+                    }
+                }
+
                 // players points behind
                 $levels = $pTag == ModelPlayer::TAG_RIVALS ?
-                    array(1, 4, 20, 32, 36) :
-                    array(1, 4, 12, 16);
+                    array(4, 36) :
+                    array(4, 16);
                 $levels_points = array();
+                $player_keys = array_keys($players);
                 foreach ($levels as $level) {
-                    $levels_points[] = $players[($level-1)]['wins_matches'];
+                    $levels_points[] = $players[$player_keys[($level-1)]]['points_player'];
                 }
+
                 $levels_points[] = 0;
                 foreach ($players as $key => $player) {
                     // find next level
-                    $last_level = 0;
+                    $last_level = null;
                     foreach ($levels_points as $level_point) {
-                        if ($player['wins_matches'] > $level_point) {
-                            $players[$key]['points_behind'] = $last_level - $player['wins_matches'];
+                        if ($player['points_player'] > $level_point) {
+                            if ($last_level) {
+                                $players[$key]['points_behind'] = $last_level - $player['points_player'];
+                            } else {
+                                $players[$key]['points_behind'] = "-";
+                            }
                             break;
                         }
                         $last_level = $level_point;
@@ -178,6 +252,14 @@ namespace app\main\models {
             return $players;
         }
 
+        // TODO set tiebreakers
+        protected function sortPlayerByPoints ($pA, $pB) {
+            return $pA['points_player'] == $pB['points_player'] ?
+                ($pA['total_matches'] > $pB['total_matches'] ? 1 : -1) :
+                ($pA['points_player'] < $pB['points_player'] ? 1 : -1);
+        }
+
+        // TODO beware of &#039;
         public function getPlayerIdByTournamentIdArenaId ($pTournamentId, $pArenaId) {
             $id_player = Query::select("id_player", $this->table)
                 ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " .
