@@ -39,7 +39,7 @@
         "contains":
         [
             "Uro, Titan of Nature's Wrath",
-            "Yasharn, Implacable Earth",
+            "Plains",
             "Swamp"
         ],
         "exclude":
@@ -162,7 +162,7 @@
     },
     "Mono-red Aggro":
     {
-        "image": "Bomat Courier",
+        "image": "Rampaging Ferocidon",
         "contains":
         [
             "Mountain"
@@ -448,7 +448,7 @@
         "contains":
         [
             "Knight of the Ebon Legion",
-            "Thoughtseize"
+            "Uro, Titan"
         ],
         "exclude":
         [
@@ -500,6 +500,20 @@
         [
             "Curious Obsession",
             "Island"
+        ]
+    },
+    "Selesnya Company":
+    {
+        "image": "Collected Company",
+        "contains":
+        [
+            "Collected Company",
+            "Plains"
+        ],
+        "exclude":
+        [
+            "Swamp",
+            "Mountain"
         ]
     },
     "Bant Company":

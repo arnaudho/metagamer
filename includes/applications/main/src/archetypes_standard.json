@@ -212,6 +212,22 @@
             "Zenith Flare"
         ]
     },
+    "Boros Transmogrify":
+    {
+        "image": "Transmogrify",
+        "contains":
+        [
+            "Mountain",
+            "Plains",
+            "Transmogrify"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Swamp",
+            "Forest"
+        ]
+    },
     "Boros Aggro":
     {
         "image": "Seasoned Hallowblade",
@@ -278,10 +294,9 @@
     },
     "Mono-green Aggro":
     {
-        "image": "Scavenging Ooze",
+        "image": "Kazandu Mammoth",
         "contains":
         [
-            "Scavenging Ooze",
             "Kazandu Mammoth"
         ],
         "exclude":
@@ -361,6 +376,21 @@
         "exclude":
         [
             "Forest",
+            "Mountain",
+            "Plains"
+        ]
+    },
+    "Sultai Midrange":
+    {
+        "image": "Titan's Nest",
+        "contains":
+        [
+            "Island",
+            "Forest",
+            "Swamp"
+        ],
+        "exclude":
+        [
             "Mountain",
             "Plains"
         ]
