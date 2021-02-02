@@ -3,6 +3,7 @@ namespace app\main\controllers\front {
 
     use app\main\models\ModelArchetype;
     use app\main\models\ModelCard;
+    use app\main\models\ModelFormat;
     use app\main\models\ModelMatch;
     use app\main\models\ModelPlayer;
     use core\application\DefaultFrontController;
@@ -33,6 +34,7 @@ namespace app\main\controllers\front {
             }
         }
 
+        // TODO filter lands by set ? to group bilands & basics
         public function display () {
             $player = $this->modelPlayer->getDataByPlayerId($_GET["id_player"]);
             if (!$player) {
@@ -43,17 +45,35 @@ namespace app\main\controllers\front {
                 Query::condition()->andWhere("count_main", Query::UPPER, 0),
                 " CASE WHEN cmc_card = '' THEN 99 ELSE cmc_card END,
                         CASE WHEN type_card LIKE '%Creature%' THEN 1 WHEN type_card IN ('Instant', 'Sorcery') THEN 2
-                        WHEN type_card = 'Legendary Planeswalker' THEN 3 WHEN type_card = 'Basic Land' THEN 10 WHEN type_card LIKE '%Land%' THEN 9 ELSE 8 END ASC,
+                        WHEN type_card = 'Legendary Planeswalker' THEN 3 WHEN type_card = 'Basic Land' THEN 10
+                        WHEN type_card LIKE '%Land%' THEN 9 ELSE 8 END ASC,
                         type_card");
-            $cards_side = $this->modelCard->getDecklistCards($player['id_player'],
-                        Query::condition()->andWhere("count_side", Query::UPPER, 0),
-                        "cmc_card ASC,
+            $sideboard_condition = Query::condition()->andWhere("count_side", Query::UPPER, 0);
+            $sideboard_order = "cmc_card ASC,
                         CASE WHEN type_card LIKE '%Creature%' THEN 1 WHEN type_card IN ('Instant', 'Sorcery') THEN 2
-                        WHEN type_card = 'Legendary Planeswalker' THEN 3 WHEN type_card = 'Basic Land' THEN 10 WHEN type_card LIKE '%Land%' THEN 9 ELSE 8 END ASC,
-                        type_card");
+                        WHEN type_card = 'Legendary Planeswalker' THEN 3 WHEN type_card = 'Basic Land' THEN 10
+                        WHEN type_card LIKE '%Land%' THEN 9 ELSE 8 END ASC,
+                        type_card";
+            // limit SB cards for limited decklists
+            if ($player['id_type_format'] == ModelFormat::TYPE_FORMAT_LIMITED_ID) {
+                $colors = $this->modelCard->getDecklistColors($player['id_player']);
+                $player_colors = array();
+                foreach ($colors as $color) {
+                    $player_colors[] = $color['color_card'];
+                }
+                $sideboard_order = " CASE WHEN color_card IN ('" . implode("', '", $player_colors) . "') THEN 1
+                        WHEN color_card = '' THEN 3 ELSE 2 END ASC, color_card, " . $sideboard_order;
+            }
 
-            // limited decklists : display only sideboard cards with same color as MD + artifacts ?
-            // TODO filter lands by set ? to group bilands & basics
+            $cards_side = $this->modelCard->getDecklistCards($player['id_player'],
+                        $sideboard_condition,
+                        $sideboard_order);
+            if ($player['id_type_format'] == ModelFormat::TYPE_FORMAT_LIMITED_ID) {
+                if (count($cards_side) > 12) {
+                    $this->addContent("sideboard_more", 1);
+                }
+                $cards_side = array_slice($cards_side, 0, 12);
+            }
 
             $decklist_by_curve = array();
             // order MD by curve

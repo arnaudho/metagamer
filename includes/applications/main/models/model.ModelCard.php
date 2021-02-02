@@ -95,6 +95,15 @@ namespace app\main\models {
             return $q->execute($this->handler);
         }
 
+        public function getDecklistColors ($pIdPlayer) {
+            $q = Query::select("color_card, SUM(count_main)", $this->table)
+                ->join("player_card", Query::JOIN_INNER, "cards.id_card = player_card.id_card AND id_player = $pIdPlayer AND color_card != ''")
+                ->groupBy("color_card")
+                ->order("SUM(count_main)", "DESC")
+                ->limit(0, 2);
+            return $q->execute($this->handler);
+        }
+
         /**
          * @param $pIdArchetype
          * @param null $pFormatCondition
