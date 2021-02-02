@@ -72,16 +72,26 @@ namespace app\main\models {
         /**
          * get ordered decklist for visual display
          * @param $pIdPlayer
+         * @param null $pCondition
+         * @param null $pOrder
+         * @param string $pAsc
          * @return array|resource
          */
-        // order is only made for maindeck cards, if needed use a different query for sideboard cards
-        public function getDecklistCards ($pIdPlayer) {
-            $q = Query::select("cards.id_card, cards.name_card, cards.mana_cost_card, cards.type_card, cards.image_card, count_main, count_side", $this->tablePlayerCards)
+        public function getDecklistCards ($pIdPlayer, $pCondition = null, $pOrder = null, $pAsc = "") {
+            if (!$pCondition) {
+                $pCondition = Query::condition();
+            }
+            $q = Query::select("cards.id_card, cards.name_card, cards.mana_cost_card, cards.cmc_card, cards.type_card, cards.image_card, count_main, count_side", $this->tablePlayerCards)
                 ->join($this->table, Query::JOIN_INNER, "cards.id_card = player_card.id_card AND id_player = $pIdPlayer")
-                ->groupBy("cards.id_card")
-                ->order(" CASE  WHEN type_card LIKE '%Creature%' THEN 1 WHEN type_card IN ('Instant', 'Sorcery') THEN 2
+                ->andCondition($pCondition)
+                ->groupBy("cards.id_card");
+            if ($pOrder) {
+                $q->order($pOrder, $pAsc);
+            } else {
+                $q->order(" CASE  WHEN type_card LIKE '%Creature%' THEN 1 WHEN type_card IN ('Instant', 'Sorcery') THEN 2
                         WHEN type_card = 'Legendary Planeswalker' THEN 3 WHEN type_card = 'Basic Land' THEN 10 WHEN type_card LIKE '%Land%' THEN 9 ELSE 8 END ASC,
                         cmc_card, count_main DESC, color_card", "");
+            }
             return $q->execute($this->handler);
         }
 

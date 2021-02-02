@@ -39,27 +39,35 @@ namespace app\main\controllers\front {
                 Go::to404();
             }
             $player['arena_id'] = ucwords($player['arena_id']);
-            $cards = $this->modelCard->getDecklistCards($player['id_player']);
-            // TODO reorder sideboard cards by CMC / #copies ?
-            // filter lands by set ? to group bilands & basics
+            $cards_main = $this->modelCard->getDecklistCards($player['id_player'],
+                Query::condition()->andWhere("count_main", Query::UPPER, 0),
+                " CASE WHEN cmc_card = '' THEN 99 ELSE cmc_card END,
+                        CASE WHEN type_card LIKE '%Creature%' THEN 1 WHEN type_card IN ('Instant', 'Sorcery') THEN 2
+                        WHEN type_card = 'Legendary Planeswalker' THEN 3 WHEN type_card = 'Basic Land' THEN 10 WHEN type_card LIKE '%Land%' THEN 9 ELSE 8 END ASC,
+                        type_card");
+            $cards_side = $this->modelCard->getDecklistCards($player['id_player'],
+                        Query::condition()->andWhere("count_side", Query::UPPER, 0),
+                        "cmc_card ASC,
+                        CASE WHEN type_card LIKE '%Creature%' THEN 1 WHEN type_card IN ('Instant', 'Sorcery') THEN 2
+                        WHEN type_card = 'Legendary Planeswalker' THEN 3 WHEN type_card = 'Basic Land' THEN 10 WHEN type_card LIKE '%Land%' THEN 9 ELSE 8 END ASC,
+                        type_card");
 
-            // display sideboard cards
-            $count_side = 0;
-            foreach ($cards as $key => $card) {
-                if ($card['count_side'] > 0) {
-                    $count_side++;
-                    $cards[$key]['side_margin'] = $count_side;
+            // limited decklists : display only sideboard cards with same color as MD + artifacts ?
+            // TODO filter lands by set ? to group bilands & basics
+
+            $decklist_by_curve = array();
+            // order MD by curve
+            foreach ($cards_main as $card) {
+                if ($card['cmc_card'] == "") {
+                    $card['cmc_card'] = 0;
                 }
-            }
-            foreach ($cards as $key => $card) {
-                if ($card['count_side'] > 0) {
-                    $cards[$key]['side_margin'] = ($cards[$key]['side_margin']-1)*(222-(450/$count_side));
-                }
+                $decklist_by_curve[$card['cmc_card']][] = $card;
             }
 
             $this->setTemplate("player", "decklist");
             $this->addContent("player", $player);
-            $this->addContent("cards", $cards);
+            $this->addContent("cards_main", $decklist_by_curve);
+            $this->addContent("cards_side", $cards_side);
         }
     }
 }
