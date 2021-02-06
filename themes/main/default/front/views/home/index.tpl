@@ -4,9 +4,14 @@
     <div class="formats-container">
         {foreach from=$content.formats key="id_format" item="format"}
             <div id="format-{$id_format}" class="format">
-                <a href="{$format.link_format}" class="link-dashboard" data-toggle="tooltip" title="Go to Dashboard">
-                    <span class="glyphicon glyphicon-dashboard"></span>
-                </a>
+                <div class="home-links">
+                    <a href="{$format.link_other}" data-toggle="tooltip" title="Browse 'Other' decklists">
+                        <span class="glyphicon glyphicon-list"></span>
+                    </a>
+                    <a href="{$format.link_dashboard}" data-toggle="tooltip" title="Go to Dashboard">
+                        <span class="glyphicon glyphicon-dashboard"></span>
+                    </a>
+                </div>
                 <h4>
                     <a data-toggle="collapse" href="#collapse-format-{$id_format}"
                        aria-expanded="false" aria-controls="collapse-format-{$id_format}">

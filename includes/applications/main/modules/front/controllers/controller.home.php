@@ -1,6 +1,7 @@
 <?php
 namespace app\main\controllers\front {
 
+    use app\main\models\ModelArchetype;
     use app\main\models\ModelFormat;
     use app\main\models\ModelPlayer;
     use app\main\models\ModelTournament;
@@ -29,7 +30,8 @@ namespace app\main\controllers\front {
                 if (!array_key_exists($tournament['id_format'], $formats)) {
                     $formats[$tournament['id_format']] = array(
                         "name_format" => $tournament['name_format'],
-                        "link_format" => RoutingHandler::rewrite("dashboard", "") . "?id_format=" . $tournament['id_format'],
+                        "link_dashboard" => RoutingHandler::rewrite("dashboard", "") . "?id_format=" . $tournament['id_format'],
+                        "link_other" => RoutingHandler::rewrite("archetype", "lists") . "?id_archetype=" . ModelArchetype::ARCHETYPE_OTHER_ID . "&id_format=" . $tournament['id_format'],
                         "tournaments" => array(),
                         "opened"          => $count_open-- > 0 ? 1 : 0
                     );
