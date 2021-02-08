@@ -17,6 +17,8 @@ namespace app\main\controllers\front {
 
     class dashboard extends DefaultFrontController
     {
+        CONST DEFAULT_ARCHETYPES_COUNT = 15;
+
         protected $modelPlayer;
         protected $modelMatches;
         protected $modelArchetypes;
@@ -94,10 +96,14 @@ namespace app\main\controllers\front {
                 $dates_time = array_map('strtotime', $dates);
                 $max_date = max($dates_time);
                 $min_date = min($dates_time);
-                if (date('M', $min_date) == date('M', $max_date)) {
-                    $date_format = date('j', $min_date) . "-" . date('j M Y', $max_date);
+                if (date('j', $min_date) == date('j', $max_date)) {
+                    $date_format = date('j M Y', $max_date);
                 } else {
-                    $date_format = date('j M', $min_date) . " - " . date('j M Y', $max_date);
+                    if (date('M', $min_date) == date('M', $max_date)) {
+                        $date_format = date('j', $min_date) . "-" . date('j M Y', $max_date);
+                    } else {
+                        $date_format = date('j M', $min_date) . " - " . date('j M Y', $max_date);
+                    }
                 }
                 $this->addContent("date_format", $date_format);
 
@@ -140,6 +146,17 @@ namespace app\main\controllers\front {
                 }
 
                 $count_other = 0;
+                // limit matrix size by default
+                if (!$_SESSION['archetypes']) {
+                    $count = 0;
+                    foreach ($metagame as $archetype) {
+                        $_SESSION['archetypes'][$archetype['id_archetype']] = $archetype['id_archetype'];
+                        if (++$count >= self::DEFAULT_ARCHETYPES_COUNT) {
+                            break;
+                        }
+                    }
+                    $_SESSION['archetypes'][ModelArchetype::ARCHETYPE_OTHER_ID] = ModelArchetype::ARCHETYPE_OTHER_ID;
+                }
                 if (isset($_SESSION['archetypes']) && !empty($_SESSION['archetypes'])) {
                     // filter archetypes
                     foreach ($metagame as $archetype) {
