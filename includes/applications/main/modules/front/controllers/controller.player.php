@@ -12,6 +12,8 @@ namespace app\main\controllers\front {
 
     class player extends DefaultFrontController
     {
+        CONST DECKLIST_MAX_COLUMNS = 8;
+
         protected $modelPlayer;
         protected $modelCard;
         protected $modelMatches;
@@ -43,7 +45,7 @@ namespace app\main\controllers\front {
             $player['arena_id'] = ucwords($player['arena_id']);
             $cards_main = $this->modelCard->getDecklistCards($player['id_player'],
                 Query::condition()->andWhere("count_main", Query::UPPER, 0),
-                " CASE WHEN cmc_card = '' THEN 99 ELSE cmc_card END,
+                " CASE WHEN mana_cost_card = '' THEN 99 ELSE cmc_card END,
                         CASE WHEN type_card LIKE '%Creature%' THEN 1 WHEN type_card IN ('Instant', 'Sorcery') THEN 2
                         WHEN type_card = 'Legendary Planeswalker' THEN 3 WHEN type_card = 'Basic Land' THEN 10
                         WHEN type_card LIKE '%Land%' THEN 9 ELSE 8 END ASC,
@@ -76,13 +78,25 @@ namespace app\main\controllers\front {
             }
 
             $decklist_by_curve = array();
+            $lands = array();
             // order MD by curve
             foreach ($cards_main as $card) {
-                if ($card['cmc_card'] == "") {
-                    $card['cmc_card'] = 0;
+                if ($card['mana_cost_card'] == "") {
+                    $card['cmc_card'] = 99;
+                    $lands[] = $card;
+                } else {
+                    $decklist_by_curve[$card['cmc_card']][] = $card;
                 }
-                $decklist_by_curve[$card['cmc_card']][] = $card;
             }
+            // if more than 7 columns before lands, group columns 7+
+            if (count($decklist_by_curve) >= self::DECKLIST_MAX_COLUMNS) {
+                $keep = array_slice($decklist_by_curve, 0, self::DECKLIST_MAX_COLUMNS-2);
+                $merge = array_slice($decklist_by_curve, self::DECKLIST_MAX_COLUMNS-2);
+                $merged = call_user_func_array('array_merge', $merge);
+                array_push($keep, $merged);
+                $decklist_by_curve = $keep;
+            }
+            $decklist_by_curve[99] = $lands;
 
             $this->setTemplate("player", "decklist");
             $this->addContent("player", $player);
