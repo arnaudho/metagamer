@@ -20,10 +20,11 @@
     {/foreach}
 </head>
 <body>
-<div class="container">
-<h1>Page introuvable !</h1>
+<div class="container container-not-found">
+    <div class="background-placeholder"></div>
+    <h1>Content not found !</h1>
     <p>
-        La page demandée n'existe pas, <a href="/">Cliquez ici</a> pour revenir &agrave; l'accueil.
+        You can find your way back to the <a href="/">homepage</a>, or try a quick <a href="/search/">search</a>.
     </p>
 </div>
 </body>
