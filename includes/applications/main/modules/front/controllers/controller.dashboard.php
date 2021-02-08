@@ -201,6 +201,12 @@ namespace app\main\controllers\front {
                         }
                     }
                     $archetypes[$key]['winrates'] = $winrate;
+
+                     // fix name display
+                    $words = str_word_count($archetype['name_archetype'], 1);
+                    if (count($words) == 2) {
+                        $archetypes[$key]['name_archetype'] = $words[0] . ' <br />' . $words[1];
+                    }
                 }
                 $this->addContent("archetypes", $archetypes);
                 $this->addContent("confidence", "0.95");
