@@ -27,13 +27,17 @@ namespace app\main\models {
             return $res[0];
         }
 
-        public function allByFormat ($pIdFormat, $pCond = null) {
+        public function allByFormat ($pIdFormat, $pCond = null, $pFields = "") {
             if (!$pCond) {
                 $cond = Query::condition();
             } else {
                 $cond = clone $pCond;
             }
-            $players = Query::select("players.id_player, SUM(result_match) AS wins, COUNT(result_match) AS total", $this->table)
+            $fields = "players.id_player, SUM(result_match) AS wins, COUNT(result_match) AS total";
+            if ($pFields) {
+                $fields = $pFields . ", $fields";
+            }
+            $players = Query::select($fields, $this->table)
                 ->join("tournaments", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament AND id_format = $pIdFormat")
                 ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
                 ->andCondition($cond)
@@ -46,7 +50,7 @@ namespace app\main\models {
         public function getDataByPlayerId ($pIdPlayer) {
             $data = Query::select(
                 "players.id_player, tournaments.id_tournament, name_tournament, name_format, name_archetype, decklist_player,
-                    arena_id, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins,
+                    formats.id_type_format, arena_id, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins,
                     COUNT(result_match) AS matches", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people AND players.id_player = $pIdPlayer")
                 ->join("archetypes", Query::JOIN_OUTER_LEFT, "archetypes.id_archetype = players.id_archetype")
@@ -78,7 +82,7 @@ namespace app\main\models {
 
         public function searchPlayerByArenaId ($pArenaId) {
             $data = Query::select(
-                    "players.id_player, tournaments.id_tournament, name_tournament, name_format, name_archetype,
+                "players.id_player, tournaments.id_tournament, name_tournament, name_format, name_archetype,
                     arena_id, discord_id, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins,
                     COUNT(result_match) AS matches", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people AND arena_id LIKE '%" . $pArenaId . "%'")
@@ -91,6 +95,26 @@ namespace app\main\models {
                 ->limit(0, 300)
                 ->execute($this->handler);
             return $data;
+        }
+
+        public function searchPlayerByCardId ($pIdCard, $pCondition = null) {
+            if(!$pCondition)
+                $pCondition = Query::condition();
+            $q = Query::select("players.id_player, tournaments.id_tournament, name_tournament, name_format,
+                    DATE_FORMAT(date_tournament, '%d %b %Y') AS date_tournament, name_archetype, arena_id,
+                    count_main, count_side, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins,
+                    COUNT(result_match) AS matches", $this->table)
+                ->join("player_card", Query::JOIN_INNER, "player_card.id_player = players.id_player AND id_card = $pIdCard")
+                ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
+                ->join("archetypes", Query::JOIN_OUTER_LEFT, "archetypes.id_archetype = players.id_archetype")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->join("formats", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
+                ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
+                ->andCondition($pCondition)
+                ->groupBy("players.id_player")
+                ->order("tournaments.date_tournament", "DESC")
+                ->limit(0, 20);
+            return $q->execute($this->handler);
         }
 
         public function countArchetypes ($pCondition = null) {
@@ -178,7 +202,7 @@ namespace app\main\models {
                 // SUM player_points with league weekend results
                 foreach ($player_points as $player_point) {
                     if (array_key_exists($player_point['id_people'], $players)) {
-                        $players[$player_point['id_people']]['points_player'] += $player_point['points'];
+                        $players[$player_point['id_people']]['points_player'] += $player_point['points_player'];
                     } else {
                         trace_r("ERROR : player " . $player_point['id_people'] . " not found");
                         trace_r($players);

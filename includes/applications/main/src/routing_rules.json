@@ -21,6 +21,18 @@
 				"action":"display"
 			}
 		},
+		"card/{$id_card}/":
+		{
+			"parameters":
+            {
+				"id_card": "[0-9]+"
+			},
+			"GET":
+            {
+				"controller": "search",
+				"action": "card"
+			}
+		},
 		"{$controller}/":
 		{
 			"parameters":

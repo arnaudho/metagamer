@@ -6,7 +6,7 @@ namespace app\main\models {
 
     class ModelTournament extends BaseModel {
 
-        CONST LEAGUE_TOURNAMENT_IDS = array(15128, 12133, 15143);
+        CONST LEAGUE_TOURNAMENT_IDS = array(15128, 15133, 15143);
         CONST PT_TOURNAMENT_IDS = array(4090);
 
         public function __construct()

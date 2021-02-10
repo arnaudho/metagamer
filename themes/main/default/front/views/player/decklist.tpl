@@ -40,9 +40,6 @@
                         </div>
                     {/if}
                 {/foreach}
-                {if $content.sideboard_more}
-                    <div class="decklist-more">...</div>
-                {/if}
             </div>
         </div>
     </div>

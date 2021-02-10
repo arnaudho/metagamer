@@ -16,7 +16,7 @@
                         <th></th>
                         <th>Name</th>
                         <th>Total points</th>
-                        <th>Matches played</th>
+                        <th>League matches played</th>
                         <th>Winrate</th>
                         <th>Points behind</th>
                         {if $content.tournament_labels}
@@ -54,7 +54,7 @@
                     <th></th>
                     <th>Name</th>
                     <th>Total points</th>
-                    <th>Matches played</th>
+                    <th>League matches played</th>
                     <th>Winrate</th>
                     <th>Points behind</th>
                     {if $content.tournament_labels}

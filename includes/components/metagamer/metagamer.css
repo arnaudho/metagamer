@@ -149,6 +149,17 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 .container-not-found p { font-size: 16px;}
 .container-not-found h1 { font-size: 44px;}
 
+/* CARD PAGE */
+.container-card { display: flex; flex-direction: row; margin-bottom: 30px;}
+.container-card .card-image { flex: 1 1 400px; padding: 10px 20px;}
+.container-card .card-image img { max-width: 350px;}
+.container-card .card-content-container { flex: 1 1 700px; padding: 20px 30px; background-color: #FAFAFA;}
+.container-card .card-content-container h2 { margin-top: 0;}
+.container-card .card-content { max-width: 350px;
+    font-family: Metropolis, Arial, serif;}
+.container-card .card-content table { width: 100%;}
+.container-card .card-content table td { border-bottom: 1px solid #DDDDDD; padding: 12px 6px;}
+
 /* DECKLIST */
 .container .decklist { padding: 34px 40px 60px 60px; background: url("imgs/marble-white.png"); background-repeat: no-repeat; }
 .container .decklist.decklist-visual { position: fixed; top: 0; left: 0; width: 1670px; }

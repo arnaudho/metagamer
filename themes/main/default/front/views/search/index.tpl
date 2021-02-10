@@ -2,7 +2,7 @@
 
 <form class="form-inline" id="search-form">
     <div class="form-group">
-        <input type="text" placeholder="" name="q" class="form-control" value="{$global.get.q}">
+        <input type="text" placeholder="" name="q" class="form-control" value="{$global.get.q}" autofocus>
         <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
     </div>
 </form>
@@ -32,7 +32,7 @@
                             {/if}
                             {if $item.label == "Cards"}
                                 {*<div class="archetype-image" style="height: 24px; width: 50px; display: inline-block; background: no-repeat top -32px right 50%/120% url({$item.elements[$i]['image_card']});"></div>*}
-                                <span class="strong">{$item.elements[$i]['name_card']}</span><br />
+                                <a href="card/{$item.elements[$i]['id_card']}/"><span class="strong">{$item.elements[$i]['name_card']}</span></a><br />
                                 <span class="small">{$item.elements[$i]['mana_cost_card']}</span>
                             {/if}
                             {if $item.label == "Players"}

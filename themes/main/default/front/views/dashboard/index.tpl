@@ -102,7 +102,7 @@
         <div class="legend-container">
             <div class="logo"></div>
             <div class="legend">
-                <p>Format : Historic - 20-22 Nov 2020</p>
+                <p>{$content.date_format}</p>
                 <p>Data source : <img src="https://mtgmelee.com/images/logo.png" style="width: 100px; display: inline-block; vertical-align: sub;" /></p>
             </div>
         </div>

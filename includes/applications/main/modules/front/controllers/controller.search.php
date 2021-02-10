@@ -7,6 +7,8 @@ namespace app\main\controllers\front {
     use app\main\models\ModelPlayer;
     use app\main\models\ModelTournament;
     use core\application\DefaultFrontController;
+    use core\application\Go;
+    use core\db\Query;
 
     class search extends DefaultFrontController
     {
@@ -88,6 +90,34 @@ namespace app\main\controllers\front {
                 $this->addContent("count_results", $count_formats+$count_players+$count_tournaments+$count_archetypes+$count_cards);
                 $this->addContent("results", $results);
             }
+        }
+
+        public function card () {
+            $card = $this->modelCard->getTupleById($_GET["id_card"]);
+            if (!$card) {
+                Go::to404();
+            }
+            $this->addContent("card", $card);
+            $players_standard = $this->modelPlayer->searchPlayerByCardId(
+                $card['id_card'],
+                Query::condition()->andWhere("formats.id_type_format", Query::EQUAL, ModelFormat::TYPE_FORMAT_STANDARD_ID));
+            $players_historic = $this->modelPlayer->searchPlayerByCardId(
+                $card['id_card'],
+                Query::condition()->andWhere("formats.id_type_format", Query::EQUAL, ModelFormat::TYPE_FORMAT_HISTORIC_ID));
+
+            $this->addContent("players", array(
+                array(
+                    "slug" => "standard",
+                    "label" => "Last Standard decklists",
+                    "players" => $players_standard
+                ),
+                array(
+                    "slug" => "historic",
+                    "label" => "Last Historic decklists",
+                    "players" => $players_historic
+                )
+            ));
+            $this->setTitle($card['name_card']);
         }
     }
 }
