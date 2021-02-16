@@ -122,7 +122,7 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
     font-size: 17px; max-width: 120px; text-align: center; font-weight: bold; padding-top: 10px; padding-bottom: 10px;
     vertical-align: bottom; transform: scale(1, 1.05); line-height: 1.3em;}
 
-/* HOME FORMATS*/
+/* HOMEPAGE FORMATS*/
 .formats-container .format { display: inline-block; padding: 8px 16px; background-color: #FAFAFA; border-radius: 4px;
     vertical-align: top; margin-bottom: 10px; width: 370px;}
 .formats-container .format { font-family: Metropolis, Arial, serif; font-size: 14px;}
@@ -135,7 +135,8 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 .formats-container .format ul li { display: flex; padding: 5px; font-family: Metropolis, Arial, serif; color: #444444;}
 .formats-container .format ul li:hover { background-color: #EFEFEF;}
 .formats-container .format ul li.format-empty { font-style: italic;}
-.formats-container .format .home-links { float: right; margin-top: 10px; font-size: 1.4em;}
+.formats-container .format .home-links { float: right; margin-top: 10px; font-size: 1.4em; visibility: hidden;}
+.formats-container .format:hover .home-links { visibility: visible;}
 .formats-container .format .home-links span.glyphicon { border-radius: 10px;}
 .formats-container .format .home-links a:hover { text-decoration: none; color: black;}
 .formats-container .format .tournament-count-players { width: 80px; display: inline-block;}
