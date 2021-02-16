@@ -33,11 +33,12 @@ namespace app\main\controllers\front {
             $limit_results = 10;
 
             if (isset($_GET['q'])) {
+                $term = trim($_GET['q']);
                 $results = array();
 
                 // search decklists / archetypes
-                $archetypes = $this->modelPlayer->searchPlayerByDecklistName($_GET['q']);
-                $count_archetypes = $this->modelPlayer->searchPlayerByDecklistName($_GET['q'], true);
+                $archetypes = $this->modelPlayer->searchPlayerByDecklistName($term);
+                $count_archetypes = $this->modelPlayer->searchPlayerByDecklistName($term, true);
                 $results[] = array(
                     "label" => "Archetypes",
                     "elements" => $archetypes,
@@ -45,8 +46,8 @@ namespace app\main\controllers\front {
                 );
 
                 // search tournaments
-                $tournaments = $this->modelTournament->searchTournamentsByName($_GET['q']);
-                $count_tournaments = $this->modelTournament->searchTournamentsByName($_GET['q'], true);
+                $tournaments = $this->modelTournament->searchTournamentsByName($term);
+                $count_tournaments = $this->modelTournament->searchTournamentsByName($term, true);
                 foreach ($tournaments as $key => $tournament) {
                     $tournaments[$key]['date_tournament'] = date('j M Y', strtotime($tournament['date_tournament']));
                 }
@@ -57,8 +58,8 @@ namespace app\main\controllers\front {
                 );
 
                 // search formats
-                $formats = $this->modelFormat->searchFormatByName($_GET['q']);
-                $count_formats= $this->modelFormat->searchFormatByName($_GET['q'], true);
+                $formats = $this->modelFormat->searchFormatByName($term);
+                $count_formats= $this->modelFormat->searchFormatByName($term, true);
                 $results[] = array(
                     "label" => "Formats",
                     "elements" => $formats,
@@ -66,8 +67,8 @@ namespace app\main\controllers\front {
                 );
 
                 // search players
-                $players = $this->modelPeople->searchPeopleByName($_GET['q']);
-                $count_players = $this->modelPeople->searchPeopleByName($_GET['q'], true);
+                $players = $this->modelPeople->searchPeopleByName($term);
+                $count_players = $this->modelPeople->searchPeopleByName($term, true);
                 $results[] = array(
                     "label" => "Players",
                     "elements" => $players,
@@ -75,8 +76,8 @@ namespace app\main\controllers\front {
                 );
 
                 // search cards
-                $cards = $this->modelCard->searchCardsByName($_GET['q']);
-                $count_cards = $this->modelCard->searchCardsByName($_GET['q'], true);
+                $cards = $this->modelCard->searchCardsByName($term);
+                $count_cards = $this->modelCard->searchCardsByName($term, true);
                 $results[] = array(
                     "label" => "Cards",
                     "elements" => $cards,
@@ -89,6 +90,7 @@ namespace app\main\controllers\front {
                 $this->addContent("max_results", range(0, $max_results-1));
                 $this->addContent("count_results", $count_formats+$count_players+$count_tournaments+$count_archetypes+$count_cards);
                 $this->addContent("results", $results);
+                $this->addContent("term", $term);
             }
         }
 

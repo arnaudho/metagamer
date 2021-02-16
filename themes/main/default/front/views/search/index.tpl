@@ -2,7 +2,7 @@
 
 <form class="form-inline" id="search-form">
     <div class="form-group">
-        <input type="text" placeholder="" name="q" class="form-control" value="{$global.get.q}" autofocus>
+        <input type="text" placeholder="" name="q" class="form-control" value="{$content.term}" autofocus>
         <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
     </div>
 </form>
@@ -28,7 +28,7 @@
                                 <span class="small">{$item.elements[$i]['name_format']}</span>
                             {/if}
                             {if $item.label == "Formats"}
-                                {$item.elements[$i]['name_format']}
+                                <a href="dashboard/?id_format={$item.elements[$i]['id_format']}">{$item.elements[$i]['name_format']}</a>
                             {/if}
                             {if $item.label == "Cards"}
                                 {*<div class="archetype-image" style="height: 24px; width: 50px; display: inline-block; background: no-repeat top -32px right 50%/120% url({$item.elements[$i]['image_card']});"></div>*}
