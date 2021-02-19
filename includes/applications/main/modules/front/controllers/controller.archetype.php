@@ -32,6 +32,10 @@ namespace app\main\controllers\front {
             $this->modelFormat = new ModelFormat();
         }
 
+        /*
+         * player count can be different between the header and the #lists playing a given card
+         * if some players have no recorded match
+         */
         public function index () {
             $analysis_cond = Query::condition();
             $format_cond = Query::condition();
@@ -97,6 +101,7 @@ namespace app\main\controllers\front {
                 $stats = $this->modelMatch->getWinrateByArchetypeId($archetype['id_archetype'], $format_cond);
 
                 if ($stats['count_players'] > 0) {
+                    // TODO 20 seconds query
                     $cards = $this->modelCard->getPlayedCards($analysis_cond, $rules_cond);
 
                     // TODO display standard deviation in grey shades
@@ -141,7 +146,6 @@ namespace app\main\controllers\front {
                                 $deviation = StatsUtils::getStandardDeviation($card['winrate_main'], $card['total_main']);
                                 $card['deviation_up_main'] = $card['winrate_main'] + $deviation;
                                 $card['deviation_down_main'] = $card['winrate_main'] - $deviation;
-                                $card['display_actions_main'] = ($stats_rules['count_players'] > $card['count_players_main']) ? 1 : 0;
                                 // if we have less matches for current card than total for current rules
                                 if ($stats_rules['total'] > $card['total_main'] && $card['count_players_main'] < $stats_rules['count_players']) {
                                     $card['winrate_without_main'] = round(100 * ($stats_rules['wins'] - $winrate['wins']) / ($stats_rules['total'] - $card['total_main']), 2);
@@ -150,6 +154,7 @@ namespace app\main\controllers\front {
                                     $card['deviation_down_without_main'] = $card['winrate_without_main'] - $deviation;
                                 }
                             }
+                            $card['display_actions_main'] = ($stats_rules['count_players'] > $card['count_players_main']) ? 1 : 0;
                         }
                         if ($card['count_total_side'] > 0) {
                             $card['avg_side'] = round($card['count_total_side']/$card['count_players_side'], 1);
@@ -241,20 +246,12 @@ namespace app\main\controllers\front {
             $format_cond
                 ->andWhere("id_archetype", Query::EQUAL, $_GET['id_archetype'])
                 ->andCondition($rules_cond);
-            $decklists = $this->modelPlayer->getDecklists($format_cond, $_GET['id_archetype'] == ModelArchetype::ARCHETYPE_OTHER_ID);
+            $decklists = $this->modelPlayer->getDecklists($format_cond, true);
+            $archetype = $this->modelArchetype->getTupleById($_GET['id_archetype'], "name_archetype, image_archetype");
+            $format = $this->modelFormat->getTupleById($_GET['id_format'], "name_format");
+            $this->addContent("format", $format);
+            $this->addContent("archetype", $archetype);
             $this->addContent("decklists", $decklists);
-        }
-
-        // TODO WIP
-        public function evaluate () {
-            if(!Core::$request_async || !isset($_POST['url'])) {
-                Go::to404();
-            }
-            // evaluate given decklist
-            $bot = new MetagamerBot("Decklist");
-            $name_archetype = $bot->parsePlayer(0, $_POST['url'], false, false);
-            $this->addContent("archetype", $name_archetype);
-            return $name_archetype;
         }
     }
 }

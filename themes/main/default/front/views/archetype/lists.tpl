@@ -1,7 +1,17 @@
 {if !$request_async}{include file="includes/head.tpl"}{/if}
 
+<div class="archetype-container">
+    <div class="archetype-image"
+         style="background: no-repeat top {if $deck.id_archetype==3}0{else}-58px{/if} right 50%/120%
+                 url({$content.archetype.image_archetype});"></div>
+    <div class="archetype-info">
+        <h2>{$content.archetype.name_archetype}</h2>
+        <h4>{$content.format.name_format}</h4>
+        <h3>{$content.decklists|count} decklists</h3>
+    </div>
+</div>
+
 {if $content.decklists !== null}
-    <h2>{$content.decklists|count} decklists</h2>
     <table class="table table-hover table-condensed">
         <thead>
             <tr>
@@ -18,7 +28,10 @@
             {foreach from=$content.decklists item="decklist"}
                 <tr>
                     <td><a href="player/?search={$decklist.arena_id}">{$decklist.arena_id}</a></td>
-                    <td><a href="dashboard/?id_format={$decklist.id_format}&id_tournament={$decklist.id_tournament}">{$decklist.name_tournament}</a></td>
+                    <td>
+                        <a href="dashboard/?id_format={$decklist.id_format}&id_tournament={$decklist.id_tournament}">{$decklist.name_tournament}</a>
+                        ({$decklist.date_tournament})
+                    </td>
                     {if $decklist.name_deck}
                         <td>{$decklist.name_deck}</td>
                     {/if}

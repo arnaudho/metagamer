@@ -140,7 +140,9 @@ namespace app\main\models {
         }
 
         public function getDecklists ($pCondition, $pDecklistNames = false) {
-            $fields = "SUM(result_match) AS wins, COUNT(result_match) AS total, p.id_player, people.arena_id, tournaments.id_format, tournaments.id_tournament, name_tournament";
+            $fields = "SUM(result_match) AS wins, COUNT(result_match) AS total, p.id_player, people.arena_id,
+                    tournaments.id_format, tournaments.id_tournament, name_tournament,
+                    DATE_FORMAT(date_tournament, '%d %b %Y') AS date_tournament";
             if ($pDecklistNames) {
                 $fields .= ", p.name_deck";
             }

@@ -25,7 +25,12 @@ table.table-matchups tbody tr td:first-of-type { border-top-left-radius: 10px; b
 table.table-matchups tbody tr td:last-of-type { border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-right-width: 1px;}
 table.table-matchups .matchup-deviation {font-size: 1.3em; line-height: 1em; border-top: 1px solid #55555529; padding-top: 8px; color: #919191;}
 table.table-matchups .matchup-percent {font-size: 2.1em; margin: auto; margin-bottom: 5px; width: 80%; font-weight: bold;}
-table.table-matchups .matchup-count {font-size: 1.3em;}
+
+/*table.table-matchups .matchup-count {font-size: 0.9em; display: block; color: #818181;}
+table.table-matchups .matchup-deviation {font-size: 1.4em}
+table.table-matchups .matchup-percent { font-size: 2.3em;}
+table td.matchup-total .matchup-percent { font-size: 2.5em!important;}*/
+
 table td.matchup-total .matchup-percent { font-size: 2.3em; color: #222222;}
 table.table-matchups th.matchup-archetype-image { width: 124px;}
 table.table-matchups th.matchup-archetype-name { width: 200px;}
@@ -96,7 +101,7 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 /* METAGAME */
 .table-metagame-container .background-placeholder { background: 0 0 /100% url("imgs/marble-white.png");
     background-repeat: no-repeat; position: absolute; top: 0; bottom: 0; left: 0; right: 0; opacity: 0.4; z-index: -1;}
-.table-metagame-container { border: 1px solid red; width: 1160px; height: 580px; padding: 14px 24px; position: relative;}
+.table-metagame-container { border: 1px solid red; width: 1160px; height: 656px; padding: 14px 24px; position: relative;}
 .table-metagame-container h2 { font-family: "Gill Sans MT", Arial, serif; font-size: 3em; text-transform: uppercase;
     margin-top: 0; margin-bottom: 5px;}
 .table-metagame-container h3 { font-family: "Metropolis", Arial, serif; margin-top: 5px; font-size: 1.6em;}
@@ -112,6 +117,8 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 .table-metagame-container .table-metagame tr.metagame-deck-count td { padding: 10px 20px;}
 .table-metagame-container .table-metagame tr.metagame-deck-percent td:not(.deck-legend) { color: #EF845C; font-size: 29px; font-weight: bold;}
 .table-metagame-container .table-metagame tr.metagame-deck-count td:not(.deck-legend) { font-weight: bold; font-size: 29px; }
+.table-metagame-container .table-metagame tr.metagame-deck-winrate .winrate-positive { color: #65C682;}
+.table-metagame-container .table-metagame tr.metagame-deck-winrate .winrate-negative { color: #D14042;}
 .table-metagame-container .table-metagame td.metagame-deck-image { width: 150px; padding: 10px;}
 .table-metagame-container .table-metagame td.metagame-deck-image div.deck-image { border-radius: 30px 30px 80px 80px;
     margin: 0 auto; width: 120px; height: 200px;
@@ -160,6 +167,14 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
     font-family: Metropolis, Arial, serif;}
 .container-card .card-content table { width: 100%;}
 .container-card .card-content table td { border-bottom: 1px solid #DDDDDD; padding: 12px 6px;}
+
+/* ARCHETYPE PAGE */
+.archetype-container { display: flex; margin-bottom: 30px;}
+.archetype-container .archetype-image { border-radius: 16px; width: 250px; height: 160px;}
+.archetype-container .archetype-info { padding: 0 24px;}
+.archetype-container .archetype-info * { font-family: "Metropolis", Arial, serif;}
+.archetype-container .archetype-info h2 { font-family: "Gill Sans MT", Arial, serif; font-size: 46px; text-transform: uppercase;}
+.archetype-container .archetype-info h4 { text-transform: uppercase; color: #666666;}
 
 /* DECKLIST */
 .container .decklist { padding: 34px 40px 60px 60px; background: url("imgs/marble-white.png"); background-repeat: no-repeat; }
