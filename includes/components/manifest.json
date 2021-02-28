@@ -12,6 +12,20 @@
             "utils/Request.js"
         ]
     },
+	"Mana":
+	{
+		"css":
+		[
+			"mana/css/mana.css"
+		]
+	},
+	"Flags":
+	{
+		"css":
+		[
+			"flags/css/flag-icon.css"
+		]
+	},
 	"Metagamer":
 	{
         "need":["Request"],

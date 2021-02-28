@@ -244,7 +244,7 @@ namespace app\main\controllers\front {
         }
 
         public function leaderboard () {
-            Autoload::addStyle("flags/css/flag-icon.css");
+            Autoload::addStyle("flags/css/flag-icon.min.css");
             $labels = $this->modelTournament->getProTournamentLabels();
             $this->addContent("tournament_labels", $labels);
             if (isset($_GET['detailed']) && $_GET['detailed'] == 1) {
