@@ -7,6 +7,7 @@ namespace app\main\controllers\front {
     use app\main\models\ModelMatch;
     use app\main\models\ModelPlayer;
     use app\main\models\ModelTournament;
+    use core\application\Autoload;
     use core\application\Core;
     use core\application\DefaultFrontController;
     use core\application\Go;
@@ -243,16 +244,24 @@ namespace app\main\controllers\front {
         }
 
         public function leaderboard () {
+            Autoload::addStyle("flags/css/flag-icon.css");
             $labels = $this->modelTournament->getProTournamentLabels();
             $this->addContent("tournament_labels", $labels);
-            $mpl = $this->modelPlayer->getLeaderboard(ModelPlayer::TAG_MPL);
-            $rivals = $this->modelPlayer->getLeaderboard(ModelPlayer::TAG_RIVALS);
+            if (isset($_GET['detailed']) && $_GET['detailed'] == 1) {
+                $mpl = $this->modelPlayer->getLeaderboard(ModelPlayer::TAG_MPL);
+                $rivals = $this->modelPlayer->getLeaderboard(ModelPlayer::TAG_RIVALS);
+                $this->addContent("detailed", true);
+            } else {
+                $mpl = $this->modelPlayer->getLeaderboard(ModelPlayer::TAG_MPL, false);
+                $rivals = $this->modelPlayer->getLeaderboard(ModelPlayer::TAG_RIVALS, false);
+            }
             foreach ($mpl as &$player) {
-                $player['name_player'] = mb_strtoupper($player['name_player']);
+                $player['name_player'] = ucwords($player['name_player']);
             }
             foreach ($rivals as &$player) {
-                $player['name_player'] = mb_strtoupper($player['name_player']);
+                $player['name_player'] = ucwords($player['name_player']);
             }
+            $this->addContent("img_path", Core::$path_to_components . '/metagamer/imgs/');
             $this->addContent("mpl", $mpl);
             $this->addContent("rivals", $rivals);
         }

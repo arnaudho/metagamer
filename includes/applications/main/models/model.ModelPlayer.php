@@ -2,6 +2,7 @@
 namespace app\main\models {
 
     use core\application\BaseModel;
+    use core\application\Core;
     use core\db\Query;
 
     class ModelPlayer extends BaseModel {
@@ -164,7 +165,7 @@ namespace app\main\models {
                 if (in_array($pIdTournament, ModelTournament::LEAGUE_TOURNAMENT_IDS)) {
                     $league_weekend_ids = $pIdTournament;
                 }
-                $fields = "people.id_people, players.id_player, tag_player, arena_id AS name_player,
+                $fields = "people.id_people, players.id_player, tag_player, country_player, arena_id AS name_player,
                     SUM(result_match) AS points_player, COUNT(result_match) AS total_matches";
                 if (is_null($pIdTournament)) {
                     $fields .= ", ROUND(SUM(result_match)/COUNT(result_match)*100, 2) AS winrate";
@@ -223,8 +224,34 @@ namespace app\main\models {
             $position = 0;
             $tie_position = 0;
             $record = 0;
+
+            $path = Core::$path_to_components . '/metagamer/imgs/';
+            // add finishes
+            $finish = $pTag == ModelPlayer::TAG_RIVALS ?
+                array(
+                    1 => array("count" => 4, "image" => $path . 'worlds.png'),
+                    5 => array("count" => 16, "image" => $path . 'mpl_gauntlet.png'),
+                    21 => array("count" => 12, "image" => $path . 'rivals_gauntlet.png'),
+                    33 => array("count" => 4, "image" => $path . 'rivals.png', "width" => 100),
+                    37 => array("count" => 12, "image" => $path . 'challenger.png')
+                ) :
+                array(
+                    1 => array("count" => 4, "image" => $path . 'worlds.png'),
+                    5 => array("count" => 8, "image" => $path . 'mpl_gauntlet.png'),
+                    13 => array("count" => 4, "image" => $path . 'rivals_gauntlet.png'),
+                    17 => array("count" => 8, "image" => $path . 'challenger.png')
+                );
+            $count_players = 1;
+
             foreach ($players as $key => $player) {
+                if ($count_players <= 4) {
+                    $players[$key]['mpl_next'] = 1;
+                }
+                if (array_key_exists($count_players, $finish)) {
+                    $players[$key]['finish_player'] = $finish[$count_players];
+                }
                 $player_record = $player['points_player'];
+                $count_players++;
                 $position++;
                 if ($record != $player_record) {
                     $tie_position = $position;

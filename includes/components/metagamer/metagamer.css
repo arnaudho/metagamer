@@ -157,6 +157,47 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 .container-not-found p { font-size: 16px;}
 .container-not-found h1 { font-size: 44px;}
 
+/* LEADERBOARD */
+.container-leaderboard { position: relative; padding: 30px;}
+.container-leaderboard h2 { font-size: 54px; text-transform: uppercase; font-weight: bold;}
+.container-leaderboard h3 { font-size: 34px; text-transform: uppercase; margin-top: 10px;}
+.container-leaderboard hr { width: 10%; border-color: black; margin: 12px 0 10px;}
+.container-leaderboard .background-placeholder { background: 0 0 /auto 100% url(../../includes/components/./metagamer/imgs/marble-white.png);
+    background-repeat: no-repeat; position: absolute; top: 0; bottom: 0; left: 0; right: 0; opacity: 0.4; z-index: -1;}
+.table-leaderboard { width: auto; margin-bottom: 10px;}
+.container-leaderboard * { font-family: Metropolis, Arial, serif;}
+table.table-leaderboard thead tr th { border-bottom-width: 0; font-size: 16px;}
+table.table-leaderboard tbody tr td { font-size: 22px; vertical-align: bottom; border-color: #D9D9D9; border-width: 1px;}
+table.table-leaderboard.leaderboard-detailed tbody tr td { font-size: 16px;}
+.table-leaderboard tbody tr:first-of-type td { border: 0;}
+.table-leaderboard th.player-rank { width: 40px;}
+.table-leaderboard th.player-flag { width: 50px;}
+.table-leaderboard th.player-name { width: 400px;}
+.table-leaderboard th.player-points { width: 90px; text-align: center;}
+.table-leaderboard th.player-matches { width: 150px; text-align: center;}
+.table-leaderboard th.player-finish { width: 240px; text-align: center; padding-left: 30px;}
+.table-leaderboard td.player-finish { border-top: 0; position: relative;}
+.table-leaderboard td.player-flag { text-align: center;}
+.table-leaderboard td.player-finish .player-finish-image { width: 180px; background: #1c1c1c; border-radius: 8px;
+    /*background: transparent linear-gradient(202deg, #505050 0%, #000000 98%, #656564 100%) 0% 0% no-repeat padding-box;*/
+    display: flex; position: absolute; top: 4px; bottom: 4px; left: 30px; right: 10px;}
+.table-leaderboard td.player-finish img { width: 140px; margin: auto;}
+.table-leaderboard td.player-name { text-transform: uppercase; font-size: 20px;}
+.table-leaderboard td.player-name.player-mpl-next { color: #F5875E; font-weight: bold;}
+.table-leaderboard td.player-rank,
+.table-leaderboard td.player-points,
+.table-leaderboard td.player-matches { text-align: center; font-size: 20px; font-weight: bold;}
+.table-leaderboard .flag-icon { border-radius: 30px; font-size: 1.3em; margin-top: -1px; /*margin-right: 1px;*/
+    border: 1px solid #DDDDDD; box-sizing: content-box; height: 28px; width: 28px;}
+.table-leaderboard tr.row-spacer td { color: #F5875E; font-size: 15px; font-style: italic;}
+.table-leaderboard tr.row-spacer + tr td { border: 0;}
+.container-leaderboard .legend { color: #666666; width: 90%;}
+.container-leaderboard .legend .main-legend { display: flex; flex-direction: row; color: #000000; font-size: 22px;
+    justify-content: space-between; margin-top: 26px;}
+.container-leaderboard .legend .main-legend > * { flex: 0 0 auto;}
+.container-leaderboard .legend img { vertical-align: sub; height: 32px;}
+.container-leaderboard .legend .legend-copyright { font-size: 10px; text-align: center;}
+
 /* CARD PAGE */
 .container-card { display: flex; flex-direction: row; margin-bottom: 30px;}
 .container-card .card-image { flex: 1 1 400px; padding: 10px 20px;}
