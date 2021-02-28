@@ -121,7 +121,10 @@
                             {/if}
                             <tr>
                                 <td class="player-rank">{$player.rank_player}</td>
-                                <td class="player-diff">{$player.rank_diff_player}</td>
+                                <td class="player-diff {if $player.rank_diff_player > 0}diff-positive{else}{if $player.rank_diff_player < 0}diff-negative{/if}{/if}">
+                                    <span class="glyphicon glyphicon-triangle-{if $player.rank_diff_player > 0}top{else}{if $player.rank_diff_player < 0}bottom{/if}{/if}">
+                                    </span>{$player.rank_diff_player}
+                                </td>
                                 <td class="player-flag">
                                     <span class="flag-icon flag-icon-{$player.country_player} flag-icon-squared"></span>
                                 </td>
@@ -171,8 +174,8 @@
                             <tr>
                                 <td class="player-rank">{$player.rank_player}</td>
                                 <td class="player-diff {if $player.rank_diff_player > 0}diff-positive{else}{if $player.rank_diff_player < 0}diff-negative{/if}{/if}">
-                                    <span class="glyphicon glyphicon-triangle-{if $player.rank_diff_player > 0}top{else}{if $player.rank_diff_player < 0}bottom{/if}{/if}"></span>
-                                    {$player.rank_diff_player}
+                                    <span class="glyphicon glyphicon-triangle-{if $player.rank_diff_player > 0}top{else}{if $player.rank_diff_player < 0}bottom{/if}{/if}">
+                                    </span>{$player.rank_diff_player}
                                 </td>
                                 <td class="player-flag">
                                     <span class="flag-icon flag-icon-{$player.country_player} flag-icon-squared"></span>
@@ -195,7 +198,7 @@
             </div>
         {/if}
         <div class="legend">
-            <p>Tiebreakers not informed, players with equal score are ordered alphabetically</p>
+            <p class="legend-rules">Tiebreakers not informed, players with equal score are ordered alphabetically</p>
             <div class="main-legend">
                 <p>Last updated 28 Feb. 2021</p>
                 <p>
