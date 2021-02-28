@@ -101,6 +101,7 @@
                     <thead>
                         <tr>
                             <th class="player-rank"></th>
+                            <th class="player-diff"></th>
                             <th class="player-flag"></th>
                             <th class="player-name">Name</th>
                             <th class="player-points">Total points</th>
@@ -114,12 +115,13 @@
                                 <tr class="row-spacer">
                                     <td colspan="2"></td>
                                     <td colspan="3">
-                                        {if $player.rank_player <= 4}MPL next year if the season ended today{/if}
+                                        {if $player.rank_player <= 5}MPL next year if the season ended today{/if}
                                     </td>
                                 </tr>
                             {/if}
                             <tr>
                                 <td class="player-rank">{$player.rank_player}</td>
+                                <td class="player-diff">{$player.rank_diff_player}</td>
                                 <td class="player-flag">
                                     <span class="flag-icon flag-icon-{$player.country_player} flag-icon-squared"></span>
                                 </td>
@@ -148,6 +150,7 @@
                     <thead>
                         <tr>
                             <th class="player-rank"></th>
+                            <th class="player-diff"></th>
                             <th class="player-flag"></th>
                             <th class="player-name">Name</th>
                             <th class="player-points">Total points</th>
@@ -161,12 +164,16 @@
                                 <tr class="row-spacer">
                                     <td colspan="2"></td>
                                     <td colspan="3">
-                                        {if $player.rank_player <= 4}MPL next year if the season ended today{/if}
+                                        {if $player.rank_player <= 5}MPL next year if the season ended today{/if}
                                     </td>
                                 </tr>
                             {/if}
                             <tr>
                                 <td class="player-rank">{$player.rank_player}</td>
+                                <td class="player-diff {if $player.rank_diff_player > 0}diff-positive{else}{if $player.rank_diff_player < 0}diff-negative{/if}{/if}">
+                                    <span class="glyphicon glyphicon-triangle-{if $player.rank_diff_player > 0}top{else}{if $player.rank_diff_player < 0}bottom{/if}{/if}"></span>
+                                    {$player.rank_diff_player}
+                                </td>
                                 <td class="player-flag">
                                     <span class="flag-icon flag-icon-{$player.country_player} flag-icon-squared"></span>
                                 </td>

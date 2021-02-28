@@ -255,11 +255,21 @@ namespace app\main\controllers\front {
                 $mpl = $this->modelPlayer->getLeaderboard(ModelPlayer::TAG_MPL, false);
                 $rivals = $this->modelPlayer->getLeaderboard(ModelPlayer::TAG_RIVALS, false);
             }
+            if (isset($_GET['save']) && $_GET['save'] == 1) {
+                foreach ($mpl as $player) {
+                    Query::execute("UPDATE player_tag SET rank_player = " . $player['rank_player'] . " WHERE id_people = " . $player['id_people']);
+                }
+                foreach ($rivals as $player) {
+                    Query::execute("UPDATE player_tag SET rank_player = " . $player['rank_player'] . " WHERE id_people = " . $player['id_people']);
+                }
+            }
             foreach ($mpl as &$player) {
                 $player['name_player'] = ucwords($player['name_player']);
+                $player['rank_diff_player'] = $player['old_rank_player'] == 0 ? 0 : $player['old_rank_player'] - $player['rank_player'];
             }
             foreach ($rivals as &$player) {
                 $player['name_player'] = ucwords($player['name_player']);
+                $player['rank_diff_player'] = $player['old_rank_player'] == 0 ? 0 : $player['old_rank_player'] - $player['rank_player'];
             }
             $this->addContent("img_path", Core::$path_to_components . '/metagamer/imgs/');
             $this->addContent("mpl", $mpl);

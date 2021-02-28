@@ -166,7 +166,7 @@ namespace app\main\models {
                     $league_weekend_ids = $pIdTournament;
                 }
                 $fields = "people.id_people, players.id_player, tag_player, country_player, arena_id AS name_player,
-                    SUM(result_match) AS points_player, COUNT(result_match) AS total_matches";
+                    rank_player AS old_rank_player, SUM(result_match) AS points_player, COUNT(result_match) AS total_matches";
                 if (is_null($pIdTournament)) {
                     $fields .= ", ROUND(SUM(result_match)/COUNT(result_match)*100, 2) AS winrate";
                 }

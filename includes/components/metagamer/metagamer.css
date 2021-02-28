@@ -165,19 +165,26 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 .container-leaderboard .background-placeholder { background: 0 0 /auto 100% url(../../includes/components/./metagamer/imgs/marble-white.png);
     background-repeat: no-repeat; position: absolute; top: 0; bottom: 0; left: 0; right: 0; opacity: 0.4; z-index: -1;}
 .table-leaderboard { width: auto; margin-bottom: 10px;}
-.container-leaderboard * { font-family: Metropolis, Arial, serif;}
+.container-leaderboard h2, .container-leaderboard h3,
+.container-leaderboard td, .container-leaderboard th,
+.container-leaderboard p { font-family: Metropolis, Arial, serif;}
 table.table-leaderboard thead tr th { border-bottom-width: 0; font-size: 16px;}
 table.table-leaderboard tbody tr td { font-size: 22px; vertical-align: bottom; border-color: #D9D9D9; border-width: 1px;}
 table.table-leaderboard.leaderboard-detailed tbody tr td { font-size: 16px;}
 .table-leaderboard tbody tr:first-of-type td { border: 0;}
 .table-leaderboard th.player-rank { width: 40px;}
 .table-leaderboard th.player-flag { width: 50px;}
+.table-leaderboard th.player-diff { width: 70px;}
 .table-leaderboard th.player-name { width: 400px;}
 .table-leaderboard th.player-points { width: 90px; text-align: center;}
 .table-leaderboard th.player-matches { width: 150px; text-align: center;}
 .table-leaderboard th.player-finish { width: 240px; text-align: center; padding-left: 30px;}
 .table-leaderboard td.player-finish { border-top: 0; position: relative;}
 .table-leaderboard td.player-flag { text-align: center;}
+.table-leaderboard td.player-diff { color: #808080; font-size: 18px; text-align: center;}
+.table-leaderboard td.player-diff span.glyphicon { font-size: 0.8em;}
+.table-leaderboard td.player-diff.diff-positive { color: #159B3A;}
+.table-leaderboard td.player-diff.diff-negative { color: #CB3D3D;}
 .table-leaderboard td.player-finish .player-finish-image { width: 180px; background: #1c1c1c; border-radius: 8px;
     /*background: transparent linear-gradient(202deg, #505050 0%, #000000 98%, #656564 100%) 0% 0% no-repeat padding-box;*/
     display: flex; position: absolute; top: 4px; bottom: 4px; left: 30px; right: 10px;}
