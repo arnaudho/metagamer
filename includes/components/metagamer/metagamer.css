@@ -235,15 +235,18 @@ table.table-leaderboard.leaderboard-detailed tbody tr td { font-size: 16px;}
 
 /* PUBLIC COVERAGE PAGE */
 body#page-coverage #debug:not(.fullscreen) { height: 0;}
+#page-coverage h1 { font-family: Metropolis, serif; font-size: 40px;}
+#page-coverage h3 { font-family: "Metropolis Thin", Metropolis, serif;}
 .table-standings { font-size: 16px;}
 .table-standings th.image-archetype { width: 84px;}
 .table-standings th, .table-standings td { font-family: Metropolis, Arial, serif;}
 .table-standings td.name-archetype { text-transform: uppercase; font-size: 1.3em;}
 .table-standings td.name-player { text-transform: capitalize;}
 
+
     /* DECKLIST */
 .container .decklist { padding: 34px 40px 60px 60px; background: url("imgs/marble-white.png"); background-repeat: no-repeat; }
-.container .decklist.decklist-visual { position: fixed; top: 0; left: 0; width: 1670px; }
+.container .decklist.decklist-visual { position: fixed; top: 0; left: 0; width: 2560px; }
 .container .decklist * { font-family: "Gill Sans MT", Calibri, serif; }
 .container .decklist h2 { text-transform: uppercase; font-size: 50px; margin-top: 0;}
 .container .decklist h2 small { text-transform: none;}

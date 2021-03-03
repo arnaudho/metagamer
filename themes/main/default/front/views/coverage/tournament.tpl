@@ -36,7 +36,7 @@
                             <th>Archetype</th>
                             <th>Player</th>
                             <th>Record</th>
-                            <th></th>
+                            <th>Decklist</th>
                         </tr>
                     </thead>
                     <tbody>
