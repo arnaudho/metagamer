@@ -105,7 +105,7 @@
                             <th class="player-flag"></th>
                             <th class="player-name">Name</th>
                             <th class="player-points">Total points</th>
-                            <th class="player-matches">League matches played</th>
+                            <th class="player-matches">League <br />matches played</th>
                             <th class="player-finish">If the season <br />ended today</th>
                         </tr>
                     </thead>
@@ -113,7 +113,7 @@
                         {foreach from=$content.mpl item="player"}
                             {if $player.finish_player && $player.rank_player != 1}
                                 <tr class="row-spacer">
-                                    <td colspan="2"></td>
+                                    <td colspan="3"></td>
                                     <td colspan="3">
                                         {if $player.rank_player <= 5}MPL next year if the season ended today{/if}
                                     </td>
@@ -134,7 +134,8 @@
                                 {if $player.finish_player}
                                     <td class="player-finish" rowspan="{$player.finish_player.count}">
                                         <div class="player-finish-image">
-                                            <img src="{$player.finish_player.image}" />
+                                            <img {if $player.finish_player.width}style="width:{$player.finish_player.width}px;"{/if}
+                                                 src="{$player.finish_player.image}" />
                                         </div>
                                     </td>
                                 {/if}
@@ -157,7 +158,7 @@
                             <th class="player-flag"></th>
                             <th class="player-name">Name</th>
                             <th class="player-points">Total points</th>
-                            <th class="player-matches">League matches played</th>
+                            <th class="player-matches">League <br />matches played</th>
                             <th class="player-finish">If the season <br />ended today</th>
                         </tr>
                     </thead>
@@ -165,7 +166,7 @@
                         {foreach from=$content.rivals item="player"}
                             {if $player.finish_player && $player.rank_player != 1}
                                 <tr class="row-spacer">
-                                    <td colspan="2"></td>
+                                    <td colspan="3"></td>
                                     <td colspan="3">
                                         {if $player.rank_player <= 5}MPL next year if the season ended today{/if}
                                     </td>
