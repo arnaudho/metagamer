@@ -52,16 +52,30 @@ namespace app\main\models {
             $data = Query::select(
                 "players.id_player, tournaments.id_tournament, name_tournament, name_format, name_archetype, decklist_player,
                     formats.id_type_format, arena_id, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins,
-                    COUNT(result_match) AS matches", $this->table)
+                    COUNT(result_match) AS matches, pc.count_cards_main, pc.count_cards_side", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people AND players.id_player = $pIdPlayer")
                 ->join("archetypes", Query::JOIN_OUTER_LEFT, "archetypes.id_archetype = players.id_archetype")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
                 ->join("formats", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
                 ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
+                ->join("(SELECT id_player, SUM(count_main) AS count_cards_main, SUM(count_side) AS count_cards_side FROM player_card GROUP BY id_player) AS pc", Query::JOIN_OUTER_LEFT, "pc.id_player = players.id_player")
                 ->groupBy("players.id_player")
                 ->limit(0, 1)
                 ->execute($this->handler);
             return $data[0];
+        }
+
+        public function getPlayersByTournamentId ($pIdTournament) {
+            $q = Query::select("players.id_player, arena_id, name_deck, name_archetype, image_archetype,
+                IF (SUM(result_match) IS NULL, 0, SUM(result_match))AS wins,
+                COUNT(result_match) AS matches", $this->table)
+                ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
+                ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype")
+                ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
+                ->andWhere("players.id_tournament", Query::EQUAL, $pIdTournament)
+                ->groupBy("players.id_player")
+                ->order("arena_id");
+            return $q->execute($this->handler);
         }
 
         public function searchPlayerByDecklistName ($pName, $pCount = false, $pLimit = 10) {
@@ -141,7 +155,7 @@ namespace app\main\models {
         }
 
         public function getDecklists ($pCondition, $pDecklistNames = false) {
-            $fields = "SUM(result_match) AS wins, COUNT(result_match) AS total, p.id_player, people.arena_id,
+            $fields = "IF (SUM(result_match) IS NULL, 0, SUM(result_match))AS wins, COUNT(result_match) AS total, p.id_player, people.arena_id,
                     tournaments.id_format, tournaments.id_tournament, name_tournament,
                     DATE_FORMAT(date_tournament, '%d %b %Y') AS date_tournament";
             if ($pDecklistNames) {
@@ -239,7 +253,7 @@ namespace app\main\models {
                     1 => array("count" => 4, "image" => $path . 'worlds.png'),
                     5 => array("count" => 8, "image" => $path . 'mpl_gauntlet.png'),
                     13 => array("count" => 4, "image" => $path . 'rivals_gauntlet.png'),
-                    17 => array("count" => 8, "image" => $path . 'challenger.png')
+                    17 => array("count" => 8, "image" => $path . 'rivals.png', "width" => 100),
                 );
             $count_players = 1;
 

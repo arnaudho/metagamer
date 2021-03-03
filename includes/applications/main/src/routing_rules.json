@@ -21,6 +21,30 @@
 				"action":"display"
 			}
 		},
+		"coverage/tournament/{$id_tournament}/":
+		{
+			"parameters":
+            {
+				"id_tournament": "[0-9]+"
+			},
+			"GET":
+            {
+				"controller": "coverage",
+				"action": "tournament"
+			}
+		},
+		"coverage/decklist/{$id_decklist}/":
+		{
+			"parameters":
+            {
+				"id_decklist": "[0-9]+"
+			},
+			"GET":
+            {
+				"controller": "coverage",
+				"action": "decklist"
+			}
+		},
 		"card/{$id_card}/":
 		{
 			"parameters":

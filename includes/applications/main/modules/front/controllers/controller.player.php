@@ -88,16 +88,20 @@ namespace app\main\controllers\front {
                     $decklist_by_curve[$card['cmc_card']][] = $card;
                 }
             }
+
+            $max_columns = self::DECKLIST_MAX_COLUMNS;
             // if more than 7 columns before lands, group columns 7+
-            if (count($decklist_by_curve) >= self::DECKLIST_MAX_COLUMNS) {
-                $keep = array_slice($decklist_by_curve, 0, self::DECKLIST_MAX_COLUMNS-2);
-                $merge = array_slice($decklist_by_curve, self::DECKLIST_MAX_COLUMNS-2);
+            if (count($decklist_by_curve) >= $max_columns) {
+                $keep = array_slice($decklist_by_curve, 0, $max_columns-2);
+                $merge = array_slice($decklist_by_curve, $max_columns-2);
                 $merged = call_user_func_array('array_merge', $merge);
                 array_push($keep, $merged);
                 $decklist_by_curve = $keep;
             }
             $decklist_by_curve[99] = $lands;
 
+            $this->addContent("logo", 1);
+            $this->addContent("overlay_twitter", 1);
             $this->setTemplate("player", "decklist");
             $this->addContent("player", $player);
             $this->addContent("cards_main", $decklist_by_curve);

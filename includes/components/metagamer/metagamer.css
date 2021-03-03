@@ -3,6 +3,14 @@
     src: url("fonts/Metropolis/Metropolis-Regular.otf") format("opentype");
 }
 @font-face {
+    font-family: "Metropolis Medium";
+    src: url("fonts/Metropolis/Metropolis-Medium.otf") format("opentype");
+}
+@font-face {
+    font-family: "Metropolis Thin";
+    src: url("fonts/Metropolis/Metropolis-Thin.otf") format("opentype");
+}
+@font-face {
     font-family: "IBMPlex";
     src: url("fonts/IBMPlex/IBMPlexMono-Regular.ttf") format("truetype");
 }
@@ -167,7 +175,7 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 .table-leaderboard { width: auto; margin-bottom: 10px;}
 .container-leaderboard h2, .container-leaderboard h3,
 .container-leaderboard td, .container-leaderboard th,
-.container-leaderboard p { font-family: Metropolis, Arial, serif;}
+.container-leaderboard p, .container-leaderboard strong { font-family: Metropolis, Arial, serif;}
 table.table-leaderboard thead tr th { border-bottom-width: 0; font-size: 16px;}
 table.table-leaderboard tbody tr td { font-size: 22px; vertical-align: bottom; border-top-width: 0; border-bottom: 1px solid #D9D9D9;}
 table.table-leaderboard.leaderboard-detailed tbody tr td { font-size: 16px;}
@@ -192,7 +200,8 @@ table.table-leaderboard.leaderboard-detailed tbody tr td { font-size: 16px;}
 .table-leaderboard td.player-name.player-mpl-next { color: #F5875E; font-weight: bold;}
 .table-leaderboard td.player-rank,
 .table-leaderboard td.player-points,
-.table-leaderboard td.player-matches { text-align: center; font-size: 20px; font-weight: bold;}
+.table-leaderboard td.player-matches { text-align: center; font-size: 20px;
+    font-family: 'Metropolis Medium', Metropolis, Arial, serif; font-weight: normal;}
 .table-leaderboard .flag-icon { border-radius: 30px; font-size: 1.3em; margin-top: -1px; /*margin-right: 1px;*/
     border: 1px solid #DDDDDD; box-sizing: content-box; height: 28px; width: 28px;}
 .table-leaderboard tr.row-spacer td { color: #F5875E; font-size: 15px; font-style: italic;}
@@ -224,13 +233,22 @@ table.table-leaderboard.leaderboard-detailed tbody tr td { font-size: 16px;}
 .archetype-container .archetype-info h2 { font-family: "Gill Sans MT", Arial, serif; font-size: 46px; text-transform: uppercase;}
 .archetype-container .archetype-info h4 { text-transform: uppercase; color: #666666;}
 
-/* DECKLIST */
+/* PUBLIC COVERAGE PAGE */
+body#page-coverage #debug:not(.fullscreen) { height: 0;}
+.table-standings { font-size: 16px;}
+.table-standings th.image-archetype { width: 84px;}
+.table-standings th, .table-standings td { font-family: Metropolis, Arial, serif;}
+.table-standings td.name-archetype { text-transform: uppercase; font-size: 1.3em;}
+.table-standings td.name-player { text-transform: capitalize;}
+
+    /* DECKLIST */
 .container .decklist { padding: 34px 40px 60px 60px; background: url("imgs/marble-white.png"); background-repeat: no-repeat; }
 .container .decklist.decklist-visual { position: fixed; top: 0; left: 0; width: 1670px; }
 .container .decklist * { font-family: "Gill Sans MT", Calibri, serif; }
 .container .decklist h2 { text-transform: uppercase; font-size: 50px; margin-top: 0;}
 .container .decklist h2 small { text-transform: none;}
-.container .decklist h3 { color: #555555; margin: 10px 0 10px; text-transform: uppercase; transform: scale(1, 1.15);}
+.container .decklist h3 { color: #555555; margin: 10px 0 10px; text-transform: uppercase; transform: scale(1, 1.15);
+    font-family: Metropolis, Arial, serif;}
 .container .decklist ul {list-style-type: none; padding-left: 0;}
 .container .decklist .decklist-separator { border-color: black; width: 80px; margin-left: 0; margin-top: 10px;}
 .container .decklist .decklist-main-container { vertical-align: top; width: 87%; display: inline-block;}
