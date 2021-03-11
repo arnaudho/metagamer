@@ -155,6 +155,7 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 .formats-container .format .home-links span.glyphicon { border-radius: 10px;}
 .formats-container .format .home-links a:hover { text-decoration: none; color: black;}
 .formats-container .format .tournament-count-players { width: 80px; display: inline-block;}
+.container form#create-format { font-family: 'Metropolis', Arial, serif; margin: 10px 0 20px;}
 
 /* 404 */
 .container-not-found { position: relative; height: 570px; width: 970px; text-align: center; color: #333333;
@@ -188,7 +189,7 @@ table.table-leaderboard.leaderboard-detailed tbody tr td { font-size: 16px;}
 .table-leaderboard th.player-finish { width: 240px; text-align: center; padding-left: 30px;}
 .table-leaderboard td.player-finish { border-width: 0; position: relative;}
 .table-leaderboard td.player-flag { text-align: center;}
-.table-leaderboard td.player-diff { color: #808080; font-size: 18px; text-align: center;}
+.table-leaderboard td.player-diff { color: #808080; font-size: 18px; text-align: center; padding-bottom: 10px;}
 .table-leaderboard td.player-diff span.glyphicon { font-size: 0.8em;}
 .table-leaderboard td.player-diff.diff-positive { color: #159B3A;}
 .table-leaderboard td.player-diff.diff-negative { color: #CB3D3D;}

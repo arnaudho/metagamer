@@ -5,6 +5,7 @@ namespace app\main\controllers\front {
     use app\main\models\ModelFormat;
     use app\main\models\ModelPlayer;
     use app\main\models\ModelTournament;
+    use app\main\models\ModelTypeFormat;
     use core\application\DefaultFrontController;
     use core\application\routing\RoutingHandler;
     use core\db\Query;
@@ -13,6 +14,7 @@ namespace app\main\controllers\front {
     {
         protected $modelPlayer;
         protected $modelTournament;
+        protected $modelTypeFormat;
         protected $modelFormat;
 
         public function __construct()
@@ -20,10 +22,20 @@ namespace app\main\controllers\front {
             parent::__construct();
             $this->modelPlayer = new ModelPlayer();
             $this->modelFormat = new ModelFormat();
+            $this->modelTypeFormat = new ModelTypeFormat();
             $this->modelTournament = new ModelTournament();
         }
 
         public function index () {
+            if (isset($_POST['create-format']) && isset($_POST['create-format']['name_format'])) {
+                $exists_format = $this->modelFormat->one(
+                    Query::condition()
+                        ->andWhere("name_format", Query::EQUAL, $_POST['create-format']['name_format'])
+                );
+                if (!$exists_format) {
+                    $this->modelFormat->insert($_POST['create-format']);
+                }
+            }
             $count_open = 3;
             $formats = array();
             $data = $this->modelFormat->all(Query::condition()->order("id_format", "DESC"));
@@ -45,8 +57,8 @@ namespace app\main\controllers\front {
                     );
                 }
             }
+            $this->addContent("type_formats", $this->modelTypeFormat->all());
             $this->addContent("formats", $formats);
-
         }
     }
 }

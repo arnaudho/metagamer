@@ -1,17 +1,31 @@
 {if !$request_async}{include file="includes/head.tpl"}{/if}
 
+<form class="form-inline" id="create-format" method="post">
+    <h4>Create folder</h4>
+    <div class="form-group">
+        <select name="create-format[id_type_format]" class="form-control">
+            {foreach from=$content.type_formats item="type_format"}
+                <option value="{$type_format.id_type_format}">{$type_format.name_type_format}</option>
+            {/foreach}
+        </select>
+        <input type="text" placeholder="Format name" name="create-format[name_format]" class="form-control">
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+</form>
 {if $content.formats}
     <div class="formats-container">
         {foreach from=$content.formats key="id_format" item="format"}
             <div id="format-{$id_format}" class="format">
-                <div class="home-links">
-                    <a href="{$format.link_other}" data-toggle="tooltip" title="Browse 'Other' decklists">
-                        <span class="glyphicon glyphicon-list"></span>
-                    </a>
-                    <a href="{$format.link_dashboard}" data-toggle="tooltip" title="Go to Dashboard">
-                        <span class="glyphicon glyphicon-dashboard"></span>
-                    </a>
-                </div>
+                {if $format.tournaments}
+                    <div class="home-links">
+                        <a href="{$format.link_other}" data-toggle="tooltip" title="Browse 'Other' decklists">
+                            <span class="glyphicon glyphicon-list"></span>
+                        </a>
+                        <a href="{$format.link_dashboard}" data-toggle="tooltip" title="Go to Dashboard">
+                            <span class="glyphicon glyphicon-dashboard"></span>
+                        </a>
+                    </div>
+                {/if}
                 <h4>
                     <a data-toggle="collapse" href="#collapse-format-{$id_format}"
                        aria-expanded="false" aria-controls="collapse-format-{$id_format}">
