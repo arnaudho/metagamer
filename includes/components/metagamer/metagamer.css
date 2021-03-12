@@ -245,9 +245,10 @@ body#page-coverage #debug:not(.fullscreen) { height: 0;}
 .table-standings td.name-player { text-transform: capitalize;}
 
 
-    /* DECKLIST */
-.container .decklist { padding: 34px 40px 60px 60px; background: url("imgs/marble-white.png"); background-repeat: no-repeat; }
-.container .decklist.decklist-visual { position: fixed; top: 0; left: 0; width: 2560px; }
+/* DECKLIST */
+.container .decklist .background-placeholder { background: 0 0 /100% url("imgs/marble-white.png");
+    background-repeat: no-repeat; position: absolute; top: 0; left: 0; opacity: 1; z-index: -1; width: 2560px; height: 1800px; }
+.container .decklist.decklist-visual { position: fixed; top: 0; left: 0; width: 1670px; padding: 34px 40px 60px 60px; }
 .container .decklist * { font-family: "Gill Sans MT", Calibri, serif; }
 .container .decklist h2 { text-transform: uppercase; font-size: 50px; margin-top: 0;}
 .container .decklist h2 small { text-transform: none;}
@@ -255,7 +256,7 @@ body#page-coverage #debug:not(.fullscreen) { height: 0;}
     font-family: Metropolis, Arial, serif;}
 .container .decklist ul {list-style-type: none; padding-left: 0;}
 .container .decklist .decklist-separator { border-color: black; width: 80px; margin-left: 0; margin-top: 10px;}
-.container .decklist .decklist-main-container { vertical-align: top; width: 87%; display: inline-block;}
+.container .decklist .decklist-main-container { vertical-align: top; width: 1360px; display: inline-block;}
 .container .decklist .decklist-side-container { vertical-align: top; display: inline-block; width: 200px; padding-left: 16px; margin-top: -4px;}
 .container .decklist .decklist-side-container .decklist-card { top: 0;}
 .container .decklist h5 { text-transform: uppercase; color: white; background-color: grey;

@@ -2,6 +2,7 @@
 
 {if $content.cards_main!==null}
     <div class="decklist decklist-visual decklist-curve">
+        <div class="background-placeholder"></div>
         {if $content.logo}
             <div class="logo"></div>
         {/if}

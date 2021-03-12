@@ -26,7 +26,6 @@ namespace app\main\controllers\front {
 
         public function __construct()
         {
-            trace_r("COVERAGE MODULE");
             $this->modelTournament = new ModelTournament();
             $this->modelArchetype = new ModelArchetype();
             $this->modelPlayer = new ModelPlayer();
@@ -106,7 +105,7 @@ namespace app\main\controllers\front {
 
                 $this->setTemplate("player", "decklist");
                 $this->addContent("player", $player);
-                $this->addContent("maindeck_width", count($decklist_by_curve)*165+40);
+                $this->addContent("maindeck_width", count($decklist_by_curve)*165+60);
                 $this->addContent("cards_main", $decklist_by_curve);
                 $this->addContent("cards_side", $cards_side);
             }
