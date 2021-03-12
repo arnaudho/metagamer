@@ -226,6 +226,9 @@ table.table-leaderboard.leaderboard-detailed tbody tr td { font-size: 16px;}
 .container-card .card-content table { width: 100%;}
 .container-card .card-content table td { border-bottom: 1px solid #DDDDDD; padding: 12px 6px;}
 
+/* MANA SYMBOLS */
+.container i.ms { font-size: 20px; margin: 2px; border: 1px solid #DDDDDD; border-radius: 15px; padding: 4px 4px 3px;}
+
 /* ARCHETYPE PAGE */
 .archetype-container { display: flex; margin-bottom: 30px;}
 .archetype-container .archetype-image { border-radius: 16px; width: 250px; height: 160px;}

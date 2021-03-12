@@ -6,6 +6,7 @@ namespace app\main\controllers\front {
     use app\main\models\ModelPeople;
     use app\main\models\ModelPlayer;
     use app\main\models\ModelTournament;
+    use core\application\Autoload;
     use core\application\DefaultFrontController;
     use core\application\Go;
     use core\db\Query;
@@ -95,10 +96,12 @@ namespace app\main\controllers\front {
         }
 
         public function card () {
+            Autoload::addStyle("mana/css/mana.min.css");
             $card = $this->modelCard->getTupleById($_GET["id_card"]);
             if (!$card) {
                 Go::to404();
             }
+            $card['mana_cost_card'] = preg_replace('/(\{([\durbgw])\})/i', '<i class="ms ms-$2"></i>', strtolower($card['mana_cost_card']));
             $this->addContent("card", $card);
             $players_standard = $this->modelPlayer->searchPlayerByCardId(
                 $card['id_card'],
