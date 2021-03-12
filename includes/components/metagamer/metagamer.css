@@ -105,6 +105,7 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
     background-color: transparent; color: #ff8d00; border: 0 solid transparent;}
 .container #search-form button[type='submit']:focus {border: 0 solid transparent;}
 .container #search-form button[type='submit']:active {box-shadow: none;}
+.container .table-results i.ms { font-size: 14px; padding: 2px;}
 
 /* METAGAME */
 .table-metagame-container .background-placeholder { background: 0 0 /100% url("imgs/marble-white.png");
@@ -221,13 +222,12 @@ table.table-leaderboard.leaderboard-detailed tbody tr td { font-size: 16px;}
 .container-card .card-image img { max-width: 350px;}
 .container-card .card-content-container { flex: 1 1 700px; padding: 20px 30px; background-color: #FAFAFA;}
 .container-card .card-content-container h2 { margin-top: 0;}
-.container-card .card-content { max-width: 350px;
-    font-family: Metropolis, Arial, serif;}
+.container-card .card-content { max-width: 350px; font-family: Metropolis, Arial, serif; font-size: 20px;}
 .container-card .card-content table { width: 100%;}
 .container-card .card-content table td { border-bottom: 1px solid #DDDDDD; padding: 12px 6px;}
 
 /* MANA SYMBOLS */
-.container i.ms { font-size: 20px; margin: 2px; border: 1px solid #DDDDDD; border-radius: 15px; padding: 4px 4px 3px;}
+.container i.ms { font-size: 20px; margin: 2px; border: 1px solid #DDDDDD; border-radius: 15px; padding: 4px;}
 
 /* ARCHETYPE PAGE */
 .archetype-container { display: flex; margin-bottom: 30px;}

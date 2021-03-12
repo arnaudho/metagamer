@@ -27,6 +27,8 @@ namespace app\main\controllers\front {
             $this->modelTournament = new ModelTournament();
             $this->modelFormat = new ModelFormat();
             $this->modelCard = new ModelCard();
+
+            Autoload::addStyle("mana/css/mana.min.css");
         }
 
         public function index () {
@@ -79,6 +81,9 @@ namespace app\main\controllers\front {
                 // search cards
                 $cards = $this->modelCard->searchCardsByName($term);
                 $count_cards = $this->modelCard->searchCardsByName($term, true);
+                foreach ($cards as $key => $card) {
+                    $cards[$key]['mana_cost_card'] = preg_replace('/(\{([\durbgw])\})/i', '<i class="ms ms-$2"></i>', strtolower($card['mana_cost_card']));
+                }
                 $results[] = array(
                     "label" => "Cards",
                     "elements" => $cards,
@@ -96,7 +101,6 @@ namespace app\main\controllers\front {
         }
 
         public function card () {
-            Autoload::addStyle("mana/css/mana.min.css");
             $card = $this->modelCard->getTupleById($_GET["id_card"]);
             if (!$card) {
                 Go::to404();
