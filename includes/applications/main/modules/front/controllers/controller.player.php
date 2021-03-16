@@ -42,6 +42,7 @@ namespace app\main\controllers\front {
             if (!$player) {
                 Go::to404();
             }
+            $is_limited = $player['id_type_format'] == ModelFormat::TYPE_FORMAT_LIMITED_ID;
             $player['arena_id'] = ucwords($player['arena_id']);
             $cards_main = $this->modelCard->getDecklistCards($player['id_player'],
                 Query::condition()->andWhere("count_main", Query::UPPER, 0),
@@ -57,37 +58,67 @@ namespace app\main\controllers\front {
                         WHEN type_card LIKE '%Land%' THEN 9 ELSE 8 END ASC,
                         type_card";
             // limit SB cards for limited decklists
-            if ($player['id_type_format'] == ModelFormat::TYPE_FORMAT_LIMITED_ID) {
+            if ($is_limited) {
                 $colors = $this->modelCard->getDecklistColors($player['id_player']);
                 $player_colors = array();
                 foreach ($colors as $color) {
                     $player_colors[] = $color['color_card'];
                 }
+                $sideboard_condition
+                    ->andWhere("type_card", Query::NOT_LIKE, "%Land%")
+                    ->andCondition(
+                    Query::condition()
+                        ->orWhere("color_card", Query::EQUAL, '')
+                        ->orWhere("color_card", Query::IN, "('" . implode("', '", $player_colors) . "')", false)
+                );
                 $sideboard_order = " CASE WHEN color_card IN ('" . implode("', '", $player_colors) . "') THEN 1
                         WHEN color_card = '' THEN 3 ELSE 2 END ASC, color_card, " . $sideboard_order;
             }
 
             $cards_side = $this->modelCard->getDecklistCards($player['id_player'],
-                        $sideboard_condition,
-                        $sideboard_order);
-            if ($player['id_type_format'] == ModelFormat::TYPE_FORMAT_LIMITED_ID) {
-                if (count($cards_side) > 12) {
-                    $this->addContent("sideboard_more", 1);
-                }
-                $cards_side = array_slice($cards_side, 0, 12);
+                $sideboard_condition,
+                $sideboard_order);
+            if ($is_limited) {
+                $cards_side = array_slice($cards_side, 0, 15);
             }
 
-            $decklist_by_curve = array();
             $lands = array();
+            $decklist_by_curve = array();
+            $decklist_by_curve_spells = array();
+
             // order MD by curve
             foreach ($cards_main as $card) {
                 if ($card['mana_cost_card'] == "") {
                     $card['cmc_card'] = 99;
                     $lands[] = $card;
                 } else {
-                    $decklist_by_curve[$card['cmc_card']][] = $card;
+                    if ($is_limited) {
+                        // fill creatures/spells curve at the same time
+                        if (strpos($card['type_card'], "Creature") === false) {
+                            $decklist_by_curve_spells[$card['cmc_card']][] = $card;
+                        } else {
+                            $decklist_by_curve[$card['cmc_card']][] = $card;
+                        }
+                    } else {
+                        $decklist_by_curve[$card['cmc_card']][] = $card;
+                    }
                 }
             }
+
+            // align creatures & spells in curve
+            if ($is_limited) {
+                for ($curve = 0; $curve <= 10; $curve++) {
+                    if (array_key_exists($curve, $decklist_by_curve)) {
+                        if (!array_key_exists($curve, $decklist_by_curve_spells)) {
+                            $decklist_by_curve_spells[$curve] = array();
+                        }
+                    } elseif (array_key_exists($curve, $decklist_by_curve_spells)) {
+                        $decklist_by_curve[$curve] = array();
+                    }
+                }
+            }
+            ksort($decklist_by_curve);
+            ksort($decklist_by_curve_spells);
 
             $max_columns = self::DECKLIST_MAX_COLUMNS;
             // if more than 7 columns before lands, group columns 7+
@@ -99,6 +130,20 @@ namespace app\main\controllers\front {
                 $decklist_by_curve = $keep;
             }
             $decklist_by_curve[99] = $lands;
+
+            if ($is_limited) {
+                if (count($decklist_by_curve_spells) >= $max_columns) {
+                    $keep = array_slice($decklist_by_curve_spells, 0, $max_columns-2);
+                    $merge = array_slice($decklist_by_curve_spells, $max_columns-2);
+                    $merged = call_user_func_array('array_merge', $merge);
+                    array_push($keep, $merged);
+                    $decklist_by_curve_spells = $keep;
+                }
+                $this->addContent("cards_spells_main", $decklist_by_curve_spells);
+
+                // get max height for creatures block
+                $this->addContent("creatures_main_height", count(max($decklist_by_curve))*60+230);
+            }
 
             $this->addContent("logo", 1);
             $this->addContent("overlay_twitter", 1);

@@ -11,9 +11,9 @@
         <hr class="decklist-separator" />
         <div class="decklist-main-container" style="width:{$content.maindeck_width}px">
             <h5 class="decklist-title-main">Maindeck ({$content.player.count_cards_main})</h5>
-            <div class="decklist-main">
+            <div class="decklist-main"{if $content.creatures_main_height} style="height: {$content.creatures_main_height}px;"{/if}>
                 {foreach from=$content.cards_main item="mana"}
-                    <div class="mana-curve" style="display: inline-block; vertical-align: top;">
+                    <div class="mana-curve" style="display: inline-block; vertical-align: top; width: 163px;">
                         {foreach from=$mana key="i" item="card"}
                             {if $card.count_main > 0}
                                 <div class="decklist-card" style="display: block; width: 165px; top: {$i*-166}px;">
@@ -28,6 +28,25 @@
                     </div>
                 {/foreach}
             </div>
+            {if $content.cards_spells_main}
+                <div class="decklist-main">
+                    {foreach from=$content.cards_spells_main item="mana"}
+                        <div class="mana-curve" style="display: inline-block; vertical-align: top; width: 163px;">
+                            {foreach from=$mana key="i" item="card"}
+                                {if $card.count_main > 0}
+                                    <div class="decklist-card" style="display: block; width: 165px; top: {$i*-166}px;">
+                                        <img src="{$card.image_card}" />
+                                    <span class="decklist-card-count" {if $card.count_main >= 10}style="right: 34px;"{/if}>
+                                        x{$card.count_main}
+                                    </span>
+                                        <span class="decklist-card-count-shadow" {if $card.count_main >= 10}style="width: 18px;"{/if}></span>
+                                    </div>
+                                {/if}
+                            {/foreach}
+                        </div>
+                    {/foreach}
+                </div>
+            {/if}
         </div>
         <div class="decklist-side-container">
             <h5 class="decklist-title-side">Sideboard ({$content.player.count_cards_side})</h5>
