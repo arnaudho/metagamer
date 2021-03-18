@@ -16,6 +16,56 @@ namespace app\main\models {
             parent::__construct("cards", "id_card");
         }
 
+        public function sortDecklistByCurve ($pDecklist, $pIsLimited = false) {
+            $lands = array();
+            $decklist_by_curve = array();
+            $decklist_by_curve_spells = array();
+            foreach ($pDecklist as $card) {
+                if ($card['mana_cost_card'] == "") {
+                    $card['cmc_card'] = 99;
+                    $lands[] = $card;
+                } else {
+                    if ($pIsLimited) {
+                        // fill creatures/spells curve at the same time
+                        if (strpos($card['type_card'], "Creature") === false) {
+                            $decklist_by_curve_spells[$card['cmc_card']][] = $card;
+                        } else {
+                            $decklist_by_curve[$card['cmc_card']][] = $card;
+                        }
+                    } else {
+                        $decklist_by_curve[$card['cmc_card']][] = $card;
+                    }
+                }
+            }
+            // align creatures & spells in curve
+            if ($pIsLimited) {
+                for ($curve = 0; $curve <= 10; $curve++) {
+                    if (array_key_exists($curve, $decklist_by_curve)) {
+                        if (!array_key_exists($curve, $decklist_by_curve_spells)) {
+                            $decklist_by_curve_spells[$curve] = array();
+                        }
+                    } elseif (array_key_exists($curve, $decklist_by_curve_spells)) {
+                        $decklist_by_curve[$curve] = array();
+                    }
+                }
+            }
+            ksort($decklist_by_curve);
+            ksort($decklist_by_curve_spells);
+
+            $max_columns = 8;
+            // if more than 7 columns before lands, group columns 7+
+            if (count($decklist_by_curve) >= $max_columns) {
+                $keep = array_slice($decklist_by_curve, 0, $max_columns-2);
+                $merge = array_slice($decklist_by_curve, $max_columns-2);
+                $merged = call_user_func_array('array_merge', $merge);
+                array_push($keep, $merged);
+                $decklist_by_curve = $keep;
+            }
+            $decklist_by_curve[99] = $lands;
+
+            return $decklist_by_curve;
+        }
+
         public function getPlayedCards ($pCondition = null, $pRulesCondition = null, $pOrder = "name_card", $pType = "ASC") {
             if(!$pCondition)
                 $pCondition = Query::condition();
@@ -34,6 +84,21 @@ namespace app\main\models {
                 $rules_cond = clone $pRulesCondition;
                 $q->andCondition($rules_cond);
             }
+            return $q->execute($this->handler);
+        }
+
+        public function getPlayedCardsByCopies ($pCondition = null) {
+            if(!$pCondition)
+                $pCondition = Query::condition();
+            $q = Query::select("cards.id_card, count_main AS 'copie_n', name_card,
+                COUNT(IF(count_main = 0, NULL, count_main)) AS count_players_main", $this->tablePlayerCards)
+                ->join("players p", Query::JOIN_INNER, "p.id_player = player_card.id_player")
+                ->join($this->table, Query::JOIN_INNER, "cards.id_card = player_card.id_card")
+                ->join("tournaments", Query::JOIN_INNER, "p.id_tournament = tournaments.id_tournament")
+                ->andWhere("count_main", Query::NOT_EQUAL, 0)
+                ->andCondition(clone $pCondition)
+                ->groupBy("cards.id_card, copie_n")
+                ->order("cards.id_card, copie_n", "DESC");
             return $q->execute($this->handler);
         }
 
@@ -186,6 +251,20 @@ namespace app\main\models {
             }
             $data = $q->execute($this->handler);
             return $pCount ? $data[0]['count'] : $data;
+        }
+
+        public function getCardCount ($pCondition) {
+            $subquery = Query::select("SUM(count_main) AS count_cards", $this->tablePlayerCards)
+                ->join("players", Query::JOIN_INNER, "players.id_player = player_card.id_player")
+                ->join("tournaments", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament")
+                ->andCondition($pCondition)
+                ->groupBy("players.id_player")
+                ->get(false);
+            $data = Query::select("COUNT(1) AS count_players, count_cards", "($subquery) tmp ")
+                ->groupBy("count_cards")
+                ->order("count_players", "DESC")
+                ->execute($this->handler);
+            return $data;
         }
 
         public function insertCards ($pCards) {

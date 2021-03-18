@@ -142,7 +142,7 @@ namespace app\main\controllers\front {
                 $this->addContent("cards_spells_main", $decklist_by_curve_spells);
 
                 // get max height for creatures block
-                $this->addContent("creatures_main_height", count(max($decklist_by_curve))*60+230);
+                $this->addContent("creatures_main_height", count(max($decklist_by_curve))*60+210);
             }
 
             $this->addContent("logo", 1);

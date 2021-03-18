@@ -18,10 +18,15 @@
                             {if $card.count_main > 0}
                                 <div class="decklist-card" style="display: block; width: 165px; top: {$i*-166}px;">
                                     <img src="{$card.image_card}" />
-                                    <span class="decklist-card-count" {if $card.count_main >= 10}style="right: 34px;"{/if}>
+                                    <span class="decklist-card-count" style="{if $card.diff_card}right: 52px;{/if}{if $card.count_main >= 10}right: 34px;{/if}">
                                         x{$card.count_main}
                                     </span>
-                                    <span class="decklist-card-count-shadow" {if $card.count_main >= 10}style="width: 18px;"{/if}></span>
+                                    {if $card.diff_card}
+                                        <span class="decklist-card-count decklist-card-diff {if $card.diff_card > 0}decklist-card-diff-positive{else}{if $card.diff_card < 0}decklist-card-diff-negative{/if}{/if}">
+                                            {$card.diff_card}
+                                        </span>
+                                    {/if}
+                                    <span class="decklist-card-count-shadow" style="{if $card.diff_card}width: 37px;{/if}{if $card.count_main >= 10}width: 18px;{/if}"></span>
                                 </div>
                             {/if}
                         {/foreach}
@@ -48,22 +53,24 @@
                 </div>
             {/if}
         </div>
-        <div class="decklist-side-container">
-            <h5 class="decklist-title-side">Sideboard ({$content.player.count_cards_side})</h5>
-            <div class="decklist-side">
-                {foreach from=$content.cards_side key="i" item="card"}
-                    {if $card.count_side > 0}
-                        <div class="decklist-card" style="top: {$i*-180}px;">
-                            <img src="{$card.image_card}" />
-                            <span class="decklist-card-count" {if $card.count_side >= 10}style="right: 34px;"{/if}>
-                                x{$card.count_side}
-                            </span>
-                            <span class="decklist-card-count-shadow" {if $card.count_side >= 10}style="width: 18px;"{/if}></span>
-                        </div>
-                    {/if}
-                {/foreach}
+        {if $content.cards_side!==null}
+            <div class="decklist-side-container">
+                <h5 class="decklist-title-side">Sideboard ({$content.player.count_cards_side})</h5>
+                <div class="decklist-side">
+                    {foreach from=$content.cards_side key="i" item="card"}
+                        {if $card.count_side > 0}
+                            <div class="decklist-card" style="top: {$i*-180}px;">
+                                <img src="{$card.image_card}" />
+                                <span class="decklist-card-count" {if $card.count_side >= 10}style="right: 34px;"{/if}>
+                                    x{$card.count_side}
+                                </span>
+                                <span class="decklist-card-count-shadow" {if $card.count_side >= 10}style="width: 18px;"{/if}></span>
+                            </div>
+                        {/if}
+                    {/foreach}
+                </div>
             </div>
-        </div>
+        {/if}
     </div>
     {if $content.overlay_twitter}
         <div class="overlay-twitter-size"></div>

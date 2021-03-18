@@ -253,5 +253,177 @@ namespace app\main\controllers\front {
             $this->addContent("archetype", $archetype);
             $this->addContent("decklists", $decklists);
         }
+
+        protected function sortCardsByPlayerCount ($pA, $pB) {
+            return $pA['count_players_main'] == $pB['count_players_main'] ?
+                ($pA['name_card'] > $pB['name_card'] ? 1 : -1) :
+                ($pA['count_players_main'] < $pB['count_players_main'] ? 1 : -1);
+        }
+
+        /*
+         * KARSTEN algo #1
+         *
+         * Sort all played cards by copies and count players
+         * Then add (up to 60 cards) each copies, most popular first
+        */
+        // work on manabase splits (ex if 10 lists play a 5-5 split on snow-covered basics
+        // and some cards are played in 6 copies, the land count could be wrong in some corner cases)
+        public function getAggregateList ($pIdFormat, $pIdArchetype) {
+            $aggregate = array();
+            $count_aggregate = 0;
+            $aggregate_cond = Query::condition()
+                ->andWhere("id_archetype", Query::EQUAL, $pIdArchetype)
+                ->andWhere("id_format", Query::EQUAL, $pIdFormat);
+
+            // get card cound for archetype
+            $archetype_card_count = $this->modelCard->getCardCount($aggregate_cond);
+            if ($archetype_card_count[0]['count_players'] < 5*$archetype_card_count[1]['count_players']) {
+                trace_r("WARNING : multiple cards count in archetype");
+                trace_r($archetype_card_count);
+            }
+            $archetype_card_count = $archetype_card_count[0]['count_cards'];
+
+            $cards = $this->modelCard->getPlayedCardsByCopies($aggregate_cond);
+            $current_card = "--";
+            $current_player_count = 0;
+            // add placeholder to check last card for filling copies
+            $cards[] = array('name_card' => "---");
+            $fill_copies = array();
+            foreach ($cards as $key => $card) {
+                if (!isset($card['copie_n'])) {
+                    continue;
+                }
+                if ($current_card != $card['name_card']) {
+                    $current_card = $card['name_card'];
+                    $current_player_count = $card['count_players_main'];
+                } else {
+                    $current_player_count += $card['count_players_main'];
+                    $cards[$key]['count_players_main'] = $current_player_count;
+                }
+
+                // if next card is not same name AND card was only played in N copies, manually add copies 1 to N-1 into the combined list
+                if ($card['copie_n'] != 1 &&
+                    isset($cards[$key+1]) &&
+                    $cards[$key+1]['name_card'] != $card['name_card']
+                ) {
+                    for ($i = 1; $i < $card['copie_n']; $i++) {
+                        $tmp_card = $card;
+                        $tmp_card['copie_n'] = $i;
+                        $tmp_card['count_players_main'] = $current_player_count;
+                        $fill_copies[] = $tmp_card;
+                    }
+                }
+            }
+            $cards = array_merge($cards, $fill_copies);
+
+            // sort copies by player count
+            uasort($cards, array($this, "sortCardsByPlayerCount"));
+
+            foreach ($cards as $card) {
+                $aggregate[] = $card['name_card'];
+                if (++$count_aggregate >= $archetype_card_count) {
+                    break;
+                }
+            }
+            sort($aggregate);
+            return $aggregate;
+        }
+
+        public function aggregatelist ()
+        {
+            if (
+                $_GET['id_format'] &&
+                ($format = $this->modelFormat->getTupleById($_GET['id_format'])) &&
+                $_GET['id_archetype'] &&
+                ($archetype = $this->modelArchetype->getTupleById($_GET['id_archetype']))
+            ) {
+                $aggregate_cond = Query::condition()
+                    ->andWhere("id_archetype", Query::EQUAL, $archetype['id_archetype'])
+                    ->andWhere("id_format", Query::EQUAL, $format['id_format']);
+
+                // get archetype aggregate list
+                $aggregate = $this->getAggregateList($format['id_format'], $archetype['id_archetype']);
+                $aggregate_counts = array_count_values($aggregate);
+                $list_cards = array_unique($aggregate);
+
+                $cards_week = array();
+                $cards_data = $this->modelCard->all(
+                    Query::condition()
+                        ->andWhere("name_card", Query::IN, '("' . implode('","', $list_cards) . '")', false)
+                        ->order(" CASE  WHEN type_card LIKE '%Creature%' THEN 1 WHEN type_card IN ('Instant', 'Sorcery') THEN 2
+                            WHEN type_card = 'Legendary Planeswalker' THEN 3 WHEN type_card = 'Basic Land' THEN 10 WHEN type_card LIKE '%Land%' THEN 9 ELSE 8 END ASC,
+                            cmc_card, color_card", ""),
+                    "cards.id_card, cards.name_card, cards.mana_cost_card, cards.cmc_card, cards.type_card, cards.image_card"
+                );
+                foreach ($cards_data as $card) {
+                    if (isset($aggregate_counts[$card['name_card']])) {
+                        $card['count_main'] = $aggregate_counts[$card['name_card']];
+                    } else {
+                        trace_r("WARNING : " . $card['name_card'] . " - card count not found");
+                    }
+                    $cards_week[$card['id_card']] = $card;
+                }
+
+                if (
+                    $_GET['id_format_compare'] &&
+                    $_GET['id_format_compare'] != $_GET['id_format'] &&
+                    ($format_compare = $this->modelFormat->getTupleById($_GET['id_format_compare']))
+                ) {
+
+                    // get average card count by id_format + id_archetype WHERE name_card IN (list_cards)
+                    $cards = $this->modelCard->getPlayedCards(
+                        Query::condition()
+                            ->andWhere("name_card", Query::IN, '("' . implode('","', $list_cards) . '")', false),
+                        $aggregate_cond
+                    );
+                    foreach ($cards as $card) {
+                        $card['average_count_main'] = $card['count_total_main']/$card['count_players_main'];
+                        $cards_week[$card['id_card']] = array_merge($cards_week[$card['id_card']], $card);
+                    }
+
+                    $compare_cond =
+                        Query::condition()
+                            ->andWhere("id_archetype", Query::EQUAL, $archetype['id_archetype'])
+                            ->andWhere("id_format", Query::EQUAL, $format_compare['id_format']);
+
+                    $cards_compare = $this->modelCard->getPlayedCards(
+                        Query::condition()
+                            ->andWhere("name_card", Query::IN, '("' . implode('","', $list_cards) . '")', false),
+                        $compare_cond
+                    );
+                    // removed cards can't be highlighted here because we fetch old format data with cards from new format only
+
+                    foreach ($cards_compare as $card) {
+                        if (isset($cards_week[$card['id_card']]) && $card['count_players_main'] != 0) {
+                            $cards_week[$card['id_card']]['average_old_count'] = $card['count_total_main']/$card['count_players_main'];
+                            $cards_week[$card['id_card']]['diff_card'] = round($cards_week[$card['id_card']]['average_count_main'] - $cards_week[$card['id_card']]['average_old_count'], 1);
+                        }
+                    }
+                    foreach ($cards_week as $key => $card) {
+                        if (!isset($card['diff_card'])) {
+                            $cards_week[$key]['diff_card'] = "NEW";
+                            continue;
+                        }
+                        if ($card['diff_card'] > 0) {
+                            $cards_week[$key]['diff_card'] = "+" . $card['diff_card'];
+                        }
+                    }
+                }
+                // Add decklist to content
+                $decklist_by_curve = $this->modelCard->sortDecklistByCurve($cards_week);
+                $this->addContent("cards_main", $decklist_by_curve);
+                trace_r($decklist_by_curve);
+
+                $this->addContent("player", array(
+                    "name_archetype" => $archetype['name_archetype'],
+                    "arena_id"       => "AGGREGATE DECKLIST",
+                    "name_tournament" => $format['name_format'],
+                    "count_cards_main" => count($aggregate)
+                ));
+            } else {
+                $this->addMessage("Please specify a format and an archetype");
+            }
+            $this->setTemplate("player", "decklist");
+        }
     }
 }

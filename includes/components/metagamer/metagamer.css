@@ -280,6 +280,10 @@ body#page-coverage #debug:not(.fullscreen) { height: 0;}
 .container .logo { margin: 0 auto; float: right; width: 240px; margin-top: 10px; background: center /100% no-repeat url("imgs/logo.png"); height: 50px;}
 .container .overlay-twitter-size { position: fixed; border: 1px solid red; border-bottom-width: 0; height: 928px; width: 1650px;
     top: 5px; left: 10px; box-sizing: content-box;}
+.container .decklist .decklist-card .decklist-card-diff { color: #B8EDEB; font-size: 15px; font-family: Metropolis; padding-top: 8px;}
+.container .decklist .decklist-card .decklist-card-diff.decklist-card-diff-negative { color: #FF4500;}
+.container .decklist .decklist-card .decklist-card-diff.decklist-card-diff-positive { color: #ACFF2F;}
+
 #import-mtgmelee .form-group > * { display: block;}
 input#matchups-export-mode { cursor: pointer;}
 input#matchups-export-mode:checked ~ .table-matchups .matchup-deviation,

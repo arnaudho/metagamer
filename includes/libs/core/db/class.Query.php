@@ -19,6 +19,10 @@ namespace core\db
 		/**
 		 * @var String
 		 */
+		const NOT_LIKE 			= 	" NOT LIKE ";
+		/**
+		 * @var String
+		 */
 		const EQUAL				= 	" = ";
 		/**
 		 * @string

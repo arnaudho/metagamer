@@ -38,7 +38,7 @@
                                 {if $deck.name_archetype != "Other"}
                                     <div class="checkbox">
                                         <label>
-                                            <input name="archetypes-select[{$deck.id_archetype}]" type="checkbox" value="{$deck.id_archetype}"{if !$content.other_archetypes[$deck.id_archetype]} checked{/if}>
+                                            <input name="archetypes-select[{$deck.id_archetype}]" type="checkbox" value="{$deck.id_archetype}"{if !isset($content.other_archetypes[$deck.id_archetype])} checked{/if}>
                                             {$deck.name_archetype} <span class="small">({$deck.percent} %)</span>
                                         </label>
                                     </div>
@@ -103,7 +103,7 @@
             <div class="logo"></div>
             <div class="legend">
                 <p>{$content.date_format}</p>
-                <p>Data source : <img src="https://mtgmelee.com/images/logo.png" style="width: 100px; display: inline-block; vertical-align: sub;" /></p>
+                <p>Data source : <img src="https://mtgmelee.com/images/logo.png" style="width: 100px; display: inline-block; vertical-align: middle;" /></p>
             </div>
         </div>
     </div>
@@ -112,7 +112,8 @@
             <tr>
                 <th>Archetype</th>
                 <th>Count</th>
-                <th>%</th>
+                <th>Metagame %</th>
+                <th>Aggregate decklist</th>
             </tr>
         </thead>
         <tbody>
@@ -125,6 +126,11 @@
                     </td>
                     <td>{$deck.count}</td>
                     <td>{$deck.percent} %</td>
+                    <td>
+                        <a href="archetype/aggregatelist/?id_archetype={$deck.id_archetype}&id_format={$content.format.id_format}" class="btn btn-info" target="_blank">
+                            <span class="glyphicon glyphicon-duplicate"></span>
+                        </a>
+                    </td>
                 </tr>
             {/foreach}
         </tbody>
@@ -177,7 +183,7 @@
                                         {if $deck.id_archetype==0}<div class="matchup-total-cell">{/if}
                                         <div class="matchup-percent">{$deck.percent}<sup>%</sup></div>
                                         <span class="matchup-deviation">{$deck.deviation_down}<sup>%</sup> - {$deck.deviation_up}<sup>%</sup></span>
-                                        {*<span class="matchup-count">{$deck.count}</span>*}
+                                        {*<span class="matchup-count">{$deck.count} matches</span>*}
 
                                         {if $deck.id_archetype==0}</div>{/if}
                                     {else}
