@@ -41,9 +41,7 @@ namespace app\main\controllers\front {
             } else {
                 // TODO ModelPlayer method to get standings
                 $players = $this->modelPlayer->getPlayersByTournamentId($tournament['id_tournament']);
-                trace_r($players);
                 $tournament['date_tournament'] = date("d F Y", strtotime($tournament['date_tournament']));
-                trace_r($tournament);
                 foreach ($players as &$player) {
                     if ($player['name_archetype'] == ModelArchetype::ARCHETYPE_OTHER) {
                         $player['name_archetype'] = $player['name_deck'];
@@ -59,7 +57,6 @@ namespace app\main\controllers\front {
                 $this->addContent("error", "Decklist not found");
             } else {
                 $player = $this->modelPlayer->getDataByPlayerId($player["id_player"]);
-                trace_r($player);
 
                 $player['arena_id'] = ucwords($player['arena_id']);
                 $cards_main = $this->modelCard->getDecklistCards($player['id_player'],
@@ -105,7 +102,7 @@ namespace app\main\controllers\front {
 
                 $this->setTemplate("player", "decklist");
                 $this->addContent("player", $player);
-                $this->addContent("maindeck_width", count($decklist_by_curve)*165+60);
+                $this->addContent("maindeck_width", count($decklist_by_curve)*165+40);
                 $this->addContent("cards_main", $decklist_by_curve);
                 $this->addContent("cards_side", $cards_side);
             }

@@ -80,6 +80,7 @@ namespace app\main\controllers\front {
                 $sideboard_order);
             if ($is_limited) {
                 $cards_side = array_slice($cards_side, 0, 15);
+                $player['count_cards_side'] = count($cards_side) . "/" . $player['count_cards_side'];
             }
 
             $lands = array();
@@ -146,7 +147,7 @@ namespace app\main\controllers\front {
             }
 
             $this->addContent("logo", 1);
-            $this->addContent("overlay_twitter", 1);
+//            $this->addContent("overlay_twitter", 1);
             $this->setTemplate("player", "decklist");
             $this->addContent("player", $player);
             $this->addContent("cards_main", $decklist_by_curve);
