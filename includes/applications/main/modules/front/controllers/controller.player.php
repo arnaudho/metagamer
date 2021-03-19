@@ -147,7 +147,7 @@ namespace app\main\controllers\front {
             }
 
             $this->addContent("logo", 1);
-//            $this->addContent("overlay_twitter", 1);
+            $this->addContent("overlay_twitter", 0);
             $this->setTemplate("player", "decklist");
             $this->addContent("player", $player);
             $this->addContent("cards_main", $decklist_by_curve);

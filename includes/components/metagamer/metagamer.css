@@ -251,7 +251,7 @@ body#page-coverage #debug:not(.fullscreen) { height: 0;}
 /* DECKLIST */
 .container .decklist .background-placeholder { background: 0 0 /100% url("imgs/marble-white.png");
     background-repeat: no-repeat; position: absolute; top: 0; left: 0; opacity: 1; z-index: -1; width: 2560px; height: 1800px; }
-.container .decklist.decklist-visual { position: fixed; top: 0; left: 0; width: 1670px; padding: 34px 40px 60px 60px; }
+.container .decklist.decklist-visual { position: fixed; top: 0; left: 0; width: 1690px; padding: 34px 40px 60px 60px; }
 .container .decklist * { font-family: "Gill Sans MT", Calibri, serif; }
 .container .decklist h2 { text-transform: uppercase; font-size: 50px; margin-top: 0;}
 .container .decklist h2 small { text-transform: none;}
@@ -260,7 +260,7 @@ body#page-coverage #debug:not(.fullscreen) { height: 0;}
 .container .decklist ul {list-style-type: none; padding-left: 0;}
 .container .decklist .decklist-separator { border-color: black; width: 80px; margin-left: 0; margin-top: 10px;}
 .container .decklist .decklist-main-container { vertical-align: top; width: 1360px; display: inline-block;}
-.container .decklist .decklist-side-container { vertical-align: top; display: inline-block; width: 200px; padding-left: 16px; margin-top: -4px;}
+.container .decklist .decklist-side-container { vertical-align: top; display: inline-block; max-width: 220px; padding-left: 14px; margin-top: -4px;}
 .container .decklist .decklist-side-container .decklist-card { top: 0;}
 .container .decklist h5 { text-transform: uppercase; color: white; background-color: grey;
     padding: 14px 15px 10px; font-size: 18px; display: inline-block; font-family: Metropolis, Arial, serif;
@@ -277,7 +277,7 @@ body#page-coverage #debug:not(.fullscreen) { height: 0;}
     padding: 2px 12px; font-family: 'IBMPlex', serif;}
 .container .decklist .decklist-side .decklist-card .decklist-card-count { top: 22px;}
 .container .decklist .decklist-side .decklist-card .decklist-card-count-shadow { top: 40px;}
-.container .logo { margin: 0 auto; float: right; width: 240px; margin-top: 10px; background: center /100% no-repeat url("imgs/logo.png"); height: 50px;}
+.container .logo { float: right; width: 240px; margin-top: 10px; background: center /100% no-repeat url("imgs/logo.png"); height: 50px;}
 .container .overlay-twitter-size { position: fixed; border: 1px solid red; border-bottom-width: 0; height: 928px; width: 1650px;
     top: 5px; left: 10px; box-sizing: content-box;}
 .container .decklist .decklist-card .decklist-card-diff { color: #B8EDEB; font-size: 15px; font-family: Metropolis; padding-top: 8px;}

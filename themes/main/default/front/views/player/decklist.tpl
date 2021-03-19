@@ -72,7 +72,7 @@
             </div>
         {/if}
     </div>
-    {if $content.overlay_twitter}
+    {if $content.overlay_twitter==1}
         <div class="overlay-twitter-size"></div>
     {/if}
 {/if}
