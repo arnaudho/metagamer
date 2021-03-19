@@ -253,6 +253,20 @@ namespace app\main\models {
             return $pCount ? $data[0]['count'] : $data;
         }
 
+        public function getBasicLandIds () {
+            $basics = array();
+            $data = $this->all(
+                Query::condition()
+                    ->andWhere("type_card", Query::LIKE, "%basic%")
+                    ->andWhere("cmc_card", Query::EQUAL, 0),
+                "id_card, name_card"
+            );
+            foreach ($data as $card) {
+                $basics[$card['id_card']] = $card['name_card'];
+            }
+            return $basics;
+        }
+
         public function getCardCount ($pCondition) {
             $subquery = Query::select("SUM(count_main) AS count_cards", $this->tablePlayerCards)
                 ->join("players", Query::JOIN_INNER, "players.id_player = player_card.id_player")

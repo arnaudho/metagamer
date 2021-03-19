@@ -141,10 +141,22 @@ class MtgMeleeBot extends BotController
                 trace_r("CARD NOT FOUND : $card_name");
             }
         }
+
+        $basic_ids = array();
+        if ($player['id_type_format'] == ModelFormat::TYPE_FORMAT_LIMITED_ID) {
+            $basic_ids = $this->modelCard->getBasicLandIds();
+        }
+
         if (array_key_exists(0, $parsing_side[2])) {
             foreach ($parsing_side[2] as $key => $card_name) {
                 $card_name = trim($card_name);
                 if (array_key_exists($card_name, $id_cards)) {
+                    // exclude basic lands in sideboard for limited decklists
+                    if ($player['id_type_format'] == ModelFormat::TYPE_FORMAT_LIMITED_ID &&
+                        array_key_exists($id_cards[$card_name], $basic_ids)
+                    ) {
+                        continue;
+                    }
                     if (array_key_exists($card_name, $cards)) {
                         $cards[$card_name]['count_side'] += $parsing_side[1][$key];
                     } else {
@@ -160,9 +172,11 @@ class MtgMeleeBot extends BotController
                 }
             }
         }
-        if ($deck_count < 60) {
-            trace_r("Deck < 60 cards for player $pIdPlayer (<a href='" . $player['decklist_player'] . "'>See decklist</a>)");
-            $this->addMessage("Deck < 60 cards for player $pIdPlayer (<a href='" . $player['decklist_player'] . "' target='_blank'>See decklist</a>)", self::MESSAGE_ERROR);
+
+        $count_min_cards = $player['id_type_format'] == ModelFormat::TYPE_FORMAT_LIMITED_ID ? 40 : 60;
+        if ($deck_count < $count_min_cards) {
+            trace_r("Deck < $count_min_cards cards for player $pIdPlayer (<a href='" . $player['decklist_player'] . "'>See decklist</a>)");
+            $this->addMessage("Deck < $count_min_cards cards for player $pIdPlayer (<a href='" . $player['decklist_player'] . "' target='_blank'>See decklist</a>)", self::MESSAGE_ERROR);
         }
         $cards = array_values($cards);
 
