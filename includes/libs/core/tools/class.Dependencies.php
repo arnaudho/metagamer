@@ -157,7 +157,7 @@ namespace core\tools
                 }
                 else
                     $this->output .= $this->log($lib." is not available", "warn");
-            }   
+            }
 
 
             /**

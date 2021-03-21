@@ -87,15 +87,21 @@ namespace app\main\models {
             return $q->execute($this->handler);
         }
 
-        public function getPlayedCardsByCopies ($pCondition = null) {
+        /**
+         * Function used for aggregate decklists tool
+         * @param null $pCondition
+         * @return array|resource
+         */
+        public function getPlayedCardsByCopies ($pCondition = null, $pMaindeck = true) {
+            $count_cards = $pMaindeck ? "count_main" : "count_side";
             if(!$pCondition)
                 $pCondition = Query::condition();
-            $q = Query::select("cards.id_card, count_main AS 'copie_n', name_card,
-                COUNT(IF(count_main = 0, NULL, count_main)) AS count_players_main", $this->tablePlayerCards)
+            $q = Query::select("cards.id_card, $count_cards AS 'copie_n', name_card,
+                IF(type_card LIKE '%land%',1,0) AS is_land, COUNT(1) AS count_players_main", $this->tablePlayerCards)
                 ->join("players p", Query::JOIN_INNER, "p.id_player = player_card.id_player")
                 ->join($this->table, Query::JOIN_INNER, "cards.id_card = player_card.id_card")
                 ->join("tournaments", Query::JOIN_INNER, "p.id_tournament = tournaments.id_tournament")
-                ->andWhere("count_main", Query::NOT_EQUAL, 0)
+                ->andWhere("$count_cards", Query::NOT_EQUAL, 0)
                 ->andCondition(clone $pCondition)
                 ->groupBy("cards.id_card, copie_n")
                 ->order("cards.id_card, copie_n", "DESC");

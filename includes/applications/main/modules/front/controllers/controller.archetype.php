@@ -79,8 +79,8 @@ namespace app\main\controllers\front {
                     unset($_SESSION[$card_rule[1]][$card_rule[2]][$card_rule[3]]);
                 }
                 $link_decklists = RoutingHandler::rewrite(
-                    "archetype",
-                    "lists") . "?" . http_build_query(array(
+                        "archetype",
+                        "lists") . "?" . http_build_query(array(
                         "id_archetype" => $archetype['id_archetype'],
                         "id_format"    => $format['id_format'],
                         "im"           => implode(":", array_flip($_SESSION['included']['main'])),
@@ -254,7 +254,19 @@ namespace app\main\controllers\front {
             $this->addContent("decklists", $decklists);
         }
 
+        protected function sortCardsByCmc ($pA, $pB) {
+            return $pA['cmc_card'] == $pB['cmc_card'] ?
+                ($pA['name_card'] > $pB['name_card'] ? 1 : -1) :
+                ($pA['cmc_card'] < $pB['cmc_card'] ? 1 : -1);
+        }
+
         protected function sortCardsByPlayerCount ($pA, $pB) {
+            if (!array_key_exists('count_players_main', $pA)) {
+                return 1;
+            }
+            if (!array_key_exists('count_players_main', $pB)) {
+                return -1;
+            }
             return $pA['count_players_main'] == $pB['count_players_main'] ?
                 ($pA['name_card'] > $pB['name_card'] ? 1 : -1) :
                 ($pA['count_players_main'] < $pB['count_players_main'] ? 1 : -1);
@@ -268,22 +280,27 @@ namespace app\main\controllers\front {
         */
         // work on manabase splits (ex if 10 lists play a 5-5 split on snow-covered basics
         // and some cards are played in 6 copies, the land count could be wrong in some corner cases)
-        public function getAggregateList ($pIdFormat, $pIdArchetype) {
+        public function getAggregateList ($pIdFormat, $pIdArchetype, $pMaindeck = true) {
             $aggregate = array();
             $count_aggregate = 0;
             $aggregate_cond = Query::condition()
                 ->andWhere("id_archetype", Query::EQUAL, $pIdArchetype)
                 ->andWhere("id_format", Query::EQUAL, $pIdFormat);
 
-            // get card cound for archetype
-            $archetype_card_count = $this->modelCard->getCardCount($aggregate_cond);
-            if ($archetype_card_count[0]['count_players'] < 5*$archetype_card_count[1]['count_players']) {
-                trace_r("WARNING : multiple cards count in archetype");
-                trace_r($archetype_card_count);
+            // sideboard count
+            $archetype_card_count = 15;
+            if ($pMaindeck) {
+                // get card count for archetype
+                $archetype_card_count = $this->modelCard->getCardCount($aggregate_cond);
+                if ($archetype_card_count[0]['count_players'] < 5 * $archetype_card_count[1]['count_players']) {
+                    trace_r("WARNING : multiple cards count in archetype");
+                    trace_r($archetype_card_count);
+                }
+                $archetype_card_count = $archetype_card_count[0]['count_cards'];
             }
-            $archetype_card_count = $archetype_card_count[0]['count_cards'];
 
-            $cards = $this->modelCard->getPlayedCardsByCopies($aggregate_cond);
+
+            $cards = $this->modelCard->getPlayedCardsByCopies($aggregate_cond, $pMaindeck);
             $current_card = "--";
             $current_player_count = 0;
             // add placeholder to check last card for filling copies
@@ -299,6 +316,20 @@ namespace app\main\controllers\front {
                 } else {
                     $current_player_count += $card['count_players_main'];
                     $cards[$key]['count_players_main'] = $current_player_count;
+                }
+
+                // if next card is the same AND with copie_n != N-1, manually add missing copies into the combined list
+                if (
+                    isset($cards[$key+1]) &&
+                    $cards[$key+1]['name_card'] == $card['name_card'] &&
+                    $cards[$key+1]['copie_n'] != ($card['copie_n'] - 1)
+                ) {
+                    for ($i = ($cards[$key+1]['copie_n'] + 1); $i < $card['copie_n']; $i++) {
+                        $tmp_card = $card;
+                        $tmp_card['copie_n'] = $i;
+                        $tmp_card['count_players_main'] = $current_player_count;
+                        $fill_copies[] = $tmp_card;
+                    }
                 }
 
                 // if next card is not same name AND card was only played in N copies, manually add copies 1 to N-1 into the combined list
@@ -317,7 +348,23 @@ namespace app\main\controllers\front {
             $cards = array_merge($cards, $fill_copies);
 
             // sort copies by player count
-            uasort($cards, array($this, "sortCardsByPlayerCount"));
+            usort($cards, array($this, "sortCardsByPlayerCount"));
+            trace_r($cards);
+
+            if ($pMaindeck) {
+                // TODO check lands count
+
+                // get average lands count
+                /*
+                SELECT AVG(toto) FROM (SELECT SUM(IF(type_card LIKE '%land%', count_main, 0)) AS toto
+                FROM player_card
+                INNER JOIN players p ON p.id_player = player_card.id_player
+                INNER JOIN cards ON cards.id_card = player_card.id_card
+                INNER JOIN tournaments ON p.id_tournament = tournaments.id_tournament
+                WHERE count_main != '0' AND (id_archetype = '65' AND id_format = '57')
+                GROUP BY p.id_player HAVING SUM(count_main) = 60) tmp
+                 */
+            }
 
             foreach ($cards as $card) {
                 $aggregate[] = $card['name_card'];
@@ -342,14 +389,19 @@ namespace app\main\controllers\front {
                     ->andWhere("id_format", Query::EQUAL, $format['id_format']);
 
                 // get archetype aggregate list
-                $aggregate = $this->getAggregateList($format['id_format'], $archetype['id_archetype']);
-                $aggregate_counts = array_count_values($aggregate);
-                $list_cards = array_unique($aggregate);
+                $aggregate_main = $this->getAggregateList($format['id_format'], $archetype['id_archetype']);
+                $aggregate_counts = array_count_values($aggregate_main);
+                $list_cards = array_unique($aggregate_main);
+
+                $aggregate_side = $this->getAggregateList($format['id_format'], $archetype['id_archetype'], false);
+                $aggregate_counts_side = array_count_values($aggregate_side);
+                $list_cards_side = array_unique($aggregate_side);
 
                 $cards_week = array();
+                $cards_week_side = array();
                 $cards_data = $this->modelCard->all(
                     Query::condition()
-                        ->andWhere("name_card", Query::IN, '("' . implode('","', $list_cards) . '")', false)
+                        ->andWhere("name_card", Query::IN, '("' . implode('","', array_merge($list_cards, $list_cards_side)) . '")', false)
                         ->order(" CASE  WHEN type_card LIKE '%Creature%' THEN 1 WHEN type_card IN ('Instant', 'Sorcery') THEN 2
                             WHEN type_card = 'Legendary Planeswalker' THEN 3 WHEN type_card = 'Basic Land' THEN 10 WHEN type_card LIKE '%Land%' THEN 9 ELSE 8 END ASC,
                             cmc_card, color_card", ""),
@@ -358,12 +410,17 @@ namespace app\main\controllers\front {
                 foreach ($cards_data as $card) {
                     if (isset($aggregate_counts[$card['name_card']])) {
                         $card['count_main'] = $aggregate_counts[$card['name_card']];
-                    } else {
-                        trace_r("WARNING : " . $card['name_card'] . " - card count not found");
+                        $cards_week[$card['id_card']] = $card;
                     }
-                    $cards_week[$card['id_card']] = $card;
+                    if (isset($aggregate_counts_side[$card['name_card']])) {
+                        $card['count_side'] = $aggregate_counts_side[$card['name_card']];
+                        $cards_week_side[$card['id_card']] = $card;
+                    }
+                    // TODO check that cards are correctly found ?
                 }
 
+
+                // TODO remove format comparing -- move to other tool ?
                 if (
                     $_GET['id_format_compare'] &&
                     $_GET['id_format_compare'] != $_GET['id_format'] &&
@@ -412,13 +469,19 @@ namespace app\main\controllers\front {
                 // Add decklist to content
                 $decklist_by_curve = $this->modelCard->sortDecklistByCurve($cards_week);
                 $this->addContent("cards_main", $decklist_by_curve);
-                trace_r($decklist_by_curve);
+
+                // sort sideboard cards by curve (also resets keys to proper display)
+                usort($cards_week_side, array($this, "sortCardsByCmc"));
+
+                $this->addContent("cards_side", $cards_week_side);
+                $this->addContent("aggregate", 1);
 
                 $this->addContent("player", array(
                     "name_archetype" => $archetype['name_archetype'],
                     "arena_id"       => "AGGREGATE DECKLIST",
                     "name_tournament" => $format['name_format'],
-                    "count_cards_main" => count($aggregate)
+                    "count_cards_main" => count($aggregate_main),
+                    "count_cards_side" => count($aggregate_side)
                 ));
             } else {
                 $this->addMessage("Please specify a format and an archetype");

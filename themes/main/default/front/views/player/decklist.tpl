@@ -1,12 +1,12 @@
 {if !$request_async}{include file="includes/head.tpl"}{/if}
 
 {if $content.cards_main!==null}
-    <div class="decklist decklist-visual decklist-curve">
+    <div class="decklist decklist-visual decklist-curve{if $content.aggregate == 1} decklist-aggregate{/if}">
         <div class="background-placeholder"></div>
         {if $content.logo}
             <div class="logo"></div>
         {/if}
-        <h2>{$content.player.name_archetype} <small>by {$content.player.arena_id}</small></h2>
+        <h2>{$content.player.name_archetype} <small> {$content.player.arena_id}</small></h2>
         <h3>{$content.player.name_tournament}</h3>
         <hr class="decklist-separator" />
         <div class="decklist-main-container" style="width:{$content.maindeck_width}px">

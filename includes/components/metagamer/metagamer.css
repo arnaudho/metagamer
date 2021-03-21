@@ -265,7 +265,8 @@ body#page-coverage #debug:not(.fullscreen) { height: 0;}
 .container .decklist h5 { text-transform: uppercase; color: white; background-color: grey;
     padding: 14px 15px 10px; font-size: 18px; display: inline-block; font-family: Metropolis, Arial, serif;
     margin-bottom: 12px; border-top-right-radius: 16px;}
-.container .decklist h5.decklist-title-main { background-color: #f5875e; margin-top: 6px; }
+.container .decklist h5.decklist-title-main { background-color: #F5875E; margin-top: 6px; }
+.container .decklist.decklist-aggregate h5.decklist-title-main { background-color: #BB1111; }
 .container .decklist .decklist-card { position: relative; z-index: 10; display: inline-block; margin-bottom: 5px; margin-right: -2px;}
 .container .decklist .decklist-card img { width: 163px;}
 .container .decklist .decklist-card .decklist-card-count-shadow { position: absolute; top: 42px; right: 32px; z-index: 19; height: 0;
@@ -278,13 +279,17 @@ body#page-coverage #debug:not(.fullscreen) { height: 0;}
 .container .decklist .decklist-side .decklist-card .decklist-card-count { top: 22px;}
 .container .decklist .decklist-side .decklist-card .decklist-card-count-shadow { top: 40px;}
 .container .logo { float: right; width: 240px; margin-top: 10px; background: center /100% no-repeat url("imgs/logo.png"); height: 50px;}
+/*.container .logo { float: right; width: 150px; margin-right: 33px; background: center /100% no-repeat url(../../includes/components/./metagamer/imgs/logo-perf-series.png); height: 110px;}*/
 .container .overlay-twitter-size { position: fixed; border: 1px solid red; border-bottom-width: 0; height: 928px; width: 1650px;
     top: 5px; left: 10px; box-sizing: content-box;}
 .container .decklist .decklist-card .decklist-card-diff { color: #B8EDEB; font-size: 15px; font-family: Metropolis; padding-top: 8px;}
 .container .decklist .decklist-card .decklist-card-diff.decklist-card-diff-negative { color: #FF4500;}
 .container .decklist .decklist-card .decklist-card-diff.decklist-card-diff-positive { color: #ACFF2F;}
 
+/* IMPORT TOURNAMENT */
 #import-mtgmelee .form-group > * { display: block;}
+#import-mtgmelee input[name="import-mtgmelee[tournament_name]"] { width: 100%;}
+
 input#matchups-export-mode { cursor: pointer;}
 input#matchups-export-mode:checked ~ .table-matchups .matchup-deviation,
 input#matchups-export-mode:checked ~ .table-matchups .matchup-count,
