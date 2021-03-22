@@ -52,7 +52,8 @@ namespace app\main\models {
             ksort($decklist_by_curve);
             ksort($decklist_by_curve_spells);
 
-            $max_columns = 8;
+            $max_lands = 7;
+            $max_columns = count($lands) > $max_lands ? 8 : 7;
             // if more than 7 columns before lands, group columns 7+
             if (count($decklist_by_curve) >= $max_columns) {
                 $keep = array_slice($decklist_by_curve, 0, $max_columns-2);
@@ -61,7 +62,16 @@ namespace app\main\models {
                 array_push($keep, $merged);
                 $decklist_by_curve = $keep;
             }
-            $decklist_by_curve[99] = $lands;
+            // split lands in 2 columns if needed
+            if (count($lands) > $max_lands) {
+                $size_lands = round(count($lands)/2);
+                $lands_bis = array_slice($lands, $size_lands);
+                $lands = array_slice($lands, 0, $size_lands);
+                $decklist_by_curve[98] = $lands;
+                $decklist_by_curve[99] = $lands_bis;
+            } else {
+                $decklist_by_curve[99] = $lands;
+            }
 
             return $decklist_by_curve;
         }
