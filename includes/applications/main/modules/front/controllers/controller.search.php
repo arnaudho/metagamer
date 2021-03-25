@@ -82,7 +82,7 @@ namespace app\main\controllers\front {
                 $cards = $this->modelCard->searchCardsByName($term);
                 $count_cards = $this->modelCard->searchCardsByName($term, true);
                 foreach ($cards as $key => $card) {
-                    $cards[$key]['mana_cost_card'] = preg_replace('/(\{([\durbgw])\})/i', '<i class="ms ms-$2"></i>', strtolower($card['mana_cost_card']));
+                    $cards[$key]['mana_cost_card'] = preg_replace('/(\{([\dxcpsurbgw])\})/i', '<i class="ms ms-$2"></i>', strtolower($card['mana_cost_card']));
                 }
                 $results[] = array(
                     "label" => "Cards",
@@ -105,7 +105,7 @@ namespace app\main\controllers\front {
             if (!$card) {
                 Go::to404();
             }
-            $card['mana_cost_card'] = preg_replace('/(\{([\durbgw])\})/i', '<i class="ms ms-$2"></i>', strtolower($card['mana_cost_card']));
+            $card['mana_cost_card'] = preg_replace('/(\{([\dxcpsurbgw])\})/i', '<i class="ms ms-$2"></i>', strtolower($card['mana_cost_card']));
             $this->addContent("card", $card);
             $players_standard = $this->modelPlayer->searchPlayerByCardId(
                 $card['id_card'],
