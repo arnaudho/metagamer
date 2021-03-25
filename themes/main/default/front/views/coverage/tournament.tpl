@@ -7,21 +7,33 @@
         {if $content.tournament && $content.players}
             <h1>{$content.tournament.name_tournament}</h1>
             <h3>{$content.tournament.date_tournament} - {$content.players|count} players</h3>
-            <table class="table table-standings table-striped">
+            <table class="table table-standings table-striped" data-toggle="table"  data-search="true">
                 <thead>
                     <tr>
                         <th class="image-archetype"></th>
-                        <th>Archetype</th>
-                        <th>Player</th>
-                        <th>Record</th>
+                        <th data-field="archetype-player" data-sortable="true">Archetype</th>
+                        {if $content.display_league}
+                            <th data-field="icon-player" data-sortable="true" class="icon-player">League</th>
+                        {/if}
+                        <th data-field="name-player" data-sortable="true">Player</th>
+                        <th data-field="record-player" data-sortable="true">Record</th>
                         <th>Decklist</th>
                     </tr>
                 </thead>
                 <tbody>
                     {foreach from=$content.players key="rank" item="player"}
                         <tr>
-                            <td class="image-archetype" style="background: no-repeat top -21px right 50%/116% url({$player.image_archetype});"></td>
+                            <td class="image-archetype">
+                                <img src="{$player.image_archetype}" />
+                            </td>
                             <td class="name-archetype">{$player.name_archetype}</td>
+                            {if $content.display_league}
+                                <td class="icon-player">
+                                    {if $player.tag_player}
+                                        <img src="{$player.tag_player}" />
+                                    {/if}
+                                </td>
+                            {/if}
                             <td class="name-player">{$player.arena_id}</td>
                             <td>{$player.wins}-{$player.matches-$player.wins}</td>
                             <td>

@@ -245,6 +245,7 @@ table.table-leaderboard.leaderboard-detailed tbody tr td { font-size: 16px;}
 /* COVERAGE PAGES */
 .container-coverage h1 { font-family: Metropolis, serif; font-size: 40px;}
 .container-coverage h3 { font-family: "Metropolis Thin", Metropolis, serif;}
+.container-coverage .search.input-group input { font-family: Metropolis, serif;}
 .container-coverage .tournament-link h4 { font-family: Metropolis, serif; font-size: 24px;}
 .container-coverage .tournament-link { display: flex; font-family: "Metropolis Thin", Metropolis, serif;}
 .container-coverage .tournament-image { width: 200px;}
@@ -252,12 +253,21 @@ table.table-leaderboard.leaderboard-detailed tbody tr td { font-size: 16px;}
 .container-coverage .tournament-info { padding: 0 20px; font-size: 16px;}
 .container-coverage .tournament-date { font-family: 'Metropolis Thin', Arial, serif;}
 .container-coverage .tournament-count-players { font-family: Metropolis, Arial, serif;}
-.container-coverage .table-standings { font-size: 16px;}
+.container-coverage .table-standings { font-size: 16px; border: 0;}
 .container-coverage .table-standings th.image-archetype { width: 84px;}
-.container-coverage .table-standings th, .table-standings td { font-family: Metropolis, Arial, serif;}
+.container-coverage .table-standings th.icon-player { width: 52px;}
+.container-coverage .table-standings th,
+.container-coverage .table-standings th div,
+.container-coverage .table-standings td { font-family: Metropolis, Arial, serif;}
+.table-standings.table-bordered>tbody>tr>td,
+.table-standings.table-bordered>thead>tr>th {border: 0; border-top: 1px solid #DDDDDD;}
 .container-coverage .table-standings td.name-archetype { text-transform: uppercase; font-size: 1.3em;}
 .container-coverage .table-standings td.name-player { text-transform: capitalize;}
-
+.container-coverage .table-standings td.icon-player img { height: 48px;}
+.container-coverage .table-standings td.image-archetype { position: relative; overflow: hidden; pointer-events: none;}
+.container-coverage .table-standings td.image-archetype img { position: absolute; top: -17px; left: -9px; width: 100px; display: block;}
+.container-coverage table.table-standings>tbody>tr>td.icon-player { padding: 3px 8px;}
+.container-coverage .legend { font-style: italic; font-family: 'Metropolis Thin', Arial, serif; margin-top: 10px;}
 
 /* DECKLIST */
 .container .decklist .background-placeholder { background: 0 0 /100% #FFFFFF;

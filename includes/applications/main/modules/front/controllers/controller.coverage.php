@@ -49,14 +49,23 @@ namespace app\main\controllers\front {
             if (!isset($_GET['id_tournament']) || !$tournament = $this->modelTournament->getTupleById($_GET['id_tournament'])) {
                 $this->addContent("error", "Tournament not found");
             } else {
-                // TODO ModelPlayer method to get standings
+                $display_league = 0;
                 $players = $this->modelPlayer->getPlayersByTournamentId($tournament['id_tournament']);
                 $tournament['date_tournament'] = date("d F Y", strtotime($tournament['date_tournament']));
                 foreach ($players as &$player) {
                     if ($player['name_archetype'] == ModelArchetype::ARCHETYPE_OTHER) {
                         $player['name_archetype'] = $player['name_deck'];
                     }
+                    // ad player icons
+                    if (
+                        $player['tag_player'] == ModelPlayer::TAG_MPL ||
+                        $player['tag_player'] == ModelPlayer::TAG_RIVALS
+                    ) {
+                        $display_league = 1;
+                        $player['tag_player'] = Core::$path_to_components . "/metagamer/imgs/" . $player['tag_player'] . ".png";
+                    }
                 }
+                $this->addContent("display_league", $display_league);
                 $this->addContent("tournament", $tournament);
                 $this->addContent("players", $players);
             }
