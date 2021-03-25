@@ -192,7 +192,8 @@ namespace app\main\models {
             if (!$pCondition) {
                 $pCondition = Query::condition();
             }
-            $q = Query::select("cards.id_card, cards.name_card, cards.mana_cost_card, cards.cmc_card, cards.type_card, cards.image_card, count_main, count_side", $this->tablePlayerCards)
+            $q = Query::select("cards.id_card, cards.name_card, cards.mana_cost_card, cards.type_card, cards.image_card,
+                IF(cards.mana_cost_card LIKE '{X}%', 20, cards.cmc_card) AS cmc_card, count_main, count_side", $this->tablePlayerCards)
                 ->join($this->table, Query::JOIN_INNER, "cards.id_card = player_card.id_card AND id_player = $pIdPlayer")
                 ->andCondition($pCondition)
                 ->groupBy("cards.id_card");
