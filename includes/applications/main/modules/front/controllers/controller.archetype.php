@@ -257,7 +257,7 @@ namespace app\main\controllers\front {
         protected function sortCardsByCmc ($pA, $pB) {
             return $pA['cmc_card'] == $pB['cmc_card'] ?
                 ($pA['name_card'] > $pB['name_card'] ? 1 : -1) :
-                ($pA['cmc_card'] < $pB['cmc_card'] ? 1 : -1);
+                ($pA['cmc_card'] > $pB['cmc_card'] ? 1 : -1);
         }
 
         protected function sortCardsByPlayerCount ($pA, $pB) {
@@ -351,6 +351,9 @@ namespace app\main\controllers\front {
             usort($cards, array($this, "sortCardsByPlayerCount"));
             trace_r($cards);
 
+            // TODO check split versions -- e.g SB Thoughtseize without any black source / 10 Forest + 6 Snow-covered Forest
+            // http://complots.org/archetype/aggregatelist/?id_archetype=182&id_format=57
+
             if ($pMaindeck) {
                 // TODO check lands count
 
@@ -364,6 +367,7 @@ namespace app\main\controllers\front {
                 WHERE count_main != '0' AND (id_archetype = '65' AND id_format = '57')
                 GROUP BY p.id_player HAVING SUM(count_main) = 60) tmp
                  */
+                // when adding a card, if lands threshold is excessed AND card is land, THEN continue
             }
 
             foreach ($cards as $card) {
@@ -466,15 +470,17 @@ namespace app\main\controllers\front {
                         }
                     }
                 }
-                // Add decklist to content
-                $decklist_by_curve = $this->modelCard->sortDecklistByCurve($cards_week);
-                $this->addContent("cards_main", $decklist_by_curve);
+                // Sort decklist -- no aggregates for limited
+                $decklist_data = $this->modelCard->sortDecklistByCurve($cards_week);
+                $this->addContent("cards_main", $decklist_data['curve']);
 
                 // sort sideboard cards by curve (also resets keys to proper display)
                 usort($cards_week_side, array($this, "sortCardsByCmc"));
 
                 $this->addContent("cards_side", $cards_week_side);
                 $this->addContent("aggregate", 1);
+                $this->addContent("logo", 1);
+                $this->addContent("maindeck_width", count($decklist_data['curve'])*165+40);
 
                 $this->addContent("player", array(
                     "name_archetype" => $archetype['name_archetype'],

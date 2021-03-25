@@ -67,14 +67,15 @@ namespace app\main\models {
 
         public function getPlayersByTournamentId ($pIdTournament) {
             $q = Query::select("players.id_player, arena_id, name_deck, name_archetype, image_archetype,
-                IF (SUM(result_match) IS NULL, 0, SUM(result_match))AS wins,
+                IF (SUM(result_match) IS NULL, 0, SUM(result_match))AS wins, tag_player, country_player,
                 COUNT(result_match) AS matches", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
                 ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype")
                 ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
+                ->join("player_tag", Query::JOIN_OUTER_LEFT, "player_tag.id_people = people.id_people")
                 ->andWhere("players.id_tournament", Query::EQUAL, $pIdTournament)
                 ->groupBy("players.id_player")
-                ->order("arena_id");
+                ->order("wins DESC, matches, arena_id");
             return $q->execute($this->handler);
         }
 
@@ -358,11 +359,15 @@ namespace app\main\models {
             return $players;
         }
 
-        public function countPlayersWithoutDecklist () {
-            return $this->count(
-                Query::condition()
-                    ->andWhere("id_archetype", Query::IS, "NULL", false)
-            );
+        public function countPlayersWithoutDecklist ($pCondition = null) {
+            if(!$pCondition)
+                $pCondition = Query::condition();
+            $res = Query::select("COUNT(1) AS nb", $this->table)
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->andWhere("id_archetype", Query::IS, "NULL", false)
+                ->andCondition($pCondition)
+                ->execute($this->handler);
+            return $res[0]['nb'];
         }
 
         public function countPlayers ($pCond = null, $pRulesCondition = null) {
@@ -377,7 +382,7 @@ namespace app\main\models {
                 $q->andCondition($rules_cond);
             }
             $data = $q->execute($this->handler);
-            return $data[0]["nb"];
+            return $data[0]['nb'];
         }
 
         public function deletePlayerById ($pIdPlayer) {

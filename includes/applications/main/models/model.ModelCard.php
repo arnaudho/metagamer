@@ -6,6 +6,9 @@ namespace app\main\models {
 
     class ModelCard extends BaseModel
     {
+        CONST DECKLIST_MAX_COLUMNS = 8;
+        CONST DECKLIST_MAX_LANDS = 7;
+
         protected $tablePlayerCards;
         protected $modelPlayer;
 
@@ -16,10 +19,18 @@ namespace app\main\models {
             parent::__construct("cards", "id_card");
         }
 
+        /**
+         * Sort maindeck cards for visual display
+         * @param $pDecklist
+         * @param bool $pIsLimited
+         * @return array
+         */
         public function sortDecklistByCurve ($pDecklist, $pIsLimited = false) {
+            $return = array();
             $lands = array();
             $decklist_by_curve = array();
             $decklist_by_curve_spells = array();
+
             foreach ($pDecklist as $card) {
                 if ($card['mana_cost_card'] == "") {
                     $card['cmc_card'] = 99;
@@ -37,6 +48,7 @@ namespace app\main\models {
                     }
                 }
             }
+
             // align creatures & spells in curve
             if ($pIsLimited) {
                 for ($curve = 0; $curve <= 10; $curve++) {
@@ -48,13 +60,14 @@ namespace app\main\models {
                         $decklist_by_curve[$curve] = array();
                     }
                 }
+                ksort($decklist_by_curve_spells);
             }
             ksort($decklist_by_curve);
-            ksort($decklist_by_curve_spells);
 
-            $max_lands = 7;
-            $max_columns = count($lands) > $max_lands ? 8 : 7;
-            // if more than 7 columns before lands, group columns 7+
+            $max_columns = count($lands) > self::DECKLIST_MAX_LANDS ?
+                self::DECKLIST_MAX_COLUMNS-1 : self::DECKLIST_MAX_COLUMNS;
+
+            // if more than N columns before lands, group columns N+
             if (count($decklist_by_curve) >= $max_columns) {
                 $keep = array_slice($decklist_by_curve, 0, $max_columns-2);
                 $merge = array_slice($decklist_by_curve, $max_columns-2);
@@ -62,8 +75,13 @@ namespace app\main\models {
                 array_push($keep, $merged);
                 $decklist_by_curve = $keep;
             }
+            if ($pIsLimited) {
+                // get max height for creatures block
+                $return["creatures_main_height"] = count(max($decklist_by_curve))*60+210;
+            }
+
             // split lands in 2 columns if needed
-            if (count($lands) > $max_lands) {
+            if (count($lands) > self::DECKLIST_MAX_LANDS) {
                 $size_lands = round(count($lands)/2);
                 $lands_bis = array_slice($lands, $size_lands);
                 $lands = array_slice($lands, 0, $size_lands);
@@ -73,7 +91,19 @@ namespace app\main\models {
                 $decklist_by_curve[99] = $lands;
             }
 
-            return $decklist_by_curve;
+            if ($pIsLimited) {
+                if (count($decklist_by_curve_spells) >= $max_columns) {
+                    $keep = array_slice($decklist_by_curve_spells, 0, $max_columns-2);
+                    $merge = array_slice($decklist_by_curve_spells, $max_columns-2);
+                    $merged = call_user_func_array('array_merge', $merge);
+                    array_push($keep, $merged);
+                    $decklist_by_curve_spells = $keep;
+                }
+                $return['curve_spells'] = $decklist_by_curve_spells;
+            }
+
+            $return['curve'] = $decklist_by_curve;
+            return $return;
         }
 
         public function getPlayedCards ($pCondition = null, $pRulesCondition = null, $pOrder = "name_card", $pType = "ASC") {
