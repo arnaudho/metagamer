@@ -2,11 +2,19 @@
 
 namespace core\application
 {
+
+    use core\tools\Menu;
+
     /**
      * Controller front office de base
      * @package core\application
      */
     class DefaultFrontController extends DefaultController implements InterfaceController {
+
+        /**
+         * @var Menu
+         */
+        protected $menu;
 
         public function __construct()
         {
@@ -14,16 +22,15 @@ namespace core\application
             if(!call_user_func_array(array($authHandler, 'is'), array($authHandler::USER)))
                 Go::to();
             Autoload::addComponent("Metagamer");
-            /*
-             * TODO : handle menu
-            $menu = new Menu(Core::$path_to_application.'/modules/back/menu.json');
-            $menu->redirectToDefaultItem();
-            */
+
+            $data = $authHandler::$data;
+            $this->menu = new Menu(Core::$path_to_application.'/modules/front/menu.json', $data['permissions_user']);
         }
 
         public function index()
         {
-            Go::to("index", "index");
+            $this->menu->redirectToDefaultItem();
+//            Go::to("index", "index");
         }
 
         /**
@@ -32,6 +39,7 @@ namespace core\application
          */
         public function render($pDisplay = true)
         {
+            $this->addContent('menu_items', $this->menu->retrieveItems());
             return parent::render($pDisplay);
         }
 

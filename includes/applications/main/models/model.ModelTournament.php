@@ -72,7 +72,8 @@ namespace app\main\models {
                 $cond = clone $pCondition;
             }
             $cond->order("id_format", "DESC");
-            return Query::select("tournaments.*, formats.*, COUNT(id_player) AS count_players", "formats")
+            return Query::select("tournaments.*, formats.*, DATE_FORMAT(date_tournament, '%d %b %Y') AS date_tournament,
+                COUNT(id_player) AS count_players", "formats")
                 ->join($this->table, Query::JOIN_OUTER_LEFT, "tournaments.id_format = formats.id_format")
                 ->join("players", Query::JOIN_OUTER_LEFT, "tournaments.id_tournament = players.id_tournament")
                 ->andCondition($cond)

@@ -16,7 +16,7 @@ namespace core\tools
     {
         private $items;
 
-        public function __construct($pFile)
+        public function __construct($pFile, $pUserPermissions = 0)
         {
             if(!file_exists($pFile))
                 return;
@@ -25,8 +25,13 @@ namespace core\tools
             {
                 trigger_error('[Object Menu] No Items loaded', E_USER_NOTICE);
             }
-            foreach($this->items as &$item)
+
+            foreach($this->items as $key => &$item)
             {
+                if ($item['permissions'] && !((int)$pUserPermissions & (int)$item['permissions'])) {
+                    unset($this->items[$key]);
+                    continue;
+                }
                 if(!isset($item['parameters']))
                     $item['parameters'] = array();
                 if(!isset($item['controller']))

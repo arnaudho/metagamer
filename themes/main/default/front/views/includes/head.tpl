@@ -23,16 +23,7 @@
 	</head>
 	<body>
 		<div class="container">
-			<div class="menu">
-				<a href="home/"><span class="glyphicon glyphicon-home"></span></a>
-				<a href="dashboard/"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a>
-				<a href="dashboard/leaderboard/"><span class="glyphicon glyphicon-stats"></span> MPL</a>
-				<a href="archetype/"><span class="glyphicon glyphicon-screenshot"></span> Analysis</a>
-				<a href="search/"><span class="glyphicon glyphicon-search"></span> Search</a>
-				<a href="tournament/import/"><span class="glyphicon glyphicon-save"></span> Import</a>
-				<a href="dashboard/archetypes/"><span class="glyphicon glyphicon-tasks"></span> Archetypes</a>
-				<a href="index/logout/"><span class="glyphicon glyphicon-log-out"></span> Log out</a>
-			</div>
+			{include file="includes/menu.tpl"}
 			<div id="messages">
 				{foreach from=$messages item="message"}
 					<p class="bg-{$message.type}">{$message.message}</p>
