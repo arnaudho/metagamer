@@ -7,6 +7,7 @@ namespace app\main\controllers\front {
     use app\main\models\ModelPlayer;
     use app\main\models\ModelTournament;
     use app\main\src\BattlefyBot;
+    use app\main\src\MagicGGBot;
     use app\main\src\MetagamerBot;
     use app\main\src\MtgMeleeBot;
     use core\application\DefaultFrontController;
@@ -42,6 +43,22 @@ namespace app\main\controllers\front {
                     }
                     if (isset($bot)) {
                         $result = $bot->parseDecklists($post_data['url'], $post_data['id_format']);
+                        if ($result) {
+                            $id_tournament = $bot->tournament;
+                            $data = $this->modelTournament->getTournamentData($id_tournament);
+                            $data['id_tournament'] = $id_tournament;
+                            $this->addContent("data", $data);
+                        }
+                    }
+                } elseif ($_POST['import-magicgg']['url'] && $_POST['import-magicgg']['id_format']) {
+                    $post_data = $_POST['import-magicgg'];
+                    if (preg_match('/magic.gg/', $post_data['url'], $output_array)) {
+                        $bot = new MagicGGBot("Scott (Magic.gg events tournament parser)");
+                    } else {
+                        $this->addMessage("Unknown tournament source : " . $post_data['url'], self::MESSAGE_ERROR);
+                    }
+                    if (isset($bot)) {
+                        $result = $bot->parseTournament($post_data['url'], $post_data['id_format']);
                         if ($result) {
                             $id_tournament = $bot->tournament;
                             $data = $this->modelTournament->getTournamentData($id_tournament);
@@ -90,6 +107,7 @@ namespace app\main\controllers\front {
                     $count = $_POST['import-mtgmelee-decklists']['count'] > 100 ? 100 : intval($_POST['import-mtgmelee-decklists']['count']);
                     $players = $this->modelPlayer->all(Query::condition()
                         ->andWhere("id_archetype", Query::IS, "NULL", false)
+                        // parse specific decklist here
                         ->limit(0, $count),
                         "id_player"
                     );
@@ -158,6 +176,56 @@ namespace app\main\controllers\front {
             $this->setTitle("Import tournament");
             $this->addContent("list_formats", $this->modelFormat->allOrdered());
             $this->addContent("count_waiting", $this->modelPlayer->countPlayersWithoutDecklist());
+        }
+
+        // TODO get archetype OTHER by default
+        // TODO accept id_format as well for dashboard metagame
+        public function metagame () {
+            if (
+                !isset($_GET['id_tournament']) ||
+                !$tournament = $this->modelTournament->getTupleById(
+                    $_GET['id_tournament'],
+                    "tournaments.*, DATE_FORMAT(date_tournament, '%d %b %Y') AS date_tournament"
+                )
+            ) {
+                $this->addContent("error", "Tournament not found");
+            } else {
+                $metagame_cond = Query::condition()
+                    ->andWhere("tournaments.id_tournament", Query::EQUAL, $tournament['id_tournament']);
+                $metagame = $this->modelPlayer->countArchetypes($metagame_cond);
+
+                $condensed_metagame = $this->round_metagame($metagame);
+                $this->addContent("metagame", $condensed_metagame);
+                $this->addContent("title", $tournament['name_tournament']);
+                $this->addContent("date", $tournament['date_tournament']);
+            }
+        }
+
+        private function round_metagame ($pMetagame, $pMaxArchetypes = 7) {
+            $other_id = null;
+            $count_archetypes = 1;
+            $metagame = array();
+            $sum_other = 0;
+            $percent_other = 0;
+            foreach ($pMetagame as $key => $archetype) {
+                if ($archetype['id_archetype'] == ModelArchetype::ARCHETYPE_OTHER_ID) {
+                    $other_id = $key;
+                } else {
+                    if ($count_archetypes < $pMaxArchetypes) {
+                        $metagame[] = $archetype;
+                        $count_archetypes++;
+                        $percent_other += $archetype['percent'];
+                    } else {
+                        $sum_other += $archetype['count'];
+                    }
+                }
+            }
+            $pMetagame[$other_id]['count'] += $sum_other;
+            $pMetagame[$other_id]['percent'] = 100 - $percent_other;
+            if ($other_id) {
+                $metagame[] = $pMetagame[$other_id];
+            }
+            return $metagame;
         }
 
         // TODO : filter by format first, then async load tournament list

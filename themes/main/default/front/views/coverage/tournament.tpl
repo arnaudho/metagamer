@@ -7,6 +7,8 @@
         {if $content.tournament && $content.players}
             <h1>{$content.tournament.name_tournament}</h1>
             <h3>{$content.tournament.date_tournament} - {$content.players|count} players</h3>
+            <a href="tournament/metagame/?id_tournament={$content.tournament.id_tournament}"
+               class="btn btn-default" target="_blank">Metagame breakdown</a>
             <table class="table table-standings table-striped" data-toggle="table"  data-search="true">
                 <thead>
                     <tr>
