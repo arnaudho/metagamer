@@ -280,6 +280,12 @@ class MtgMeleeBot extends BotController
             // get list players (from new players)
             // merge with list_players
         if ($new_players) {
+
+            // TODO se baser sur les playerId plutot que les player name pour les resultats de matches
+
+            trace_r("NEW PLAYERS !!!");
+            trace_r($new_players);
+            $this->addMessage(count($new_players) . " new players inserted");
             $new_players_arena_ids = array_column($new_players, "arena_id");
             $all_people = $this->modelPeople->all(
                 Query::condition()
@@ -368,12 +374,14 @@ class MtgMeleeBot extends BotController
 
     public function getMatchResult ($pPlayer, $pOpponent, $pResult) {
         if (preg_match('/(.+)\sWon/i', $pResult, $output_array)) {
-            if ($output_array[1] == $pPlayer || $output_array[1] == html_entity_decode($pPlayer)) {
+            if ($output_array[1] == $pPlayer || htmlentities($output_array[1], ENT_QUOTES) == $pPlayer || $output_array[1] == html_entity_decode($pPlayer)) {
                 return 1;
-            } elseif ($output_array[1] == $pOpponent || $output_array[1] == html_entity_decode($pOpponent)) {
+            } elseif ($output_array[1] == $pOpponent || htmlentities($output_array[1], ENT_QUOTES) == $pOpponent || $output_array[1] == html_entity_decode($pOpponent)) {
                 return 0;
             }
         }
+        $this->addMessage("Unknown result - $pPlayer vs. $pOpponent : $pResult");
+        trace_r("$pPlayer vs. $pOpponent : $pResult");
         // 0-0-3 Draw & all other results
         return false;
     }
