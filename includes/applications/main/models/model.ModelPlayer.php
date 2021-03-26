@@ -233,6 +233,21 @@ namespace app\main\models {
             return $players;
         }
 
+        public function getPlayersByCountry ($pIdCountry, $pIdTournaments = array()) {
+            $players = Query::select("people.id_people, arena_id, country_player, players.id_tournament, name_tournament, tag_player,
+                SUM(result_match) AS wins, COUNT(result_match) AS total", $this->table)
+                ->join("matches", Query::JOIN_INNER, "matches.id_player = players.id_player")
+                ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
+                ->join("player_tag", Query::JOIN_INNER, "people.id_people = player_tag.id_people")
+                ->join("tournaments", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament")
+                ->andWhere("country_player", Query::EQUAL, $pIdCountry)
+                ->andWhere("players.id_tournament", Query::IN, "(" . implode(",", $pIdTournaments) . ")", false)
+                ->groupBy("people.id_people, players.id_tournament")
+                ->order("people.arena_id, players.id_tournament")
+                ->execute($this->handler);
+            return $players;
+        }
+
         public function getLeaderboard ($pTag = ModelPlayer::TAG_MPL, $pDetailed = true) {
             $players = $this->getProLeaguePointsByEvent($pTag);
 

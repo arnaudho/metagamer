@@ -37,7 +37,7 @@ namespace app\main\controllers\front {
         public function index () {
             $tournaments = $this->modelTournament->allOrdered(
                 Query::condition()
-                    ->andWhere("tournaments.id_tournament", Query::IN, "(5288, 5287, 4090, 4091, 15133, 15148)", false)
+                    ->andWhere("tournaments.id_tournament", Query::IN, "(4090, 4091, 5287, 5288)", false)
             );
             foreach ($tournaments as &$tournament) {
                 $tournament['image_tournament'] = Core::$path_to_components . "/metagamer/imgs/kaldheim_championship.png";
