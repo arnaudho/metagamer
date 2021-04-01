@@ -11,6 +11,7 @@ namespace app\main\controllers\front {
     use app\main\src\MetagamerBot;
     use app\main\src\MtgMeleeBot;
     use core\application\DefaultFrontController;
+    use core\application\routing\RoutingHandler;
     use core\data\SimpleJSON;
     use core\db\Query;
 
@@ -179,7 +180,6 @@ namespace app\main\controllers\front {
         }
 
         // TODO get archetype OTHER by default
-        // TODO accept id_format as well for dashboard metagame
         public function metagame () {
             if (
                 !isset($_GET['id_tournament']) ||
@@ -188,17 +188,47 @@ namespace app\main\controllers\front {
                     "tournaments.*, DATE_FORMAT(date_tournament, '%d %b %Y') AS date_tournament"
                 )
             ) {
-                $this->addContent("error", "Tournament not found");
+                if (
+                    isset($_GET['id_format']) &&
+                    $format = $this->modelFormat->getTupleById(
+                        $_GET['id_format']
+                    )
+                ) {
+                    $metagame_cond = Query::condition()
+                        ->andWhere("tournaments.id_format", Query::EQUAL, $format['id_format']);
+                    $metagame = $this->modelPlayer->countArchetypes($metagame_cond);
+                    $condensed_metagame = $this->round_metagame($metagame);
+                    $title = $format['name_format'];
+
+                    $dates = $this->modelTournament->allWithFormat($metagame_cond, "MIN(date_tournament) AS min_date, MAX(date_tournament) AS max_date");
+                    $dates = $dates[0];
+                    $dates_time = array_map('strtotime', $dates);
+                    if (date('j', $dates_time['min_date']) == date('j', $dates_time['max_date'])) {
+                        $date = date('j M Y', $dates_time['max_date']);
+                    } else {
+                        if (date('M', $dates_time['min_date']) == date('M', $dates_time['max_date'])) {
+                            $date = date('j', $dates_time['min_date']) . "-" . date('j M Y', $dates_time['max_date']);
+                        } else {
+                            $date = date('j M', $dates_time['min_date']) . " - " . date('j M Y', $dates_time['max_date']);
+                        }
+                    }
+                } else {
+                    $this->addMessage("Incorrect format or tournament specified", self::MESSAGE_ERROR);
+                }
             } else {
                 $metagame_cond = Query::condition()
                     ->andWhere("tournaments.id_tournament", Query::EQUAL, $tournament['id_tournament']);
                 $metagame = $this->modelPlayer->countArchetypes($metagame_cond);
 
                 $condensed_metagame = $this->round_metagame($metagame);
-                $this->addContent("metagame", $condensed_metagame);
-                $this->addContent("title", $tournament['name_tournament']);
-                $this->addContent("date", $tournament['date_tournament']);
+                $title = $tournament['name_tournament'];
+                $date = $tournament['date_tournament'];
             }
+            // break deck names in 2 lines
+            $this->addContent("metagame", $condensed_metagame);
+            $this->addContent("title", $title);
+            $this->addContent("date", $date);
+            $this->setTitle("$title - Metagame breakdown");
         }
 
         private function round_metagame ($pMetagame, $pMaxArchetypes = 7) {
@@ -228,10 +258,13 @@ namespace app\main\controllers\front {
             return $metagame;
         }
 
-        // TODO : filter by format first, then async load tournament list
         public function search () {
             $this->setTitle("Search tournament");
-            $list_tournaments = $this->modelTournament->all(Query::condition()->order("date_tournament DESC, name_tournament"), "id_tournament, name_tournament");
+            $list_tournaments = $this->modelTournament->all(
+                Query::condition()
+                    ->order("date_tournament DESC, name_tournament")
+                    ->limit(0, 50)
+                , "id_tournament, name_tournament");
             $this->addContent("list_tournaments", $list_tournaments);
             if (isset($_GET['id'])) {
                 $tournament = $this->modelTournament->getTupleById($_GET['id']);
@@ -277,6 +310,8 @@ namespace app\main\controllers\front {
                         $deck['winrate'] = $winrates[$key]['winrate'];
                     }
                     $tournament['count_players'] = $count_players;
+
+                    $this->addContent("link_metagame", RoutingHandler::rewrite("tournament", "metagame") . "?id_tournament=" . $tournament['id_tournament']);
                     $this->addContent("tournament", $tournament);
                     $this->addContent("metagame", $metagame);
                 }

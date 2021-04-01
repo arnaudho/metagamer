@@ -7,7 +7,7 @@ namespace app\main\models {
     class ModelTournament extends BaseModel {
 
         CONST LEAGUE_TOURNAMENT_IDS = array(15128, 15133, 15143, 15148);
-        CONST PT_TOURNAMENT_IDS = array(4090);
+        CONST PT_TOURNAMENT_IDS = array(4090, 4091, 5287, 5288);
 
         public function __construct()
         {
@@ -79,6 +79,17 @@ namespace app\main\models {
                 ->andCondition($cond)
                 ->order("formats.id_format DESC, tournaments.date_tournament ASC, tournaments.id_tournament")
                 ->groupBy("tournaments.id_tournament")
+                ->execute($this->handler);
+        }
+
+        public function allWithFormat ($pCondition = null, $pFields = "*") {
+            $cond = Query::condition();
+            if ($pCondition) {
+                $cond = clone $pCondition;
+            }
+            return Query::select($pFields, $this->table)
+                ->join("formats", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
+                ->andCondition($cond)
                 ->execute($this->handler);
         }
 

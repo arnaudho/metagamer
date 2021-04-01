@@ -25,6 +25,11 @@
     {/if}
 {/if}
 
+{if $content.link_metagame}
+    <a href="{$content.link_metagame}"
+       class="btn btn-default" target="_blank">Metagame breakdown <span class="glyphicon glyphicon-new-window"></span></a>
+{/if}
+
 {if $content.metagame}
     <h3>Metagame breakdown</h3>
     <table class="table table-hover table-condensed">

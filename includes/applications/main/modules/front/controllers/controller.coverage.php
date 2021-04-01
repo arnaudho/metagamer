@@ -37,12 +37,16 @@ namespace app\main\controllers\front {
         public function index () {
             $tournaments = $this->modelTournament->allOrdered(
                 Query::condition()
-                    ->andWhere("tournaments.id_tournament", Query::IN, "(4090, 4091, 5287, 5288)", false)
+                    ->andWhere("tournaments.id_tournament", Query::IN, "(5287, 5288)", false)
             );
             foreach ($tournaments as &$tournament) {
-                $tournament['image_tournament'] = Core::$path_to_components . "/metagamer/imgs/kaldheim_championship.png";
+                if (!$tournament['image_tournament']) {
+                    $tournament['image_tournament'] = "arena_logo.png";
+                }
+                $tournament['image_tournament'] = Core::$path_to_components . "/metagamer/imgs/" . $tournament['image_tournament'];
             }
             $this->addContent("tournaments", $tournaments);
+            $this->setTitle("Coverage");
         }
 
         public function tournament () {
@@ -63,11 +67,14 @@ namespace app\main\controllers\front {
                     ) {
                         $display_league = 1;
                         $player['tag_player'] = Core::$path_to_components . "/metagamer/imgs/" . $player['tag_player'] . ".png";
+                    } else {
+                        $player['tag_player'] = '';
                     }
                 }
                 $this->addContent("display_league", $display_league);
                 $this->addContent("tournament", $tournament);
                 $this->addContent("players", $players);
+                $this->setTitle($tournament['name_tournament'] . " - Coverage");
             }
         }
     }

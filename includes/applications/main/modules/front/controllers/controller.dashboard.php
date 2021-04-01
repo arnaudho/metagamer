@@ -12,6 +12,7 @@ namespace app\main\controllers\front {
     use core\application\DefaultFrontController;
     use core\application\Go;
     use core\application\Header;
+    use core\application\routing\RoutingHandler;
     use core\db\Query;
     use core\utils\StatsUtils;
     use lib\core\tools\Http;
@@ -72,10 +73,12 @@ namespace app\main\controllers\front {
             }
             if ($format && $dashboard_cond) {
                 // check if duplicate players
-                $count_duplicates = $this->modelPlayer->countDuplicatePlayers(
-                    Query::condition()
-                        ->andWhere("tournaments.id_format", Query::EQUAL, $format['id_format'])
-                );
+                $count_duplicates = $this->modelPlayer->countDuplicatePlayers($dashboard_cond);
+
+                $count_wainting = $this->modelPlayer->countPlayersWithoutDecklist($dashboard_cond);
+                if ($count_wainting > 0) {
+                    $this->addMessage("$count_wainting players without decklist - <a href='tournament/import/'>Go to import</a>", self::MESSAGE_ERROR);
+                }
 
                 if ($count_duplicates != 0) {
                     $this->addMessage("$count_duplicates duplicates decklists found", self::MESSAGE_ERROR);
@@ -126,15 +129,6 @@ namespace app\main\controllers\front {
                 $this->addContent("data", $data);
 
                 $metagame = $this->modelPlayer->countArchetypes($dashboard_cond);
-                $this->addContent("metagame", $metagame);
-                $condensed_metagame = $this->round_metagame($metagame);
-                foreach ($condensed_metagame as $key => $deck) {
-                    if (substr_count($deck['name_archetype'], ' ') == 1) {
-                        $condensed_metagame[$key]['name_archetype'] = str_replace(' ', '<br />', $deck['name_archetype']);
-                    }
-                }
-                $this->addContent("condensed_metagame", $condensed_metagame);
-
                 if (empty($metagame)) {
                     $this->addMessage("No metagame data for selected format", self::MESSAGE_ERROR);
                 }
@@ -190,57 +184,46 @@ namespace app\main\controllers\front {
                         if ($matchup['id_archetype'] == $archetype['id_archetype']) {
                             $winrate[$m]['count'] = ceil($matchup['count'] / 2);
                         }
-                        $deviation = StatsUtils::getStandardDeviation($matchup['percent'], $matchup['count'], StatsUtils::Z95);
-                        $winrate[$m]['deviation'] = $deviation;
-                        $winrate[$m]['deviation_up'] = round($matchup['percent'] + $deviation);
-                        if ($winrate[$m]['deviation_up'] > 100) {
-                            $winrate[$m]['deviation_up'] = 100;
-                        }
-                        $winrate[$m]['deviation_down'] = round($matchup['percent'] - $deviation);
-                        if ($winrate[$m]['deviation_down'] < 0) {
+                        if (isset($matchup['percent']) && isset($matchup['count']) && $matchup['count'] != 0) {
+                            // League Weekend : count x2
+                            $deviation = StatsUtils::getStandardDeviation($matchup['percent'], $matchup['count'], StatsUtils::Z95);
+                            $winrate[$m]['deviation'] = $deviation;
+                            $winrate[$m]['deviation_up'] = round($matchup['percent'] + $deviation);
+                            if ($winrate[$m]['deviation_up'] > 100) {
+                                $winrate[$m]['deviation_up'] = 100;
+                            }
+                            $winrate[$m]['deviation_down'] = round($matchup['percent'] - $deviation);
+                            if ($winrate[$m]['deviation_down'] < 0) {
+                                $winrate[$m]['deviation_down'] = 0;
+                            }
+                        } else {
                             $winrate[$m]['deviation_down'] = 0;
+                            $winrate[$m]['deviation_up'] = 100;
                         }
                     }
                     $archetypes[$key]['winrates'] = $winrate;
 
-                     // fix name display
+                    // fix name display
                     $words = str_word_count($archetype['name_archetype'], 1);
                     if (count($words) == 2) {
                         $archetypes[$key]['name_archetype'] = $words[0] . ' <br />' . $words[1];
                     }
                 }
+
+                $link_metagame = RoutingHandler::rewrite("tournament", "metagame");
+                if ($tournament) {
+                    $link_metagame .= "?id_tournament=" . $tournament['id_tournament'];
+                } else {
+                    $link_metagame .= "?id_format=" . $format['id_format'];
+                }
+                $this->addContent("link_metagame", $link_metagame);
+
+                $this->addContent("metagame", $metagame);
                 $this->addContent("archetypes", $archetypes);
                 $this->addContent("confidence", "0.95");
             } else {
                 $this->setTitle("Dashboard");
             }
-        }
-
-        private function round_metagame ($pMetagame, $pMaxArchetypes = 7) {
-            $other_id = null;
-            $count_archetypes = 1;
-            $metagame = array();
-            $sum_other = 0;
-            $percent_other = 0;
-            foreach ($pMetagame as $key => $archetype) {
-                if ($archetype['id_archetype'] == ModelArchetype::ARCHETYPE_OTHER_ID) {
-                    $other_id = $key;
-                } else {
-                    if ($count_archetypes < $pMaxArchetypes) {
-                        $metagame[] = $archetype;
-                        $count_archetypes++;
-                        $percent_other += $archetype['percent'];
-                    } else {
-                        $sum_other += $archetype['count'];
-                    }
-                }
-            }
-            $pMetagame[$other_id]['count'] += $sum_other;
-            $pMetagame[$other_id]['percent'] = 100 - $percent_other;
-            if ($other_id) {
-                $metagame[] = $pMetagame[$other_id];
-            }
-            return $metagame;
         }
 
         public function leaderboard () {

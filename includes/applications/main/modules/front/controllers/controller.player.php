@@ -94,9 +94,10 @@ namespace app\main\controllers\front {
             $this->addContent("overlay_twitter", 0);
             $this->setTemplate("player", "decklist");
             $this->addContent("player", $player);
-            $this->addContent("maindeck_width", count($decklist_data["curve"])*165+40);
+//            $this->addContent("maindeck_width", count($decklist_data["curve"])*165+40);
             $this->addContent("cards_main", $decklist_data["curve"]);
             $this->addContent("cards_side", $cards_side);
+            $this->setTitle($player['name_archetype'] . " - " . $player['arena_id']);
         }
     }
 }

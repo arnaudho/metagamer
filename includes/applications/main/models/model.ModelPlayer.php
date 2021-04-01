@@ -75,7 +75,7 @@ namespace app\main\models {
                 ->join("player_tag", Query::JOIN_OUTER_LEFT, "player_tag.id_people = people.id_people")
                 ->andWhere("players.id_tournament", Query::EQUAL, $pIdTournament)
                 ->groupBy("players.id_player")
-                ->order("wins DESC, matches, arena_id");
+                ->order("wins DESC, matches, name_archetype, arena_id");
             return $q->execute($this->handler);
         }
 
@@ -236,7 +236,7 @@ namespace app\main\models {
         public function getPlayersByCountry ($pIdCountry, $pIdTournaments = array()) {
             $players = Query::select("people.id_people, arena_id, country_player, players.id_tournament, name_tournament, tag_player,
                 SUM(result_match) AS wins, COUNT(result_match) AS total", $this->table)
-                ->join("matches", Query::JOIN_INNER, "matches.id_player = players.id_player")
+                ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
                 ->join("player_tag", Query::JOIN_INNER, "people.id_people = player_tag.id_people")
                 ->join("tournaments", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament")
@@ -356,7 +356,7 @@ namespace app\main\models {
             } elseif (!$id_player) {
                 $id_player = Query::select("id_player", $this->table)
                     ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " .
-                        $pTournamentId . " AND people.discord_id = '" . $pArenaId . "'")
+                        $pTournamentId . " AND (people.discord_id = '$pArenaId' OR people.arena_id = ' " . str_replace("&#039;", "'", $pArenaId) . "')")
                     ->execute($this->handler);
             }
             // cancel if several players could match

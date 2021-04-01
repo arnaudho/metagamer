@@ -61,78 +61,39 @@
             </tr>
         </tbody>
     </table>
-    <h2>Metagame breakdown <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseMetagame" aria-expanded="false" aria-controls="collapseMetagame">
-            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-th-list"></span></button></a></h2>
-    <div id="collapseMetagame" class="panel-collapse collapse table-metagame-container" role="tabpanel">
-        <div class="background-placeholder"></div>
-        <h2>{$content.format.name_format}</h2>
-        <h3>METAGAME BREAKDOWN</h3>
-        <hr width="9%" />
-        <table class="table-metagame">
-            <tbody>
-                <tr class="metagame-deck-name">
-                    <td></td>
-                    {foreach from=$content.condensed_metagame item="deck"}
-                        <td>{$deck.name_archetype}</td>
-                    {/foreach}
-                </tr>
-                <tr>
-                    <td></td>
-                    {foreach from=$content.condensed_metagame item="deck"}
-                        <td class="metagame-deck-image">
-                            <div class="deck-image"
-                                style="background: no-repeat top {if $deck.id_archetype==3}0{else}-52px{/if} right 50%/273%
-                                        url({$deck.image_archetype});"></div></td>
-                    {/foreach}
-                </tr>
-                <tr class="metagame-deck-percent">
-                    <td class="deck-legend">% Field</td>
-                    {foreach from=$content.condensed_metagame item="deck"}
-                        <td><sup class="percent-placeholder">%</sup>{$deck.percent}<sup>%</sup></td>
-                    {/foreach}
-                </tr>
-                <tr class="metagame-deck-count">
-                    <td class="deck-legend">Copies played</td>
-                    {foreach from=$content.condensed_metagame item="deck"}
-                        <td>{$deck.count}</td>
-                    {/foreach}
-                </tr>
-            </tbody>
-        </table>
-        <div class="legend-container">
-            <div class="logo"></div>
-            <div class="legend">
-                <p>{$content.date_format}</p>
-                <p>Data source : <img src="https://mtgmelee.com/images/logo.png" style="width: 100px; display: inline-block; vertical-align: middle;" /></p>
-            </div>
-        </div>
-    </div>
+
+    {if $content.link_metagame}
+        <a href="{$content.link_metagame}"
+           class="btn btn-default" target="_blank">Metagame breakdown <span class="glyphicon glyphicon-new-window"></span></a>
+    {/if}
     <table class="table table-hover table-condensed">
         <thead>
-            <tr>
-                <th>Archetype</th>
-                <th>Count</th>
-                <th>Metagame %</th>
-                <th>Aggregate decklist</th>
-            </tr>
+        <tr>
+            <th>Archetype</th>
+            <th>Count</th>
+            <th>Metagame %</th>
+            <th>Browse decklists</th>
+            <th>Aggregate decklist</th>
+        </tr>
         </thead>
         <tbody>
-            {foreach from=$content.metagame item="deck"}
-                <tr{if $deck.name_archetype == "Other"} class="active"{/if}>
-                    <td>
-                        <a href="archetype/lists/?id_archetype={$deck.id_archetype}&id_format={$content.format.id_format}" class="" target="_blank">
-                            {$deck.name_archetype}
-                        </a>
-                    </td>
-                    <td>{$deck.count}</td>
-                    <td>{$deck.percent} %</td>
-                    <td>
-                        <a href="archetype/aggregatelist/?id_archetype={$deck.id_archetype}&id_format={$content.format.id_format}" class="btn btn-info" target="_blank">
-                            <span class="glyphicon glyphicon-duplicate"></span>
-                        </a>
-                    </td>
-                </tr>
-            {/foreach}
+        {foreach from=$content.metagame item="deck"}
+            <tr{if $deck.name_archetype == "Other"} class="active"{/if}>
+                <td class="name-archetype">{$deck.name_archetype}</td>
+                <td>{$deck.count}</td>
+                <td>{$deck.percent} %</td>
+                <td>
+                    <a href="archetype/lists/?id_archetype={$deck.id_archetype}&id_format={$content.format.id_format}" class="btn btn-info" target="_blank">
+                        <span class="glyphicon glyphicon-duplicate"></span>
+                    </a>
+                </td>
+                <td>
+                    <a href="archetype/aggregatelist/?id_archetype={$deck.id_archetype}&id_format={$content.format.id_format}" class="btn btn-success" target="_blank">
+                        <span class="glyphicon glyphicon-file"></span>
+                    </a>
+                </td>
+            </tr>
+        {/foreach}
         </tbody>
     </table>
 {/if}
