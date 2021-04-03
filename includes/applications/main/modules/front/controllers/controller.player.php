@@ -43,7 +43,11 @@ namespace app\main\controllers\front {
                 Go::to404();
             }
             $is_limited = $player['id_type_format'] == ModelFormat::TYPE_FORMAT_LIMITED_ID;
-            $player['arena_id'] = ucwords($player['arena_id']);
+
+            // format player name
+            $player['arena_id'] = ucwords(strtolower($player['arena_id']));
+            $player['arena_id'] = " by " . $player['arena_id'];
+
             $cards_main = $this->modelCard->getDecklistCards($player['id_player'],
                 Query::condition()->andWhere("count_main", Query::UPPER, 0),
                 " CASE WHEN mana_cost_card = '' THEN 99 ELSE cmc_card END,
