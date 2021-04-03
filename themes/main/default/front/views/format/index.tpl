@@ -18,6 +18,9 @@
             <div id="format-{$id_format}" class="format">
                 {if $format.tournaments}
                     <div class="home-links">
+                        <a href="{$format.link_metagame}" data-toggle="tooltip" title="Metagame breakdown" target="_blank">
+                            <span class="glyphicon glyphicon-signal"></span>
+                        </a>
                         <a href="{$format.link_other}" data-toggle="tooltip" title="Browse 'Other' decklists">
                             <span class="glyphicon glyphicon-list"></span>
                         </a>

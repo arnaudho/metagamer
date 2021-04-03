@@ -56,6 +56,7 @@ namespace app\main\controllers\front {
                     "name_format"    => $format['name_format'],
                     "link_dashboard" => RoutingHandler::rewrite("dashboard", "") . "?id_format=" . $format['id_format'],
                     "link_other"     => RoutingHandler::rewrite("archetype", "lists") . "?id_archetype=" . ModelArchetype::ARCHETYPE_OTHER_ID . "&id_format=" . $format['id_format'],
+                    "link_metagame"  => RoutingHandler::rewrite("tournament", "metagame") . "?id_format=" . $format['id_format'],
                     "tournaments"    => array(),
                     "opened"         => $count_open-- > 0 ? 1 : 0
                 );
