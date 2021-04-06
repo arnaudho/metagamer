@@ -66,7 +66,9 @@ namespace app\main\controllers\front {
                 if ($tournament['id_tournament']) {
                     $formats[$tournament['id_format']]['tournaments'][$tournament['id_tournament']] = array(
                         "name_tournament" => $tournament['name_tournament'],
-                        "count_players" => $tournament['count_players']
+                        "count_players" => $tournament['count_players'],
+                        "count_matches" => $tournament['count_matches'],
+                        "count_rounds"  => $tournament['count_rounds']
                     );
                 }
             }
