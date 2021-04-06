@@ -41,7 +41,9 @@
                     <ul>
                         {foreach from=$format.tournaments key="id_tournament" item="tournament"}
                             <li>
-                                <span class="tournament-count-players"><span class="glyphicon glyphicon-user"></span> {$tournament.count_players}</span>
+                                <span class="tournament-info-icon" data-toggle="tooltip" title="{$tournament.count_players} players"><span class="glyphicon glyphicon-user"></span> {$tournament.count_players}</span>
+                                <span class="tournament-info-icon" data-toggle="tooltip" title="{$tournament.count_matches} matches"><span class="glyphicon glyphicon-adjust"></span> {$tournament.count_matches}</span>
+                                <span class="tournament-info-icon tournament-count-rounds" data-toggle="tooltip" title="{$tournament.count_rounds} rounds"><span class="glyphicon glyphicon-expand"></span> {$tournament.count_rounds}</span>
                                 <span>{$tournament.name_tournament}</span>
                             </li>
                             {foreachelse}

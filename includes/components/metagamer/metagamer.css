@@ -20,10 +20,9 @@
 }
 #messages p { padding: 15px; font-size: 16px; border-radius: 3px;}
 .container { margin-bottom: 20px;}
-.container #main-menu { background-color: #F4F4F4; display: flex; justify-content: start; font-size: 18px;
-    margin: 0 0 12px; padding-left: 24px;}
-.container #main-menu a { padding: 14px 20px; font-family: "Metropolis Medium", Arial, serif;}
-.container #main-menu a:hover { background-color: #adddf9; text-decoration: none;}
+.container #main-menu { display: flex; justify-content: start; font-size: 16px; margin: 0 0 16px; padding-left: 0;}
+.container #main-menu a { padding: 14px 20px; font-family: "Metropolis", Arial, serif;}
+.container #main-menu a:hover { background-color: #e5f6ff; text-decoration: none;}
 .container .archetypes-info { max-width: 600px;}
 .container .archetypes-info .rule-remove { cursor: pointer;}
 .container .link-decklists { margin-bottom: 12px;}
@@ -124,7 +123,7 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 .table-metagame-container .legend-container .logo { width: 160px; margin-top: 0;}
 .table-metagame-container .table-metagame { margin-bottom: 16px; margin-top: 8px;}
 .table-metagame-container .table-metagame td { text-align: center; font-size: 20px; font-family: 'GillSans', Arial, serif;}
-.table-metagame-container .table-metagame td sup.percent-placeholder { color: transparent;}
+.table-metagame-container .table-metagame td sup.percent-placeholder { visibility: hidden;}
 .table-metagame-container .table-metagame tr.metagame-deck-count { background-color: #F3F3F3;}
 .table-metagame-container .table-metagame tr td.deck-legend { text-align: left; color: #858dA5; font-size: 14px;
     width: 90px; font-family: 'Metropolis Thin', serif;}
@@ -146,7 +145,7 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 
 /* HOMEPAGE FORMATS*/
 .formats-container .format { display: inline-block; padding: 8px 16px; background-color: #FAFAFA; border-radius: 4px;
-    vertical-align: top; margin-bottom: 10px; width: 370px;}
+    vertical-align: top; margin-bottom: 10px; width: 49.7%;}
 .formats-container .format { font-family: Metropolis, Arial, serif; font-size: 14px;}
 .formats-container .format h4 a { font-family: Metropolis, Arial, serif; font-size: 16px; color: initial; text-decoration: none;}
 .formats-container .format h4 a[data-toggle="collapse"] span.format-icon { display: none; margin-right: 10px;}
@@ -154,14 +153,16 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 .formats-container .format h4 a[aria-expanded="false"] span.glyphicon-folder-close { display: inline;}
 .formats-container .format h4 a:hover { color: #23527c;}
 .formats-container .format ul { padding-left: 10px; list-style-type: none;}
-.formats-container .format ul li { display: flex; padding: 5px; font-family: Metropolis, Arial, serif; color: #444444;}
+.formats-container .format ul li { display: flex; padding: 5px; color: #444444;}
+.formats-container .format ul li *:not(.glyphicon) { font-family: 'Metropolis Thin', Arial, serif;}
 .formats-container .format ul li:hover { background-color: #EFEFEF;}
 .formats-container .format ul li.format-empty { font-style: italic;}
 .formats-container .format .home-links { float: right; margin-top: 10px; font-size: 1.4em; visibility: hidden;}
 .formats-container .format:hover .home-links { visibility: visible;}
 .formats-container .format .home-links span.glyphicon { border-radius: 10px;}
 .formats-container .format .home-links a:hover { text-decoration: none; color: black;}
-.formats-container .format .tournament-count-players { width: 80px; display: inline-block;}
+.formats-container .format .tournament-info-icon { width: 64px; display: inline-block; flex: 0 0 auto;}
+.formats-container .format .tournament-info-icon.tournament-count-rounds { width: 46px;}
 .container form#create-format { font-family: 'Metropolis', Arial, serif; margin: 10px 0 20px;}
 
 /* 404 */
@@ -322,16 +323,19 @@ table.table-leaderboard.leaderboard-detailed tbody tr td { font-size: 16px;}
 #import-mtgmelee input[name="import-mtgmelee[tournament_name]"] { width: 100%;}
 
 input#matchups-export-mode { cursor: pointer;}
-input#matchups-export-mode:checked ~ .table-matchups .matchup-deviation,
-input#matchups-export-mode:checked ~ .table-matchups .matchup-count,
-input#matchups-export-mode:checked ~ .table-matchups .matchup-total { display: none;}
-input#matchups-export-mode:checked ~ .table-matchups sup { display: none;}
-input#matchups-export-mode:checked ~ .table-matchups .matchup-mirror,
-input#matchups-export-mode:checked ~ .table-matchups .matchup-slightly-negative,
-input#matchups-export-mode:checked ~ .table-matchups .matchup-negative,
-input#matchups-export-mode:checked ~ .table-matchups .matchup-slightly-positive,
-input#matchups-export-mode:checked ~ .table-matchups .matchup-positive { background-color: white;}
-input#matchups-export-mode:checked ~ .table-matchups>tbody>tr:hover { background-color: white;}
+input#matchups-export-mode:checked ~ .matchups-container { background: white;}
+input#matchups-export-mode:checked ~ .matchups-container th.matchup-archetype-image { width: 1px;}
+input#matchups-export-mode:checked ~ .matchups-container .legend-container,
+input#matchups-export-mode:checked ~ .matchups-container .archetype-count,
+input#matchups-export-mode:checked ~ .matchups-container .table-matchups .matchup-deviation,
+input#matchups-export-mode:checked ~ .matchups-container .table-matchups .matchup-count { display: none;}
+input#matchups-export-mode:checked ~ .matchups-container .table-matchups sup { display: none;}
+input#matchups-export-mode:checked ~ .matchups-container .table-matchups .matchup-mirror,
+input#matchups-export-mode:checked ~ .matchups-container .table-matchups .matchup-slightly-negative,
+input#matchups-export-mode:checked ~ .matchups-container .table-matchups .matchup-negative,
+input#matchups-export-mode:checked ~ .matchups-container .table-matchups .matchup-slightly-positive,
+input#matchups-export-mode:checked ~ .matchups-container .table-matchups .matchup-positive { background-color: white;}
+input#matchups-export-mode:checked ~ .matchups-container .table-matchups>tbody>tr:hover { background-color: white;}
 
 .sticky { position: fixed; top: 0; width: 1140px;}
 .sticky + .table-french { margin-top: 200px;}

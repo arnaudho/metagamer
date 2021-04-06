@@ -180,6 +180,7 @@ namespace app\main\controllers\front {
         }
 
         // TODO get archetype OTHER by default
+
         public function metagame () {
             if (
                 !isset($_GET['id_tournament']) ||
@@ -224,7 +225,23 @@ namespace app\main\controllers\front {
                 $title = $tournament['name_tournament'];
                 $date = $tournament['date_tournament'];
             }
-            // break deck names in 2 lines
+            if (isset($date)) {
+                $id_format = isset($format) ? $format['id_format'] : $tournament['id_format'];
+
+                // check if duplicate players or null archetypes
+                $count_duplicates = $this->modelPlayer->countDuplicatePlayers($metagame_cond);
+
+                $count_wainting = $this->modelPlayer->countPlayersWithoutDecklist($metagame_cond);
+                if ($count_wainting > 0) {
+                    $this->addMessage("$count_wainting players without decklist - <a href='tournament/import/#mtgmelee_decklists_old'>Go to import</a>", self::MESSAGE_ERROR);
+                }
+                if ($count_duplicates != 0) {
+                    $this->addMessage("$count_duplicates duplicates decklists found - <a href='dashboard/?id_format=$id_format'>Go to dashboard</a>", self::MESSAGE_ERROR);
+                }
+            }
+
+            // TODO break deck names in 2 lines
+
             $this->addContent("metagame", $condensed_metagame);
             $this->addContent("title", $title);
             $this->addContent("date", $date);
