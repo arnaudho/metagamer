@@ -267,10 +267,18 @@ namespace app\main\controllers\front {
                     }
                 }
             }
-            $pMetagame[$other_id]['count'] += $sum_other;
-            $pMetagame[$other_id]['percent'] = 100 - $percent_other;
-            if ($other_id) {
-                $metagame[] = $pMetagame[$other_id];
+            if ($sum_other > 0) {
+                if (is_null($other_id)) {
+                    // TODO fetch other for current id_type_format
+                    $other = $this->modelArchetype->getTupleById(ModelArchetype::ARCHETYPE_OTHER_ID);
+                    $other_id = -1;
+                    $pMetagame[$other_id] = $other;
+                }
+                $pMetagame[$other_id]['count'] += $sum_other;
+                $pMetagame[$other_id]['percent'] = 100 - $percent_other;
+                if ($other_id) {
+                    $metagame[] = $pMetagame[$other_id];
+                }
             }
             return $metagame;
         }

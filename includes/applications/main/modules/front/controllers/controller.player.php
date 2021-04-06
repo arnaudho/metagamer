@@ -17,7 +17,7 @@ namespace app\main\controllers\front {
         protected $modelPlayer;
         protected $modelCard;
         protected $modelMatches;
-        protected $modelArchetypes;
+        protected $modelArchetype;
 
         public function __construct()
         {
@@ -25,7 +25,7 @@ namespace app\main\controllers\front {
             $this->modelPlayer = new ModelPlayer();
             $this->modelCard = new ModelCard();
             $this->modelMatches = new ModelMatch();
-            $this->modelArchetypes = new ModelArchetype();
+            $this->modelArchetype = new ModelArchetype();
         }
 
         public function index () {

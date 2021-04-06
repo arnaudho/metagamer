@@ -23,7 +23,7 @@ namespace app\main\controllers\front {
 
         protected $modelPlayer;
         protected $modelMatches;
-        protected $modelArchetypes;
+        protected $modelArchetype;
         protected $modelTournament;
         protected $modelFormat;
         protected $modelCard;
@@ -33,7 +33,7 @@ namespace app\main\controllers\front {
             parent::__construct();
             $this->modelPlayer = new ModelPlayer();
             $this->modelMatches = new ModelMatch();
-            $this->modelArchetypes = new ModelArchetype();
+            $this->modelArchetype = new ModelArchetype();
             $this->modelTournament = new ModelTournament();
             $this->modelFormat = new ModelFormat();
             $this->modelCard = new ModelCard();
@@ -77,7 +77,7 @@ namespace app\main\controllers\front {
 
                 $count_wainting = $this->modelPlayer->countPlayersWithoutDecklist($dashboard_cond);
                 if ($count_wainting > 0) {
-                    $this->addMessage("$count_wainting players without decklist - <a href='tournament/import/'>Go to import</a>", self::MESSAGE_ERROR);
+                    $this->addMessage("$count_wainting players without decklist - <a href='tournament/import/#mtgmelee_decklists_old'>Go to import</a>", self::MESSAGE_ERROR);
                 }
 
                 if ($count_duplicates != 0) {
@@ -165,15 +165,26 @@ namespace app\main\controllers\front {
                 }
                 // add correct count to 'Other' archetype
                 if ($count_other > 0) {
+                    $other_id = null;
                     foreach ($archetypes as $key => $archetype) {
                         if ($archetype['id_archetype'] == ModelArchetype::ARCHETYPE_OTHER_ID) {
-                            $archetypes[$key]['count'] += $count_other;
-                            $archetypes[$key]['percent'] = round(100 * $archetypes[$key]['count'] / $data['count_players'], 1);
+                            $other_id = $key;
+                            break;
                         }
                     }
+                    if (is_null($other_id)) {
+                        // TODO fetch other for current id_type_format
+                        $other = $this->modelArchetype->getTupleById(ModelArchetype::ARCHETYPE_OTHER_ID);
+                        $other_id = -1;
+                        $archetypes[$other_id] = $other;
+                    }
+
+                    $archetypes[$other_id]['count'] += $count_other;
+                    $archetypes[$other_id]['percent'] = round(100 * $archetypes[$other_id]['count'] / $data['count_players'], 1);
                 }
                 $this->addContent("other_archetypes", $other_archetypes);
                 if (empty($archetypes)) {
+                    // no archetypes selected : get full metagame
                     $archetypes = $metagame;
                 }
 
@@ -196,9 +207,6 @@ namespace app\main\controllers\front {
                             if ($winrate[$m]['deviation_down'] < 0) {
                                 $winrate[$m]['deviation_down'] = 0;
                             }
-                        } else {
-                            $winrate[$m]['deviation_down'] = 0;
-                            $winrate[$m]['deviation_up'] = 100;
                         }
                     }
                     $archetypes[$key]['winrates'] = $winrate;
@@ -277,7 +285,7 @@ namespace app\main\controllers\front {
                 switch($action) {
                     case 'get_archetypes_by_format':
                         if (isset($_POST['id_format']) && !empty($_POST['id_format'])) {
-                            $archetypes = $this->modelArchetypes->allByFormat($_POST['id_format']);
+                            $archetypes = $this->modelArchetype->allByFormat($_POST['id_format']);
                             $this->addContent("archetypes", $archetypes);
                         } else {
                             $http_status = Http::CODE_404;
