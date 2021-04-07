@@ -240,7 +240,12 @@ namespace app\main\controllers\front {
                 }
             }
 
-            // TODO break deck names in 2 lines
+            foreach ($condensed_metagame as $key => $archetype) {
+                $words = str_word_count($archetype['name_archetype'], 1);
+                if (count($words) == 2) {
+                    $condensed_metagame[$key]['name_archetype'] = $words[0] . ' <br />' . $words[1];
+                }
+            }
 
             $this->addContent("metagame", $condensed_metagame);
             $this->addContent("title", $title);
