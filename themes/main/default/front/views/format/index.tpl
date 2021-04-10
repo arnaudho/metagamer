@@ -53,6 +53,9 @@
                 </div>
             </div>
         {/foreach}
+        {if $content.link_full}
+            <a href="{$content.link_full}" class="btn btn-default link-full">Load more<br /><span class="glyphicon glyphicon-chevron-down"></span></a>
+        {/if}
     </div>
 {/if}
 

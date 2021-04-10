@@ -49,9 +49,19 @@ namespace app\main\controllers\front {
                 }
             }
             $count_open = 3;
+            $ids_format = array();
+            $full_formats = isset($_GET['full']) && $_GET['full'] == 1;
+            if ($full_formats) {
+                $data = $this->modelFormat->all(Query::condition()->order("id_format", "DESC"));
+            } else {
+                $this->addContent("link_full", $link_full = RoutingHandler::rewrite("format", "") . "?full=1");
+                $data = $this->modelFormat->all(Query::condition()->order("id_format", "DESC")->limit(0, 6));
+            }
             $formats = array();
-            $data = $this->modelFormat->all(Query::condition()->order("id_format", "DESC"));
             foreach ($data as $format) {
+                if (!$full_formats) {
+                    $ids_format[] = $format['id_format'];
+                }
                 $formats[$format['id_format']] = array(
                     "name_format"    => $format['name_format'],
                     "link_dashboard" => RoutingHandler::rewrite("dashboard", "") . "?id_format=" . $format['id_format'],
@@ -61,7 +71,11 @@ namespace app\main\controllers\front {
                     "opened"         => $count_open-- > 0 ? 1 : 0
                 );
             }
-            $tournaments = $this->modelTournament->allOrdered();
+            $tournaments_cond = Query::condition();
+            if (!$full_formats && !empty($ids_format)) {
+                $tournaments_cond->andWhere("formats.id_format", Query::IN, "(" . implode(", ", $ids_format) . ")", false);
+            }
+            $tournaments = $this->modelTournament->allOrdered($tournaments_cond);
             foreach ($tournaments as $tournament) {
                 if ($tournament['id_tournament']) {
                     $formats[$tournament['id_format']]['tournaments'][$tournament['id_tournament']] = array(

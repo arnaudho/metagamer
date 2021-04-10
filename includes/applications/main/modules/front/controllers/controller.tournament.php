@@ -11,6 +11,7 @@ namespace app\main\controllers\front {
     use app\main\src\MetagamerBot;
     use app\main\src\MtgMeleeBot;
     use core\application\DefaultFrontController;
+    use core\application\Go;
     use core\application\routing\RoutingHandler;
     use core\data\SimpleJSON;
     use core\db\Query;
@@ -214,7 +215,7 @@ namespace app\main\controllers\front {
                         }
                     }
                 } else {
-                    $this->addMessage("Incorrect format or tournament specified", self::MESSAGE_ERROR);
+                    Go::to404();
                 }
             } else {
                 $metagame_cond = Query::condition()
@@ -225,19 +226,17 @@ namespace app\main\controllers\front {
                 $title = $tournament['name_tournament'];
                 $date = $tournament['date_tournament'];
             }
-            if (isset($date)) {
-                $id_format = isset($format) ? $format['id_format'] : $tournament['id_format'];
+            $id_format = isset($format) ? $format['id_format'] : $tournament['id_format'];
 
-                // check if duplicate players or null archetypes
-                $count_duplicates = $this->modelPlayer->countDuplicatePlayers($metagame_cond);
+            // check if duplicate players or null archetypes
+            $count_duplicates = $this->modelPlayer->countDuplicatePlayers($metagame_cond);
 
-                $count_wainting = $this->modelPlayer->countPlayersWithoutDecklist($metagame_cond);
-                if ($count_wainting > 0) {
-                    $this->addMessage("$count_wainting players without decklist - <a href='tournament/import/#mtgmelee_decklists_old'>Go to import</a>", self::MESSAGE_ERROR);
-                }
-                if ($count_duplicates != 0) {
-                    $this->addMessage("$count_duplicates duplicates decklists found - <a href='dashboard/?id_format=$id_format'>Go to dashboard</a>", self::MESSAGE_ERROR);
-                }
+            $count_wainting = $this->modelPlayer->countPlayersWithoutDecklist($metagame_cond);
+            if ($count_wainting > 0) {
+                $this->addMessage("$count_wainting players without decklist - <a href='tournament/import/#mtgmelee_decklists_old'>Go to import</a>", self::MESSAGE_ERROR);
+            }
+            if ($count_duplicates != 0) {
+                $this->addMessage("$count_duplicates duplicates decklists found - <a href='dashboard/?id_format=$id_format'>Go to dashboard</a>", self::MESSAGE_ERROR);
             }
 
             foreach ($condensed_metagame as $key => $archetype) {

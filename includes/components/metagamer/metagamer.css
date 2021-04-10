@@ -143,7 +143,7 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
     font-size: 17px; max-width: 120px; text-align: center; font-weight: bold; padding-top: 10px; padding-bottom: 10px;
     vertical-align: bottom; transform: scale(1, 1.05); line-height: 1.3em;}
 
-/* HOMEPAGE FORMATS*/
+/* HOMEPAGE FORMATS */
 .formats-container .format { display: inline-block; padding: 8px 16px; background-color: #FAFAFA; border-radius: 4px;
     vertical-align: top; margin-bottom: 10px; width: 49.7%;}
 .formats-container .format { font-family: Metropolis, Arial, serif; font-size: 14px;}
@@ -163,6 +163,7 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 .formats-container .format .home-links a:hover { text-decoration: none; color: black;}
 .formats-container .format .tournament-info-icon { width: 64px; display: inline-block; flex: 0 0 auto;}
 .formats-container .format .tournament-info-icon.tournament-count-rounds { width: 46px;}
+.formats-container .link-full { display: block; margin: 0 auto; width: 110px;}
 .container form#create-format { font-family: 'Metropolis', Arial, serif; margin: 10px 0 20px;}
 
 /* 404 */
@@ -258,21 +259,22 @@ table.table-leaderboard.leaderboard-detailed tbody tr td { font-size: 16px;}
 .container-coverage .tournament-info { padding: 0 20px; font-size: 16px;}
 .container-coverage .tournament-date { font-family: 'Metropolis Thin', Arial, serif;}
 .container-coverage .tournament-count-players { font-family: Metropolis, Arial, serif;}
-.container-coverage .table-standings { font-size: 16px; border: 0;}
-.container-coverage .table-standings th.image-archetype { width: 84px;}
-.container-coverage .table-standings th.icon-player { width: 52px;}
-.container-coverage .table-standings th,
-.container-coverage .table-standings th div,
-.container-coverage .table-standings td { font-family: Metropolis, Arial, serif;}
+.table-standings { font-size: 16px; border: 0;}
+.table-standings th.image-archetype { width: 84px;}
+.table-standings th.icon-player { width: 52px;}
+.table-standings th,
+.table-standings th div,
+.table-standings td { font-family: Metropolis, Arial, serif;}
 .table-standings.table-bordered>tbody>tr>td,
 .table-standings.table-bordered>thead>tr>th {border: 0; border-top: 1px solid #DDDDDD;}
-.container-coverage .table-standings td.name-archetype { text-transform: uppercase; font-size: 1.3em;}
-.container-coverage .table-standings td.name-player { text-transform: capitalize;}
-.container-coverage .table-standings td.icon-player img { height: 48px;}
-.container-coverage .table-standings.table-french td.icon-player img { height: 76px;}
-.container-coverage .table-standings td.image-archetype { position: relative; overflow: hidden; pointer-events: none;}
-.container-coverage .table-standings td.image-archetype img { position: absolute; top: -19px; left: -8px; width: 100px; display: block;}
-.container-coverage table.table-standings:not(.table-french)>tbody>tr>td.icon-player { padding: 3px 8px;}
+.table-standings th.archetype-decklists { width: 100px;}
+.table-standings td.name-archetype { text-transform: uppercase; font-size: 1.3em;}
+.table-standings td.name-player { text-transform: capitalize;}
+.table-standings td.icon-player img { height: 48px;}
+.table-standings.table-french td.icon-player img { height: 76px;}
+.table-standings td.image-archetype { position: relative; overflow: hidden; pointer-events: none;}
+.table-standings td.image-archetype img { position: absolute; top: -19px; left: -8px; width: 100px; display: block;}
+table.table-standings:not(.table-french)>tbody>tr>td.icon-player { padding: 3px 8px;}
 .container-coverage .table-standings.table-french td.player-image { padding: 0; height: 160px; pointer-events: none;}
 .container-coverage .table-standings.table-french td.player-image img { height: 100%;}
 .container-coverage .table-standings.table-french td.player-name { text-transform: uppercase; font-size: 22px;}
