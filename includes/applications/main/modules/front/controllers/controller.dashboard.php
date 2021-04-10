@@ -40,20 +40,11 @@ namespace app\main\controllers\front {
         }
 
         public function index () {
-            $this->addContent("list_formats", $this->modelFormat->allOrdered());
-
-            // handle tier1 archetypes selection
-            if (isset($_POST['archetypes-select'])) {
-                $_POST['archetypes-select'][] = ModelArchetype::ARCHETYPE_OTHER_ID;
-                $_SESSION['archetypes'] = array();
-                foreach ($_POST['archetypes-select'] as $id_archetype) {
-                    $_SESSION['archetypes'][$id_archetype] = $id_archetype;
-                }
-            }
-
             $format = array();
             $tournament = array();
             $dashboard_cond = null;
+            $this->addContent("list_formats", $this->modelFormat->allOrdered());
+
             if ($_GET['id_format'] && $format = $this->modelFormat->getTupleById($_GET['id_format'])) {
                 $dashboard_cond = Query::condition()->andWhere("id_format", Query::EQUAL, $format['id_format']);
 
@@ -91,26 +82,6 @@ namespace app\main\controllers\front {
                     "id_tournament, name_tournament, date_tournament"
                 );
 
-                // get format dates
-                $dates = array();
-                foreach ($list_tournaments as $one_tournament) {
-                    $dates[] = $one_tournament['date_tournament'];
-                }
-
-                $dates_time = array_map('strtotime', $dates);
-                $max_date = max($dates_time);
-                $min_date = min($dates_time);
-                if (date('j', $min_date) == date('j', $max_date)) {
-                    $date_format = date('j M Y', $max_date);
-                } else {
-                    if (date('M', $min_date) == date('M', $max_date)) {
-                        $date_format = date('j', $min_date) . "-" . date('j M Y', $max_date);
-                    } else {
-                        $date_format = date('j M', $min_date) . " - " . date('j M Y', $max_date);
-                    }
-                }
-                $this->addContent("date_format", $date_format);
-
                 $this->addContent("list_tournaments", $list_tournaments);
                 $title = "Dashboard - " . $format['name_format'];
                 if ($tournament) {
@@ -133,14 +104,6 @@ namespace app\main\controllers\front {
                     $this->addMessage("No metagame data for selected format", self::MESSAGE_ERROR);
                 }
 
-                $archetypes = array();
-                $other_archetypes = array();
-                $order_archetypes = array();
-                foreach ($metagame as $deck) {
-                    $order_archetypes[] = $deck['id_archetype'];
-                }
-
-                $count_other = 0;
                 // limit matrix size by default
                 if (!$_SESSION['archetypes']) {
                     $count = 0;
@@ -154,84 +117,244 @@ namespace app\main\controllers\front {
                 }
                 if (isset($_SESSION['archetypes']) && !empty($_SESSION['archetypes'])) {
                     // filter archetypes
-                    foreach ($metagame as $archetype) {
+                    foreach ($metagame as $key => $archetype) {
                         if (array_key_exists($archetype['id_archetype'], $_SESSION['archetypes'])) {
-                            $archetypes[] = $archetype;
-                        } else {
-                            $count_other += $archetype['count'];
-                            $other_archetypes[$archetype['id_archetype']] = $archetype['id_archetype'];
+                            $metagame[$key]['checked'] = 1;
                         }
                     }
                 }
-                // add correct count to 'Other' archetype
-                if ($count_other > 0) {
-                    $other_id = null;
-                    foreach ($archetypes as $key => $archetype) {
-                        if ($archetype['id_archetype'] == ModelArchetype::ARCHETYPE_OTHER_ID) {
-                            $other_id = $key;
-                            break;
-                        }
-                    }
-                    if (is_null($other_id)) {
-                        // TODO fetch other for current id_type_format
-                        $other = $this->modelArchetype->getTupleById(ModelArchetype::ARCHETYPE_OTHER_ID);
-                        $other_id = -1;
-                        $archetypes[$other_id] = $other;
-                    }
 
-                    $archetypes[$other_id]['count'] += $count_other;
-                    $archetypes[$other_id]['percent'] = round(100 * $archetypes[$other_id]['count'] / $data['count_players'], 1);
-                }
-                $this->addContent("other_archetypes", $other_archetypes);
-                if (empty($archetypes)) {
-                    // no archetypes selected : get full metagame
-                    $archetypes = $metagame;
-                }
-
-                foreach ($archetypes as $key => $archetype) {
-                    $winrate = $this->modelMatches->getFullWinrateByArchetypeId($archetype['id_archetype'], $dashboard_cond, $order_archetypes, $other_archetypes);
-                    foreach ($winrate as $m => $matchup) {
-                        // divide mirror count
-                        if ($matchup['id_archetype'] == $archetype['id_archetype']) {
-                            $winrate[$m]['count'] = ceil($matchup['count'] / 2);
-                        }
-                        if (isset($matchup['percent']) && isset($matchup['count']) && $matchup['count'] != 0) {
-                            // League Weekend : count x2
-                            $deviation = StatsUtils::getStandardDeviation($matchup['percent'], $matchup['count'], StatsUtils::Z95);
-                            $winrate[$m]['deviation'] = $deviation;
-                            $winrate[$m]['deviation_up'] = round($matchup['percent'] + $deviation);
-                            if ($winrate[$m]['deviation_up'] > 100) {
-                                $winrate[$m]['deviation_up'] = 100;
-                            }
-                            $winrate[$m]['deviation_down'] = round($matchup['percent'] - $deviation);
-                            if ($winrate[$m]['deviation_down'] < 0) {
-                                $winrate[$m]['deviation_down'] = 0;
-                            }
-                        }
-                    }
-                    $archetypes[$key]['winrates'] = $winrate;
-
-                    // fix name display
-                    $words = str_word_count($archetype['name_archetype'], 1);
-                    if (count($words) == 2) {
-                        $archetypes[$key]['name_archetype'] = $words[0] . ' <br />' . $words[1];
-                    }
-                }
-
-                $link_metagame = RoutingHandler::rewrite("tournament", "metagame");
-                if ($tournament) {
-                    $link_metagame .= "?id_tournament=" . $tournament['id_tournament'];
-                } else {
-                    $link_metagame .= "?id_format=" . $format['id_format'];
-                }
+                $param = $tournament ? "?id_tournament=" . $tournament['id_tournament'] : "?id_format=" . $format['id_format'];
+                $link_metagame = RoutingHandler::rewrite("tournament", "metagame") . $param;
+                $link_matrix = RoutingHandler::rewrite("dashboard", "matrix") . $param;
                 $this->addContent("link_metagame", $link_metagame);
+                $this->addContent("link_matrix", $link_matrix);
 
                 $this->addContent("metagame", $metagame);
-                $this->addContent("archetypes", $archetypes);
-                $this->addContent("confidence", "0.95");
             } else {
                 $this->setTitle("Dashboard");
             }
+        }
+
+        public function matrix () {
+            $dashboard_cond = null;
+            $metagame = array();
+            if (
+                isset($_GET['id_tournament']) &&
+                $tournament = $this->modelTournament->getTupleById(
+                    $_GET['id_tournament'],
+                    "tournaments.*, DATE_FORMAT(date_tournament, '%d %b %Y') AS date_tournament"
+                )
+            ) {
+                $dashboard_cond = Query::condition()
+                    ->andWhere("tournaments.id_tournament", Query::EQUAL, $tournament['id_tournament']);
+                $metagame = $this->modelPlayer->countArchetypes($dashboard_cond);
+
+                $title = $tournament['name_tournament'];
+                $date = $tournament['date_tournament'];
+            } elseif (
+                isset($_GET['id_format']) &&
+                $format = $this->modelFormat->getTupleById(
+                    $_GET['id_format']
+                )
+            ) {
+                $dashboard_cond = Query::condition()
+                    ->andWhere("tournaments.id_format", Query::EQUAL, $format['id_format']);
+                $metagame = $this->modelPlayer->countArchetypes($dashboard_cond);
+                $title = $format['name_format'];
+
+                $dates = $this->modelTournament->allWithFormat($dashboard_cond, "MIN(date_tournament) AS min_date, MAX(date_tournament) AS max_date");
+                $dates = $dates[0];
+                $dates_time = array_map('strtotime', $dates);
+                if (date('j', $dates_time['min_date']) == date('j', $dates_time['max_date'])) {
+                    $date = date('j M Y', $dates_time['max_date']);
+                } else {
+                    if (date('M', $dates_time['min_date']) == date('M', $dates_time['max_date'])) {
+                        $date = date('j', $dates_time['min_date']) . "-" . date('j M Y', $dates_time['max_date']);
+                    } else {
+                        $date = date('j M', $dates_time['min_date']) . " - " . date('j M Y', $dates_time['max_date']);
+                    }
+                }
+            }
+            if (is_null($dashboard_cond)) {
+                Go::to404();
+            }
+
+            // check if duplicate players or null archetypes
+            $count_duplicates = $this->modelPlayer->countDuplicatePlayers($dashboard_cond);
+            $count_wainting = $this->modelPlayer->countPlayersWithoutDecklist($dashboard_cond);
+            if ($count_wainting > 0) {
+                $this->addMessage("$count_wainting players without decklist - <a href='tournament/import/#mtgmelee_decklists_old'>Go to import</a>", self::MESSAGE_ERROR);
+            }
+            if ($count_duplicates != 0) {
+                $id_format = isset($format) ? $format['id_format'] : $tournament['id_format'];
+                $this->addMessage("$count_duplicates duplicates decklists found - <a href='dashboard/?id_format=$id_format'>Go to dashboard</a>", self::MESSAGE_ERROR);
+            }
+            if (isset($format)) {
+                $list_tournaments = $this->modelTournament->all(
+                    Query::condition()
+                        ->andWhere("id_format", Query::EQUAL, $format['id_format']),
+                    "id_tournament, name_tournament, date_tournament"
+                );
+                $this->addContent("list_tournaments", $list_tournaments);
+            }
+
+            // handle tier1 archetypes selection
+            if (isset($_POST['archetypes-select'])) {
+                $_POST['archetypes-select'][] = ModelArchetype::ARCHETYPE_OTHER_ID;
+                $_SESSION['archetypes'] = array();
+                foreach ($_POST['archetypes-select'] as $id_archetype) {
+                    $_SESSION['archetypes'][$id_archetype] = $id_archetype;
+                }
+            }
+
+            $meta_with_keys = array();
+            foreach ($metagame as $deck) {
+                $meta_with_keys[$deck['id_archetype']] = $deck;
+            }
+            $metagame = $meta_with_keys;
+
+            $archetypes = array();
+            $other_archetypes = array();
+            $count_other = 0;
+            $count_players = $this->modelPlayer->countPlayers($dashboard_cond);
+
+            // limit matrix size by default
+            if (!isset($_SESSION['archetypes'])) {
+                $count = 0;
+                foreach ($metagame as $archetype) {
+                    $_SESSION['archetypes'][$archetype['id_archetype']] = $archetype['id_archetype'];
+                    if (++$count >= self::DEFAULT_ARCHETYPES_COUNT) {
+                        break;
+                    }
+                }
+                if (!array_key_exists(ModelArchetype::ARCHETYPE_OTHER_ID, $_SESSION['archetypes'])) {
+                    $_SESSION['archetypes'][ModelArchetype::ARCHETYPE_OTHER_ID] = ModelArchetype::ARCHETYPE_OTHER_ID;
+                }
+            }
+
+            if (isset($_SESSION['archetypes']) && !empty($_SESSION['archetypes'])) {
+                // filter archetypes
+                foreach ($metagame as $archetype) {
+                    if (array_key_exists($archetype['id_archetype'], $_SESSION['archetypes'])) {
+                        $archetypes[] = $archetype;
+                    } else {
+                        $count_other += $archetype['count'];
+                        $other_archetypes[$archetype['id_archetype']] = $archetype['id_archetype'];
+                    }
+                }
+            }
+
+            // add correct count to 'Other' archetype
+            if ($count_other > 0) {
+                $other_id = null;
+                foreach ($archetypes as $key => $archetype) {
+                    if ($archetype['id_archetype'] == ModelArchetype::ARCHETYPE_OTHER_ID) {
+                        $other_id = $key;
+                        break;
+                    }
+                }
+                if (is_null($other_id)) {
+                    // TODO fetch 'Other' for current id_type_format
+                    $other = $this->modelArchetype->getTupleById(ModelArchetype::ARCHETYPE_OTHER_ID);
+                    $other_id = -1;
+                    $archetypes[$other_id] = $other;
+                }
+
+                $archetypes[$other_id]['count'] += $count_other;
+                $archetypes[$other_id]['percent'] = round(100 * $archetypes[$other_id]['count'] / $count_players, 1);
+            }
+
+            if (empty($archetypes)) {
+                // no archetypes selected : get full metagame
+                $archetypes = $metagame;
+            }
+
+            // set all decks in metagame in order condition
+            // (because it is also used to filter matches in winrate -- we can change that if we pass another array to getFullWinrateByArchetypeId)
+            $order_archetypes = array_keys($metagame, true);
+
+            foreach ($archetypes as $key => $archetype) {
+                $winrate = $this->modelMatches->getFullWinrateByArchetypeId($archetype['id_archetype'], $dashboard_cond, $order_archetypes, $other_archetypes);
+                foreach ($winrate as $m => $matchup) {
+                    // divide mirror count
+                    if ($matchup['id_archetype'] == $archetype['id_archetype']) {
+                        $winrate[$m]['count'] = ceil($matchup['count'] / 2);
+                    }
+                    if (isset($matchup['percent']) && isset($matchup['count']) && $matchup['count'] != 0) {
+                        // League Weekend : count x2
+                        $deviation = StatsUtils::getStandardDeviation($matchup['percent'], $matchup['count'], StatsUtils::Z95);
+                        $winrate[$m]['deviation'] = $deviation;
+                        $winrate[$m]['deviation_up'] = round($matchup['percent'] + $deviation);
+                        if ($winrate[$m]['deviation_up'] > 100) {
+                            $winrate[$m]['deviation_up'] = 100;
+                        }
+                        $winrate[$m]['deviation_down'] = round($matchup['percent'] - $deviation);
+                        if ($winrate[$m]['deviation_down'] < 0) {
+                            $winrate[$m]['deviation_down'] = 0;
+                        }
+                    } else {
+                        $winrate[$m]['deviation_down'] = 0;
+                        $winrate[$m]['deviation_up'] = 100;
+                    }
+                }
+                $archetypes[$key]['winrates'] = $winrate;
+
+                // fix name display
+                $words = str_word_count($archetype['name_archetype'], 1);
+                if (count($words) == 2) {
+                    $archetypes[$key]['name_archetype'] = $words[0] . ' <br />' . $words[1];
+                }
+            }
+            /*
+                            // TODO POC tier1 domination
+                            // cf. ModelMatch getFullWinrateByArchetypeId
+
+                            $ids_metashare = array();
+                            foreach ($archetypes as $key => $archetype) {
+                                $ids_metashare[$archetype['id_archetype']] = $archetype['count']/$data['count_players'];
+                            }
+                            trace_r($ids_metashare);
+                            foreach ($archetypes as $key => $archetype) {
+                                // COEFF 1 : winrate total deck x %meta deck
+            //                    $coeff1 = $archetype['count']*$archetype['winrates'][0]['wins']/$archetype['winrates'][0]['count'];
+
+                                // COEFF 2 : winrate vs decksA-N x %meta deckA-N
+                                // represents the expected winrate of the deck in the current metagame
+                                // SHOULD COUNT mirror matches
+                                $coeff2 = 0;
+                                $coeff3 = 0;
+                                foreach ($archetype['winrates'] as $winrate) {
+                                    // exclude mirror : if winrate/id_archetype != archetype/id_archetype
+                                    if ($winrate['id_archetype'] != 0) {
+                                        $coeff2 += 100*$ids_metashare[$winrate['id_archetype']]*$winrate['wins']/$winrate['count'];
+                                        $coeff3 += 10000*$ids_metashare[$winrate['id_archetype']]*$winrate['wins']/$winrate['count']/($archetype['count']/$ids_metashare[$archetype['id_archetype']]);
+                                    }
+                                }
+                                trace_r($archetype['id_archetype'] . " -- " . $archetype['name_archetype']);
+                                trace_r($coeff2);
+                                trace_r($coeff3);
+
+                                // TODO added matrix column 3
+                                array_unshift($archetypes[$key]['winrates'], array(
+                                    "name_archetype" => "total_theorical",
+                                    "wins"           => 50,
+                                    "count"          => 100,
+                                    "percent"        => round($coeff2, 1),
+                                    "id_archetype"   => 0
+                                ));
+                            }*/
+
+            $param = $tournament ? "?id_format=" . $tournament['id_format'] . "&id_tournament=" . $tournament['id_tournament'] : "?id_format=" . $format['id_format'];
+            $link_dashboard = RoutingHandler::rewrite("dashboard", "") . $param;
+            $this->addContent("link_dashboard", $link_dashboard);
+            $this->addContent("other_archetypes", $other_archetypes);
+            $this->addContent("archetypes", $archetypes);
+            $this->addContent("title", $title);
+            $this->addContent("date", $date);
+            $this->addContent("confidence", "0.95");
+            $this->addContent("count_matches", $this->modelMatches->countMatches($dashboard_cond) / 2);
+            $this->setTitle("$title - Winrate matrix");
         }
 
         public function leaderboard () {
@@ -313,16 +436,16 @@ namespace app\main\controllers\front {
                 foreach ($archetypes as $archetype_name => $archetype) {
                     if (isset($archetype['image']) && $card = $this->modelCard->one(Query::condition()->andWhere("name_card", Query::LIKE, $archetype['image'] . "%"), "image_card")) {
                         // get archetype by name
-                        $arch = $this->modelArchetypes->one(Query::condition()->andWhere("name_archetype", Query::EQUAL, $archetype_name));
+                        $arch = $this->modelArchetype->one(Query::condition()->andWhere("name_archetype", Query::EQUAL, $archetype_name));
                         if ($arch) {
-                            $this->modelArchetypes->updateById(
+                            $this->modelArchetype->updateById(
                                 $arch['id_archetype'],
                                 array(
                                     "image_archetype" => $card['image_card']
                                 )
                             );
                         } else {
-                            $this->modelArchetypes->insert(
+                            $this->modelArchetype->insert(
                                 array(
                                     "name_archetype" => $archetype_name,
                                     "image_archetype" => $card['image_card']

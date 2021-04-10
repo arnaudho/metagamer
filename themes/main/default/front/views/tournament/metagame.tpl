@@ -19,7 +19,7 @@
                 {foreach from=$content.metagame item="deck"}
                     <td class="metagame-deck-image">
                         <div class="deck-image"
-                             style="background: no-repeat top {if $deck.id_archetype==3}-20px right -50px/170%{else}-52px right 50%/273%{/if}
+                             style="background: no-repeat top {if $deck.id_archetype==3}-20px right -50px/170%{else}-53px right 50%/273%{/if}
                                      url({$deck.image_archetype});"></div></td>
                 {/foreach}
             </tr>
