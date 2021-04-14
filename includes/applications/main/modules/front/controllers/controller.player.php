@@ -45,8 +45,7 @@ namespace app\main\controllers\front {
             $is_limited = $player['id_type_format'] == ModelFormat::TYPE_FORMAT_LIMITED_ID;
 
             // format player name
-            $player['arena_id'] = ucwords(strtolower($player['arena_id']));
-            $player['arena_id'] = " by " . $player['arena_id'];
+            $player['arena_id'] = " by " . ucwords(strtolower($player['arena_id']), " -\t\r\n\f\v");
 
             $cards_main = $this->modelCard->getDecklistCards($player['id_player'],
                 Query::condition()->andWhere("count_main", Query::UPPER, 0),

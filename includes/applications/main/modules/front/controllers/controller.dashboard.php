@@ -378,11 +378,11 @@ namespace app\main\controllers\front {
                 }
             }
             foreach ($mpl as &$player) {
-                $player['name_player'] = ucwords($player['name_player']);
+                $player['name_player'] = ucwords($player['name_player'], " -\t\r\n\f\v");
                 $player['rank_diff_player'] = $player['old_rank_player'] == 0 ? 0 : $player['old_rank_player'] - $player['rank_player'];
             }
             foreach ($rivals as &$player) {
-                $player['name_player'] = ucwords($player['name_player']);
+                $player['name_player'] = ucwords($player['name_player'], " -\t\r\n\f\v");
                 $player['rank_diff_player'] = $player['old_rank_player'] == 0 ? 0 : $player['old_rank_player'] - $player['rank_player'];
             }
             $this->addContent("img_path", Core::$path_to_components . '/metagamer/imgs/');
