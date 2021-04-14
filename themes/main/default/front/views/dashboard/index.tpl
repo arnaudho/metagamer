@@ -35,7 +35,7 @@
             <a href="{$content.link_metagame}"
                class="btn btn-default" target="_blank">Metagame breakdown <span class="glyphicon glyphicon-new-window"></span></a>
         {/if}
-        <form action="{$content.link_matrix}" method="post">
+        <form action="{$content.link_matrix}" method="post" target="_blank" class="no-loader">
             <button type="submit" class="btn btn-default">Winrate matrix <span class="glyphicon glyphicon-th"></span></button>
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-default">

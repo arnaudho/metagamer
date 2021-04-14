@@ -2,7 +2,7 @@
     // TODO separate components on different pages
     function init(){
         // init forms loader
-        var forms = document.querySelectorAll('.container form');
+        var forms = document.querySelectorAll('.container form:not("no-loader")');
         if(forms.length > 0 ){
             forms.forEach(function(pElt) {
                 pElt.addEventListener("submit", function(pEvt) {
@@ -52,6 +52,17 @@
                     .onComplete(populateArchetypesList);
             });
         }
+
+        // enable link to tabs
+        var hash = location.hash.replace(/^#/, '');     // only match the first hash
+        if (hash) {
+            $('.nav-tabs a[href="#' + hash + '"]').tab('show');
+        }
+
+        // Change hash for page-reload
+        $('.nav-tabs a').on('shown.bs.tab', function (e) {
+            window.location.hash = e.target.hash;
+        })
     }
 
     function populateArchetypesList (pResponse) {
