@@ -58,7 +58,8 @@ namespace app\main\models {
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
                 ->join("formats", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
                 ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
-                ->join("(SELECT id_player, SUM(count_main) AS count_cards_main, SUM(count_side) AS count_cards_side FROM player_card GROUP BY id_player) AS pc", Query::JOIN_OUTER_LEFT, "pc.id_player = players.id_player")
+                ->join("(SELECT id_player, SUM(count_main) AS count_cards_main, SUM(count_side) AS count_cards_side FROM player_card WHERE id_card != 0 GROUP BY id_player) AS pc",
+                    Query::JOIN_OUTER_LEFT, "pc.id_player = players.id_player")
                 ->groupBy("players.id_player")
                 ->limit(0, 1)
                 ->execute($this->handler);
@@ -342,12 +343,15 @@ namespace app\main\models {
                 ($pA['points_player'] < $pB['points_player'] ? 1 : -1);
         }
 
-        // TODO beware of &#039;
-        public function getPlayerIdByTournamentIdArenaId ($pTournamentId, $pArenaId) {
-            $id_player = Query::select("id_player", $this->table)
+        public function getPlayerIdByTournamentIdArenaId ($pTournamentId, $pArenaId, $pTagPlayer = "") {
+            $q = Query::select("id_player", $this->table)
                 ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " .
-                    $pTournamentId . " AND people.arena_id = '" . $pArenaId . "'")
-                ->execute($this->handler);
+                    $pTournamentId . " AND people.arena_id = '" . $pArenaId . "'");
+            if ($pTagPlayer) {
+                $q->join("player_tag", Query::JOIN_INNER, "player_tag.id_people = people.id_people")
+                    ->andWhere("tag_player", Query::EQUAL, $pTagPlayer);
+            }
+            $id_player = $q->execute($this->handler);
             if (!$id_player && preg_match('/^([^#]+)#([0-9]+)/', $pArenaId, $output_array)) {
                 $id_player = Query::select("id_player", $this->table)
                     ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " .
@@ -356,11 +360,14 @@ namespace app\main\models {
             } elseif (!$id_player) {
                 $id_player = Query::select("id_player", $this->table)
                     ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " .
-                        $pTournamentId . " AND (people.discord_id = '$pArenaId' OR people.arena_id = ' " . str_replace("&#039;", "'", $pArenaId) . "')")
+                        $pTournamentId . " AND (people.discord_id = '$pArenaId' OR people.arena_id = '" . htmlentities($pArenaId, 0, 'UTF-8') .
+                        "' OR people.arena_id = '" . str_replace("&#039;", "'", $pArenaId) . "')")
                     ->execute($this->handler);
             }
             // cancel if several players could match
             if (count($id_player) > 1) {
+                trace_r("WARNING : several players found for tournament $pTournamentId");
+                trace_r($id_player);
                 $id_player = array();
             }
             return $id_player ? $id_player[0]['id_player'] : null;
