@@ -12,15 +12,15 @@
 </div>
 
 {if $content.decklists !== null}
-    <table class="table table-hover table-condensed">
+    <table class="table table-hover table-condensed" data-toggle="table"  data-search="true">
         <thead>
             <tr>
-                <th>Arena ID</th>
-                <th>Tournament</th>
+                <th data-field="player_name" data-sortable="true">Arena ID</th>
+                <th data-field="player_tournament" data-sortable="true">Tournament</th>
                 {if $content.decklists[0]['name_deck']}
-                    <th>Deck name</th>
+                    <th data-field="player_deck_name" data-sortable="true">Deck name</th>
                 {/if}
-                <th>Record</th>
+                <th data-field="player_record" data-sortable="true">Record</th>
                 <th>Decklist</th>
             </tr>
         </thead>

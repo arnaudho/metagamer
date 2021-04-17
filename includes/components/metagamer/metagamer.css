@@ -167,6 +167,11 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 .formats-container .link-full { display: block; margin: 0 auto; width: 110px;}
 .container form#create-format { font-family: 'Metropolis', Arial, serif; margin: 10px 0 20px;}
 
+/* Fix tables styles (styles are added by the bootstrap data-sortable component) */
+table[data-toggle="table"] { border: 0;}
+table[data-toggle="table"]>thead>tr>th {border-color: #DDDDDD; border-style: solid; border-width: 0 0 2px 0;}
+table[data-toggle="table"]>tbody>tr>td {border: 0; border-top: 1px solid #DDDDDD;}
+
 /* 404 */
 .container-not-found { position: relative; height: 570px; width: 970px; text-align: center; color: #333333;
     font-family: "Metropolis", Arial, serif; }
@@ -260,14 +265,12 @@ table.table-leaderboard.leaderboard-detailed tbody tr td { font-size: 16px;}
 .container-coverage .tournament-info { padding: 0 20px; font-size: 16px;}
 .container-coverage .tournament-date { font-family: 'Metropolis Thin', Arial, serif;}
 .container-coverage .tournament-count-players { font-family: Metropolis, Arial, serif;}
-.table-standings { font-size: 16px; border: 0;}
+.table-standings { font-size: 16px;}
 .table-standings th.image-archetype { width: 84px;}
 .table-standings th.icon-player { width: 52px;}
 .table-standings th,
 .table-standings th div,
 .table-standings td { font-family: Metropolis, Arial, serif;}
-.table-standings.table-bordered>tbody>tr>td,
-.table-standings.table-bordered>thead>tr>th {border: 0; border-top: 1px solid #DDDDDD;}
 .table-standings th.archetype-decklists { width: 100px;}
 .table-standings td.name-archetype { text-transform: uppercase; font-size: 1.3em;}
 .table-standings td.name-player { text-transform: capitalize;}
