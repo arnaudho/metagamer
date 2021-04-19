@@ -246,6 +246,22 @@ namespace app\main\controllers\front {
                 }
             }
 
+            $order_archetypes = array();
+            foreach ($condensed_metagame as $deck) {
+                $order_archetypes[] = $deck['id_archetype'];
+            }
+            $data = $this->modelMatch->getFullWinrate($metagame_cond, $order_archetypes);
+            $winrates = array();
+            foreach ($data as $winrate) {
+                $winrates[$winrate['id_archetype']] = $winrate;
+            }
+            foreach ($condensed_metagame as $key => $archetype) {
+                if (!array_key_exists($archetype['id_archetype'], $winrates)) {
+                    trace_r("WARNING - archetype not found : " . $archetype['name_archetype']);
+                }
+                $condensed_metagame[$key]['winrate'] = $winrates[$archetype['id_archetype']]['winrate'];
+            }
+
             $this->addContent("metagame", $condensed_metagame);
             $this->addContent("title", $title);
             $this->addContent("date", $date);
