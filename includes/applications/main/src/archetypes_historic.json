@@ -1,10 +1,589 @@
 {
+    "Jund Company":
+    {
+        "image": "Collected Company",
+        "contains":
+        [
+            "Collected Company",
+            "Mayhem Devil"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Plains"
+        ]
+    },
+    "Jund Food":
+    {
+        "image": "Korvold, Fae-Cursed King",
+        "contains":
+        [
+            "Korvold, Fae-Cursed King",
+            "Mayhem Devil"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Plains"
+        ]
+    },
+    "Rakdos Sacrifice":
+    {
+        "image": "Mayhem Devil",
+        "contains":
+        [
+            "Mayhem Devil"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Plains",
+            "Forest"
+        ]
+    },
+    "Rakdos Arcanist":
+    {
+        "image": "Dreadhorde Arcanist",
+        "contains":
+        [
+            "Dreadhorde Arcanist",
+            "Stitcher's Supplier"
+        ],
+        "exclude":
+        [
+            "Stomping Ground",
+            "Forest",
+            "Island",
+            "Plains"
+        ]
+    },
+    "Orzhov Auras":
+    {
+        "image": "Kor Spiritdancer",
+        "contains":
+        [
+            "Kor Spiritdancer",
+            "Godless Shrine"
+        ],
+        "exclude":
+        [
+            "Temple Garden",
+            "Island",
+            "Forest",
+            "Mountain"
+        ]
+    },
+    "Azorius Auras":
+    {
+        "image": "Kor Spiritdancer",
+        "contains":
+        [
+            "Kor Spiritdancer",
+            "Curious Obsession"
+        ],
+        "exclude":
+        [
+            "Swamp",
+            "Forest",
+            "Mountain"
+        ]
+    },
+    "Esper Control":
+    {
+        "image": "Teferi, Hero of Dominaria",
+        "contains":
+        [
+            "Teferi, Hero of Dominaria",
+            "Godless Shrine"
+        ],
+        "exclude":
+        [
+            "Forest",
+            "Mountain",
+            "Overgrown Tomb",
+            "Steam Vents",
+            "Blood Crypt",
+            "Breeding Pool"
+        ]
+    },
+    "Jeskai Control":
+    {
+        "image": "Teferi, Hero of Dominaria",
+        "contains":
+        [
+            "Teferi, Hero of Dominaria",
+            "Steam Vents"
+        ],
+        "exclude":
+        [
+            "Forest",
+            "Swamp",
+            "Godless Shrine",
+            "Watery Grave",
+            "Breeding Pool"
+        ]
+    },
+    "Azorius Control":
+    {
+        "image": "Teferi, Hero of Dominaria",
+        "contains":
+        [
+            "Teferi, Hero of Dominaria"
+        ],
+        "exclude":
+        [
+            "Watery Grave",
+            "Steam Vents",
+            "Breeding Pool",
+            "Godless Shrine",
+            "Sacred Foundry",
+            "Swamp",
+            "Forest",
+            "Mountain"
+        ]
+    },
+    "Bant Midrange":
+    {
+        "image": "Nissa, Who Shakes the World",
+        "contains":
+        [
+            "Nissa, Who Shakes the World",
+            "Growth Spiral",
+            "Baffling End"
+        ],
+        "exclude":
+        [
+            "Mountain",
+            "Swamp"
+        ]
+    },
+    "Demonic Pact":
+    {
+        "image": "Demonic Pact",
+        "contains":
+        [
+            "Demonic Pact"
+        ]
+    },
+    "Angels":
+    {
+        "image": "Righteous Valkyrie",
+        "contains":
+        [
+            "Righteous Valkyrie",
+            "Collected Company",
+            "Bishop of Wings"
+        ]
+    },
+    "5-color Niv Mizzet":
+    {
+        "image": "Niv-Mizzet Reborn",
+        "contains":
+        [
+            "Niv-Mizzet Reborn"
+        ]
+    },
+    "Four-color Incarnation":
+    {
+        "image": "Enigmatic Incarnation",
+        "contains":
+        [
+            "Enigmatic Incarnation",
+            "Trial of Ambition"
+        ]
+    },
+    "Four-color Midrange":
+    {
+        "image": "Yasharn, Implacable Earth",
+        "contains":
+        [
+            "Yasharn, Implacable Earth",
+            "Growth Spiral",
+            "Zagoth Triome",
+            "Indatha Triome"
+        ],
+        "exclude":
+        [
+            "Enigmatic Incarnation",
+            "Purphoros, Bronze-Blooded"
+        ]
+    },
+    "Temur Marvel":
+    {
+        "image": "Aetherworks Marvel",
+        "contains":
+        [
+            "Aetherworks Marvel",
+            "Forest",
+            "Island",
+            "Mountain"
+        ]
+    },
+    "Sultai Marvel":
+    {
+        "image": "Aetherworks Marvel",
+        "contains":
+        [
+            "Aetherworks Marvel",
+            "Forest",
+            "Island",
+            "Swamp"
+        ]
+    },
+    "Sultai Ultimatum Combo":
+    {
+        "image": "Omniscience",
+        "contains":
+        [
+            "Scholar of the Lost Trove",
+            "Emergent Ultimatum"
+        ]
+    },
+    "Sultai Ultimatum Midrange":
+    {
+        "image": "Emergent Ultimatum",
+        "contains":
+        [
+            "Emergent Ultimatum"
+        ]
+    },
+    "Sultai Midrange":
+    {
+        "image": "Nissa, Who Shakes the World",
+        "contains":
+        [
+            "Nissa, Who Shakes the World",
+            "Zagoth Triome"
+        ]
+    },
+    "Sultai Flash":
+    {
+        "image": "Torrential Gearhulk",
+        "contains":
+        [
+            "Torrential Gearhulk",
+            "Nightpack Ambusher",
+            "Watery Grave"
+        ]
+    },
+    "Simic Flash":
+    {
+        "image": "Nightpack Ambusher",
+        "contains":
+        [
+            "Breeding Pool",
+            "Nightpack Ambusher",
+            "Brazen Borrower"
+        ]
+    },
     "Goblins":
     {
         "image": "Muxus, Goblin Grandee",
         "contains":
         [
-            "Muxus, Goblin Grandee",
+            "Muxus, Goblin Grandee"
+        ]
+    },
+    "Mono-white Aggro":
+    {
+        "image": "Thalia, Guardian of Thraben",
+        "contains":
+        [
+            "Thalia, Guardian of Thraben",
+            "Thraben Inspector"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Swamp",
+            "Forest",
+            "Mountain"
+        ]
+    },
+    "Mono-red Aggro":
+    {
+        "image": "Bomat Courier",
+        "contains":
+        [
+            "Mountain"
+        ],
+        "exclude":
+        [
+            "Ugin, the Spirit Dragon",
+            "Chandra, Awakened Inferno",
+            "Sacred Foundry",
+            "Blood Crypt",
+            "Stomping Ground",
+            "Swamp",
+            "Plains",
+            "Island",
+            "Forest"
+        ]
+    },
+    "Mono-Green Elves":
+    {
+        "image": "Elvish Archdruid",
+        "contains":
+        [
+            "Elvish Archdruid"
+        ]
+    },
+    "Boros Feather":
+    {
+        "image": "Feather, the Redeemed",
+        "contains":
+        [
+            "Feather, the Redeemed"
+        ],
+        "exclude":
+        [
+            "Concealed Courtyard"
+        ]
+    },
+    "Mardu Vehicles":
+    {
+        "image": "Heart of Kiran",
+        "contains":
+        [
+            "Heart of Kiran",
+            "Inspiring Vantage",
+            "Concealed Courtyard"
+        ]
+    },
+    "Orzhov Shadow":
+    {
+        "image": "Death's Shadow",
+        "contains":
+        [
+            "Death's Shadow",
+            "Adanto Vanguard"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Forest",
+            "Mountain"
+        ]
+    },
+    "Rakdos Shadow":
+    {
+        "image": "Death's Shadow",
+        "contains":
+        [
+            "Death's Shadow",
+            "Blightstep Pathway"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Forest",
+            "Plains"
+        ]
+    },
+    "Mono-black Shadow":
+    {
+        "image": "Death's Shadow",
+        "contains":
+        [
+            "Death's Shadow"
+        ],
+        "exclude":
+        [
+            "Plains",
+            "Mountain"
+        ]
+    },
+    "Dimir Rogues":
+    {
+        "image": "Soaring Thought-Thief",
+        "contains":
+        [
+            "Soaring Thought-Thief"
+        ]
+    },
+    "Four-Color Adventures":
+    {
+        "image": "Lucky Clover",
+        "contains":
+        [
+            "Lucky Clover",
+            "Plains"
+        ],
+        "exclude":
+        [
+            "Swamp"
+        ]
+    },
+    "Gruul Aggro":
+    {
+        "image": "Pelt Collector",
+        "contains":
+        [
+            "Stomping Ground",
+            "Pelt Collector",
+            "Burning-Tree Emissary",
+            "Bonecrusher Giant",
+            "Embercleave"
+        ]
+    },
+    "Temur Neoform":
+    {
+        "image": "Neoform",
+        "contains":
+        [
+            "Neoform"
+        ],
+        "exclude":
+        [
+            "Swamp",
+            "Plains"
+        ]
+    },
+    "Selesyna Company":
+    {
+        "image": "Yasharn, Implacable Earth",
+        "contains":
+        [
+            "Collected Company",
+            "Skyclave Apparition"
+        ],
+        "exclude":
+        [
+            "Breeding Pool",
+            "Hallowed Fountain",
+            "Mountain",
+            "Island",
+            "Swamp"
+        ]
+    },
+    "Abzan Midrange":
+    {
+        "image": "Yasharn, Implacable Earth",
+        "contains":
+        [
+            "Yasharn, Implacable Earth",
+            "Wall of Blossoms",
+            "Yorion, Sky Nomad",
+            "Binding the Old Gods"
+        ],
+        "exclude":
+        [
+            "Mountain",
+            "Island"
+        ]
+    },
+    "Bant Company":
+    {
+        "image": "Collected Company",
+        "contains":
+        [
+            "Collected Company",
+            "Hengegate Pathway"
+        ],
+        "exclude":
+        [
+            "Mountain",
+            "Swamp"
+        ]
+    },
+    "Cycling":
+    {
+        "image": "Zenith Flare",
+        "contains":
+        [
+            "Zenith Flare"
+        ],
+        "exclude":
+        [
+            "Steam Vents"
+        ]
+    },
+    "Dimir Control":
+    {
+        "image": "Torrential Gearhulk",
+        "contains":
+        [
+            "Torrential Gearhulk",
+            "Watery Grave"
+        ],
+        "exclude":
+        [
+            "Hallowed Fountain",
+            "Steam Vents",
+            "Breeding Pool",
+            "Plains",
+            "Mountain",
+            "Forest"
+        ]
+    },
+    "Grixis Valki":
+    {
+        "image": "Valki, God of Lies",
+        "contains":
+        [
+            "Valki, God of Lies",
+            "Release to the Wind"
+        ]
+    },
+    "Tempered Steel":
+    {
+        "image": "Tempered Steel",
+        "contains":
+        [
+            "Tempered Steel"
+        ]
+    },
+    "Kinnan Combo":
+    {
+        "image": "Kinnan, Bonder Prodigy",
+        "contains":
+        [
+            "Kinnan, Bonder Prodigy"
+        ]
+    },
+    "Mono-green Aggro":
+    {
+        "image": "Pelt Collector",
+        "contains":
+        [
+            "Pelt Collector"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Plains",
+            "Swamp",
+            "Mountain"
+        ]
+    },
+    "Mono-green Ramp":
+    {
+        "image": "Nissa, Who Shakes the World",
+        "contains":
+        [
+            "Nissa, Who Shakes the World",
+            "Forest"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Plains",
+            "Swamp",
+            "Mountain"
+        ]
+    },
+    "Mono-blue Aggro":
+    {
+        "image": "Curious Obsession",
+        "contains":
+        [
+            "Curious Obsession"
+        ],
+        "exclude":
+        [
+            "Swamp",
+            "Forest",
+            "Plains",
             "Mountain"
         ]
     },
@@ -18,114 +597,59 @@
             "Diligent Excavator"
         ]
     },
-    "Sultai Midrange":
-    {
-        "image": "Uro, Titan of Nature's Wrath",
-        "contains":
-        [
-            "Uro, Titan of Nature's Wrath",
-            "Swamp"
-        ],
-        "exclude":
-        [
-            "Aetherworks Marvel",
-            "Plains",
-            "Mountain"
-        ]
-    },
-    "4-color Midrange":
-    {
-        "image": "Yasharn, Implacable Earth",
-        "contains":
-        [
-            "Uro, Titan of Nature's Wrath",
-            "Plains",
-            "Swamp"
-        ],
-        "exclude":
-        [
-            "Mountain"
-        ]
-    },
-    "Bant Control":
-    {
-        "image": "Nissa, Who Shakes the World",
-        "contains":
-        [
-            "Uro, Titan of Nature's Wrath",
-            "Teferi, Hero of Dominaria"
-        ],
-        "exclude":
-        [
-            "Mountain",
-            "Swamp"
-        ]
-    },
-    "Rakdos Arcanist":
-    {
-        "image": "Dreadhorde Arcanist",
-        "contains":
-        [
-            "Dreadhorde Arcanist",
-            "Blood Crypt"
-        ],
-        "exclude":
-        [
-            "Stomping Ground",
-            "Forest",
-            "Island",
-            "Plains"
-        ]
-    },
-    "Jund Sacrifice":
-    {
-        "image": "Collected Company",
-        "contains":
-        [
-            "Mayhem Devil",
-            "Collected Company"
-        ],
-        "exclude":
-        [
-            "Plains",
-            "Island"
-        ]
-    },
-    "Jund Food":
-    {
-        "image": "Trail of Crumbs",
-        "contains":
-        [
-            "Mayhem Devil",
-            "Trail of Crumbs"
-        ],
-        "exclude":
-        [
-            "Plains",
-            "Island"
-        ]
-    },
-    "Azorius Auras":
-    {
-        "image": "Kor Spiritdancer",
-        "contains":
-        [
-            "Kor Spiritdancer",
-            "Hallowed Fountain"
-        ],
-        "exclude":
-        [
-            "Swamp",
-            "Forest",
-            "Mountain"
-        ]
-    },
     "Nine Lives":
     {
         "image": "Nine Lives",
         "contains":
         [
             "Nine Lives"
+        ]
+    },
+    "Mono-Black Vampires":
+    {
+        "image": "Champion of Dusk",
+        "contains":
+        [
+            "Champion of Dusk",
+            "Swamp"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Plains",
+            "Forest",
+            "Mountain"
+        ]
+    },
+    "Mono-Black Aggro":
+    {
+        "image": "Spawn of Mayhem",
+        "contains":
+        [
+            "Knight of the Ebon Legion",
+            "Swamp"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Plains",
+            "Forest",
+            "Mountain"
+        ]
+    },
+    "Mono-Black Devotion":
+    {
+        "image": "Gray Merchant of Asphodel",
+        "contains":
+        [
+            "Gray Merchant of Asphodel"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Plains",
+            "Forest",
+            "Mountain"
         ]
     },
     "Mono-Black Gift":
@@ -160,150 +684,27 @@
             "Mountain"
         ]
     },
-    "Mono-red Aggro":
+    "Jund Midrange":
     {
-        "image": "Rampaging Ferocidon",
+        "image": "Elder Gargaroth",
         "contains":
         [
-            "Mountain"
+            "Binding the Old Gods",
+            "Chandra, Torch of Defiance"
         ],
         "exclude":
         [
-            "Sacred Foundry",
-            "Blood Crypt",
-            "Stomping Ground",
-            "Swamp",
-            "Plains",
-            "Island",
-            "Forest"
-        ]
-    },
-    "Gruul Aggro":
-    {
-        "image": "Burning-Tree Emissary",
-        "contains":
-        [
-            "Burning-Tree Emissary",
-            "Stomping Ground",
-            "Embercleave"
-        ],
-        "exclude":
-        [
-            "Swamp",
             "Island",
             "Plains"
         ]
     },
-    "Dimir Rogues":
+    "Locust Combo":
     {
-        "image": "Soaring Thought-Thief",
+        "image": "Indomitable Creativity",
         "contains":
         [
-            "Soaring Thought-Thief",
-            "Thieves"
-        ],
-        "exclude":
-        [
-            "Plains",
-            "Forest",
-            "Mountain"
-        ]
-    },
-    "Temur Marvel":
-    {
-        "image": "Aetherworks Marvel",
-        "contains":
-        [
-            "Aetherworks Marvel",
-            "Forest",
-            "Island",
-            "Mountain"
-        ]
-    },
-    "Sultai Marvel":
-    {
-        "image": "Aetherworks Marvel",
-        "contains":
-        [
-            "Aetherworks Marvel",
-            "Forest",
-            "Island",
-            "Swamp"
-        ]
-    },
-    "Sultai Control":
-    {
-        "image": "Torrential Gearhulk",
-        "contains":
-        [
-            "Uro, Titan of Nature's Wrath",
-            "Torrential Gearhulk"
-        ],
-        "exclude":
-        [
-            "Plains",
-            "Mountain"
-        ]
-    },
-    "Dimir Control":
-    {
-        "image": "Torrential Gearhulk",
-        "contains":
-        [
-            "Watery Grave",
-            "Torrential Gearhulk"
-        ],
-        "exclude":
-        [
-            "Plains",
-            "Forest",
-            "Mountain"
-        ]
-    },
-    "Orzhov Auras":
-    {
-        "image": "Kor Spiritdancer",
-        "contains":
-        [
-            "Kor Spiritdancer",
-            "Godless Shrine"
-        ],
-        "exclude":
-        [
-            "Island",
-            "Forest",
-            "Mountain"
-        ]
-    },
-    "Mardu Vehicles":
-    {
-        "image": "Heart of Kiran",
-        "contains":
-        [
-            "Heart of Kiran",
-            "Inspiring Vantage",
-            "Concealed Courtyard"
-        ],
-        "exclude":
-        [
-            "Island",
-            "Forest"
-        ]
-    },
-    "Mono-green Aggro":
-    {
-        "image": "Pelt Collector",
-        "contains":
-        [
-            "Pelt Collector",
-            "Llanowar Elves"
-        ],
-        "exclude":
-        [
-            "Swamp",
-            "Plains",
-            "Island",
-            "Mountain"
+            "Indomitable Creativity",
+            "The Locust God"
         ]
     },
     "Azorius Cycling":
@@ -314,21 +715,6 @@
             "Abandoned Sarcophagus",
             "Island",
             "Plains"
-        ],
-        "exclude":
-        [
-            "Swamp",
-            "Forest",
-            "Mountain"
-        ]
-    },
-    "Azorius Control":
-    {
-        "image": "Teferi, Hero of Dominaria",
-        "contains":
-        [
-            "Teferi, Hero of Dominaria",
-            "Island"
         ],
         "exclude":
         [
@@ -349,32 +735,26 @@
     },
     "Colorless Ramp":
     {
-        "image": "Karn, the Great Creator",
+        "image": "Ugin, the Spirit Dragon",
         "contains":
         [
-            "Karn, the Great Creator",
-            "Mind Stone",
-            "Guardian Idol"
-        ],
-        "exclude":
-        [
-            "Swamp"
+            "Ugin, the Spirit Dragon",
+            "Mind Stone"
         ]
     },
-    "Esper Control":
+    "Mono-red Ramp":
     {
-        "image": "Teferi, Hero of Dominaria",
+        "image": "Chandra, Awakened Inferno",
         "contains":
         [
-            "Teferi, Hero of Dominaria",
-            "Thoughtseize"
+            "Chandra, Awakened Inferno"
         ],
         "exclude":
         [
-            "Overgrown Tomb",
-            "Steam Vents",
-            "Blood Crypt",
-            "Breeding Pool"
+            "Swamp",
+            "Forest",
+            "Plains",
+            "Island"
         ]
     },
     "Golgari Aggro":
@@ -425,144 +805,13 @@
             "Genesis Ultimatum"
         ]
     },
-    "5-color Niv Mizzet":
+    "Izzet Tempo":
     {
-        "image": "Niv-Mizzet Reborn",
+        "image": "Stormwing Entity",
         "contains":
         [
-            "Niv-Mizzet Reborn"
-        ]
-    },
-    "Izzet Phoenix":
-    {
-        "image": "Arclight Phoenix",
-        "contains":
-        [
-            "Arclight Phoenix",
-            "Spirebluff Canal"
-        ]
-    },
-    "Mono-black Aggro":
-    {
-        "image": "Knight of the Ebon Legion",
-        "contains":
-        [
-            "Knight of the Ebon Legion",
-            "Uro, Titan"
-        ],
-        "exclude":
-        [
-            "Forest",
-            "Plains",
-            "Island",
+            "Stormwing Entity",
             "Mountain"
-        ]
-    },
-    "Mono-black Control":
-    {
-        "image": "Pelt Collector",
-        "contains":
-        [
-            "Swamp",
-            "Guardian Idol",
-            "Mind Stone"
-        ],
-        "exclude":
-        [
-            "Forest",
-            "Plains",
-            "Island",
-            "Mountain"
-        ]
-    },
-    "Neostorm":
-    {
-        "image": "Neoform",
-        "contains":
-        [
-            "Neoform",
-            "Sea Gate Stormcaller"
-        ]
-    },
-    "Paradox Engine Combo":
-    {
-        "image": "Paradox Engine",
-        "contains":
-        [
-            "Paradox Engine",
-            "Emry, Lurker of the Loch"
-        ]
-    },
-    "Mono-blue Tempo":
-    {
-        "image": "Curious Obsession",
-        "contains":
-        [
-            "Curious Obsession",
-            "Island"
-        ]
-    },
-    "Selesnya Company":
-    {
-        "image": "Collected Company",
-        "contains":
-        [
-            "Collected Company",
-            "Plains"
-        ],
-        "exclude":
-        [
-            "Swamp",
-            "Mountain"
-        ]
-    },
-    "Bant Company":
-    {
-        "image": "Collected Company",
-        "contains":
-        [
-            "Collected Company",
-            "Hallowed Fountain"
-        ],
-        "exclude":
-        [
-            "Swamp",
-            "Mountain"
-        ]
-    },
-    "Mono-green Ramp":
-    {
-        "image": "Leyline of Abundance",
-        "contains":
-        [
-            "Leyline of Abundance"
-        ]
-    },
-    "Rakdos Vehicles":
-    {
-        "image": "Heart of Kiran",
-        "contains":
-        [
-            "Heart of Kiran",
-            "Blood Crypt"
-        ],
-        "exclude":
-        [
-            "Spirebluff Canal",
-            "Inspiring Vantage"
-        ]
-    },
-    "Rakdos Sacrifice":
-    {
-        "image": "Mayhem Devil",
-        "contains":
-        [
-            "Mayhem Devil"
-        ],
-        "exclude":
-        [
-            "Forest",
-            "Godless Shrine"
         ]
     }
 }

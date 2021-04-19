@@ -1,11 +1,90 @@
 {
-    "Big Red":
+    "Cycling Pyromancer":
     {
-        "image": "Irencrag Feat",
+        "image": "Irencrag Pyromancer",
         "contains":
         [
-            "Irencrag Feat",
-            "Mountain"
+            "Irencrag Pyromancer",
+            "Zenith Flare",
+            "Flourishing Fox"
+        ]
+    },
+    "Cycling":
+    {
+        "image": "Zenith Flare",
+        "contains":
+        [
+            "Zenith Flare",
+            "Flourishing Fox"
+        ]
+    },
+    "Gyruda Combo":
+    {
+        "image": "Gyruda, Doom of Depths",
+        "contains":
+        [
+            "Gyruda, Doom of Depths"
+        ]
+    },
+    "Mutate Combo":
+    {
+        "image": "Vadrok, Apex of Thunder",
+        "contains":
+        [
+            "Open the Omenpaths",
+            "Vadrok, Apex of Thunder"
+        ]
+    },
+    "Mutate":
+    {
+        "image": "Pollywog Symbiote",
+        "contains":
+        [
+            "Pollywog Symbiote"
+        ]
+    },
+    "Orzhov Foretold":
+    {
+        "image": "Doom Foretold",
+        "contains":
+        [
+            "Doom Foretold"
+        ],
+        "exclude":
+        [
+            "Mountain",
+            "Forest",
+            "Island"
+        ]
+    },
+    "Orzhov Angels":
+    {
+        "image": "Righteous Valkyrie",
+        "contains":
+        [
+            "Righteous Valkyrie",
+            "Starnheim Unleashed"
+        ],
+        "exclude":
+        [
+            "Mountain",
+            "Forest",
+            "Island"
+        ]
+    },
+    "Orzhov Clerics":
+    {
+        "image": "Righteous Valkyrie",
+        "contains":
+        [
+            "Righteous Valkyrie",
+            "Speaker of the Heavens"
+        ],
+        "exclude":
+        [
+            "Mountain",
+            "Forest",
+            "Island"
         ]
     },
     "Dimir Rogues":
@@ -13,59 +92,78 @@
         "image": "Soaring Thought-Thief",
         "contains":
         [
-            "Soaring Thought-Thief",
-            "Thieves"
+            "Thieves' Guild Enforcer",
+            "Island"
         ],
         "exclude":
         [
             "Plains",
-            "Forest",
-            "Mountain"
+            "Forest"
         ]
     },
-    "Selesnya Adventures":
+    "Dimir Control":
     {
-        "image": "Edgewall Innkeeper",
+        "image": "Mazemind Tome",
         "contains":
         [
-            "Edgewall Innkeeper",
-            "Plains"
+            "Clearwater Pathway",
+            "Heartless Act"
         ],
         "exclude":
         [
-            "Swamp",
-            "Island",
-            "Mountain"
+            "Pollywog Symbiote",
+            "Goldspan Dragon",
+            "Claim the Firstborn",
+            "Binding the Old Gods",
+            "Kroxa, Titan of Death's Hunger",
+            "Ruin Crab",
+            "Forest",
+            "Plains"
         ]
     },
-    "Golgari Adventures":
+    "Izzet Tempo":
     {
-        "image": "Foulmire Knight",
+        "image": "Goldspan Dragon",
         "contains":
         [
-            "Edgewall Innkeeper",
+            "Goldspan Dragon",
+            "Brazen Borrower"
+        ],
+        "exclude":
+        [
+            "Plains",
+            "Swamp",
+            "Forest"
+        ]
+    },
+    "Grixis Tempo":
+    {
+        "image": "Goldspan Dragon",
+        "contains":
+        [
+            "Goldspan Dragon",
+            "Island",
             "Swamp"
         ],
         "exclude":
         [
+            "Pollywog Symbiote",
             "Plains",
-            "Island",
-            "Mountain"
+            "Forest"
         ]
     },
-    "Abzan Adventures":
+    "Mardu Showdown":
     {
-        "image": "Giant Killer",
+        "image": "Showdown of the Skalds",
         "contains":
         [
-            "Edgewall Innkeeper",
-            "Foulmire Knight",
-            "Plains"
+            "Showdown of the Skalds",
+            "Swamp"
         ],
         "exclude":
         [
             "Island",
-            "Mountain"
+            "Forest"
         ]
     },
     "Rakdos Midrange":
@@ -73,29 +171,47 @@
         "image": "Kroxa, Titan of Death's Hunger",
         "contains":
         [
-            "Kroxa, Titan of Death's Hunger"
+            "Blightstep Pathway",
+            "Mountain",
+            "Swamp"
         ],
         "exclude":
         [
-            "Island",
+            "Ugin, the Spirit Dragon",
             "Forest",
             "Plains"
         ]
     },
-    "Mono-red Aggro":
+    "Boros Aggro":
     {
-        "image": "Fervent Champion",
+        "image": "Seasoned Hallowblade",
         "contains":
         [
-            "Castle Embereth",
-            "Fervent Champion"
+            "Mountain",
+            "Plains",
+            "Showdown of the Skalds"
         ],
         "exclude":
         [
-            "Forest",
             "Island",
-            "Plains",
-            "Swamp"
+            "Swamp",
+            "Forest"
+        ]
+    },
+    "Azorius Control":
+    {
+        "image": "Doomskar",
+        "contains":
+        [
+            "Doomskar",
+            "Temple of Enlightenment"
+        ],
+        "exclude":
+        [
+            "Heartless Act",
+            "Mountain",
+            "Swamp",
+            "Forest"
         ]
     },
     "Azorius Yorion":
@@ -103,90 +219,14 @@
         "image": "Yorion, Sky Nomad",
         "contains":
         [
-            "Yorion, Sky Nomad"
-        ],
-        "exclude":
-        [
-            "Mountain",
-            "Forest",
-            "Swamp"
-        ]
-    },
-    "Selesnya Yorion":
-    {
-        "image": "Trail of Crumbs",
-        "contains":
-        [
             "Yorion, Sky Nomad",
             "Plains",
-            "Forest"
-        ],
-        "exclude":
-        [
-            "Mountain",
-            "Island",
-            "Swamp"
-        ]
-    },
-    "Bant Yorion":
-    {
-        "image": "Trail of Crumbs",
-        "contains":
-        [
-            "Yorion, Sky Nomad",
-            "Plains",
-            "Forest",
             "Island"
         ],
         "exclude":
         [
             "Mountain",
-            "Swamp"
-        ]
-    },
-    "Abzan Foretold":
-    {
-        "image": "Doom Foretold",
-        "contains":
-        [
-            "Doom Foretold",
-            "Forest",
-            "Plains",
-            "Swamp"
-        ],
-        "exclude":
-        [
-            "Mountain",
-            "Island"
-        ]
-    },
-    "Abzan Midrange":
-    {
-        "image": "Garruk, Cursed Huntsman",
-        "contains":
-        [
-            "Indatha Triome",
-            "Forest",
-            "Plains",
-            "Swamp"
-        ],
-        "exclude":
-        [
-            "Mountain",
-            "Island"
-        ]
-    },
-    "Esper Foretold":
-    {
-        "image": "Doom Foretold",
-        "contains":
-        [
-            "Doom Foretold",
-            "Island"
-        ],
-        "exclude":
-        [
-            "Mountain",
+            "Swamp",
             "Forest"
         ]
     },
@@ -204,59 +244,196 @@
             "Forest"
         ]
     },
-    "Cycling":
+    "Mardu Midrange":
     {
-        "image": "Zenith Flare",
+        "image": "Ruinous Ultimatum",
         "contains":
         [
-            "Zenith Flare"
-        ]
-    },
-    "Boros Transmogrify":
-    {
-        "image": "Transmogrify",
-        "contains":
-        [
-            "Mountain",
-            "Plains",
-            "Transmogrify"
+            "Ruinous Ultimatum"
         ],
         "exclude":
         [
+            "Island",
+            "Forest"
+        ]
+    },
+    "Tibalt Combo":
+    {
+        "image": "Tibalt's Trickery",
+        "contains":
+        [
+            "Tibalt's Trickery"
+        ]
+    },
+    "Sultai Ultimatum":
+    {
+        "image": "Emergent Ultimatum",
+        "contains":
+        [
+            "Emergent Ultimatum"
+        ],
+        "exclude":
+        [
+            "Plains"
+        ]
+    },
+    "Jund Sacrifice":
+    {
+        "image": "Korvold, Fae-Cursed King",
+        "contains":
+        [
+            "Korvold, Fae-Cursed King"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Plains"
+        ]
+    },
+    "Jund Midrange":
+    {
+        "image": "Binding the Old Gods",
+        "contains":
+        [
+            "Binding the Old Gods",
+            "Mountain"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Plains"
+        ]
+    },
+    "Sultai Midrange":
+    {
+        "image": "Elder Gargaroth",
+        "contains":
+        [
+            "Binding the Old Gods",
+            "Island",
+            "Zagoth Triome"
+        ],
+        "exclude":
+        [
+            "Plains",
+            "Mountain"
+        ]
+    },
+    "Abzan Party":
+    {
+        "image": "Tajuru Paragon",
+        "contains":
+        [
+            "Tajuru Paragon",
+            "Squad Commander",
+            "Acquisitions Expert"
+        ]
+    },
+    "Elves":
+    {
+        "image": "Tajuru Paragon",
+        "contains":
+        [
+            "Tajuru Paragon",
+            "Canopy Tactician"
+        ]
+    },
+    "Mono-White Control":
+    {
+        "image": "Ugin, the Spirit Dragon",
+        "contains":
+        [
+            "Plains",
+            "Ugin, the Spirit Dragon"
+        ],
+        "exclude":
+        [
+            "Mountain",
             "Island",
             "Swamp",
             "Forest"
         ]
     },
-    "Boros Aggro":
+    "Esper Foretold":
     {
-        "image": "Seasoned Hallowblade",
+        "image": "Doom Foretold",
         "contains":
         [
-            "Mountain",
-            "Plains",
-            "Needleverge Pathway"
+            "Doom Foretold",
+            "Island",
+            "Swamp",
+            "Plains"
         ],
         "exclude":
         [
-            "Island",
-            "Swamp",
             "Forest"
         ]
     },
-    "Grixis Control":
+    "Four-color Foretold":
     {
-        "image": "Extinction Event",
+        "image": "Doom Foretold",
         "contains":
         [
-            "Island",
-            "Mountain",
-            "Swamp"
+            "Doom Foretold",
+            "Binding the Old Gods",
+            "Island"
+        ]
+    },
+    "Abzan Midrange":
+    {
+        "image": "Archon of Sun's Grace",
+        "contains":
+        [
+            "Binding the Old Gods",
+            "Plains"
         ],
         "exclude":
         [
-            "Plains",
+            "Island"
+        ]
+    },
+    "Esper Control":
+    {
+        "image": "Doomskar",
+        "contains":
+        [
+            "Doomskar",
+            "Clearwater Pathway"
+        ],
+        "exclude":
+        [
+            "Mountain",
             "Forest"
+        ]
+    },
+    "Gruul Adventures":
+    {
+        "image": "Bonecrusher Giant",
+        "contains":
+        [
+            "Edgewall Innkeeper",
+            "Bonecrusher Giant"
+        ],
+        "exclude":
+        [
+            "Brazen Borrower",
+            "Swamp",
+            "Plains"
+        ]
+    },
+    "Temur Lukka":
+    {
+        "image": "Lukka, Coppercoat Outcast",
+        "contains":
+        [
+            "Edgewall Innkeeper",
+            "Lukka, Coppercoat Outcast",
+            "Koma, Cosmos Serpent"
+        ],
+        "exclude":
+        [
+            "Swamp",
+            "Plains"
         ]
     },
     "Temur Adventures":
@@ -265,15 +442,166 @@
         "contains":
         [
             "Edgewall Innkeeper",
-            "Genesis Ultimatum"
+            "Bonecrusher Giant",
+            "Brazen Borrower"
+        ],
+        "exclude":
+        [
+            "Swamp",
+            "Plains"
         ]
     },
-    "Temur & 4-color Ramp":
+    "Temur Ultimatum":
     {
         "image": "Genesis Ultimatum",
         "contains":
         [
             "Genesis Ultimatum"
+        ],
+        "exclude":
+        [
+            "Swamp"
+        ]
+    },
+    "Big Red":
+    {
+        "image": "Irencrag Feat",
+        "contains":
+        [
+            "Irencrag Feat",
+            "Mountain"
+        ]
+    },
+    "Mono-red Aggro":
+    {
+        "image": "Torbran, Thane of Red Fell",
+        "contains":
+        [
+            "Bonecrusher Giant"
+        ],
+        "exclude":
+        [
+            "Forest",
+            "Island",
+            "Plains",
+            "Swamp"
+        ]
+    },
+    "Temur Reflection":
+    {
+        "image": "Mystic Reflection",
+        "contains":
+        [
+            "Mystic Reflection",
+            "Terror of the Peaks"
+        ]
+    },
+    "Temur Midrange":
+    {
+        "image": "Goldspan Dragon",
+        "contains":
+        [
+            "Goldspan Dragon",
+            "Island",
+            "Forest"
+        ],
+        "exclude":
+        [
+            "Swamp",
+            "Plains"
+        ]
+    },
+    "Naya Winota":
+    {
+        "image": "Winota, Joiner of Forces",
+        "contains":
+        [
+            "Winota, Joiner of Forces",
+            "Forest"
+        ]
+    },
+    "Naya Fury":
+    {
+        "image": "Unleash Fury",
+        "contains":
+        [
+            "Edgewall Innkeeper",
+            "Showdown of the Skalds",
+            "Unleash Fury"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Swamp"
+        ]
+    },
+    "Naya Spirit":
+    {
+        "image": "Clarion Spirit",
+        "contains":
+        [
+            "Edgewall Innkeeper",
+            "Clarion Spirit",
+            "Bonecrusher Giant"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Swamp"
+        ]
+    },
+    "Naya Adventures":
+    {
+        "image": "The Great Henge",
+        "contains":
+        [
+            "Edgewall Innkeeper",
+            "Giant Killer",
+            "Bonecrusher Giant"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Swamp"
+        ]
+    },
+    "Naya Runes":
+    {
+        "image": "Runeforge Champion",
+        "contains":
+        [
+            "Runeforge Champion",
+            "Setessan Champion"
+        ]
+    },
+    "Bant Tokens":
+    {
+        "image": "Clarion Spirit",
+        "contains":
+        [
+            "Clarion Spirit",
+            "Forest",
+            "Island"
+        ],
+        "exclude":
+        [
+            "Mountain",
+            "Swamp"
+        ]
+    },
+    "Gruul Food":
+    {
+        "image": "Trail of Crumbs",
+        "contains":
+        [
+            "Trail of Crumbs",
+            "Cragcrown Pathway"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Swamp",
+            "Plains"
         ]
     },
     "Mono-green Food":
@@ -282,11 +610,10 @@
         "contains":
         [
             "Wicked Wolf",
-            "Trail of Crumbs"
+            "Feasting Troll King"
         ],
         "exclude":
         [
-            "Island",
             "Mountain",
             "Swamp",
             "Plains"
@@ -294,10 +621,10 @@
     },
     "Mono-green Aggro":
     {
-        "image": "Kazandu Mammoth",
+        "image": "The Great Henge",
         "contains":
         [
-            "Kazandu Mammoth"
+            "The Great Henge"
         ],
         "exclude":
         [
@@ -322,241 +649,251 @@
             "Forest"
         ]
     },
-    "Gruul Aggro":
+    "Mono-blue Tempo":
     {
-        "image": "Bonecrusher Giant",
+        "image": "Frost Augur",
         "contains":
         [
-            "Bonecrusher Giant",
-            "Lovestruck Beast"
+            "Brazen Borrower",
+            "Island"
         ],
         "exclude":
         [
-            "Island",
-            "Swamp",
-            "Plains"
-        ]
-    },
-    "Jund Sacrifice":
-    {
-        "image": "Korvold, Fae-Cursed King",
-        "contains":
-        [
-            "Korvold, Fae-Cursed King"
-        ],
-        "exclude":
-        [
-            "Island",
-            "Plains"
-        ]
-    },
-    "Gruul Food":
-    {
-        "image": "Wicked Wolf",
-        "contains":
-        [
+            "Plains",
             "Mountain",
+            "Swamp",
             "Forest"
-        ],
-        "exclude":
-        [
-            "Island",
-            "Swamp",
-            "Plains"
         ]
     },
-    "Dimir Control":
+    "Jeskai Yorion":
     {
-        "image": "Ashiok, Nightmare Muse",
+        "image": "Yorion, Sky Nomad",
         "contains":
         [
-            "Clearwater Pathway",
-            "Swamp"
-        ],
-        "exclude":
-        [
-            "Forest",
-            "Mountain",
-            "Plains"
-        ]
-    },
-    "Sultai Midrange":
-    {
-        "image": "Titan's Nest",
-        "contains":
-        [
-            "Island",
-            "Forest",
-            "Swamp"
-        ],
-        "exclude":
-        [
-            "Mountain",
-            "Plains"
-        ]
-    },
-    "Azorius Monument":
-    {
-        "image": "Forsaken Monument",
-        "contains":
-        [
-            "Forsaken Monument",
-            "Island",
-            "Plains"
-        ],
-        "exclude":
-        [
-            "Forest",
-            "Mountain",
-            "Swamp"
-        ]
-    },
-    "Azorius Control":
-    {
-        "image": "Shatter the Sky",
-        "contains":
-        [
-            "Temple of Enlightenment",
-            "Island",
-            "Plains"
-        ],
-        "exclude":
-        [
-            "Forest",
-            "Mountain",
-            "Swamp"
-        ]
-    },
-    "Jeskai Lukka":
-    {
-        "image": "Lukka, Coppercoat Outcast",
-        "contains":
-        [
-            "Lukka, Coppercoat Outcast",
-            "Yorion, Sky Nomad"
-        ],
-        "exclude":
-        [
-            "Forest",
-            "Swamp"
-        ]
-    },
-    "Jeskai Control":
-    {
-        "image": "Dream Trawler",
-        "contains":
-        [
+            "Yorion, Sky Nomad",
             "Island",
             "Plains",
             "Mountain"
         ],
         "exclude":
         [
-            "Forest",
-            "Swamp"
+            "Swamp",
+            "Forest"
         ]
     },
-    "Orzhov Yorion":
+    "Jeskai Showdown":
     {
-        "image": "Acquisitions Expert",
+        "image": "Showdown of the Skalds",
         "contains":
         [
-            "Yorion, Sky Nomad",
-            "Swamp"
+            "Showdown of the Skalds",
+            "Island",
+            "Plains",
+            "Mountain"
+        ],
+        "exclude":
+        [
+            "Swamp",
+            "Forest"
+        ]
+    },
+    "Jeskai Control":
+    {
+        "image": "Doomskar",
+        "contains":
+        [
+            "Doomskar",
+            "Mountain",
+            "Island"
+        ],
+        "exclude":
+        [
+            "Swamp",
+            "Forest"
+        ]
+    },
+    "Mono-Black Aggro":
+    {
+        "image": "Egon, God of Death",
+        "contains":
+        [
+            "Egon, God of Death"
         ],
         "exclude":
         [
             "Island",
             "Mountain",
+            "Plains",
             "Forest"
         ]
     },
-    "Naya Adventures":
+    "Mono-Black Midrange":
     {
-        "image": "Giant Killer",
+        "image": "Archfiend's Vessel",
+        "contains":
+        [
+            "Archfiend's Vessel",
+            "Lurrus of the Dream-Den"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Mountain",
+            "Plains",
+            "Forest"
+        ]
+    },
+    "Mono-Black Ugin":
+    {
+        "image": "Ugin, the Spirit Dragon",
+        "contains":
+        [
+            "Ugin, the Spirit Dragon",
+            "Swamp"
+        ],
+        "exclude":
+        [
+            "Binding the Old Gods",
+            "Island",
+            "Plains",
+            "Forest"
+        ]
+    },
+    "Selesnya Adventures":
+    {
+        "image": "Yasharn, Implacable Earth",
         "contains":
         [
             "Edgewall Innkeeper",
-            "Giant Killer",
-            "Bonecrusher Giant"
+            "Plains"
         ],
         "exclude":
         [
             "Island",
+            "Swamp",
+            "Mountain"
+        ]
+    },
+    "Jund Adventures":
+    {
+        "image": "Edgewall Innkeeper",
+        "contains":
+        [
+            "Edgewall Innkeeper",
+            "Bonecrusher Giant",
             "Swamp"
-        ]
-    },
-    "Winota":
-    {
-        "image": "Winota, Joiner of Forces",
-        "contains":
-        [
-            "Winota, Joiner of Forces"
-        ]
-    },
-    "Selesnya Landfall":
-    {
-        "image": "Felidar Retreat",
-        "contains":
-        [
-            "Felidar Retreat",
-            "Forest"
         ],
         "exclude":
         [
             "Island",
-            "Mountain",
-            "Swamp"
+            "Plains"
         ]
     },
-    "Mono-blue Devotion":
+    "Golgari Adventures":
     {
-        "image": "Nyx Lotus",
+        "image": "Foulmire Knight",
         "contains":
         [
-            "Nyx Lotus",
-            "Island"
+            "Edgewall Innkeeper",
+            "Foulmire Knight"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Plains",
+            "Mountain"
+        ]
+    },
+    "Golgari Elves":
+    {
+        "image": "Harald, King of Skemfar",
+        "contains":
+        [
+            "Harald Unites the Elves"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Plains",
+            "Mountain"
+        ]
+    },
+    "Golgari Deathtouch":
+    {
+        "image": "Fynn, the Fangbearer",
+        "contains":
+        [
+            "Fynn, the Fangbearer",
+            "Swamp"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Plains",
+            "Mountain"
+        ]
+    },
+    "Izzet Aggro":
+    {
+        "image": "Sprite Dragon",
+        "contains":
+        [
+            "Sprite Dragon",
+            "Stormwing Entity"
         ],
         "exclude":
         [
             "Swamp",
             "Plains",
-            "Mountain",
             "Forest"
         ]
     },
-    "Esper Control":
+    "Four-color Lukka":
     {
-        "image": "Shatter the Sky",
+        "image": "Lukka, Coppercoat Outcast",
         "contains":
         [
-            "Swamp",
-            "Plains",
+            "Lukka, Coppercoat Outcast",
+            "Omen of the Sea",
+            "The Birth of Meletis"
+        ]
+    },
+    "Izzet Giants":
+    {
+        "image": "Calamity Bearer",
+        "contains":
+        [
+            "Calamity Bearer",
             "Island"
-        ],
-        "exclude":
-        [
-            "Mountain",
-            "Forest"
-        ]
-    },
-    "4-color Yorion":
-    {
-        "image": "Yorion, Sky Nomad",
-        "contains":
-        [
-            "Yorion, Sky Nomad"
-        ]
-    },
-    "Gyruda Combo":
-    {
-        "image": "Gyruda, Doom of Depths",
-        "contains":
-        [
-            "Gyruda, Doom of Depths"
         ]
     },
     "_comment":
     {
+        "Sultai Adventures":
+        {
+            "image": "Edgewall Innkeeper",
+            "contains":
+            [
+                "Emergent Ultimatum",
+                "Edgewall Innkeeper"
+            ],
+            "exclude":
+            [
+                "Plains"
+            ]
+        },
+        "Sultai Ramp":
+        {
+            "image": "Emergent Ultimatum",
+            "contains":
+            [
+                "Emergent Ultimatum",
+                "Migration Path"
+            ],
+            "exclude":
+            [
+                "Plains"
+            ]
+        }
     }
 }
