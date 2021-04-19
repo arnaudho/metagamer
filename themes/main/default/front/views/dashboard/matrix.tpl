@@ -11,6 +11,7 @@
     <label for="matchups-export-mode">Export mode</label>
     <input type="checkbox" name="matchups-export-mode" id="matchups-export-mode" />
     <div class="matchups-container">
+        <div class="logo"></div>
         <h1>{$content.title}</h1>
         <h3>{$content.date}</h3>
         <hr width="10%" />
@@ -85,7 +86,6 @@
                 <div class="">
                     <p style="display: inline-block;">Data source : <img src="https://mtgmelee.com/images/logo.png" style="width: 100px; display: inline-block;" /></p>
                 </div>
-                <div class="logo"></div>
             </div>
         </div>
     </div>

@@ -3,6 +3,7 @@
 {if $content.metagame}
     <div class="table-metagame-container">
         <div class="background-placeholder"></div>
+        <div class="logo"></div>
         <h2>{$content.title}</h2>
         <h3>METAGAME BREAKDOWN</h3>
         <hr width="9%" />
@@ -38,7 +39,6 @@
             </tbody>
         </table>
         <div class="legend-container">
-            <div class="logo"></div>
             <div class="legend">
                 <p>{$content.date}</p>
                 <p>Data source : <img src="https://mtgmelee.com/images/logo.png" style="width: 100px; display: inline-block; vertical-align: middle;" /></p>

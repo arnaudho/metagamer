@@ -89,6 +89,7 @@ table.table-archetypes * { font-family: Metropolis, serif;}
 .container .matchups-container h1 { font-family: "GillSans", Arial, serif; font-size: 5em; text-transform: uppercase;}
 .container .matchups-container h3 { font-family: "Metropolis", Arial, serif; margin-top: 10px; font-size: 2.2em;}
 .container .matchups-container hr { width: 5%; border-color: black; margin: 12px 0 10px;}
+.container .matchups-container .logo { margin-top: 24px;}
 .container .winrate-slightly-negative {color: red;}
 .container .winrate-negative {color: red; font-weight: bold;}
 .container .winrate-slightly-positive {color: green;}
@@ -118,6 +119,7 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 .table-metagame-container { width: 1160px; height: 620px; padding: 20px 24px; position: relative;}
 .table-metagame-container h2 { font-family: "GillSans", Arial, serif; font-size: 3em; text-transform: uppercase;
     margin-top: 0; margin-bottom: 5px;}
+.table-metagame-container div.logo { width: 200px; margin-top: 0;}
 .table-metagame-container h3 { font-family: "Metropolis Thin", Arial, serif; margin-top: 5px; font-size: 1.6em;}
 .table-metagame-container hr { text-align: left; border-top-color: #000000; margin: 0;}
 .table-metagame-container .legend p { font-family: 'Metropolis', Arial, serif; margin-bottom: 0;}
@@ -171,6 +173,7 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 table[data-toggle="table"] { border: 0;}
 table[data-toggle="table"]>thead>tr>th {border-color: #DDDDDD; border-style: solid; border-width: 0 0 2px 0;}
 table[data-toggle="table"]>tbody>tr>td {border: 0; border-top: 1px solid #DDDDDD;}
+.bootstrap-table div.search input.search-input { border-radius: 22px; padding: 16px;}
 
 /* 404 */
 .container-not-found { position: relative; height: 570px; width: 970px; text-align: center; color: #333333;
