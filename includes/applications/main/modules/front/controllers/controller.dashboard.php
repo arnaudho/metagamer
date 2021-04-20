@@ -127,6 +127,7 @@ namespace app\main\controllers\front {
                 $param = $tournament ? "?id_tournament=" . $tournament['id_tournament'] : "?id_format=" . $format['id_format'];
                 $link_metagame = RoutingHandler::rewrite("tournament", "metagame") . $param;
                 $link_matrix = RoutingHandler::rewrite("dashboard", "matrix") . $param;
+                $this->addContent("link_condition", $param);
                 $this->addContent("link_metagame", $link_metagame);
                 $this->addContent("link_matrix", $link_matrix);
 

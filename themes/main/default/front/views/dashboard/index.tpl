@@ -16,7 +16,8 @@
     </form>
 {/if}
 {if $content.format}
-    <h1>{$content.format.name_format}{if $content.tournament} - {$content.tournament.name_tournament}{/if}</h1>
+    <h1 class="name-format">{$content.format.name_format}</h1>
+    {if $content.tournament}<h2 class="name-tournament">{$content.tournament.name_tournament}</h2>{/if}
 {/if}
 
 {if $content.metagame}
@@ -83,12 +84,12 @@
                     <td>{$deck.count}</td>
                     <td>{$deck.percent} %</td>
                     <td>
-                        <a href="archetype/lists/?id_archetype={$deck.id_archetype}&id_format={$content.format.id_format}" class="btn btn-info" target="_blank">
+                        <a href="archetype/lists/{$content.link_condition}&id_archetype={$deck.id_archetype}" class="btn btn-info" target="_blank">
                             <span class="glyphicon glyphicon-duplicate"></span>
                         </a>
                     </td>
                     <td>
-                        <a href="archetype/aggregatelist/?id_archetype={$deck.id_archetype}&id_format={$content.format.id_format}" class="btn btn-success" target="_blank">
+                        <a href="archetype/aggregatelist/{$content.link_condition}&id_archetype={$deck.id_archetype}" class="btn btn-success" target="_blank">
                             <span class="glyphicon glyphicon-file"></span>
                         </a>
                     </td>

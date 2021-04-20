@@ -6,7 +6,10 @@
                  url({$content.archetype.image_archetype});"></div>
     <div class="archetype-info">
         <h2>{$content.archetype.name_archetype}</h2>
-        <h4>{$content.format.name_format}</h4>
+        <h4>{$content.name_format}</h4>
+        {if $content.name_tournament !== null}
+            <h4>{$content.name_tournament}</h4>
+        {/if}
         <h3>{$content.decklists|count} decklists</h3>
     </div>
 </div>

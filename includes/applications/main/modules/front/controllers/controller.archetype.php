@@ -6,6 +6,7 @@ namespace app\main\controllers\front {
     use app\main\models\ModelFormat;
     use app\main\models\ModelMatch;
     use app\main\models\ModelPlayer;
+    use app\main\models\ModelTournament;
     use app\main\src\MetagamerBot;
     use core\application\Core;
     use core\application\DefaultFrontController;
@@ -21,6 +22,7 @@ namespace app\main\controllers\front {
         protected $modelArchetype;
         protected $modelCard;
         protected $modelFormat;
+        protected $modelTournament;
 
         public function __construct()
         {
@@ -30,6 +32,7 @@ namespace app\main\controllers\front {
             $this->modelArchetype = new ModelArchetype();
             $this->modelCard = new ModelCard();
             $this->modelFormat = new ModelFormat();
+            $this->modelTournament = new ModelTournament();
         }
 
         /*
@@ -205,6 +208,13 @@ namespace app\main\controllers\front {
         }
 
         public function lists () {
+            if ($_GET['id_tournament'] && $tournament = $this->modelTournament->getTupleById($_GET['id_tournament'])) {
+                $format_cond = Query::condition()->andWhere("tournaments.id_tournament", Query::EQUAL, $tournament['id_tournament']);
+            } elseif ($_GET['id_format'] && $format = $this->modelFormat->getTupleById($_GET['id_format'])) {
+                $format_cond = Query::condition()->andWhere("id_format", Query::EQUAL, $format['id_format']);
+            } else {
+                Go::to404();
+            }
             $included = array(
                 "main" => array(),
                 "side" => array()
@@ -237,7 +247,7 @@ namespace app\main\controllers\front {
                     $excluded['side'][$id_card] = $id_card;
                 }
             }
-            $format_cond = Query::condition()->andWhere("id_format", Query::EQUAL, $_GET['id_format']);
+
             $rules_cond = $this->modelCard->getCardRuleCondition(
                 $_GET['id_archetype'],
                 $format_cond,
@@ -248,8 +258,10 @@ namespace app\main\controllers\front {
                 ->andCondition($rules_cond);
             $decklists = $this->modelPlayer->getDecklists($format_cond, true);
             $archetype = $this->modelArchetype->getTupleById($_GET['id_archetype'], "name_archetype, image_archetype");
-            $format = $this->modelFormat->getTupleById($_GET['id_format'], "name_format");
-            $this->addContent("format", $format);
+            $this->addContent("name_format", $tournament ? $tournament['name_format'] : $format['name_format']);
+            if ($tournament) {
+                $this->addContent("name_tournament", $tournament['name_tournament']);
+            }
             $this->addContent("archetype", $archetype);
             $this->addContent("decklists", $decklists);
         }
@@ -280,18 +292,18 @@ namespace app\main\controllers\front {
         */
         // work on manabase splits (ex if 10 lists play a 5-5 split on snow-covered basics
         // and some cards are played in 6 copies, the land count could be wrong in some corner cases)
-        public function getAggregateList ($pIdFormat, $pIdArchetype, $pMaindeck = true) {
+        public function getAggregateList ($pCondition, $pMaindeck = true) {
+            if (!$pCondition) {
+                return false;
+            }
             $aggregate = array();
             $count_aggregate = 0;
-            $aggregate_cond = Query::condition()
-                ->andWhere("id_archetype", Query::EQUAL, $pIdArchetype)
-                ->andWhere("id_format", Query::EQUAL, $pIdFormat);
 
             // sideboard count
             $archetype_card_count = 15;
             if ($pMaindeck) {
                 // get card count for archetype
-                $archetype_card_count = $this->modelCard->getCardCount($aggregate_cond);
+                $archetype_card_count = $this->modelCard->getCardCount($pCondition);
                 if ($archetype_card_count[0]['count_players'] < 5 * $archetype_card_count[1]['count_players']) {
                     trace_r("WARNING : multiple cards count in archetype");
                     trace_r($archetype_card_count);
@@ -300,7 +312,7 @@ namespace app\main\controllers\front {
             }
 
 
-            $cards = $this->modelCard->getPlayedCardsByCopies($aggregate_cond, $pMaindeck);
+            $cards = $this->modelCard->getPlayedCardsByCopies($pCondition, $pMaindeck);
             $current_card = "--";
             $current_player_count = 0;
             // add placeholder to check last card for filling copies
@@ -382,22 +394,29 @@ namespace app\main\controllers\front {
 
         public function aggregatelist ()
         {
+            $aggregate_cond = null;
             if (
-                $_GET['id_format'] &&
-                ($format = $this->modelFormat->getTupleById($_GET['id_format'])) &&
                 $_GET['id_archetype'] &&
                 ($archetype = $this->modelArchetype->getTupleById($_GET['id_archetype']))
             ) {
-                $aggregate_cond = Query::condition()
-                    ->andWhere("id_archetype", Query::EQUAL, $archetype['id_archetype'])
-                    ->andWhere("id_format", Query::EQUAL, $format['id_format']);
-
+                if ($_GET['id_tournament'] && $tournament = $this->modelTournament->getTupleById($_GET['id_tournament'])) {
+                    $aggregate_cond = Query::condition()
+                        ->andWhere("tournaments.id_tournament", Query::EQUAL, $tournament['id_tournament'])
+                        ->andWhere("id_archetype", Query::EQUAL, $archetype['id_archetype']);
+                } elseif ($_GET['id_format'] && $format = $this->modelFormat->getTupleById($_GET['id_format'])) {
+                    $aggregate_cond = Query::condition()
+                        ->andWhere("id_format", Query::EQUAL, $format['id_format'])
+                        ->andWhere("id_archetype", Query::EQUAL, $archetype['id_archetype']);
+                }
+            }
+            if ($aggregate_cond) {
                 // get archetype aggregate list
-                $aggregate_main = $this->getAggregateList($format['id_format'], $archetype['id_archetype']);
+                $aggregate_main = $this->getAggregateList($aggregate_cond);
                 $aggregate_counts = array_count_values($aggregate_main);
                 $list_cards = array_unique($aggregate_main);
 
-                $aggregate_side = $this->getAggregateList($format['id_format'], $archetype['id_archetype'], false);
+                // TODO set cond instead of id format
+                $aggregate_side = $this->getAggregateList($aggregate_cond, false);
                 $aggregate_counts_side = array_count_values($aggregate_side);
                 $list_cards_side = array_unique($aggregate_side);
 
@@ -430,7 +449,7 @@ namespace app\main\controllers\front {
                     $_GET['id_format_compare'] != $_GET['id_format'] &&
                     ($format_compare = $this->modelFormat->getTupleById($_GET['id_format_compare']))
                 ) {
-
+                    $this->addMessage("WARNING - Aggregate comparing is deprecated");
                     // get average card count by id_format + id_archetype WHERE name_card IN (list_cards)
                     $cards = $this->modelCard->getPlayedCards(
                         Query::condition()
@@ -485,12 +504,12 @@ namespace app\main\controllers\front {
                 $this->addContent("player", array(
                     "name_archetype" => $archetype['name_archetype'],
                     "arena_id"       => "AGGREGATE DECKLIST",
-                    "name_tournament" => $format['name_format'],
+                    "name_tournament" => $tournament ? $tournament['name_tournament'] : $format['name_format'],
                     "count_cards_main" => count($aggregate_main),
                     "count_cards_side" => count($aggregate_side)
                 ));
             } else {
-                $this->addMessage("Please specify a format and an archetype");
+                $this->addMessage("Please specify a format / tournament and an archetype ID");
             }
             $this->setTemplate("player", "decklist");
         }
