@@ -20,7 +20,7 @@
                     <td>
                         {if $item.elements[$i]}
                             {if $item.label == "Tournaments"}
-                                <a href="tournament/search/?id={$item.elements[$i]['id_tournament']}">{$item.elements[$i]['name_tournament']}</a><br />
+                                <a href="dashboard/?id_format={$item.elements[$i]['id_format']}&id_tournament={$item.elements[$i]['id_tournament']}">{$item.elements[$i]['name_tournament']}</a><br />
                                 {$item.elements[$i]['date_tournament']}
                             {/if}
                             {if $item.label == "Archetypes"}
