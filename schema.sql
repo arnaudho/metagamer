@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `archetypes` (
   `image_archetype` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   PRIMARY KEY (`id_archetype`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+ALTER TABLE `archetypes` ADD `id_type_format` INT(1) NOT NULL AFTER `name_archetype`;
 
 -- --------------------------------------------------------
 
@@ -92,6 +93,7 @@ CREATE TABLE IF NOT EXISTS `matches` (
   `result_match` tinyint(1) NOT NULL,
   PRIMARY KEY (`id_player`,`opponent_id_player`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+ALTER TABLE `matches` ADD `score_match` VARCHAR(5) AFTER `result_match`;
 
 -- --------------------------------------------------------
 
@@ -166,4 +168,41 @@ CREATE TABLE IF NOT EXISTS `tournaments` (
   `id_format` int(11) NOT NULL,
   PRIMARY KEY (`id_tournament`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `sets`
+--
+
+DROP TABLE IF EXISTS `sets`;
+CREATE TABLE IF NOT EXISTS `sets` (
+  `id_set` int(11) NOT NULL AUTO_INCREMENT,
+  `name_set` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `code_set` varchar(7) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `type_set` VARCHAR(31) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `released_date_set` date NOT NULL,
+  PRIMARY KEY (`id_set`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Structure de la table `type_format`
+--
+
+DROP TABLE IF EXISTS `type_format`;
+CREATE TABLE IF NOT EXISTS `type_format` (
+  `id_type_format` int(1) NOT NULL AUTO_INCREMENT,
+  `name_type_format` varchar(63) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`id_type_format`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+--
+-- Déchargement des données de la table `type_format`
+--
+
+INSERT INTO `type_format` (`id_type_format`, `name_type_format`) VALUES
+  (1, 'Standard'),
+  (2, 'Historic'),
+  (3, 'Limited');
+
 COMMIT;

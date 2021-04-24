@@ -345,17 +345,20 @@ class MtgMeleeBot extends BotController
             // INSERT match player2 vs player 1 (opposite result)
         foreach ($pData as $pairing) {
             $result_match = $this->getMatchResult($pairing['Player1'], $pairing['Player2'], $pairing['Result']);
+            preg_match('/(\d)-(\d)-\d/', $pairing['Result'], $score_match);
             if ($result_match !== false && $pairing['Player1DecklistId'] && $pairing['Player2DecklistId']) {
                 $insert_matches[] = array(
                     "id_player" => $list_players[$pairing['Player1DecklistId']],
                     "opponent_id_player" => $list_players[$pairing['Player2DecklistId']],
                     "result_match" => $result_match,
+                    "score_match" => $result_match == 1 ? $score_match[1].'-'.$score_match[2] : $score_match[2].'-'.$score_match[1],
                     "round_number" => $pairing['RoundNumber']
                 );
                 $insert_matches[] = array(
                     "id_player" => $list_players[$pairing['Player2DecklistId']],
                     "opponent_id_player" => $list_players[$pairing['Player1DecklistId']],
                     "result_match" => intval(!$result_match),
+                    "score_match" => $result_match == 1 ? $score_match[2].'-'.$score_match[1] : $score_match[1].'-'.$score_match[2],
                     "round_number" => $pairing['RoundNumber']
                 );
             }
