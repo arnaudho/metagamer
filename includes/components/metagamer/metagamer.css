@@ -121,7 +121,7 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 /* METAGAME */
 .table-metagame-container .background-placeholder { background: 0 0 /100% url("imgs/marble-white.png");
     background-repeat: no-repeat; position: absolute; top: 0; bottom: 0; left: 0; right: 0; opacity: 0.4; z-index: -1;}
-.table-metagame-container { width: 1160px; height: 620px; padding: 20px 24px; position: relative;}
+.table-metagame-container { width: 1190px; height: 660px; padding: 20px 24px; position: relative;}
 .table-metagame-container h2 { font-family: "GillSans", Arial, serif; font-size: 3em; text-transform: uppercase;
     margin-top: 0; margin-bottom: 5px;}
 .table-metagame-container div.logo { width: 200px; margin-top: 0;}
@@ -304,7 +304,15 @@ table.table-standings:not(.table-french)>tbody>tr>td.icon-player { padding: 3px 
 .container .decklist .background-placeholder { background: 0 0 /100% #FFFFFF;
     background-repeat: no-repeat; position: absolute; top: 0; left: 0; opacity: 1; z-index: -1; width: 2560px; height: 1800px; }
 .container .decklist.decklist-visual { position: fixed; top: 0; left: 0; width: 1690px; padding: 34px 40px 60px 60px; }
-.container .decklist * { font-family: "GillSans", Calibri, serif; }
+.container .decklist.decklist-text { margin-top: 30px;}
+.container .decklist.decklist-text .decklist-cards-container { display: flex;}
+.container .decklist.decklist-text .decklist-main-container { flex: 1 0 55%; margin-right: 7%;}
+.container .decklist.decklist-text .decklist-side-container { flex: 1 0 38%; max-width: unset;}
+.container .decklist.decklist-text .decklist-card-name { font-family: "Metropolis", Calibri, serif; }
+.container .decklist.decklist-text .decklist-card-mana { float: right;}
+.container .decklist.decklist-text .decklist-card { line-height: 1.6em;}
+.container .decklist.decklist-text .decklist-card:hover { background-color: #F3F3F3;}
+.container .decklist.decklist-text i.ms { font-size: 11px; padding: 2px;}
 .container .decklist h2 { text-transform: uppercase; font-size: 50px; margin-top: 0;}
 .container .decklist h2 small { text-transform: none;}
 .container .decklist h3 { color: #555555; margin: 10px 0 10px; text-transform: uppercase; transform: scale(1, 1.15);
@@ -314,11 +322,12 @@ table.table-standings:not(.table-french)>tbody>tr>td.icon-player { padding: 3px 
 .container .decklist .decklist-main-container { vertical-align: top; width: 1360px; display: inline-block;}
 .container .decklist .decklist-side-container { vertical-align: top; display: inline-block; max-width: 220px; padding-left: 14px; margin-top: -4px;}
 .container .decklist .decklist-side-container .decklist-card { top: 0;}
-.container .decklist h5 { text-transform: uppercase; color: white; background-color: grey;
+.container .decklist.decklist-text h5 { text-transform: uppercase; font-family: 'Metropolis Medium', Arial, serif; font-size: 20px;}
+.container .decklist.decklist-visual h5 { text-transform: uppercase; color: white; background-color: grey;
     padding: 14px 15px 10px; font-size: 18px; display: inline-block; font-family: Metropolis, Arial, serif;
     margin-bottom: 12px; border-top-right-radius: 16px;}
-.container .decklist h5.decklist-title-main { background-color: #F5875E; margin-top: 6px; }
-.container .decklist .decklist-card { position: relative; z-index: 10; display: inline-block; margin-bottom: 5px; margin-right: -2px;}
+.container .decklist.decklist-visual h5.decklist-title-main { background-color: #F5875E; margin-top: 6px; }
+.container .decklist.decklist-visual .decklist-card { position: relative; z-index: 10; display: inline-block; margin-bottom: 5px; margin-right: -2px;}
 .container .decklist .decklist-card img { width: 163px;}
 .container .decklist .decklist-card .decklist-card-count-shadow { position: absolute; top: 42px; right: 32px; z-index: 19; height: 0;
     border-width: 0; width: 4px; background-color: transparent; box-shadow: 0 0 12px 15px rgba(0,0,0,0.98);

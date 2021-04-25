@@ -6,8 +6,10 @@ namespace app\main\controllers\front {
     use app\main\models\ModelFormat;
     use app\main\models\ModelMatch;
     use app\main\models\ModelPlayer;
+    use core\application\Autoload;
     use core\application\DefaultFrontController;
     use core\application\Go;
+    use core\application\routing\RoutingHandler;
     use core\db\Query;
 
     class player extends DefaultFrontController
@@ -36,8 +38,49 @@ namespace app\main\controllers\front {
             }
         }
 
-        // TODO filter lands by set ? to group bilands & basics
         public function display () {
+            $player = $this->modelPlayer->getDataByPlayerId($_GET["id_player"]);
+            if (!$player) {
+                Go::to404();
+            }
+            // format player name
+            $player['arena_id'] = " by " . ucwords(strtolower($player['arena_id']), " -\t\r\n\f\v");
+
+            $cards_main = $this->modelCard->getDecklistCards($player['id_player'],
+                Query::condition()->andWhere("count_main", Query::UPPER, 0),
+                " CASE WHEN mana_cost_card = '' THEN 99 ELSE cmc_card END,
+                        CASE WHEN type_card LIKE '%Creature%' THEN 1 WHEN type_card IN ('Instant', 'Sorcery') THEN 2
+                        WHEN type_card = 'Legendary Planeswalker' THEN 3 WHEN type_card = 'Basic Land' THEN 10
+                        WHEN type_card LIKE '%Land%' THEN 9 ELSE 8 END ASC,
+                        type_card");
+            $sideboard_condition = Query::condition()->andWhere("count_side", Query::UPPER, 0);
+            $sideboard_order = "cmc_card ASC,
+                        CASE WHEN type_card LIKE '%Creature%' THEN 1 WHEN type_card IN ('Instant', 'Sorcery') THEN 2
+                        WHEN type_card = 'Legendary Planeswalker' THEN 3 WHEN type_card = 'Basic Land' THEN 10
+                        WHEN type_card LIKE '%Land%' THEN 9 ELSE 8 END ASC,
+                        type_card";
+            $cards_side = $this->modelCard->getDecklistCards($player['id_player'],
+                $sideboard_condition,
+                $sideboard_order);
+
+            foreach ($cards_main as $key => $card) {
+                $cards_main[$key]['mana_cost_card'] = preg_replace('/(\{([\dxcpsurbgw])\})/i', '<i class="ms ms-$2"></i>', strtolower($card['mana_cost_card']));
+            }
+            foreach ($cards_side as $key => $card) {
+                $cards_side[$key]['mana_cost_card'] = preg_replace('/(\{([\dxcpsurbgw])\})/i', '<i class="ms ms-$2"></i>', strtolower($card['mana_cost_card']));
+            }
+
+            $this->setTemplate("player", "decklist");
+            $this->addContent("link_visual", RoutingHandler::rewrite("player", "visual") . "?id_player=" . $player['id_player']);
+            $this->addContent("cards_main", $cards_main);
+            $this->addContent("cards_side", $cards_side);
+            $this->addContent("player", $player);
+            $this->setTitle($player['name_archetype'] . " - " . $player['arena_id']);
+            Autoload::addStyle("mana/css/mana.min.css");
+        }
+
+        // TODO filter lands by set ? to group bilands & basics
+        public function visual () {
             $player = $this->modelPlayer->getDataByPlayerId($_GET["id_player"]);
             if (!$player) {
                 Go::to404();
@@ -95,7 +138,7 @@ namespace app\main\controllers\front {
 
             $this->addContent("logo", 1);
             $this->addContent("overlay_twitter", 0);
-            $this->setTemplate("player", "decklist");
+            $this->setTemplate("player", "decklist_visual");
             $this->addContent("player", $player);
 //            $this->addContent("maindeck_width", count($decklist_data["curve"])*165+40);
             $this->addContent("cards_main", $decklist_data["curve"]);

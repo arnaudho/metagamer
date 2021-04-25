@@ -189,6 +189,7 @@ namespace app\main\controllers\front {
                     }
                     $this->addContent("cards", $cards);
                     $this->addContent("confidence", "0.90");
+                    $this->setTitle($archetype['name_archetype'] . " - Archetype analysis");
                 } else {
                     $this->addMessage("No decklist found", self::MESSAGE_ERROR);
                 }
@@ -471,6 +472,9 @@ namespace app\main\controllers\front {
                             cmc_card, color_card", ""),
                     "cards.id_card, cards.name_card, cards.mana_cost_card, cards.cmc_card, cards.type_card, cards.image_card"
                 );
+                // TODO remove average count
+                // TODO set counts for copies 1-4 instead
+                // maybe comapre those counts to last format ?
                 foreach ($cards_data as $card) {
                     if (isset($aggregate_counts[$card['name_card']])) {
                         $card['count_main'] = $aggregate_counts[$card['name_card']];
@@ -552,7 +556,7 @@ namespace app\main\controllers\front {
             } else {
                 $this->addMessage("Please specify a format / tournament and an archetype ID");
             }
-            $this->setTemplate("player", "decklist");
+            $this->setTemplate("player", "decklist_visual");
         }
     }
 }

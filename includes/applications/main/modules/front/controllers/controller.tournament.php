@@ -303,7 +303,9 @@ namespace app\main\controllers\front {
             return $metagame;
         }
 
+        // TODO remove method -- depreacted
         public function search () {
+            $this->addMessage("Method depreacted -- TODO");
             $this->setTitle("Search tournament");
             $list_tournaments = $this->modelTournament->all(
                 Query::condition()
