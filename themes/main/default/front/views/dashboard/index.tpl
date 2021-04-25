@@ -75,6 +75,7 @@
                 <th>Metagame %</th>
                 <th class="archetype-decklists">Browse decklists</th>
                 <th class="archetype-decklists">Aggregate decklist</th>
+                <th class="archetype-decklists">Cards list</th>
             </tr>
             </thead>
             <tbody>
@@ -91,6 +92,11 @@
                     <td>
                         <a href="archetype/aggregatelist/{$content.link_condition}&id_archetype={$deck.id_archetype}" class="btn btn-success" target="_blank">
                             <span class="glyphicon glyphicon-file"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="archetype/list_cards/{$content.link_condition}&id_archetype={$deck.id_archetype}" class="btn btn-info" target="_blank">
+                            <span class="glyphicon glyphicon-list"></span>
                         </a>
                     </td>
                 </tr>

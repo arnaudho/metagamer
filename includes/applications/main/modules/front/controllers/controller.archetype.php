@@ -201,6 +201,47 @@ namespace app\main\controllers\front {
             $this->addContent("list_formats", $this->modelFormat->allOrdered());
         }
 
+        // TODO add cards mana cost
+        public function list_cards () {
+            $analysis_cond = Query::condition();
+            $archetype = null;
+            $format = null;
+            $archetype_cond = null;
+            if (
+                $_GET['id_archetype'] &&
+                ($archetype = $this->modelArchetype->getTupleById($_GET['id_archetype'])) &&
+                $_GET['id_format'] &&
+                ($format = $this->modelFormat->getTupleById($_GET['id_format']))
+            ) {
+                $analysis_cond = Query::condition()
+                    ->andWhere("id_archetype", Query::EQUAL, $archetype['id_archetype'])
+                    ->andWhere("id_format", Query::EQUAL, $format['id_format']);
+                $archetype_cond = Query::condition()
+                    ->andWhere("id_archetype", Query::EQUAL, $archetype['id_archetype']);
+            }
+
+            if ($archetype && $format) {
+                $count_players = $this->modelPlayer->countPlayersByIdFormat($format['id_format'], $archetype_cond);
+                $this->addContent("archetype", $archetype);
+                $this->addContent("format", $format);
+                $cards = $this->modelCard->getPlayedCards($analysis_cond);
+                foreach ($cards as $key => $card) {
+                    if ($card['count_total_main'] > 0) {
+                        $cards[$key]['avg_main'] = round($card['count_total_main'] / $card['count_players_main'], 1);
+                    }
+                    if ($card['count_total_side'] > 0) {
+                        $cards[$key]['avg_side'] = round($card['count_total_side'] / $card['count_players_side'], 1);
+                    }
+                }
+                $this->addContent("count_players", $count_players);
+                $this->addContent("cards", $cards);
+                $this->addContent("link_analysis",
+                    RoutingHandler::rewrite("archetype", "") . "?id_archetype=" . $archetype['id_archetype'] . "&id_format=" . $format['id_format']);
+                $this->setTitle($archetype['name_archetype'] . " - Cards list");
+            }
+            $this->setTemplate("archetype", "list_cards");
+        }
+
         protected function cleanCardRules () {
             $_SESSION['included'] = array("main" => array(), "side" => array());
             $_SESSION['excluded'] = array("main" => array(), "side" => array());
@@ -449,7 +490,7 @@ namespace app\main\controllers\front {
                     $_GET['id_format_compare'] != $_GET['id_format'] &&
                     ($format_compare = $this->modelFormat->getTupleById($_GET['id_format_compare']))
                 ) {
-                    $this->addMessage("WARNING - Aggregate comparing is deprecated");
+                    $this->addMessage("Aggregate comparing is deprecated");
                     // get average card count by id_format + id_archetype WHERE name_card IN (list_cards)
                     $cards = $this->modelCard->getPlayedCards(
                         Query::condition()

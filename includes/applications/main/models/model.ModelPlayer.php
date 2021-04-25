@@ -407,6 +407,18 @@ namespace app\main\models {
             return $data[0]['nb'];
         }
 
+        public function countPlayersByIdFormat ($pIdFormat, $pCond = null) {
+            if (!$pCond) {
+                $pCond = Query::condition();
+            }
+            $q = Query::select("count(1) as nb", "players p")
+                ->join("tournaments", Query::JOIN_INNER, "p.id_tournament = tournaments.id_tournament")
+                ->setCondition(clone $pCond)
+                ->andWhere("tournaments.id_format", Query::EQUAL, $pIdFormat);
+            $data = $q->execute($this->handler);
+            return $data[0]['nb'];
+        }
+
         public function deletePlayerById ($pIdPlayer) {
             $id_player = $this->one(Query::condition()->andWhere("id_player", Query::EQUAL, $pIdPlayer), "id_player");
             if (!$id_player) {
