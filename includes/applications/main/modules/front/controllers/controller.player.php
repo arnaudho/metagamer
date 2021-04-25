@@ -64,10 +64,10 @@ namespace app\main\controllers\front {
                 $sideboard_order);
 
             foreach ($cards_main as $key => $card) {
-                $cards_main[$key]['mana_cost_card'] = preg_replace('/(\{([\dxcpsurbgw])\})/i', '<i class="ms ms-$2"></i>', strtolower($card['mana_cost_card']));
+                $cards_main[$key]['mana_cost_card'] = ModelCard::formatManaCost($card['mana_cost_card']);
             }
             foreach ($cards_side as $key => $card) {
-                $cards_side[$key]['mana_cost_card'] = preg_replace('/(\{([\dxcpsurbgw])\})/i', '<i class="ms ms-$2"></i>', strtolower($card['mana_cost_card']));
+                $cards_side[$key]['mana_cost_card'] = ModelCard::formatManaCost($card['mana_cost_card']);
             }
 
             $this->setTemplate("player", "decklist");

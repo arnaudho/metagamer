@@ -216,6 +216,12 @@ namespace app\main\models {
             return $q->execute($this->handler);
         }
 
+        public static function formatManaCost ($pManaCost) {
+            $pManaCost = preg_replace('/(\{([\dxcpsurbgw])\})/i', '<i class="ms ms-$2"></i>', $pManaCost);
+            $pManaCost = preg_replace('/(\{([\dxcpsurbgw])\/([\dxcpsurbgw])\})/i', '<i class="ms ms-$2$3"></i>', $pManaCost);
+            return $pManaCost;
+        }
+
         /**
          * @param $pIdArchetype
          * @param null $pFormatCondition

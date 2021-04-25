@@ -39,7 +39,7 @@
                             <td class="name-player">{$player.arena_id}</td>
                             <td>{$player.wins}-{$player.matches-$player.wins}</td>
                             <td>
-                                <a href="deck/id:{$player.id_player}/" class="btn btn-info" target="_blank">
+                                <a href="player/visual/?id_player={$player.id_player}" class="btn btn-info" target="_blank">
                                     <span class="glyphicon glyphicon-duplicate"></span>
                                 </a>
                             </td>
