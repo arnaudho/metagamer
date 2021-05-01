@@ -1,0 +1,122 @@
+{
+  "front": {
+    "decklist/{$id_decklist}/": {
+      "parameters": {
+        "id_decklist": "[0-9]+"
+      },
+      "GET": {
+        "controller": "decklist",
+        "action": "getDecklistById"
+      }
+    },
+    "decklists/archetype/{$id_archetype}/": {
+      "parameters": {
+        "id_archetype": "[0-9]+"
+      },
+      "GET": {
+        "controller": "decklist",
+        "action": "getDecklistsByIdArchetype"
+      }
+    },
+    "decklists/tournament/{$id_tournament}/": {
+      "parameters": {
+        "id_tournament": "[0-9]+"
+      },
+      "GET": {
+        "controller": "decklist",
+        "action": "getDecklistsByIdTournament"
+      }
+    },
+    "decklists/player/{$id_player}/": {
+      "parameters": {
+        "id_player": "[0-9]+"
+      },
+      "GET": {
+        "controller": "decklist",
+        "action": "getDecklistsByIdPlayer"
+      }
+    },
+    "decklists/card/{$id_card}/": {
+      "parameters": {
+        "id_card": "[0-9]+"
+      },
+      "GET": {
+        "controller": "decklist",
+        "action": "getDecklistsByIdCard"
+      }
+    },
+    "tournament/{$id_tournament}/": {
+      "parameters": {
+        "id_tournament": "[0-9]+"
+      },
+      "GET": {
+        "controller": "tournament",
+        "action": "getTournamentById"
+      }
+    },
+    "tournaments/format/{$id_format}/": {
+      "parameters": {
+        "id_format": "[0-9]+"
+      },
+      "GET": {
+        "controller": "tournament",
+        "action": "getTournamentsByIdFormat"
+      }
+    },
+    "archetype/{$id_archetype}/": {
+      "parameters": {
+        "id_archetype": "[0-9]+"
+      },
+      "GET": {
+        "controller": "archetype",
+        "action": "getArchetypeById"
+      }
+    },
+    "archetypes/format/{$id_format}/": {
+      "parameters": {
+        "id_format": "[0-9]+"
+      },
+      "GET": {
+        "controller": "archetype",
+        "action": "getArchetypesByIdFormat"
+      }
+    },
+    "format/{$id_format}/": {
+      "parameters": {
+        "id_format": "[0-9]+"
+      },
+      "GET": {
+        "controller": "format",
+        "action": "getFormatById"
+      }
+    },
+    "formats/type/{$id_type_format}/": {
+      "parameters": {
+        "id_type_format": "[0-9]+"
+      },
+      "GET": {
+        "controller": "format",
+        "action": "getFormatsByIdTypeFormat"
+      }
+    },
+    "leaderboard/{$tag}/": {
+      "parameters": {
+        "tag": "[a-zA-Z]+"
+      },
+      "GET": {
+        "controller": "leaderboard",
+        "action": "getLeaderboard"
+      }
+    },
+    "{$controller}/{$action}/": {
+      "parameters": {
+        "controller": "[a-zA-z0-9\\-]+",
+        "action": "[a-zA-z0-9\\-]+"
+      },
+      "*": {
+        "controller": "$controller",
+        "action": "$action"
+      }
+    }
+  }
+}
