@@ -28,6 +28,128 @@ namespace app\main\models {
             return $res[0];
         }
 
+        public function getDecklistById ($pIdDecklist) {
+            $data = Query::select(
+                "players.id_player AS id_decklist, people.id_people AS id_player, arena_id AS name_player,
+                    tournaments.id_tournament, name_tournament, formats.id_format, name_format,
+                    archetypes.id_archetype, name_archetype,
+                    IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins_decklist,
+                    COUNT(result_match) AS matches_decklist", $this->table)
+                ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people AND players.id_player = $pIdDecklist")
+                ->join("archetypes", Query::JOIN_OUTER_LEFT, "archetypes.id_archetype = players.id_archetype")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->join("formats", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
+                ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
+                ->groupBy("players.id_player")
+                ->limit(0, 1)
+                ->execute($this->handler);
+            if (empty($data)) {
+                return false;
+            }
+            // TODO handle tournament icons
+            $data = $data[0];
+            $data['icon_tournament'] = "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/1/11/2012_MPL_logo.png/revision/latest/scale-to-width-down/180?cb=20200731044520";
+            $mCard = new ModelCard();
+            $cards = $mCard->getDecklistCards($pIdDecklist);
+            $data['export_arena'] = $this->convertToArenaFormat($cards);
+            $data["cards"] = $cards;
+            return $data;
+        }
+
+        // TODO decklists by archetype / tournament : restrict on result
+        // by card & player : get full data
+
+        // we don't specify id_format here, because an id_archetype should be specifid to a format
+        // TODO handle tournament icons
+        public function getDecklistsByIdArchetype ($pIdArchetype) {
+            $data = Query::select(
+                "players.id_player AS id_decklist, people.id_people AS id_player, arena_id AS name_player,
+                    tournaments.id_tournament, name_tournament, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins_decklist,
+                    COUNT(result_match) AS matches_decklist, DATE_FORMAT(date_tournament, '%d %b %Y') AS date_tournament", $this->table)
+                ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
+                ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype AND archetypes.id_archetype = $pIdArchetype")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
+                ->groupBy("players.id_player")
+                ->having("matches_decklist > 0 AND wins_decklist >= matches_decklist/2", false)
+                ->order("tournaments.date_tournament DESC, wins_decklist DESC, matches_decklist")
+                ->execute($this->handler);
+            return $data;
+        }
+
+        // TODO add player finish (top8, 1st place, etc.)
+        // ORDER BY player finish then record
+        // TODO image_archetype OR id_card ?
+        public function getDecklistsByIdTournament ($pIdTournament) {
+            $data = Query::select(
+                "players.id_player AS id_decklist, people.id_people AS id_player, arena_id AS name_player, image_archetype,
+                    archetypes.id_archetype, name_archetype, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins_decklist,
+                    COUNT(result_match) AS matches_decklist, DATE_FORMAT(date_tournament, '%d %b %Y') AS date_tournament", $this->table)
+                ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
+                ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament AND tournaments.id_tournament = $pIdTournament")
+                ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
+                ->groupBy("players.id_player")
+                ->having("matches_decklist > 0 AND wins_decklist >= matches_decklist/2", false)
+                ->order("wins_decklist DESC, matches_decklist")
+                ->execute($this->handler);
+            return $data;
+        }
+
+        public function getDecklistsByIdPlayer ($pIdPlayer) {
+            $data = Query::select(
+                "players.id_player AS id_decklist, tournaments.id_tournament, name_tournament, image_archetype,
+                    formats.id_format, name_format, archetypes.id_archetype, name_archetype,
+                    IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins_decklist,
+                    COUNT(result_match) AS matches_decklist, DATE_FORMAT(date_tournament, '%d %b %Y') AS date_tournament", $this->table)
+                ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people AND people.id_people = $pIdPlayer")
+                ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
+                ->join("formats", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
+                ->groupBy("players.id_player")
+                ->order("tournaments.date_tournament", "DESC")
+                ->execute($this->handler);
+            return $data;
+        }
+
+        public function getDecklistsByIdCard ($pIdCard) {
+            $data = Query::select(
+                "players.id_player AS id_decklist, people.id_people AS id_player, arena_id AS name_player,
+                    tournaments.id_tournament, name_tournament, image_archetype, count_main, count_side,
+                    formats.id_format, name_format, archetypes.id_archetype, name_archetype,
+                    IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins_decklist,
+                    COUNT(result_match) AS matches_decklist, DATE_FORMAT(date_tournament, '%d %b %Y') AS date_tournament", $this->table)
+                ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
+                ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
+                ->join("formats", Query::JOIN_INNER, "tournaments.id_format = formats.id_format AND formats.id_type_format != " . ModelFormat::TYPE_FORMAT_LIMITED_ID)
+                ->join("player_card", Query::JOIN_INNER, "player_card.id_player = players.id_player AND id_card = $pIdCard")
+                ->groupBy("players.id_player")
+                ->order("tournaments.date_tournament", "DESC")
+                ->limit(0, 200)
+                ->execute($this->handler);
+            return $data;
+        }
+
+        // TODO add Companion
+        public function convertToArenaFormat ($cards) {
+            $maindeck = "";
+            $sideboard = "";
+            foreach ($cards as $card) {
+                $card['name_card'] = explode("/", $card['name_card'], 2);
+                $card['name_card'] = $card['name_card'][0];
+                if ($card['count_main'] > 0) {
+                    $maindeck .= $card['count_main'] . " " . $card['name_card'] . "\r\n";
+                }
+                if ($card['count_side'] > 0) {
+                    $sideboard .= $card['count_side'] . " " . $card['name_card'] . "\r\n";
+                }
+            }
+            return $maindeck . "\r\nSideboard\r\n" . $sideboard;
+        }
+
         public function allByFormat ($pIdFormat, $pCond = null, $pFields = "") {
             if (!$pCond) {
                 $cond = Query::condition();

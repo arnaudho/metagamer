@@ -1,8 +1,8 @@
 <?php
 namespace app\api\controllers\front {
 
-    use app\main\models\ModelFormat;
-    use app\main\models\ModelTournament;
+    use app\api\models\ModelFormat;
+    use app\api\models\ModelTournament;
     use core\application\Core;
     use core\application\RestController;
     use core\data\SimpleJSON;

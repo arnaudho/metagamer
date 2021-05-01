@@ -2,7 +2,7 @@
 namespace app\api\controllers\front {
 
     use app\api\models\ModelArchetype;
-    use app\main\models\ModelFormat;
+    use app\api\models\ModelFormat;
     use core\application\Core;
     use core\application\RestController;
     use core\data\SimpleJSON;
