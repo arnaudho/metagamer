@@ -217,8 +217,8 @@ namespace app\main\models {
         }
 
         public static function formatManaCost ($pManaCost) {
-            $pManaCost = preg_replace('/(\{([\dxcpsurbgw])\})/i', '<i class="ms ms-$2"></i>', $pManaCost);
-            $pManaCost = preg_replace('/(\{([\dxcpsurbgw])\/([\dxcpsurbgw])\})/i', '<i class="ms ms-$2$3"></i>', $pManaCost);
+            $pManaCost = preg_replace('/(\{([\dxcpsurbgw])\})/i', '<i class="ms ms-$2"></i>', strtolower($pManaCost));
+            $pManaCost = preg_replace('/(\{([\dxcpsurbgw])\/([\dxcpsurbgw])\})/i', '<i class="ms ms-ci-2 ms-ci-$2$3"></i>', strtolower($pManaCost));
             return $pManaCost;
         }
 
