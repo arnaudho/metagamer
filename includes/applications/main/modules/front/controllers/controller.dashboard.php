@@ -355,6 +355,7 @@ namespace app\main\controllers\front {
             $this->addContent("date", $date);
             $this->addContent("confidence", "0.95");
             $this->addContent("count_matches", $this->modelMatches->countMatches($dashboard_cond) / 2);
+            $this->addContent("count_players", $count_players);
             $this->setTitle("$title - Winrate matrix");
         }
 

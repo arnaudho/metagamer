@@ -80,7 +80,7 @@
             </div>
             <div class="legend" style="flex-grow: 2;">
                 <p>Highlighted matchups are the ones with the strongest sample sizes <br />with as much as -10%/+10% confidence intervals</p>
-                <p>Sample size : {$content.count_matches} matches | Confidence level : {$content.confidence} | Winrates do not include mirror matches</p>
+                <p>Sample size : {$content.count_players} players | {$content.count_matches} matches<br />Confidence level : {$content.confidence} | Winrates do not include mirror matches</p>
             </div>
             <div class="legend" style="text-align: right;">
                 <div class="">
