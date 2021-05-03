@@ -99,6 +99,7 @@ table.table-archetypes * { font-family: Metropolis, serif;}
 .container .winrate-positive {color: green; font-weight: bold;}
 table.table-players tbody tr td {vertical-align: middle;}
 table td.highlight { font-weight: bold}
+.container .analysis-tabs li { text-transform: uppercase; font-size: 18px;}
 table.archetype-analysis .card-exclude { color: red; font-size: 1.2em; cursor: pointer;}
 table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor: pointer;}
 .container form.loading { pointer-events: none; opacity: 0.6;}
