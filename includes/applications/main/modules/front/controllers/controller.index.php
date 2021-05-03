@@ -1,11 +1,10 @@
 <?php
 namespace app\main\controllers\front
 {
-    use app\main\models\ModelTournament;
-    use app\main\src\MetagamerBot;
     use core\application\Application;
     use core\application\DefaultController;
     use core\application\Go;
+    use core\application\Header;
     use core\tools\form\Form;
     use core\utils\Logs;
 
@@ -40,6 +39,11 @@ namespace app\main\controllers\front
                 $authHandlerInst = call_user_func_array(array($authHandler, 'getInstance'), array());
                 if($authHandlerInst->setUserSession($data["login"], $data["mdp"]))
                 {
+                    if (isset($_SESSION['redirect'])) {
+                        $redirect_url = $_SESSION['redirect'];
+                        unset($_SESSION['redirect']);
+                        Header::location($redirect_url);
+                    }
                     Go::to();
                 }
                 else

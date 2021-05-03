@@ -19,8 +19,10 @@ namespace core\application
         public function __construct()
         {
             $authHandler = Application::getInstance()->authenticationHandler;
-            if(!call_user_func_array(array($authHandler, 'is'), array($authHandler::USER)))
-                Go::to();
+            if(!call_user_func_array(array($authHandler, 'is'), array($authHandler::USER))) {
+                $_SESSION['redirect'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+                Go::to("index", "login");
+            }
             Autoload::addComponent("Metagamer");
 
             $data = $authHandler::$data;
