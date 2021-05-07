@@ -2,7 +2,7 @@
 
 <a href="{$content.link_visual}" class="btn btn-info" target="_blank">
     <span class="glyphicon glyphicon-eye-open"></span> Visual decklist
-</a>
+</a> {$content.player.name_deck}
 {if $content.cards_main!==null}
     <div class="decklist decklist-text">
         {if $content.logo}

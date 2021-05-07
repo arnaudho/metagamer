@@ -55,7 +55,7 @@ namespace app\main\controllers\front {
                 $data = $this->modelFormat->all(Query::condition()->order("id_format", "DESC"));
             } else {
                 $this->addContent("link_full", $link_full = RoutingHandler::rewrite("format", "") . "?full=1");
-                $data = $this->modelFormat->all(Query::condition()->order("id_format", "DESC")->limit(0, 6));
+                $data = $this->modelFormat->all(Query::condition()->order("id_format", "DESC")->limit(0, 8));
             }
             $formats = array();
             foreach ($data as $format) {

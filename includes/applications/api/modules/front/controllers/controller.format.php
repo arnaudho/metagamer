@@ -2,6 +2,7 @@
 namespace app\api\controllers\front {
 
     use app\api\models\ModelFormat;
+    use app\main\models\ModelTypeFormat;
     use core\application\Core;
     use core\application\RestController;
     use core\data\SimpleJSON;
@@ -9,11 +10,13 @@ namespace app\api\controllers\front {
     class format extends RestController
     {
         protected $modelFormat;
+        protected $modelTypeFormat;
 
         public function __construct()
         {
             $this->format = self::FORMAT_JSON;
             $this->modelFormat = new ModelFormat();
+            $this->modelTypeFormat = new ModelTypeFormat();
             parent::__construct();
         }
 
@@ -39,7 +42,7 @@ namespace app\api\controllers\front {
                 );
             }
             $id = $_GET['id_type_format'];
-            if (!$this->modelFormat->getTupleById($id)) {
+            if (!$this->modelTypeFormat->getTupleById($id)) {
                 $this->throwError(
                     422, "Format type ID $id not found"
                 );
