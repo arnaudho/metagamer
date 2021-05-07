@@ -202,6 +202,64 @@ namespace app\main\controllers\front {
             $this->addContent("list_formats", $this->modelFormat->allOrdered());
         }
 
+        // export tool for aggregate decklists
+        public function aggregatecards () {
+            if (
+                $_GET['id_archetype'] &&
+                ($archetype = $this->modelArchetype->getTupleById($_GET['id_archetype'])) &&
+                $_GET['id_format'] &&
+                ($format = $this->modelFormat->getTupleById($_GET['id_format']))
+            ) {
+                $decks = Query::execute("SELECT id_player, name_card, count_main, count_side FROM player_card
+                    INNER JOIN cards USING(id_card)
+                    INNER JOIN players USING(id_player)
+                    INNER JOIN tournaments USING(id_tournament)
+                    WHERE id_format = " . $format['id_format'] .
+                    " AND id_archetype = " . $archetype['id_archetype'] . "
+                    ORDER BY CASE WHEN type_card LIKE '%Creature%' THEN 1 WHEN type_card IN ('Instant', 'Sorcery') THEN 2
+                            WHEN type_card = 'Legendary Planeswalker' THEN 3 WHEN type_card = 'Basic Land' THEN 10 WHEN type_card LIKE '%Land%' THEN 9 ELSE 8 END ASC,
+                            cmc_card, color_card
+                    ");
+
+                $all_cards_main = array();
+                $all_cards_side = array();
+                $cards_main = array();
+                $cards_side = array();
+                foreach ($decks as $deck) {
+                    if ($deck['count_main'] > 0) {
+                        $all_cards_main[$deck['name_card']] = 0;
+                    }
+                    if ($deck['count_side'] > 0) {
+                        $all_cards_side[$deck['name_card']] = 0;
+                    }
+                }
+                foreach ($decks as $deck) {
+                    if ($deck['count_main'] > 0) {
+                        if (!array_key_exists($deck['id_player'], $cards_main)) {
+                            $cards_main[$deck['id_player']] = $all_cards_main;
+                        }
+                        $cards_main[$deck['id_player']][$deck['name_card']] = $deck['count_main'];
+                    }
+                    if ($deck['count_side'] > 0) {
+                        if (!array_key_exists($deck['id_player'], $cards_side)) {
+                            $cards_side[$deck['id_player']] = $all_cards_side;
+                        }
+                        $cards_side[$deck['id_player']][$deck['name_card']] = $deck['count_side'];
+                    }
+                }
+                $this->setTemplate("archetype", "decklists");
+                $this->addContent("all_cards_main", array_keys($all_cards_main));
+                $this->addContent("cards_main", $cards_main);
+                $this->addContent("all_cards_side", array_keys($all_cards_side));
+                $this->addContent("cards_side", $cards_side);
+
+                $this->addContent("archetype", $archetype);
+                $this->addContent("format", $format);
+            } else {
+                $this->addMessage("Incorrect format or archetype ID");
+            }
+        }
+
         // TODO add cards mana cost
         public function list_cards () {
             $analysis_cond = Query::condition();
