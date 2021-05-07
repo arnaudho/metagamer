@@ -61,6 +61,22 @@ namespace app\main\models {
             return $mapping;
         }
 
+        public function decklistDiff ($pDeckA, $pDeckB) {
+            $remainB = array();
+            foreach ($pDeckB as $item) {
+                $key = array_search($item, $pDeckA);
+                if ($key !== false) {
+                    unset($pDeckA[$key]);
+                } else {
+                    $remainB[] = $item;
+                }
+            }
+            return array(
+                "removed" => array_values($pDeckA),
+                "added"   => $remainB
+            );
+        }
+
         public function evaluatePlayerArchetype ($pIdPlayer, $pIdTypeFormat, $pWrite = true) {
             $player = $this->modelPlayer->getTupleById($pIdPlayer);
             if (!$player) {
@@ -68,9 +84,13 @@ namespace app\main\models {
                 return false;
             }
             $name_archetype = self::ARCHETYPE_OTHER;
-            // deck without sideboard : archetype 'Other'
-            if ($this->modelCard->countSideboardCardsByIdPlayer($pIdPlayer)) {
-                $cards = $this->modelCard->getPlayedCards(Query::condition()->andWhere("player_card.id_player", Query::EQUAL, $pIdPlayer));
+
+            // exclude sideboard cards for archetype mapping
+                $cards = $this->modelCard->getPlayedCards(
+                    Query::condition()
+                        ->andWhere("player_card.id_player", Query::EQUAL, $pIdPlayer)
+                        ->andWhere("player_card.count_main", Query::UPPER, 0, false)
+                );
 
                 // TODO add : if no cards found, call URL to get deck details
                 if (!$cards) {
@@ -82,7 +102,7 @@ namespace app\main\models {
                     $deck .= $card['name_card'] . " 00 ";
                 }
                 $name_archetype = self::decklistMapper($deck, $pIdTypeFormat);
-            }
+
 
             if ($pWrite) {
                 // insert archetype if needed
