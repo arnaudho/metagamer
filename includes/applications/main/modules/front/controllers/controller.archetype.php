@@ -300,8 +300,8 @@ namespace app\main\controllers\front {
                 ->andCondition($rules_cond);
             $decklists = $this->modelPlayer->getDecklists($format_cond, true);
             $archetype = $this->modelArchetype->getTupleById($_GET['id_archetype'], "name_archetype, image_archetype");
-            $this->addContent("name_format", $tournament ? $tournament['name_format'] : $format['name_format']);
-            if ($tournament) {
+            $this->addContent("name_format", isset($tournament) ? $tournament['name_format'] : $format['name_format']);
+            if (isset($tournament)) {
                 $this->addContent("name_tournament", $tournament['name_tournament']);
             }
             $this->addContent("archetype", $archetype);
@@ -557,6 +557,75 @@ namespace app\main\controllers\front {
                 $this->addMessage("Please specify a format / tournament and an archetype ID");
             }
             $this->setTemplate("player", "decklist_visual");
+        }
+
+        public function archetypereview () {
+            $aggregate_cond = null;
+            $name = null;
+            if (
+                $_GET['id_archetype'] &&
+                ($archetype = $this->modelArchetype->getTupleById($_GET['id_archetype']))
+            ) {
+                if ($_GET['id_tournament'] && $tournament = $this->modelTournament->getTupleById($_GET['id_tournament'])) {
+                    $aggregate_cond = Query::condition()
+                        ->andWhere("tournaments.id_tournament", Query::EQUAL, $tournament['id_tournament'])
+                        ->andWhere("id_archetype", Query::EQUAL, $archetype['id_archetype']);
+                    $name = $tournament['name_tournament'];
+                } elseif ($_GET['id_format'] && $format = $this->modelFormat->getTupleById($_GET['id_format'])) {
+                    $aggregate_cond = Query::condition()
+                        ->andWhere("id_format", Query::EQUAL, $format['id_format'])
+                        ->andWhere("id_archetype", Query::EQUAL, $archetype['id_archetype']);
+                    $name = $format['name_format'];
+                }
+            }
+
+            if ($aggregate_cond) {
+                $sum_distances = 0;
+                $max_distance = 0;
+                // get archetype aggregate list (maindeck only)
+                $aggregate_main = $this->getAggregateList($aggregate_cond);
+                $aggregate_counts = array_count_values($aggregate_main);
+
+                // compare with all decklists of archetype
+                $players = $this->modelPlayer->all($aggregate_cond, "id_player, arena_id AS name_player, name_deck");
+
+                foreach ($players as $key => $player) {
+                    $decklist_player = $this->modelCard->getDecklistCardsByIdPlayer($player['id_player']);
+                    $diff = $this->modelArchetype->decklistDiff($aggregate_main, $decklist_player);
+                    $distance = max(count($diff['added']), count($diff['removed']));
+                    $sum_distances += $distance;
+                    if ($distance > $max_distance) {
+                        $max_distance = $distance;
+                    }
+                    $players[$key]['distance'] = $distance;
+                    // rework diff here
+                    $players[$key]['diff'] = array(
+                        "removed" => array(),
+                        "added" => array()
+                    );
+                    foreach (array_count_values($diff['added']) as $item => $count) {
+                        $players[$key]['diff']['added'][] = "$count $item";
+                    }
+                    foreach (array_count_values($diff['removed']) as $item => $count) {
+                        $players[$key]['diff']['removed'][] = "$count $item";
+                    }
+                }
+                // get average archetype radius
+                $average_distance = round($sum_distances / count($players), 2);
+
+                foreach ($players as $key => $player) {
+                    if ($player['distance'] < $average_distance*2) {
+                        unset($players[$key]);
+                    }
+                }
+
+                $this->addContent("aggregate_decklist", $aggregate_counts);
+                $this->addContent("archetype", $archetype);
+                $this->addContent("name_format", $name);
+                $this->addContent("players", $players);
+                $this->addContent("average_distance", $average_distance);
+            }
+            $this->setTemplate("archetype", "review");
         }
     }
 }

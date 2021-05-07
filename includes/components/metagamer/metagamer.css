@@ -347,6 +347,20 @@ table.table-standings:not(.table-french)>tbody>tr>td.icon-player { padding: 3px 
 .container .decklist .decklist-card .decklist-card-diff.decklist-card-diff-negative { color: #FF4500;}
 .container .decklist .decklist-card .decklist-card-diff.decklist-card-diff-positive { color: #ACFF2F;}
 
+/* AGGREGATE */
+.aggregate-container h2 { font-size: 36px;}
+.aggregate-container .player-check { display: inline-block; padding: 16px; width: 48%; margin: 3px; vertical-align: top;
+    background-color: #EEF3F6; border-radius: 2px;}
+.aggregate-container .player-check-header h3 { margin-top: 0;}
+.aggregate-container .player-check-header .player-check-link { float: right;}
+.aggregate-container .player-check-header,
+.aggregate-container .player-check-cards li { font-family: Metropolis, Arial, serif;}
+.aggregate-container .player-check-cards { list-style-type: none; padding-left: 0;}
+.aggregate-container .archetype-aggregate { border: 1px solid #EEEEEE; border-radius: 4px; padding: 8px 16px;
+    margin-bottom: 20px;}
+.aggregate-container .archetype-aggregate h3 { cursor: pointer; text-transform: uppercase;}
+.aggregate-container .archetype-aggregate ul { list-style-type: none; padding-left: 10px;}
+
 /* IMPORT TOURNAMENT */
 #import-mtgmelee .form-group > * { display: block;}
 #import-mtgmelee input[name="import-mtgmelee[tournament_name]"] { width: 100%;}

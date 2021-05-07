@@ -15,6 +15,13 @@ namespace app\main\models {
             parent::__construct("players", "id_player");
         }
 
+        public function all($pCond = null, $pFields = "*")
+        {
+            $this->addJoinOnSelect("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament");
+            $this->addJoinOnSelect("people", Query::JOIN_INNER, "people.id_people = players.id_people");
+            return parent::all($pCond, $pFields);
+        }
+
         public function getPlayerWithTypeFormatById ($pId, $pFields = "players.*, id_type_format")
         {
             $res = Query::select($pFields, $this->table)
@@ -65,7 +72,7 @@ namespace app\main\models {
             $data = Query::select(
                 "players.id_player AS id_decklist, people.id_people AS id_player, arena_id AS name_player,
                     tournaments.id_tournament, name_tournament, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins_decklist,
-                    COUNT(result_match) AS matches_decklist, DATE_FORMAT(date_tournament, '%d %b %Y') AS date_tournament", $this->table)
+                    COUNT(result_match) AS matches_decklist, date_tournament", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
                 ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype AND archetypes.id_archetype = $pIdArchetype")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
@@ -84,7 +91,7 @@ namespace app\main\models {
             $data = Query::select(
                 "players.id_player AS id_decklist, people.id_people AS id_player, arena_id AS name_player, image_archetype,
                     archetypes.id_archetype, name_archetype, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins_decklist,
-                    COUNT(result_match) AS matches_decklist, DATE_FORMAT(date_tournament, '%d %b %Y') AS date_tournament", $this->table)
+                    COUNT(result_match) AS matches_decklist, date_tournament", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
                 ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament AND tournaments.id_tournament = $pIdTournament")
@@ -101,7 +108,7 @@ namespace app\main\models {
                 "players.id_player AS id_decklist, tournaments.id_tournament, name_tournament, image_archetype,
                     formats.id_format, name_format, archetypes.id_archetype, name_archetype,
                     IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins_decklist,
-                    COUNT(result_match) AS matches_decklist, DATE_FORMAT(date_tournament, '%d %b %Y') AS date_tournament", $this->table)
+                    COUNT(result_match) AS matches_decklist, date_tournament", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people AND people.id_people = $pIdPlayer")
                 ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
@@ -119,7 +126,7 @@ namespace app\main\models {
                     tournaments.id_tournament, name_tournament, image_archetype, count_main, count_side,
                     formats.id_format, name_format, archetypes.id_archetype, name_archetype,
                     IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins_decklist,
-                    COUNT(result_match) AS matches_decklist, DATE_FORMAT(date_tournament, '%d %b %Y') AS date_tournament", $this->table)
+                    COUNT(result_match) AS matches_decklist, date_tournament", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
                 ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
@@ -172,7 +179,7 @@ namespace app\main\models {
 
         public function getDataByPlayerId ($pIdPlayer) {
             $data = Query::select(
-                "players.id_player, tournaments.id_tournament, name_tournament, name_format, name_archetype, decklist_player,
+                "players.id_player, tournaments.id_tournament, name_tournament, name_format, name_archetype, decklist_player, name_deck,
                     formats.id_type_format, arena_id, IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins,
                     COUNT(result_match) AS matches, pc.count_cards_main, pc.count_cards_side", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people AND players.id_player = $pIdPlayer")
@@ -252,7 +259,7 @@ namespace app\main\models {
                 ->andCondition($pCondition)
                 ->groupBy("players.id_player")
                 ->order("tournaments.date_tournament", "DESC")
-                ->limit(0, 20);
+                ->limit(0, 50);
             return $q->execute($this->handler);
         }
 
