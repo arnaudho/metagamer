@@ -31,8 +31,8 @@
                     {foreach from=$content.cards_side item="card"}
                         {if $card.count_side > 0}
                             <li class="decklist-card">
-                                <span class="decklist-card-name">{$card.count_side} {$card.name_card}</span>
                                 <span class="decklist-card-mana">{$card.mana_cost_card}</span>
+                                <span class="decklist-card-name">{$card.count_side} {$card.name_card}</span>
                             </li>
                         {/if}
                     {/foreach}
