@@ -482,7 +482,7 @@ namespace app\main\controllers\front {
                         $message .= "<li>" . $card['name_card'] . "</li>";
                     }
                     $message .= "</ul>";
-                    $this->addMessage($message);
+                    $this->addMessage($message, self::MESSAGE_ERROR);
                 }
                 $formats[$idTypeFormat] = array(
                     "name_format" => ucfirst($typeFormat),

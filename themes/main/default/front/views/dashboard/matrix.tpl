@@ -90,54 +90,54 @@
         </div>
     </div>
 
-        {* TODO export texte *}{*
+    {* TODO export texte *}
 
-        TODO change format -- check last email
+    {*TODO change format -- check last email*}
 
-        <div style="margin-top: 40px;">
-            <table>
-                <tbody>
-                <tr style="background-color: lightblue;">
-                    <th>Archetype</th>
-                    <th>% metagame</th>
-                    <th class="matchup-total"><div class="matchup-total-cell">WINRATE vs. Metagame</div></th>
-                    {foreach from=$content.archetypes item="archetype"}
-                        <th class="matchup-detail"><div>vs <span class="matchup-archetype-name">{$archetype.name_archetype}</span></div></th>
+    <div style="margin-top: 40px;">
+        <table>
+            <tbody>
+            <tr style="background-color: lightblue;">
+                <th>Archetype</th>
+                <th>% metagame</th>
+                <th class="matchup-total"><div class="matchup-total-cell">WINRATE vs. Metagame</div></th>
+                {foreach from=$content.archetypes item="archetype"}
+                    <th class="matchup-detail"><div>vs <span class="matchup-archetype-name">{$archetype.name_archetype}</span></div></th>
+                {/foreach}
+            </tr>
+            {foreach from=$content.archetypes item="archetype"}
+                <tr>
+                    <td rowspan="2">
+                        <div class="archetype-name">{$archetype.name_archetype}</div>
+                    </td>
+                    <td>
+                        <div class="archetype-count">{$archetype.count}</div>
+                    </td>
+                    {foreach from=$archetype.winrates item="deck"}
+                        <td>
+                            {if $deck.percent!==null}
+                                <div class="matchup-percent">{$deck.percent}<sup>%</sup></div>
+                            {else}
+                                -
+                            {/if}
+                        </td>
                     {/foreach}
                 </tr>
-                {foreach from=$content.archetypes item="archetype"}
-                    <tr>
-                        <td rowspan="2">
-                            <div class="archetype-name">{$archetype.name_archetype}</div>
-                        </td>
+                <tr>
+                    <td>{$archetype.percent}<sup>%</sup></td>
+                    {foreach from=$archetype.winrates item="deck"}
                         <td>
-                            <div class="archetype-count">{$archetype.count}</div>
+                            {if $deck.percent!==null}
+                                <span class="matchup-count">{$deck.wins}/{$deck.count}</span>
+                            {/if}
                         </td>
-                        {foreach from=$archetype.winrates item="deck"}
-                            <td>
-                                {if $deck.percent!==null}
-                                    <div class="matchup-percent">{$deck.percent}<sup>%</sup></div>
-                                {else}
-                                    -
-                                {/if}
-                            </td>
-                        {/foreach}
-                    </tr>
-                    <tr>
-                        <td>{$archetype.percent}<sup>%</sup></td>
-                        {foreach from=$archetype.winrates item="deck"}
-                            <td>
-                                {if $deck.percent!==null}
-                                    <span class="matchup-count">{$deck.wins}/{$deck.count}</span>
-                                {/if}
-                            </td>
-                        {/foreach}
-                    </tr>
-                {/foreach}
-                </tbody>
-            </table>
-        </div>*}
-        {* TODO export texte *}
+                    {/foreach}
+                </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    </div>
+    {* TODO export texte *}
 
     {if $content.list_tournaments}
         <ul>
