@@ -39,11 +39,22 @@ namespace app\main\controllers\front {
          * player count can be different between the header and the #lists playing a given card
          * if some players have no recorded match
          */
+
+        // TODO allow user to specify opposing archetype
+        // => add a select field, then use id_opponent_archetype in format_cond (and check for other queries which should use this condition as well)
+        // ADD $q->join("players op", Query::JOIN_INNER, "matches.opponent_id_player = op.id_player AND op.id_archetype = 67");
+        // auto-join on players op in ModelMatch::getWinrateByArchetypeId ?
+
+        // 16/05/21 : we should consider the number of matches for each card instead of the number of decklsits for the threshold
+        // however this information isn't retrieved in the getPlayedCards method, because joining on the macthes table
+        // would duplicate the cards count ; matches count is only fetched for each card passing the cut.
+
         public function index () {
             $analysis_cond = Query::condition();
             $format_cond = Query::condition();
             $archetype = array();
             $format = array();
+            // TODO use em/es/im/is GET parameters instead of SESSION
             if (
                 $_GET['id_archetype'] &&
                 ($archetype = $this->modelArchetype->getTupleById($_GET['id_archetype'])) &&
@@ -134,7 +145,9 @@ namespace app\main\controllers\front {
                         // count_total_main|count_total_side > 0 : to calculate only with main|side presence
                         if ($card['count_total_main'] > 0) {
                             $card['avg_main'] = round($card['count_total_main']/$card['count_players_main'], 1);
-                            if ($card['count_players_main'] >= 10 && ($stats_rules['count_players']-$card['count_players_main']) >= 10) {
+                            $threshold_card = abs($card['count_players_main']/$stats_rules['count_players']-0.5);
+                            // do not display < 5% or > 95%
+                            if ($threshold_card <= 0.45) {
                                 $winrate = $this->modelMatch->getWinrateByArchetypeId(
                                     $archetype['id_archetype'],
                                     $format_cond,
@@ -161,7 +174,9 @@ namespace app\main\controllers\front {
                         }
                         if ($card['count_total_side'] > 0) {
                             $card['avg_side'] = round($card['count_total_side']/$card['count_players_side'], 1);
-                            if ($card['count_players_side'] >= 10 && ($stats_rules['count_players']-$card['count_players_side']) >= 10) {
+                            $threshold_card = abs($card['count_players_side']/$stats_rules['count_players']-0.5);
+                            // do not display < 5% or > 95%
+                            if ($threshold_card <= 0.45) {
                                 $winrate = $this->modelMatch->getWinrateByArchetypeId(
                                     $archetype['id_archetype'],
                                     $format_cond,
@@ -645,7 +660,7 @@ namespace app\main\controllers\front {
                 $aggregate_counts = array_count_values($aggregate_main);
 
                 // compare with all decklists of archetype
-                $players = $this->modelPlayer->all($aggregate_cond, "id_player, arena_id AS name_player, name_deck");
+                $players = $this->modelPlayer->getPlayerByCond($aggregate_cond, "id_player, arena_id AS name_player, name_deck");
 
                 foreach ($players as $key => $player) {
                     $decklist_player = $this->modelCard->getDecklistCardsByIdPlayer($player['id_player']);
@@ -682,6 +697,7 @@ namespace app\main\controllers\front {
                 $this->addContent("name_format", $name);
                 $this->addContent("players", $players);
                 $this->addContent("average_distance", $average_distance);
+                $this->setTitle($archetype['name_archetype'] . " - Archetype review");
             }
             $this->setTemplate("archetype", "review");
         }

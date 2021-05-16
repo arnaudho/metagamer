@@ -103,7 +103,9 @@ table td.highlight { font-weight: bold}
 table.archetype-analysis .card-exclude { color: red; font-size: 1.2em; cursor: pointer;}
 table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor: pointer;}
 .container form.loading { pointer-events: none; opacity: 0.6;}
-.container .confidence-interval { font-size: 0.8em; font-style: italic;}
+.container .archetype-analysis .card-name { max-width: 300px;}
+.container .archetype-analysis .confidence-interval { font-size: 0.7em; font-style: italic;}
+.container .archetype-analysis .card-count-matches { font-size: 0.9em;}
 .container h2.name-format { text-transform: uppercase; font-size: 40px; font-family: Metropolis, Arial, serif;}
 .container h2.name-tournament { font-family: 'Metropolis Thin', Arial, serif;}
 .dashboard-container .btn-default { font-size: 18px; margin-bottom: 18px;}

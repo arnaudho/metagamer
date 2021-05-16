@@ -23,17 +23,16 @@
 {if $content.cards}
     <div class="panel panel-info archetypes-info">
         <div class="panel-heading">
-            <h3 class="panel-title">{$content.global.count_players} lists -
-                winrate {$content.global.winrate} %
+            <h3 class="panel-title">{$content.global.count_players} decklists - winrate {$content.global.winrate} %
                 <span class="confidence-interval">({if $content.global.deviation_down < 0}0{else}{$content.global.deviation_down}{/if}% -
-                {if $content.global.deviation_up > 100}100{else}{$content.global.deviation_up}{/if}%)</span>,
-                mirror matches included
+                {if $content.global.deviation_up > 100}100{else}{$content.global.deviation_up}{/if}%)</span><br />
+                {$content.global.total} matches <span class="confidence-interval">mirror matches included</span>
             </h3>
         </div>
         {if $content.global_rules.count_players != $content.global.count_players}
             <div class="panel-body">
                 <p>
-                    {$content.global_rules.count_players} lists matching rules - winrate
+                    {$content.global_rules.count_players} lists matching rules ({$content.global_rules.total}) - winrate
                     <span
                         {if $content.global_rules.winrate > $content.global.winrate}class="winrate-positive"{/if}
                         {if $content.global_rules.winrate < $content.global.winrate}class="winrate-negative"{/if}>
@@ -156,8 +155,9 @@
                     <tr>
                         <th>Actions</th>
                         <th data-field="name_card" data-sortable="true">Name</th>
-                        <th data-field="count_copies" data-sortable="true">Average # copies</th>
+                        <th data-field="count_copies" data-sortable="true">Avg # copies</th>
                         <th data-field="count_lists" data-sortable="true"># lists</th>
+                        <th data-field="count_matches" data-sortable="true"># matches</th>
                         <th data-field="winrate_with" data-sortable="true">Winrate</th>
                         <th>Confidence</th>
                         <th data-field="winrate_without" data-sortable="true">W% without</th>
@@ -178,12 +178,13 @@
                                               title="Exclude decklists containing this card"></span>
                                     {/if}
                                 </td>
-                                <td>
+                                <td class="card-name">
                                     {$card.name_card}
                                 </td>
                                 <td {if $card.avg_main == 4}class="highlight"{/if}>{$card.avg_main|floatval}</td>
                                 <td {if $content.global_rules.count_players == $card.count_players_main}class="strong"{/if}>{$card.count_players_main}</td>
                                 {if $card.winrate_main}
+                                    <td class="card-count-matches">{$card.total_main}</td>
                                     <td {if $card.winrate_main > ($content.global_rules.winrate+5)}class="winrate-positive"
                                             {else}
                                             {if $card.winrate_main > $content.global_rules.winrate}class="winrate-slightly-positive"
@@ -215,7 +216,7 @@
                                         {/if}
                                     </td>
                                 {else}
-                                    <td colspan="4"></td>
+                                    <td colspan="5"></td>
                                 {/if}
                             </tr>
                         {/if}
@@ -231,6 +232,7 @@
                         <th data-field="name_card" data-sortable="true">Name</th>
                         <th data-field="count_copies" data-sortable="true">Average # copies</th>
                         <th data-field="count_lists" data-sortable="true"># lists</th>
+                        <th data-field="count_matches" data-sortable="true"># matches</th>
                         <th data-field="winrate_with" data-sortable="true">Winrate</th>
                         <th>Confidence</th>
                         <th data-field="winrate_without" data-sortable="true">W% without</th>
@@ -251,10 +253,11 @@
                                               title="Exclude decklists containing this card"></span>
                                     {/if}
                                 </td>
-                                <td>{$card.name_card}</td>
+                                <td class="card-name">{$card.name_card}</td>
                                 <td {if $card.avg_side == 4}class="highlight"{/if}>{$card.avg_side|floatval}</td>
                                 <td {if $content.global_rules.count_players == $card.count_players_side}class="strong"{/if}>{$card.count_players_side}</td>
                                 {if $card.winrate_side}
+                                    <td class="card-count-matches">{$card.total_side}</td>
                                     <td {if $card.winrate_side > ($content.global_rules.winrate+5)}class="winrate-positive"
                                         {else}
                                             {if $card.winrate_side > $content.global_rules.winrate}class="winrate-slightly-positive"
@@ -282,7 +285,7 @@
                                         {/if}
                                     </td>
                                 {else}
-                                    <td colspan="4"></td>
+                                    <td colspan="5"></td>
                                 {/if}
                             </tr>
                         {/if}
