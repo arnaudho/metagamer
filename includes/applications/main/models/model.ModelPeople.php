@@ -17,12 +17,12 @@ namespace app\main\models {
                 ->andWhere("tag_player", Query::IN, "('mpl', 'rivals')", false)
                 ->andWhere("arena_id", Query::EQUAL, $pArenaId)
                 ->execute($this->handler);
-            return $people[0] ? $people[0] : null;
+            return isset($people[0]) ? $people[0] : null;
         }
 
         // TODO order by most matches played ?
         public function searchPeopleByName ($pName, $pCount = false, $pLimit = 10) {
-            $q = Query::select(($pCount ? "COUNT(1) AS count" : "*"), $this->table)
+            $q = Query::select(($pCount ? "COUNT(1) AS count" : "id_people AS id_player, arena_id AS name_player"), $this->table)
                 ->andWhere("people.arena_id", Query::LIKE, "'%" . $pName . "%'", false)
                 ->order("arena_id");
             if (!$pCount) {
@@ -30,6 +30,13 @@ namespace app\main\models {
             }
             $data = $q->execute($this->handler);
             return $pCount ? $data[0]['count'] : $data;
+        }
+
+        public function getPlayerById ($pIdPeople) {
+            $q = Query::select("people.id_people AS id_player, arena_id AS name_player, tag_player, country_player", "people")
+                ->join("player_tag", Query::JOIN_OUTER_LEFT, "people.id_people = player_tag.id_people")
+                ->andWhere("people.id_people", Query::EQUAL, $pIdPeople);
+            return $q->execute($this->handler);
         }
     }
 }

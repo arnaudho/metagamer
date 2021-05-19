@@ -1,5 +1,14 @@
 {
   "front": {
+    "player/{$id_player}/": {
+      "parameters": {
+        "id_player": "[0-9]+"
+      },
+      "GET": {
+        "controller": "player",
+        "action": "getPlayerById"
+      }
+    },
     "decklist/{$id_decklist}/": {
       "parameters": {
         "id_decklist": "[0-9]+"
@@ -81,6 +90,15 @@
         "action": "getArchetypesByIdFormat"
       }
     },
+    "card/{$id_card}/": {
+      "parameters": {
+        "id_card": "[0-9]+"
+      },
+      "GET": {
+        "controller": "card",
+        "action": "getCardById"
+      }
+    },
     "format/{$id_format}/": {
       "parameters": {
         "id_format": "[0-9]+"
@@ -97,6 +115,44 @@
       "GET": {
         "controller": "format",
         "action": "getFormatsByIdTypeFormat"
+      }
+    },
+    "formats/all/": {
+      "GET": {
+        "controller": "format",
+        "action": "getFormats"
+      }
+    },
+    "format_types/all/": {
+      "GET": {
+        "controller": "format",
+        "action": "getFormatTypes"
+      }
+    },
+    "matrix/format:{$id_format}/size:{$size}/": {
+      "parameters": {
+        "id_format": "[0-9]+",
+        "size": "[0-9]+"
+      },
+      "GET": {
+        "controller": "index",
+        "action": "matrix"
+      }
+    },
+    "matrix/tournament:{$id_tournament}/size:{$size}/": {
+      "parameters": {
+        "id_tournament": "[0-9]+",
+        "size": "[0-9]+"
+      },
+      "GET": {
+        "controller": "index",
+        "action": "matrix"
+      }
+    },
+    "search/": {
+      "GET": {
+        "controller": "index",
+        "action": "search"
       }
     },
     "leaderboard/{$tag}/": {

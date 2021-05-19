@@ -296,7 +296,8 @@ namespace app\main\models {
         }
 
         public function searchCardsByName ($pName, $pCount = false, $pLimit = 10) {
-            $q = Query::select(($pCount ? "COUNT(1) AS count" : "*"), $this->table)
+            $q = Query::select(($pCount ? "COUNT(1) AS count" : "cards.id_card, name_card, mana_cost_card, cmc_card,
+                    type_card, color_card, set_card, image_card"), $this->table)
                 ->andWhere("cards.name_card", Query::LIKE, "'%" . $pName . "%'", false)
                 ->order("cards.name_card");
             if (!$pCount) {

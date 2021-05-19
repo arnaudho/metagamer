@@ -36,7 +36,7 @@
                                 <span class="small">{$item.elements[$i]['mana_cost_card']}</span>
                             {/if}
                             {if $item.label == "Players"}
-                                <a href="player/?search={$item.elements[$i]['arena_id']}">{$item.elements[$i]['arena_id']}</a>
+                                <a href="player/?search={$item.elements[$i]['name_player']}">{$item.elements[$i]['name_player']}</a>
                             {/if}
                         {/if}
                     </td>

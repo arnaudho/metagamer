@@ -48,7 +48,7 @@ namespace app\main\controllers\front {
                     $this->modelFormat->insert($_POST['create-format']);
                 }
             }
-            $count_open = 3;
+            $count_open = 4;
             $ids_format = array();
             $full_formats = isset($_GET['full']) && $_GET['full'] == 1;
             if ($full_formats) {

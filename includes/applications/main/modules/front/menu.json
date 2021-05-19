@@ -16,8 +16,8 @@
     },
     {
         "default":false,
-        "label":"Dashboard",
-        "controller":"dashboard",
+        "label":"Analysis",
+        "controller":"archetype",
         "action":"",
         "permissions":"14"
     },
@@ -30,17 +30,10 @@
     },
     {
         "default":false,
-        "label":"Analysis",
-        "controller":"archetype",
-        "action":"",
-        "permissions":"14"
-    },
-    {
-        "default":false,
         "label":"MPL",
         "controller":"dashboard",
         "action":"leaderboard",
-        "permissions":"14"
+        "permissions":"12"
     },
     {
         "default":false,
@@ -54,7 +47,7 @@
         "label":"Import",
         "controller":"tournament",
         "action":"import",
-        "permissions":"14"
+        "permissions":"12"
     },
     {
         "default":false,

@@ -35,6 +35,11 @@ namespace app\api\controllers\front {
             $this->content = SimpleJSON::encode($format, JSON_UNESCAPED_SLASHES);
         }
 
+        public function getFormats () {
+            $formats = $this->modelFormat->all();
+            $this->content = SimpleJSON::encode($formats, JSON_UNESCAPED_SLASHES);
+        }
+
         public function getFormatsByIdTypeFormat () {
             if (!Core::checkRequiredGetVars('id_type_format')) {
                 $this->throwError(
@@ -49,6 +54,15 @@ namespace app\api\controllers\front {
             }
             $formats = $this->modelFormat->getFormatsByIdTypeFormat($id);
             $this->content = SimpleJSON::encode($formats, JSON_UNESCAPED_SLASHES);
+        }
+
+        public function getFormatTypes () {
+            if (!$data = $this->modelTypeFormat->all()) {
+                $this->throwError(
+                    422, "No format types found"
+                );
+            }
+            $this->content = SimpleJSON::encode($data, JSON_UNESCAPED_SLASHES);
         }
     }
 }

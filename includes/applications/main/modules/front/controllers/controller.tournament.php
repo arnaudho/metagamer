@@ -180,7 +180,8 @@ namespace app\main\controllers\front {
             $this->addContent("count_waiting", $this->modelPlayer->countPlayersWithoutDecklist());
         }
 
-        // TODO get archetype OTHER by default
+        // TODO fix NAN% winrate if no matches recorded
+        // TODO group archetypes with only 1 player in 'Other'
 
         public function metagame () {
             if (

@@ -50,7 +50,7 @@ namespace app\main\controllers\front {
 
                 // search tournaments
                 $tournaments = $this->modelTournament->searchTournamentsByName($term);
-                $count_tournaments = $this->modelTournament->searchTournamentsByName($term, true);
+                $count_tournaments = $this->modelTournament->count(Query::condition()->andWhere("name_tournament", Query::LIKE, "%" . $term . "%"));
                 foreach ($tournaments as $key => $tournament) {
                     $tournaments[$key]['date_tournament'] = date('j M Y', strtotime($tournament['date_tournament']));
                 }

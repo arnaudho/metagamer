@@ -6,7 +6,7 @@ namespace app\main\models {
 
     class ModelTournament extends BaseModel {
 
-        CONST LEAGUE_TOURNAMENT_IDS = array(15128, 15133, 15143, 15148, 15154, 15155);
+        CONST LEAGUE_TOURNAMENT_IDS = array(15128, 15133, 15143, 15148, 15154, 15155, 15166, 15167);
         CONST PT_TOURNAMENT_IDS = array(4090, 4091, 5287, 5288);
 
         public function __construct()
@@ -94,15 +94,16 @@ namespace app\main\models {
                 ->execute($this->handler);
         }
 
-        public function searchTournamentsByName ($pName, $pCount = false, $pLimit = 10) {
-            $q = Query::select(($pCount ? "COUNT(1) AS count" : "*"), $this->table)
+        public function searchTournamentsByName ($pName, $pLimit = 10) {
+            $q = Query::select("tournaments.*, COUNT(1) AS count_players", $this->table)
+                ->join("players", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament")
                 ->andWhere("tournaments.name_tournament", Query::LIKE, "'%" . $pName . "%'", false)
+                ->groupBy("tournaments.id_tournament")
                 ->order("tournaments.date_tournament", "DESC");
-            if (!$pCount) {
+            if ($pLimit != 0) {
                 $q->limit(0, $pLimit);
             }
-            $data = $q->execute($this->handler);
-            return $pCount ? $data[0]['count'] : $data;
+            return $q->execute($this->handler);
         }
 
         /**

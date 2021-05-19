@@ -15,11 +15,19 @@ namespace app\main\models {
             parent::__construct("players", "id_player");
         }
 
-        public function all($pCond = null, $pFields = "*")
+        public function getPlayerByCond($pCond = null, $pFields = "*")
         {
-            $this->addJoinOnSelect("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament");
-            $this->addJoinOnSelect("people", Query::JOIN_INNER, "people.id_people = players.id_people");
-            return parent::all($pCond, $pFields);
+            if (!$pCond) {
+                $cond = Query::condition();
+            } else {
+                $cond = clone $pCond;
+            }
+            $data = Query::select($pFields, $this->table)
+                ->join("tournaments", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament")
+                ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
+                ->andCondition($cond)
+                ->execute($this->handler);
+            return $data;
         }
 
         public function getPlayerWithTypeFormatById ($pId, $pFields = "players.*, id_type_format")
@@ -210,7 +218,7 @@ namespace app\main\models {
         }
 
         public function searchPlayerByDecklistName ($pName, $pCount = false, $pLimit = 10) {
-            $q = Query::select("name_archetype, name_format, image_archetype, COUNT(1) AS count", $this->table)
+            $q = Query::select("archetypes.id_archetype, name_archetype, formats.id_format, name_format, image_archetype, COUNT(1) AS count_players", $this->table)
                 ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
                 ->join("formats", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
