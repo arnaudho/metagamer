@@ -39,7 +39,7 @@ namespace app\main\controllers\front
                 $authHandlerInst = call_user_func_array(array($authHandler, 'getInstance'), array());
                 if($authHandlerInst->setUserSession($data["login"], $data["mdp"]))
                 {
-                    if (isset($_SESSION['redirect'])) {
+                    if (isset($_SESSION['redirect']) && !preg_match('/favicon/', $_SESSION['redirect'], $output_array)) {
                         $redirect_url = $_SESSION['redirect'];
                         unset($_SESSION['redirect']);
                         Header::location($redirect_url);
