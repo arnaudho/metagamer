@@ -43,12 +43,53 @@ namespace app\main\models {
             return $res[0];
         }
 
+        public function getDecklistsByCondition ($pCond, $pFilter = false) {
+            if (!$pCond) {
+                $cond = Query::condition();
+            } else {
+                $cond = clone $pCond;
+            }
+            $q = Query::select(
+                "players.id_player AS id_decklist, people.id_people AS id_player, arena_id AS name_player,
+                    tournaments.id_tournament, name_tournament, formats.id_format, name_format,
+                    archetypes.id_archetype, name_archetype,
+                    IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins_decklist,
+                    IF(SUM(result_match) IS NULL, COUNT(result_match), COUNT(result_match)-SUM(result_match)) AS loss_decklist,
+                    COUNT(result_match) AS matches_decklist", $this->table)
+                ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
+                ->join("archetypes", Query::JOIN_OUTER_LEFT, "archetypes.id_archetype = players.id_archetype")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->join("formats", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
+                ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
+                ->andCondition($cond)
+                ->groupBy("players.id_player")
+                ->order("tournaments.date_tournament DESC, wins_decklist DESC, matches_decklist");
+            if ($pFilter) {
+                $q->having("matches_decklist > 0 AND wins_decklist >= matches_decklist/2", false);
+            }
+            $data = $q->execute($this->handler);
+            if (empty($data)) {
+                return false;
+            }
+            $mCard = new ModelCard();
+            foreach ($data as $key => $item) {
+                $cards = $mCard->getDecklistCards($item['id_decklist']);
+                $data[$key]['export_arena'] = $this->convertToArenaFormat($cards);
+                $data[$key]["cards"] = $cards;
+            }
+            return $data;
+        }
+
+        /*
+         * DEPRECATED -- generic method used instead
+         */
         public function getDecklistById ($pIdDecklist) {
             $data = Query::select(
                 "players.id_player AS id_decklist, people.id_people AS id_player, arena_id AS name_player,
                     tournaments.id_tournament, name_tournament, formats.id_format, name_format,
                     archetypes.id_archetype, name_archetype,
                     IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins_decklist,
+                    IF(SUM(result_match) IS NULL, COUNT(result_match), COUNT(result_match)-SUM(result_match)) AS loss_decklist,
                     COUNT(result_match) AS matches_decklist", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people AND players.id_player = $pIdDecklist")
                 ->join("archetypes", Query::JOIN_OUTER_LEFT, "archetypes.id_archetype = players.id_archetype")
@@ -61,9 +102,7 @@ namespace app\main\models {
             if (empty($data)) {
                 return false;
             }
-            // TODO handle tournament icons
             $data = $data[0];
-            $data['icon_tournament'] = "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/1/11/2012_MPL_logo.png/revision/latest/scale-to-width-down/180?cb=20200731044520";
             $mCard = new ModelCard();
             $cards = $mCard->getDecklistCards($pIdDecklist);
             $data['export_arena'] = $this->convertToArenaFormat($cards);
@@ -76,6 +115,9 @@ namespace app\main\models {
 
         // we don't specify id_format here, because an id_archetype should be specifid to a format
         // TODO handle tournament icons
+        /*
+         * DEPRECATED -- generic method used instead
+         */
         public function getDecklistsByIdArchetype ($pIdArchetype) {
             $data = Query::select(
                 "players.id_player AS id_decklist, people.id_people AS id_player, arena_id AS name_player,
@@ -94,7 +136,9 @@ namespace app\main\models {
 
         // TODO add player finish (top8, 1st place, etc.)
         // ORDER BY player finish then record
-        // TODO image_archetype OR id_card ?
+        /*
+         * DEPRECATED -- generic method used instead
+         */
         public function getDecklistsByIdTournament ($pIdTournament) {
             $data = Query::select(
                 "players.id_player AS id_decklist, people.id_people AS id_player, arena_id AS name_player, image_archetype,
@@ -111,6 +155,9 @@ namespace app\main\models {
             return $data;
         }
 
+        /*
+         * DEPRECATED -- generic method used instead
+         */
         public function getDecklistsByIdPlayer ($pIdPlayer) {
             $data = Query::select(
                 "players.id_player AS id_decklist, tournaments.id_tournament, name_tournament, image_archetype,
@@ -128,6 +175,7 @@ namespace app\main\models {
             return $data;
         }
 
+        // TODO handle results limit
         public function getDecklistsByIdCard ($pIdCard) {
             $data = Query::select(
                 "players.id_player AS id_decklist, people.id_people AS id_player, arena_id AS name_player,
@@ -145,6 +193,12 @@ namespace app\main\models {
                 ->order("tournaments.date_tournament", "DESC")
                 ->limit(0, 200)
                 ->execute($this->handler);
+            $mCard = new ModelCard();
+            foreach ($data as $key => $item) {
+                $cards = $mCard->getDecklistCards($item['id_decklist']);
+                $data[$key]['export_arena'] = $this->convertToArenaFormat($cards);
+                $data[$key]["cards"] = $cards;
+            }
             return $data;
         }
 
