@@ -9,6 +9,7 @@ namespace app\api\controllers\front {
     use core\application\Core;
     use core\application\RestController;
     use core\data\SimpleJSON;
+    use core\db\Query;
 
     class decklist extends RestController
     {
@@ -36,12 +37,12 @@ namespace app\api\controllers\front {
                 );
             }
             $id = $_GET['id_decklist'];
-            if (!$decklist = $this->modelPlayer->getDecklistById($id)) {
+            if (!$decklist = $this->modelPlayer->getDecklistsByCondition(Query::condition()->andWhere("players.id_player", Query::EQUAL, $id))) {
                 $this->throwError(
                     422, "Decklist ID $id not found"
                 );
             }
-            $this->content = SimpleJSON::encode($decklist, JSON_UNESCAPED_SLASHES);
+            $this->content = SimpleJSON::encode($decklist[0], JSON_UNESCAPED_SLASHES);
         }
 
         public function getDecklistsByIdArchetype () {
@@ -56,7 +57,7 @@ namespace app\api\controllers\front {
                     422, "Archetype ID $id not found"
                 );
             }
-            $decklists = $this->modelPlayer->getDecklistsByIdArchetype($id);
+            $decklists = $this->modelPlayer->getDecklistsByCondition(Query::condition()->andWhere("players.id_archetype", Query::EQUAL, $id), true);
             $this->content = SimpleJSON::encode($decklists, JSON_UNESCAPED_SLASHES);
         }
 
@@ -72,7 +73,7 @@ namespace app\api\controllers\front {
                     422, "Tournament ID $id not found"
                 );
             }
-            $decklists = $this->modelPlayer->getDecklistsByIdTournament($id);
+            $decklists = $this->modelPlayer->getDecklistsByCondition(Query::condition()->andWhere("players.id_tournament", Query::EQUAL, $tournament['id_tournament']));
             $this->content = SimpleJSON::encode($decklists, JSON_UNESCAPED_SLASHES);
         }
 
@@ -88,7 +89,7 @@ namespace app\api\controllers\front {
                     422, "Player ID $id not found"
                 );
             }
-            $decklists = $this->modelPlayer->getDecklistsByIdPlayer($id);
+            $decklists = $this->modelPlayer->getDecklistsByCondition(Query::condition()->andWhere("people.id_people", Query::EQUAL, $id));
             $this->content = SimpleJSON::encode($decklists, JSON_UNESCAPED_SLASHES);
         }
 

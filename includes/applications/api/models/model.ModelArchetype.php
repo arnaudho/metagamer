@@ -30,10 +30,22 @@ namespace app\api\models {
         // TODO order Other ?
         public function getArchetypesByIdFormat($pIdFormat)
         {
+            // get count players in format
+            $count_players = Query::select("COUNT(DISTINCT players.id_player) AS nb", "players")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->andWhere("tournaments.id_format", Query::EQUAL, $pIdFormat)
+                ->execute($this->handler);
+            $count_players = $count_players[0]['nb'];
+            if (!$count_players) {
+                return false;
+            }
             $data = Query::select(
                 "archetypes.id_archetype, name_archetype, image_archetype,
-                    COUNT(DISTINCT players.id_player) AS count_players", $this->table)
+                    COUNT(DISTINCT players.id_player) AS count_players,
+                    ROUND(COUNT(DISTINCT players.id_player)/$count_players, 3) AS meta_share_archetype,
+                    ROUND(SUM(result_match)/COUNT(1), 3) AS winrate_archetype, COUNT(1) AS total_matches_archetype", $this->table)
                 ->join("players", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype")
+                ->join("matches", Query::JOIN_INNER, "matches.id_player = players.id_player")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
                 ->andWhere("tournaments.id_format", Query::EQUAL, $pIdFormat)
                 ->groupBy("archetypes.id_archetype")
