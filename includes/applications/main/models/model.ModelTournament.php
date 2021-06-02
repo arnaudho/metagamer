@@ -73,7 +73,7 @@ namespace app\main\models {
             }
             $cond->order("id_format", "DESC");
             return Query::select("tournaments.*, formats.*, DATE_FORMAT(date_tournament, '%d %b %Y') AS date_tournament,
-                COUNT(DISTINCT players.id_player) AS count_players, ROUND(COUNT(round_number)/2, 0) AS count_matches, MAX(round_number) AS count_rounds", "formats")
+                COUNT(DISTINCT players.id_player) AS count_players, ROUND(COUNT(round_number)/2, 0) AS count_matches, COUNT(DISTINCT round_number) AS count_rounds", "formats")
                 ->join($this->table, Query::JOIN_OUTER_LEFT, "tournaments.id_format = formats.id_format")
                 ->join("players", Query::JOIN_OUTER_LEFT, "tournaments.id_tournament = players.id_tournament")
                 ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
