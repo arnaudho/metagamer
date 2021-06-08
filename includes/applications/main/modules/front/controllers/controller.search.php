@@ -37,6 +37,8 @@ namespace app\main\controllers\front {
 
             if (isset($_GET['q'])) {
                 $term = trim($_GET['q']);
+                $this->addContent("term", $term);
+                $term = addslashes($term);
                 $results = array();
 
                 // search decklists / archetypes
@@ -96,7 +98,6 @@ namespace app\main\controllers\front {
                 $this->addContent("max_results", range(0, $max_results-1));
                 $this->addContent("count_results", $count_formats+$count_players+$count_tournaments+$count_archetypes+$count_cards);
                 $this->addContent("results", $results);
-                $this->addContent("term", $term);
             }
         }
 
