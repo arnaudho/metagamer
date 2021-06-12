@@ -142,7 +142,7 @@ namespace app\api\controllers\front
                     }
                 }
                 $archetypes[$key]['winrates'] = $winrate;
-                $header[] = "vs. " . $archetype['name_archetype'];
+                $header[] = $archetype['name_archetype'];
             }
 
             $data['header'] = $header;
