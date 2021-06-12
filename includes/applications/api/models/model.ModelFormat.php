@@ -15,7 +15,8 @@ namespace app\api\models {
         public function getFormatById($pIdFormat)
         {
             $data = Query::select(
-                "formats.id_format, name_format, COUNT(DISTINCT tournaments.id_tournament) AS count_tournaments", $this->table)
+                "formats.id_format, name_format, COUNT(DISTINCT tournaments.id_tournament) AS count_tournaments,
+                MIN(date_tournament) AS min_date, MAX(date_tournament) AS max_date", $this->table)
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
                 ->andWhere("formats.id_format", Query::EQUAL, $pIdFormat)
                 ->groupBy("formats.id_format")
@@ -26,15 +27,15 @@ namespace app\api\models {
             return $data;
         }
 
-        // TODO order by last tournament date ?
         public function getFormatsByIdTypeFormat($pIdTypeFormat)
         {
             $data = Query::select(
-                "formats.id_format, name_format, COUNT(DISTINCT tournaments.id_tournament) AS count_tournaments", $this->table)
+                "formats.id_format, name_format, COUNT(DISTINCT tournaments.id_tournament) AS count_tournaments,
+                MIN(date_tournament) AS min_date, MAX(date_tournament) AS max_date", $this->table)
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
                 ->andWhere("formats.id_type_format", Query::EQUAL, $pIdTypeFormat)
                 ->groupBy("formats.id_format")
-                ->order("formats.id_format", "DESC")
+                ->order("min_date", "DESC")
                 ->execute($this->handler);
             return $data;
         }
