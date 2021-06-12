@@ -27,7 +27,7 @@ namespace app\api\models {
             return $data;
         }
 
-        public function all($pCond = null, $pFields = "*")
+        public function allWithTournamentsData($pCond = null, $pFields = "*")
         {
             $cond = Query::condition();
             if ($pCond) {
@@ -45,7 +45,7 @@ namespace app\api\models {
 
         public function getFormatsByIdTypeFormat($pIdTypeFormat)
         {
-            return $this->all(
+            return $this->allWithTournamentsData(
                 Query::condition()
                     ->andWhere("formats.id_type_format", Query::EQUAL, $pIdTypeFormat),
                 "formats.id_format, name_format, COUNT(DISTINCT tournaments.id_tournament) AS count_tournaments,

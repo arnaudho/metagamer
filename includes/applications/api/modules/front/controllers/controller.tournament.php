@@ -66,6 +66,12 @@ namespace app\api\controllers\front {
             $this->content = SimpleJSON::encode($tournaments, JSON_UNESCAPED_SLASHES);
         }
 
+        public function getLastTournaments () {
+            $tournaments = $this->modelTournament->getLastTournaments(50);
+
+            $this->content = SimpleJSON::encode($tournaments, JSON_UNESCAPED_SLASHES);
+        }
+
         private function round_metagame ($pMetagame, $pMaxArchetypes = 10) {
             $other_id = null;
             $count_archetypes = 1;

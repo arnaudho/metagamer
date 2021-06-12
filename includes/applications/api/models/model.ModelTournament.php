@@ -41,5 +41,16 @@ namespace app\api\models {
                 ->execute($this->handler);
             return $data;
         }
+
+        public function getLastTournaments ($pLimit = 50) {
+            $data = Query::select("tournaments.id_tournament, name_tournament, date_tournament,
+                    COUNT(DISTINCT players.id_player) AS count_players", $this->table)
+                ->join("players", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->groupBy("tournaments.id_tournament")
+                ->order("tournaments.date_tournament", "DESC")
+                ->limit(0, intval($pLimit))
+                ->execute($this->handler);
+            return $data;
+        }
     }
 }
