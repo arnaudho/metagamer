@@ -155,6 +155,16 @@
         "action": "matrix"
       }
     },
+    "matrix/format_type:{$id_type_format}/size:{$size}/": {
+      "parameters": {
+        "id_type_format": "[0-9]+",
+        "size": "[0-9]+"
+      },
+      "GET": {
+        "controller": "index",
+        "action": "matrix"
+      }
+    },
     "search/": {
       "GET": {
         "controller": "index",

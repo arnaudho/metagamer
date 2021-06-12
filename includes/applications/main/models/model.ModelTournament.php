@@ -7,7 +7,7 @@ namespace app\main\models {
     class ModelTournament extends BaseModel {
 
         CONST LEAGUE_TOURNAMENT_IDS = array(15128, 15133, 15143, 15148, 15154, 15155, 15166, 15167);
-        CONST PT_TOURNAMENT_IDS = array(4090, 4091, 5287, 5288);
+        CONST PT_TOURNAMENT_IDS = array(4090, 4091, 5287, 5288, 6392, 6393);
 
         public function __construct()
         {
@@ -92,6 +92,22 @@ namespace app\main\models {
                 ->join("formats", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
                 ->andCondition($cond)
                 ->execute($this->handler);
+        }
+
+        public function getLastTournament ($pCondition = null, $pFields = "*") {
+            $cond = Query::condition();
+            if ($pCondition) {
+                $cond = clone $pCondition;
+            }
+            $data = Query::select($pFields, $this->table)
+                ->join("formats", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
+                ->andCondition($cond)
+                ->order("tournaments.date_tournament", "DESC")
+                ->limit(0, 1)
+                ->execute($this->handler);
+            if(!isset($data[0]))
+                return null;
+            return $data[0];
         }
 
         public function searchTournamentsByName ($pName, $pLimit = 10) {

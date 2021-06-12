@@ -25,6 +25,21 @@ namespace app\main\models {
             return ModelArchetype::getArchetypesRules($this->typeFormat);
         }
 
+        public function getFormatById($pIdFormat)
+        {
+            $data = Query::select(
+                "formats.id_format, name_format, COUNT(DISTINCT tournaments.id_tournament) AS count_tournaments,
+                MIN(date_tournament) AS min_date, MAX(date_tournament) AS max_date", $this->table)
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
+                ->andWhere("formats.id_format", Query::EQUAL, $pIdFormat)
+                ->groupBy("formats.id_format")
+                ->execute($this->handler);
+            if (empty($data)) {
+                return false;
+            }
+            return $data[0];
+        }
+
         public function allOrdered ($pCondition = null, $pFields = "*") {
             $cond = Query::condition();
             if ($pCondition) {

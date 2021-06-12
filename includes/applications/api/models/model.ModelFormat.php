@@ -24,7 +24,7 @@ namespace app\api\models {
             if (empty($data)) {
                 return false;
             }
-            return $data;
+            return $data[0];
         }
 
         public function allWithTournamentsData($pCond = null, $pFields = "*")

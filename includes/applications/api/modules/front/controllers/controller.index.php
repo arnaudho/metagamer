@@ -8,6 +8,7 @@ namespace app\api\controllers\front
     use app\main\models\ModelPeople;
     use app\main\models\ModelPlayer;
     use app\main\models\ModelTournament;
+    use app\main\models\ModelTypeFormat;
     use core\application\Core;
     use core\application\RestController;
     use core\data\SimpleJSON;
@@ -22,6 +23,7 @@ namespace app\api\controllers\front
         protected $modelPeople;
         protected $modelMatches;
         protected $modelTournament;
+        protected $modelTypeFormat;
         protected $modelArchetype;
 
         public function __construct()
@@ -33,6 +35,7 @@ namespace app\api\controllers\front
             $this->modelPeople = new ModelPeople();
             $this->modelMatches = new ModelMatch();
             $this->modelTournament = new ModelTournament();
+            $this->modelTypeFormat = new ModelTypeFormat();
             $this->modelArchetype = new ModelArchetype();
             parent::__construct();
         }
@@ -52,12 +55,27 @@ namespace app\api\controllers\front
                 $data = $tournament;
             } elseif (
                 Core::checkRequiredGetVars('id_format') &&
-                $format = $this->modelFormat->getTupleById($_GET['id_format'])
+                $format = $this->modelFormat->getFormatById($_GET['id_format'])
             ) {
+                // limit data to last 2 weeks of the format
                 $matrix_cond = Query::condition()
-                    ->andWhere("tournaments.id_format", Query::EQUAL, $format['id_format']);
+                    ->andWhere("tournaments.id_format", Query::EQUAL, $format['id_format'])
+                    ->andWhere("tournaments.date_tournament", Query::UPPER_EQUAL, "DATE_ADD('" . $format['max_date'] . "', INTERVAL -14 DAY)", false);
                 $data = $format;
-                // TODO -- add limit last 2 weeks
+            } elseif (
+                Core::checkRequiredGetVars('id_type_format') &&
+                $type_format = $this->modelTypeFormat->getTupleById($_GET['id_type_format'])
+            ) {
+                // get last tournament from type_format
+                $last_tournament = $this->modelTournament->getLastTournament(Query::condition()
+                    ->andWhere("formats.id_type_format", Query::EQUAL, $type_format['id_type_format']));
+                $format = $this->modelFormat->getFormatById($last_tournament['id_format']);
+
+                // limit data to last 2 weeks of the format
+                $matrix_cond = Query::condition()
+                    ->andWhere("tournaments.id_format", Query::EQUAL, $format['id_format'])
+                    ->andWhere("tournaments.date_tournament", Query::UPPER_EQUAL, "DATE_ADD('" . $format['max_date'] . "', INTERVAL -14 DAY)", false);
+                $data = $format;
             } else {
                 $this->throwError(
                     422, "Missing parameter [id_format|id_tournament] or entity not found"
