@@ -52,10 +52,11 @@ namespace app\main\models {
             $q = Query::select(
                 "players.id_player AS id_decklist, people.id_people AS id_player, arena_id AS name_player,
                     tournaments.id_tournament, name_tournament, formats.id_format, name_format,
-                    archetypes.id_archetype, name_archetype,
+                    archetypes.id_archetype, name_archetype, image_archetype,
                     IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins_decklist,
                     IF(SUM(result_match) IS NULL, COUNT(result_match), COUNT(result_match)-SUM(result_match)) AS loss_decklist,
-                    COUNT(result_match) AS matches_decklist", $this->table)
+                    IF(SUM(result_match) IS NULL, '0-0', CONCAT(SUM(result_match), '-', COUNT(result_match)-SUM(result_match))) AS result_decklist",
+                $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
                 ->join("archetypes", Query::JOIN_OUTER_LEFT, "archetypes.id_archetype = players.id_archetype")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
@@ -179,10 +180,11 @@ namespace app\main\models {
         public function getDecklistsByIdCard ($pIdCard) {
             $data = Query::select(
                 "players.id_player AS id_decklist, people.id_people AS id_player, arena_id AS name_player,
-                    tournaments.id_tournament, name_tournament, image_archetype, count_main, count_side,
+                    tournaments.id_tournament, name_tournament, date_tournament, image_archetype, count_main, count_side,
                     formats.id_format, name_format, archetypes.id_archetype, name_archetype,
                     IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins_decklist,
-                    COUNT(result_match) AS matches_decklist, date_tournament", $this->table)
+                    IF(SUM(result_match) IS NULL, COUNT(result_match), COUNT(result_match)-SUM(result_match)) AS loss_decklist,
+                    IF(SUM(result_match) IS NULL, '0-0', CONCAT(SUM(result_match), '-', COUNT(result_match)-SUM(result_match))) AS result_decklist", $this->table)
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
                 ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
@@ -216,7 +218,7 @@ namespace app\main\models {
                     $sideboard .= $card['count_side'] . " " . $card['name_card'] . "\r\n";
                 }
             }
-            return $maindeck . "\r\nSideboard\r\n" . $sideboard;
+            return $maindeck . "\r\n\r\n" . $sideboard;
         }
 
         public function allByFormat ($pIdFormat, $pCond = null, $pFields = "") {
@@ -426,12 +428,14 @@ namespace app\main\models {
         }
 
         public function getPlayersByCountry ($pIdCountry, $pIdTournaments = array()) {
-            $players = Query::select("people.id_people, arena_id, country_player, players.id_tournament, name_tournament, tag_player,
+            $players = Query::select("people.id_people, arena_id, country_player, players.id_tournament, name_tournament,
+                tag_player, IF (name_archetype = 'Other', name_deck, name_archetype) AS player_archetype,
                 SUM(result_match) AS wins, COUNT(result_match) AS total", $this->table)
                 ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
                 ->join("player_tag", Query::JOIN_INNER, "people.id_people = player_tag.id_people")
                 ->join("tournaments", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament")
+                ->join("archetypes", Query::JOIN_INNER, "players.id_archetype = archetypes.id_archetype")
                 ->andWhere("country_player", Query::EQUAL, $pIdCountry)
                 ->andWhere("players.id_tournament", Query::IN, "(" . implode(",", $pIdTournaments) . ")", false)
                 ->groupBy("people.id_people, players.id_tournament")
