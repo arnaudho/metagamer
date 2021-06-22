@@ -64,9 +64,9 @@ namespace app\main\models {
                 ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
                 ->andCondition($cond)
                 ->groupBy("players.id_player")
-                ->order("tournaments.date_tournament DESC, wins_decklist DESC, matches_decklist");
+                ->order("tournaments.date_tournament DESC, wins_decklist DESC, COUNT(result_match)");
             if ($pFilter) {
-                $q->having("matches_decklist > 0 AND wins_decklist >= matches_decklist/2", false);
+                $q->having("COUNT(result_match) > 0 AND wins_decklist >= COUNT(result_match)/2", false);
             }
             $data = $q->execute($this->handler);
             if (empty($data)) {
