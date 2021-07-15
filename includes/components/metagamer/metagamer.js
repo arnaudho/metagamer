@@ -2,13 +2,24 @@
     // TODO separate components on different pages
     function init(){
         // init forms loader
-        var forms = document.querySelectorAll('.container form:not("no-loader")');
+        var forms = document.querySelectorAll('.container form:not(.no-loader)');
         if(forms.length > 0 ){
             forms.forEach(function(pElt) {
                 pElt.addEventListener("submit", function(pEvt) {
                     // TODO - add spinner
                     pEvt.target.classList.add("loading");
                 });
+            });
+        }
+
+        // handle copy decklist to clipboard button
+        var button_export_arena = document.querySelector('.button-export-arena');
+        if (button_export_arena) {
+            button_export_arena.addEventListener("click", function(pEvt) {
+                var export_arena_field = document.querySelector('#export-arena-field');
+                export_arena_field.select();
+                export_arena_field.setSelectionRange(0, 99999);
+                document.execCommand("copy");
             });
         }
 
