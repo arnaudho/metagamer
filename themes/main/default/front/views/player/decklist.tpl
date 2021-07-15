@@ -1,8 +1,16 @@
 {if !$request_async}{include file="includes/head.tpl"}{/if}
 
-<a href="{$content.link_visual}" class="btn btn-info" target="_blank">
-    <span class="glyphicon glyphicon-eye-open"></span> Visual decklist
-</a> {$content.player.name_deck}
+<div class="decklist-header">
+    <a href="{$content.link_visual}" class="btn btn-info" target="_blank">
+        <span class="glyphicon glyphicon-eye-open"></span> Visual decklist
+    </a> {$content.player.name_deck}
+    {if $content.export_arena}
+        <button class="btn btn-default button-export-arena">
+            <span class="glyphicon glyphicon-download"></span> Export Arena
+        </button>
+        <textarea id="export-arena-field" readonly="">{$content.export_arena}</textarea>
+    {/if}
+</div>
 {if $content.cards_main!==null}
     <div class="decklist decklist-text">
         {if $content.logo}

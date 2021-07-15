@@ -348,6 +348,8 @@ table.table-standings:not(.table-french)>tbody>tr>td.icon-player { padding: 3px 
 .container .decklist .decklist-card .decklist-card-diff { color: #B8EDEB; font-size: 15px; font-family: Metropolis; padding-top: 8px;}
 .container .decklist .decklist-card .decklist-card-diff.decklist-card-diff-negative { color: #FF4500;}
 .container .decklist .decklist-card .decklist-card-diff.decklist-card-diff-positive { color: #ACFF2F;}
+.container .decklist-header .button-export-arena { float: right; }
+.container .decklist-header #export-arena-field { position: absolute; left: -9999px; }
 
 /* AGGREGATE */
 .aggregate-container h2 { font-size: 36px;}

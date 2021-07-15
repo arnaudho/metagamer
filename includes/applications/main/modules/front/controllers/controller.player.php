@@ -70,10 +70,14 @@ namespace app\main\controllers\front {
                 $cards_side[$key]['mana_cost_card'] = ModelCard::formatManaCost($card['mana_cost_card']);
             }
 
+            $cards_all = $this->modelCard->getDecklistCards($player['id_player']);
+            $export_arena = $this->modelPlayer->convertToArenaFormat($cards_all);
+
             $this->setTemplate("player", "decklist");
             $this->addContent("link_visual", RoutingHandler::rewrite("player", "visual") . "?id_player=" . $player['id_player']);
             $this->addContent("cards_main", $cards_main);
             $this->addContent("cards_side", $cards_side);
+            $this->addContent("export_arena", $export_arena);
             $this->addContent("player", $player);
             $this->setTitle($player['name_archetype'] . " - " . $player['arena_id']);
             Autoload::addStyle("mana/css/mana.min.css");
