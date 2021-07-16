@@ -6,7 +6,8 @@ namespace app\main\models {
 
     class ModelTournament extends BaseModel {
 
-        CONST LEAGUE_TOURNAMENT_IDS = array(15128, 15133, 15143, 15148, 15154, 15155, 15166, 15167);
+        // TODO handle tournament type in database
+        CONST LEAGUE_TOURNAMENT_IDS = array(15128, 15133, 15143, 15148, 15154, 15155, 15166, 15167, 15206, 15207);
         CONST PT_TOURNAMENT_IDS = array(4090, 4091, 5287, 5288, 6392, 6393);
 
         public function __construct()
