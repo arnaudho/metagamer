@@ -24,37 +24,15 @@ namespace app\main\controllers\front {
         }
 
         public function index () {
-            Autoload::addStyle("flags/css/flag-icon.min.css");
-            $results = $this->modelPlayer->getPlayersByCountry(ModelCountry::COUNTRY_ID_FRANCE, array(4090, 4091, 5287, 5288));
-            $players = array();
-            foreach ($results as $player) {
-                if (!isset($players[$player['id_people']])) {
-                    $players[$player['id_people']] = array(
-                        "name_player"  => $player['arena_id'],
-                        "tag_player"   => $player['tag_player'],
-                        "image_player" => Core::$path_to_components . "/metagamer/imgs/players/" . $player['id_people'] . ".png"
-                    );
-                    // ad player icons
-                    if (
-                        $player['tag_player'] == ModelPlayer::TAG_MPL ||
-                        $player['tag_player'] == ModelPlayer::TAG_RIVALS
-                    ) {
-                        $players[$player['id_people']]['tag_player'] = Core::$path_to_components . "/metagamer/imgs/" . $player['tag_player'] . ".png";
-                    }
-                }
-                $players[$player['id_people']]["t".$player['id_tournament']]['wins'] = $player['wins'];
-                $players[$player['id_people']]["t".$player['id_tournament']]['loss'] = $player['total']-$player['wins'];
-                $players[$player['id_people']]['global']['wins'] += $player['wins'];
-                $players[$player['id_people']]['global']['loss'] += $player['total']-$player['wins'];
-            }
-            uasort($players, array($this, "sortPlayerByRecord"));
-            $this->addContent("players", $players);
-        }
+            // TODO add data quality flags
+            // SELECT * FROM `player_card` WHERE id_player NOT IN (SELECT id_player FROM players)
+            // SELECT * FROM `players` LEFT OUTER JOIN player_card USING(id_player) WHERE id_card IS NULL
+            // SELECT COUNT(1) FROM matches WHERE id_player = 0 OR opponent_id_player = 0
+            // SELECT * FROM player_card WHERE id_card = 0 => check dcklists with id_player in those
+            // Check duplicate decklists
+            // SELECT people without players -- button to delete ?
+            // SELECT players without people
 
-        protected function sortPlayerByRecord ($pA, $pB) {
-            return $pA['global']['wins'] == $pB['global']['wins'] ?
-                ($pA['global']['loss'] > ['global']['loss'] ? -1 : 1) :
-                ($pA['global']['wins'] < $pB['global']['wins'] ? 1 : -1);
         }
     }
 }

@@ -1,14 +1,6 @@
 [
     {
         "default":true,
-        "label":"",
-        "controller":"home",
-        "action":"",
-        "icon":"home",
-        "permissions":"0"
-    },
-    {
-        "default":true,
         "label":"Formats",
         "controller":"format",
         "action":"",
@@ -26,6 +18,13 @@
         "label":"Coverage",
         "controller":"coverage",
         "action":"",
+        "permissions":"15"
+    },
+    {
+        "default":false,
+        "label":"Score des français",
+        "controller":"coverage",
+        "action":"standings",
         "permissions":"15"
     },
     {
@@ -62,6 +61,7 @@
         "label":"Log out",
         "controller":"index",
         "action":"logout",
+        "icon":"log-out",
         "permissions":"0"
     }
 ]

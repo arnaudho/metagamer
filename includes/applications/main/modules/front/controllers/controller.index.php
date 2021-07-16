@@ -21,8 +21,13 @@ namespace app\main\controllers\front
             if(!call_user_func_array(array($authHandler, 'is'), array($authHandler::USER))) {
                 Go::to("index", "login");
             }
-
-            Go::to("home");
+            if (
+                call_user_func_array(array($authHandler, "is"), array($authHandler::ADMIN)) ||
+                call_user_func_array(array($authHandler, "is"), array($authHandler::DEVELOPER))
+            ) {
+                Go::to("home");
+            }
+            Go::to("coverage");
         }
 
         public function login()

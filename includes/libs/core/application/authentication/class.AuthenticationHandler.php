@@ -23,15 +23,18 @@ namespace core\application\authentication
 
 		const INVITE    = "INVITE";
 
+		const CONTRIBUTOR = "CONTRIBUTOR";
+
 		/**
 		 * Ensemble des permissions acceptées pour l'application
 		 * @var array
 		 */
 		static public $permissions = array(
-			self::INVITE    =>  0,
-			self::USER		=>	1,
-			self::ADMIN		=>	2,
-			self::DEVELOPER	=>	4
+			self::INVITE    	=>  0,
+			self::USER			=>	1,
+			self::CONTRIBUTOR	=>  2,
+			self::ADMIN			=>	4,
+			self::DEVELOPER		=>	8
 		);
 
 		/**
