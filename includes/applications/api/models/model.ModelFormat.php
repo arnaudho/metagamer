@@ -16,7 +16,7 @@ namespace app\api\models {
         {
             $data = Query::select(
                 "formats.id_format, name_format, COUNT(DISTINCT tournaments.id_tournament) AS count_tournaments,
-                MIN(date_tournament) AS min_date, MAX(date_tournament) AS max_date", $this->table)
+                id_type_format, MIN(date_tournament) AS min_date, MAX(date_tournament) AS max_date", $this->table)
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
                 ->andWhere("formats.id_format", Query::EQUAL, $pIdFormat)
                 ->groupBy("formats.id_format")
@@ -49,7 +49,7 @@ namespace app\api\models {
                 Query::condition()
                     ->andWhere("formats.id_type_format", Query::EQUAL, $pIdTypeFormat),
                 "formats.id_format, name_format, COUNT(DISTINCT tournaments.id_tournament) AS count_tournaments,
-                MIN(date_tournament) AS min_date, MAX(date_tournament) AS max_date"
+                id_type_format, MIN(date_tournament) AS min_date, MAX(date_tournament) AS max_date"
             );
         }
     }

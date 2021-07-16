@@ -39,7 +39,7 @@ namespace app\api\controllers\front {
             $formats = $this->modelFormat->allWithTournamentsData(
                 null,
                 "formats.id_format, name_format, COUNT(DISTINCT tournaments.id_tournament) AS count_tournaments,
-                MIN(date_tournament) AS min_date, MAX(date_tournament) AS max_date");
+                id_type_format, MIN(date_tournament) AS min_date, MAX(date_tournament) AS max_date");
             $this->content = SimpleJSON::encode($formats, JSON_UNESCAPED_SLASHES);
         }
 
