@@ -33,16 +33,16 @@
 				"action": "tournament"
 			}
 		},
-		"coverage/decklist/{$id_decklist}/":
+		"coverage/standings/{$id_tournament}/":
 		{
 			"parameters":
             {
-				"id_decklist": "[0-9]+"
+				"id_tournament": "[0-9]+"
 			},
 			"GET":
             {
 				"controller": "coverage",
-				"action": "decklist"
+				"action": "standings"
 			}
 		},
 		"card/{$id_card}/":

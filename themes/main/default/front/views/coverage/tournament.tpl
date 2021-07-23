@@ -8,8 +8,8 @@
             <h1>{$content.tournament.name_tournament}</h1>
             <h3>{$content.tournament.date_tournament} - {$content.players|count} players</h3>
             <a href="tournament/metagame/?id_tournament={$content.tournament.id_tournament}"
-               class="btn btn-default" target="_blank">Metagame breakdown <span class="glyphicon glyphicon-new-window"></span></a>
-            <table class="table table-standings table-striped" data-toggle="table"  data-search="true">
+               class="btn btn-orange" target="_blank">Metagame breakdown <span class="glyphicon glyphicon-new-window"></span></a>
+            <table class="table table-standings table-striped" data-toggle="table" data-search="true">
                 <thead>
                     <tr>
                         <th class="image-archetype"></th>
@@ -39,7 +39,7 @@
                             <td class="name-player">{$player.arena_id}</td>
                             <td>{$player.wins}-{$player.matches-$player.wins}</td>
                             <td>
-                                <a href="player/visual/?id_player={$player.id_player}" class="btn btn-info" target="_blank">
+                                <a href="player/visual/?id_player={$player.id_player}" class="btn btn-orange" target="_blank">
                                     <span class="glyphicon glyphicon-duplicate"></span>
                                 </a>
                             </td>
@@ -48,6 +48,8 @@
                 </tbody>
             </table>
             <p class="legend">Tiebreakers not informed, players with the same record are sorted alphabetically</p>
+        {else}
+            <div class="alert alert-danger" role="alert">No players found in this tournament</div>
         {/if}
     {/if}
 </div>
