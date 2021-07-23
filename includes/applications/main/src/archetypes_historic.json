@@ -27,6 +27,63 @@
             "Plains"
         ]
     },
+    "Mardu Shadow":
+    {
+        "image": "Death's Shadow",
+        "contains":
+        [
+            "Death's Shadow",
+            "Sacred Foundry"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Forest"
+        ]
+    },
+    "Orzhov Shadow":
+    {
+        "image": "Death's Shadow",
+        "contains":
+        [
+            "Death's Shadow",
+            "Adanto Vanguard"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Forest",
+            "Mountain"
+        ]
+    },
+    "Rakdos Shadow":
+    {
+        "image": "Death's Shadow",
+        "contains":
+        [
+            "Death's Shadow",
+            "Blightstep Pathway"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Forest",
+            "Plains"
+        ]
+    },
+    "Mono-black Shadow":
+    {
+        "image": "Death's Shadow",
+        "contains":
+        [
+            "Death's Shadow"
+        ],
+        "exclude":
+        [
+            "Plains",
+            "Mountain"
+        ]
+    },
     "Rakdos Sacrifice":
     {
         "image": "Mayhem Devil",
@@ -47,7 +104,7 @@
         "contains":
         [
             "Dreadhorde Arcanist",
-            "Stitcher's Supplier"
+            "Blood Crypt"
         ],
         "exclude":
         [
@@ -79,7 +136,8 @@
         "contains":
         [
             "Kor Spiritdancer",
-            "Curious Obsession"
+            "Staggering Insight",
+	        "Adanto Vanguard"
         ],
         "exclude":
         [
@@ -106,13 +164,61 @@
             "Breeding Pool"
         ]
     },
+    "Rakdos Phoenix":
+    {
+        "image": "Arclight Phoenix",
+        "contains":
+        [
+            "Arclight Phoenix",
+            "Blood Crypt"
+        ],
+        "exclude":
+        [
+            "Steam Vents"
+        ]
+    },
+    "Izzet Phoenix":
+    {
+        "image": "Arclight Phoenix",
+        "contains":
+        [
+            "Arclight Phoenix",
+            "Steam Vents"
+        ]
+    },
+    "Dragonstorm":
+    {
+        "image": "Dragonstorm",
+        "contains":
+        [
+            "Dragonstorm"
+        ]
+    },
+    "Jeskai Magma Opus":
+    {
+        "image": "Magma Opus",
+        "contains":
+        [
+            "Magma Opus",
+            "Mizzix's Mastery",
+            "Torrential Gearhulk",
+            "Hallowed Fountain"
+        ],
+        "exclude":
+        [
+            "Forest",
+            "Godless Shrine",
+            "Watery Grave",
+            "Breeding Pool"
+        ]
+    },
     "Jeskai Control":
     {
         "image": "Teferi, Hero of Dominaria",
         "contains":
         [
             "Teferi, Hero of Dominaria",
-            "Steam Vents"
+            "Lightning Helix"
         ],
         "exclude":
         [
@@ -148,13 +254,21 @@
         "contains":
         [
             "Nissa, Who Shakes the World",
-            "Growth Spiral",
-            "Baffling End"
+            "Breeding Pool",
+            "Temple Garden"
         ],
         "exclude":
         [
             "Mountain",
             "Swamp"
+        ]
+    },
+    "Pact Combo":
+    {
+        "image": "Tainted Pact",
+        "contains":
+        [
+            "Tainted Pact"
         ]
     },
     "Demonic Pact":
@@ -266,6 +380,41 @@
             "Watery Grave"
         ]
     },
+    "Simic Stompy":
+    {
+        "image": "Steel Leaf Champion",
+        "contains":
+        [
+            "Steel Leaf Champion",
+            "Breeding Pool"
+        ],
+        "exclude":
+        [
+            "Stomping Ground",
+            "Overgrown Tomb",
+            "Temple Garden",
+            "Swamp",
+            "Plains",
+            "Mountain"
+        ]
+    },
+    "Artifacts Combo":
+    {
+        "image": "Inspiring Statuary",
+        "contains":
+        [
+            "Inspiring Statuary"
+        ]
+    },
+    "Kinnan Combo":
+    {
+        "image": "Kinnan, Bonder Prodigy",
+        "contains":
+        [
+            "Kinnan, Bonder Prodigy",
+            "Paradox Engine"
+        ]
+    },
     "Simic Flash":
     {
         "image": "Nightpack Ambusher",
@@ -284,6 +433,14 @@
             "Muxus, Goblin Grandee"
         ]
     },
+    "Orzhov Humans":
+    {
+        "image": "General Kudro of Drannith",
+        "contains":
+        [
+            "General Kudro of Drannith"
+        ]
+    },
     "Mono-white Aggro":
     {
         "image": "Thalia, Guardian of Thraben",
@@ -294,10 +451,62 @@
         ],
         "exclude":
         [
-            "Island",
+            "Mountain",
             "Swamp",
             "Forest",
-            "Mountain"
+            "Island"
+        ]
+    },
+    "Boros Magecraft":
+    {
+        "image": "Leonin Lightscribe",
+        "contains":
+        [
+            "Leonin Lightscribe",
+            "Inspiring Vantage"
+        ],
+        "exclude":
+        [
+            "Swamp",
+            "Forest",
+            "Island",
+            "Blood Crypt",
+            "Stomping Ground",
+            "Steam Vents"
+        ]
+    },
+    "Boros Midrange":
+    {
+        "image": "Chandra, Torch of Defiance",
+        "contains":
+        [
+            "Needleverge Pathway",
+            "Chandra, Torch of Defiance",
+            "Elite Spellbinder"
+        ],
+        "exclude":
+        [
+            "Swamp",
+            "Forest",
+            "Island",
+            "Blood Crypt",
+            "Stomping Ground",
+            "Steam Vents"
+        ]
+    },
+    "Boros Burn":
+    {
+        "image": "Lightning Helix",
+        "contains":
+        [
+            "Sacred Foundry",
+            "Wizard's Lightning"
+        ],
+        "exclude":
+        [
+            "Blood Crypt",
+            "Stomping Ground",
+            "Steam Vents"
         ]
     },
     "Mono-red Aggro":
@@ -350,68 +559,27 @@
             "Concealed Courtyard"
         ]
     },
-    "Orzhov Shadow":
-    {
-        "image": "Death's Shadow",
-        "contains":
-        [
-            "Death's Shadow",
-            "Adanto Vanguard"
-        ],
-        "exclude":
-        [
-            "Island",
-            "Forest",
-            "Mountain"
-        ]
-    },
-    "Rakdos Shadow":
-    {
-        "image": "Death's Shadow",
-        "contains":
-        [
-            "Death's Shadow",
-            "Blightstep Pathway"
-        ],
-        "exclude":
-        [
-            "Island",
-            "Forest",
-            "Plains"
-        ]
-    },
-    "Mono-black Shadow":
-    {
-        "image": "Death's Shadow",
-        "contains":
-        [
-            "Death's Shadow"
-        ],
-        "exclude":
-        [
-            "Plains",
-            "Mountain"
-        ]
-    },
     "Dimir Rogues":
     {
         "image": "Soaring Thought-Thief",
         "contains":
         [
-            "Soaring Thought-Thief"
+            "Soaring Thought-Thief",
+            "Watery Grave"
+        ],
+        "exclude":
+        [
+            "Blood Crypt",
+            "Godless Shrine",
+            "Overgrown Tomb"
         ]
     },
-    "Four-Color Adventures":
+    "Adventures":
     {
         "image": "Lucky Clover",
         "contains":
         [
-            "Lucky Clover",
-            "Plains"
-        ],
-        "exclude":
-        [
-            "Swamp"
+            "Lucky Clover"
         ]
     },
     "Gruul Aggro":
@@ -422,8 +590,17 @@
             "Stomping Ground",
             "Pelt Collector",
             "Burning-Tree Emissary",
-            "Bonecrusher Giant",
-            "Embercleave"
+            "Bonecrusher Giant"
+        ]
+    },
+    "Gruul Land Destruction":
+    {
+        "image": "Stone Rain",
+        "contains":
+        [
+            "Stone Rain",
+            "Sawtusk Demolisher",
+            "Llanowar Elves"
         ]
     },
     "Temur Neoform":
@@ -439,13 +616,13 @@
             "Plains"
         ]
     },
-    "Selesyna Company":
+    "Selesnya Company":
     {
-        "image": "Yasharn, Implacable Earth",
+        "image": "Collected Company",
         "contains":
         [
             "Collected Company",
-            "Skyclave Apparition"
+            "Temple Garden"
         ],
         "exclude":
         [
@@ -500,11 +677,12 @@
     },
     "Dimir Control":
     {
-        "image": "Torrential Gearhulk",
+        "image": "Narset, Parter of Veils",
         "contains":
         [
-            "Torrential Gearhulk",
-            "Watery Grave"
+            "Fatal Push",
+            "Narset, Parter of Veils",
+            "Shark Typhoon"
         ],
         "exclude":
         [
@@ -531,14 +709,6 @@
         "contains":
         [
             "Tempered Steel"
-        ]
-    },
-    "Kinnan Combo":
-    {
-        "image": "Kinnan, Bonder Prodigy",
-        "contains":
-        [
-            "Kinnan, Bonder Prodigy"
         ]
     },
     "Mono-green Aggro":
@@ -623,11 +793,12 @@
     },
     "Mono-Black Aggro":
     {
-        "image": "Spawn of Mayhem",
+        "image": "Knight of the Ebon Legion",
         "contains":
         [
             "Knight of the Ebon Legion",
-            "Swamp"
+            "Faceless Haven",
+            "Dread Wanderer"
         ],
         "exclude":
         [
@@ -698,9 +869,18 @@
             "Plains"
         ]
     },
-    "Locust Combo":
+    "Temur Creativity":
     {
-        "image": "Indomitable Creativity",
+        "image": "Koma, Cosmos Serpent",
+        "contains":
+        [
+            "Indomitable Creativity",
+            "Koma, Cosmos Serpent"
+        ]
+    },
+    "Izzet Creativity":
+    {
+        "image": "The Locust God",
         "contains":
         [
             "Indomitable Creativity",
@@ -757,6 +937,16 @@
             "Island"
         ]
     },
+    "Sultai Citadel":
+    {
+        "image": "Bolas's Citadel",
+        "contains":
+        [
+            "Bolas's Citadel",
+            "Brainstorm",
+            "Weather the Storm"
+        ]
+    },
     "Golgari Aggro":
     {
         "image": "Rotting Regisaur",
@@ -780,13 +970,14 @@
             "Plains"
         ]
     },
-    "Temur Midrange":
+    "Temur Flash":
     {
-        "image": "Nissa, Who Shakes the World",
+        "image": "Nightpack Ambusher",
         "contains":
         [
-            "Nissa, Who Shakes the World",
-            "Ketria Triome"
+            "Nightpack Ambusher",
+            "Breeding Pool",
+            "Steam Vents"
         ]
     },
     "Temur Elementals":
@@ -803,6 +994,34 @@
         "contains":
         [
             "Genesis Ultimatum"
+        ]
+    },
+    "Temur Midrange":
+    {
+        "image": "Chandra, Torch of Defiance",
+        "contains":
+        [
+            "Chandra, Torch of Defiance",
+            "Brazen Borrower",
+            "Questing Beast"
+        ]
+    },
+    "Izzet Control":
+    {
+        "image": "Magma Opus",
+        "contains":
+        [
+            "Magma Opus",
+            "Torrential Gearhulk"
+        ]
+    },
+    "Simic Turns":
+    {
+        "image": "Time Warp",
+        "contains":
+        [
+            "Breeding Pool",
+            "Time Warp"
         ]
     },
     "Izzet Tempo":

@@ -1,4 +1,19 @@
 {
+    "Jeskai Cycling Transmogrify":
+    {
+        "image": "Transmogrify",
+        "contains":
+        [
+            "Transmogrify",
+            "Velomachus Lorehold",
+            "Improbable Alliance"
+        ],
+        "exclude":
+        [
+            "Swamp",
+            "Forest"
+        ]
+    },
     "Cycling Pyromancer":
     {
         "image": "Irencrag Pyromancer",
@@ -18,6 +33,21 @@
             "Flourishing Fox"
         ]
     },
+    "Jeskai Transmogrify":
+    {
+        "image": "Transmogrify",
+        "contains":
+        [
+            "Transmogrify",
+            "Velomachus Lorehold",
+            "The Birth of Meletis"
+        ],
+        "exclude":
+        [
+            "Swamp",
+            "Forest"
+        ]
+    },
     "Gyruda Combo":
     {
         "image": "Gyruda, Doom of Depths",
@@ -26,13 +56,13 @@
             "Gyruda, Doom of Depths"
         ]
     },
-    "Mutate Combo":
+    "Jeskai Mutate":
     {
         "image": "Vadrok, Apex of Thunder",
         "contains":
         [
-            "Open the Omenpaths",
-            "Vadrok, Apex of Thunder"
+            "Vadrok, Apex of Thunder",
+            "Lore Drakkis"
         ]
     },
     "Mutate":
@@ -41,6 +71,23 @@
         "contains":
         [
             "Pollywog Symbiote"
+        ]
+    },
+    "Orzhov Magecraft":
+    {
+        "image": "Elite Spellbinder",
+        "contains":
+        [
+            "Shineshadow Snarl",
+            "Brightclimb Pathway",
+            "Luminarch Aspirant",
+            "Elite Spellbinder"
+        ],
+        "exclude":
+        [
+            "Mountain",
+            "Island",
+            "Forest"
         ]
     },
     "Orzhov Foretold":
@@ -93,6 +140,7 @@
         "contains":
         [
             "Thieves' Guild Enforcer",
+            "Drown in the Loch",
             "Island"
         ],
         "exclude":
@@ -121,21 +169,6 @@
             "Plains"
         ]
     },
-    "Izzet Tempo":
-    {
-        "image": "Goldspan Dragon",
-        "contains":
-        [
-            "Goldspan Dragon",
-            "Brazen Borrower"
-        ],
-        "exclude":
-        [
-            "Plains",
-            "Swamp",
-            "Forest"
-        ]
-    },
     "Grixis Tempo":
     {
         "image": "Goldspan Dragon",
@@ -149,6 +182,35 @@
         [
             "Pollywog Symbiote",
             "Plains",
+            "Forest"
+        ]
+    },
+    "Mardu Foretold":
+    {
+        "image": "Doom Foretold",
+        "contains":
+        [
+            "Doom Foretold",
+            "Mountain"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Forest"
+        ]
+    },
+    "Mardu Sacrifice":
+    {
+        "image": "Extus, Oriq Overlord",
+        "contains":
+        [
+            "Extus, Oriq Overlord",
+            "Claim the Firstborn",
+            "Swamp"
+        ],
+        "exclude":
+        [
+            "Ugin, the Spirit Dragon",
             "Forest"
         ]
     },
@@ -166,6 +228,24 @@
             "Forest"
         ]
     },
+    "Rakdos Sacrifice":
+    {
+        "image": "Woe Strider",
+        "contains":
+        [
+            "Claim the Firstborn",
+            "Woe Strider",
+            "Blightstep Pathway",
+            "Mountain",
+            "Swamp"
+        ],
+        "exclude":
+        [
+            "Ugin, the Spirit Dragon",
+            "Forest",
+            "Plains"
+        ]
+    },
     "Rakdos Midrange":
     {
         "image": "Kroxa, Titan of Death's Hunger",
@@ -179,7 +259,38 @@
         [
             "Ugin, the Spirit Dragon",
             "Forest",
+            "Island",
             "Plains"
+        ]
+    },
+    "Boros Fury":
+    {
+        "image": "Unleash Fury",
+        "contains":
+        [
+            "Unleash Fury",
+            "Plains",
+            "Goldspan Dragon"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Swamp",
+            "Forest"
+        ]
+    },
+    "Boros Winota":
+    {
+        "image": "Winota, Joiner of Forces",
+        "contains":
+        [
+            "Winota, Joiner of Forces"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Swamp",
+            "Forest"
         ]
     },
     "Boros Aggro":
@@ -230,33 +341,6 @@
             "Forest"
         ]
     },
-    "Mardu Foretold":
-    {
-        "image": "Doom Foretold",
-        "contains":
-        [
-            "Doom Foretold",
-            "Mountain"
-        ],
-        "exclude":
-        [
-            "Island",
-            "Forest"
-        ]
-    },
-    "Mardu Midrange":
-    {
-        "image": "Ruinous Ultimatum",
-        "contains":
-        [
-            "Ruinous Ultimatum"
-        ],
-        "exclude":
-        [
-            "Island",
-            "Forest"
-        ]
-    },
     "Tibalt Combo":
     {
         "image": "Tibalt's Trickery",
@@ -265,12 +349,21 @@
             "Tibalt's Trickery"
         ]
     },
+    "Sultai Titans' Nest":
+    {
+        "image": "Titans' Nest",
+        "contains":
+        [
+            "Titans' Nest"
+        ]
+    },
     "Sultai Ultimatum":
     {
         "image": "Emergent Ultimatum",
         "contains":
         [
-            "Emergent Ultimatum"
+            "Emergent Ultimatum",
+            "Omen of the Sea"
         ],
         "exclude":
         [
@@ -406,6 +499,51 @@
             "Forest"
         ]
     },
+    "4-color Adventures":
+    {
+        "image": "Extus, Oriq Overlord",
+        "contains":
+        [
+            "Extus, Oriq Overlord",
+            "Edgewall Innkeeper",
+            "Bonecrusher Giant"
+        ]
+    },
+    "Gruul Fury":
+    {
+        "image": "Dragonsguard Elite",
+        "contains":
+        [
+            "Dragonsguard Elite",
+            "Goldspan Dragon",
+            "Mountain",
+            "Forest"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Swamp",
+            "Plains"
+        ]
+    },
+    "Gruul Magda":
+    {
+        "image": "Magda, Brazen Outlaw",
+        "contains":
+        [
+            "Magda, Brazen Outlaw",
+            "Jaspera Sentinel",
+            "Bonecrusher Giant"
+        ],
+        "exclude":
+        [
+            "Foulmire Knight",
+            "Giant Killer",
+            "Brazen Borrower",
+            "Swamp",
+            "Plains"
+        ]
+    },
     "Gruul Adventures":
     {
         "image": "Bonecrusher Giant",
@@ -416,9 +554,40 @@
         ],
         "exclude":
         [
+            "Foulmire Knight",
+            "Giant Killer",
             "Brazen Borrower",
             "Swamp",
             "Plains"
+        ]
+    },
+    "Simic Stompy":
+    {
+        "image": "Lovestruck Beast",
+        "contains":
+        [
+            "Lovestruck Beast",
+            "Barkchannel Pathway"
+        ],
+        "exclude":
+        [
+            "Cragcrown Pathway",
+            "Riverglide Pathway",
+            "Mountain",
+            "Plains",
+            "Swamp"
+        ]
+    },
+    "Temur Ultimatum":
+    {
+        "image": "Genesis Ultimatum",
+        "contains":
+        [
+            "Genesis Ultimatum"
+        ],
+        "exclude":
+        [
+            "Swamp"
         ]
     },
     "Temur Lukka":
@@ -451,27 +620,6 @@
             "Plains"
         ]
     },
-    "Temur Ultimatum":
-    {
-        "image": "Genesis Ultimatum",
-        "contains":
-        [
-            "Genesis Ultimatum"
-        ],
-        "exclude":
-        [
-            "Swamp"
-        ]
-    },
-    "Big Red":
-    {
-        "image": "Irencrag Feat",
-        "contains":
-        [
-            "Irencrag Feat",
-            "Mountain"
-        ]
-    },
     "Mono-red Aggro":
     {
         "image": "Torbran, Thane of Red Fell",
@@ -481,6 +629,7 @@
         ],
         "exclude":
         [
+            "Lovestruck Beast",
             "Forest",
             "Island",
             "Plains",
@@ -509,6 +658,31 @@
         [
             "Swamp",
             "Plains"
+        ]
+    },
+    "Izzet Tempo":
+    {
+        "image": "Goldspan Dragon",
+        "contains":
+        [
+            "Goldspan Dragon",
+            "Faceless Haven",
+            "Brazen Borrower"
+        ],
+        "exclude":
+        [
+            "Plains",
+            "Swamp",
+            "Forest"
+        ]
+    },
+    "Big Red":
+    {
+        "image": "Irencrag Feat",
+        "contains":
+        [
+            "Irencrag Feat",
+            "Mountain"
         ]
     },
     "Naya Winota":
@@ -561,6 +735,7 @@
         ],
         "exclude":
         [
+            "Foulmire Knight",
             "Island",
             "Swamp"
         ]
@@ -632,6 +807,22 @@
             "Mountain",
             "Swamp",
             "Plains"
+        ]
+    },
+    "Mono-white Lifegain":
+    {
+        "image": "Heliod, Sun-Crowned",
+        "contains":
+        [
+            "Linden, the Steadfast Queen",
+            "Heliod, Sun-Crowned"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Mountain",
+            "Swamp",
+            "Forest"
         ]
     },
     "Mono-white Aggro":
@@ -789,6 +980,22 @@
             "Plains"
         ]
     },
+    "Golgari Sacrifice":
+    {
+        "image": "Hunt for Specimens",
+        "contains":
+        [
+            "Hunt for Specimens",
+            "Eyetwitch"
+        ],
+        "exclude":
+        [
+            "Bonecrusher Giant",
+            "Island",
+            "Plains",
+            "Mountain"
+        ]
+    },
     "Golgari Adventures":
     {
         "image": "Foulmire Knight",
@@ -799,6 +1006,7 @@
         ],
         "exclude":
         [
+            "Bonecrusher Giant",
             "Island",
             "Plains",
             "Mountain"
@@ -856,6 +1064,15 @@
             "Lukka, Coppercoat Outcast",
             "Omen of the Sea",
             "The Birth of Meletis"
+        ]
+    },
+    "Izzet Overload":
+    {
+        "image": "Experimental Overload",
+        "contains":
+        [
+            "Experimental Overload",
+            "Kazuul's Fury"
         ]
     },
     "Izzet Giants":
