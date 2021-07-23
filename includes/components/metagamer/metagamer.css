@@ -22,13 +22,16 @@
 #messages p { padding: 15px; font-size: 16px; border-radius: 3px;}
 .container { margin-bottom: 20px;}
 .container #main-menu { display: flex; justify-content: start; font-size: 16px; margin: 0 0 16px; padding-left: 0;}
-.container #main-menu a { padding: 14px 20px; font-family: "Metropolis", Arial, serif;}
-.container #main-menu a:hover { background-color: #e5f6ff; text-decoration: none;}
+.container #main-menu a { padding: 14px 20px; font-family: "Metropolis", Arial, serif; color: #555C70; }
+.container #main-menu a:hover { color: #F5875E; text-decoration: none;}
+.container #main-menu a:last-of-type { margin-left: auto; }
 .container .archetypes-info { max-width: 600px;}
 .container .archetypes-info .rule-remove { cursor: pointer;}
 .container .link-decklists { margin-bottom: 12px;}
 .container p[class^="bg-"] { padding: 15px;}
 .strong {font-weight: bold;}
+.btn-orange { background-color: #F5875E; border-color: #DC7954; color: white;}
+.btn-orange:hover, .btn-orange:focus { color: white;}
 
 /* DASHBOARD & WINRATE MATRIX */
 table.table-matchups {border-collapse: separate; border-spacing: 0 17px; table-layout: fixed; color: #555C70;}
@@ -39,6 +42,7 @@ table.table-matchups tbody tr td {text-align: center; vertical-align: middle; he
 table.table-matchups tbody tr td:first-of-type { border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-left-width: 1px;}
 table.table-matchups tbody tr td:last-of-type { border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-right-width: 1px;}
 table.table-matchups .matchup-deviation {font-size: 1.3em; line-height: 1em; border-top: 1px solid #55555529; padding-top: 8px; color: #919191;}
+table.table-matchups .matchup-count {font-size: 1.3em; line-height: 1em; border-top: 1px solid #55555529; padding-top: 8px; color: #919191;}
 table.table-matchups .matchup-percent {font-size: 2.1em; margin: auto; margin-bottom: 5px; width: 80%; font-weight: bold;}
 
 /*table.table-matchups .matchup-count {font-size: 0.9em; display: block; color: #818181;}
@@ -80,7 +84,7 @@ table.table-archetypes th.archetype-image { width: 160px;}
 table.table-archetypes td.archetype-image { height: 116px;}
 table.table-archetypes td.archetype-name { font-weight: bold; font-size: 18px; text-transform: uppercase;}
 table.table-archetypes * { font-family: Metropolis, serif;}
-.container .matchups-container { padding: 30px 50px 30px; background: 0 0 /100% url("imgs/marble-white.png"); background-repeat: no-repeat;
+.container .matchups-container { padding: 30px 50px 30px; background: 0 0 /100% 100% url("imgs/marble-white.png"); background-repeat: no-repeat;
     width: fit-content;}
 .container .matchups-container .legend-container { display: flex;}
 .container .matchups-container .legend { margin-right: 10px; font-size: 1.3em;}
@@ -89,7 +93,7 @@ table.table-archetypes * { font-family: Metropolis, serif;}
     border: 1px solid #555C70AC; margin-right: 6px; display: inline-block;}
 .container .matchups-container .legend .matchup-positive { background-color: #EBF6E5;}
 .container .matchups-container .legend .matchup-negative { background-color: #F8EAEA;}
-.container .matchups-container h1 { font-family: "GillSans", Arial, serif; font-size: 5em; text-transform: uppercase;}
+.container .matchups-container h1 { font-family: "GillSans", Arial, serif; font-size: 4.8em; text-transform: uppercase;}
 .container .matchups-container h3 { font-family: "Metropolis", Arial, serif; margin-top: 10px; font-size: 2.2em;}
 .container .matchups-container hr { width: 5%; border-color: black; margin: 12px 0 10px;}
 .container .matchups-container .logo { margin-top: 24px;}
@@ -124,7 +128,7 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 /* METAGAME */
 .table-metagame-container .background-placeholder { background: 0 0 /100% url("imgs/marble-white.png");
     background-repeat: no-repeat; position: absolute; top: 0; bottom: 0; left: 0; right: 0; opacity: 0.4; z-index: -1;}
-.table-metagame-container { width: 1190px; height: 660px; padding: 20px 24px; position: relative;}
+.table-metagame-container { width: 1220px; height: 690px; padding: 20px 24px; position: relative;}
 .table-metagame-container h2 { font-family: "GillSans", Arial, serif; font-size: 3em; text-transform: uppercase;
     margin-top: 0; margin-bottom: 5px;}
 .table-metagame-container div.logo { width: 200px; margin-top: 0;}
@@ -273,11 +277,12 @@ table.table-leaderboard.leaderboard-detailed tbody tr td { font-size: 16px;}
 .container .container-coverage .logo { width: 180px; margin-top: 0;}
 .container-coverage h1 { font-family: Metropolis, serif; font-size: 40px;}
 .container-coverage h3 { font-family: "Metropolis Thin", Metropolis, serif;}
+.container-coverage .list-group { margin-bottom: 30px;}
 .container-coverage .search.input-group input { font-family: Metropolis, serif;}
 .container-coverage .tournament-link h4 { font-family: Metropolis, serif; font-size: 24px;}
 .container-coverage .tournament-link { display: flex; font-family: "Metropolis Thin", Metropolis, serif;}
-.container-coverage .tournament-image { width: 200px;}
-.container-coverage .tournament-image img { width: 100%;}
+.container-coverage .tournament-image { width: 200px; max-height: 120px; text-align: center;}
+.container-coverage .tournament-image img { height: 100%;}
 .container-coverage .tournament-info { padding: 0 20px; font-size: 16px;}
 .container-coverage .tournament-date { font-family: 'Metropolis Thin', Arial, serif;}
 .container-coverage .tournament-count-players { font-family: Metropolis, Arial, serif;}
@@ -291,16 +296,19 @@ table.table-leaderboard.leaderboard-detailed tbody tr td { font-size: 16px;}
 .table-standings td.name-archetype { text-transform: uppercase; font-size: 1.3em;}
 .table-standings td.name-player { text-transform: capitalize;}
 .table-standings td.icon-player img { height: 48px;}
-.table-standings.table-french td.icon-player img { height: 76px;}
+.table-standings.table-french td.icon-player img { height: 66px;}
 .table-standings td.image-archetype { position: relative; overflow: hidden; pointer-events: none;}
 .table-standings td.image-archetype img { position: absolute; top: -19px; left: -8px; width: 100px; display: block;}
 table.table-standings:not(.table-french)>tbody>tr>td.icon-player { padding: 3px 8px;}
-.container-coverage .table-standings.table-french td.player-image { padding: 0; height: 160px; pointer-events: none;}
+.container-coverage .table-standings.table-french td.player-image { padding: 0; height: 130px; pointer-events: none;}
 .container-coverage .table-standings.table-french td.player-image img { height: 100%;}
-.container-coverage .table-standings.table-french td.player-name { text-transform: uppercase; font-size: 22px;}
+.container-coverage .table-standings.table-french td.player-name { text-transform: uppercase; font-size: 22px; padding-top: 24px;}
 .container-coverage .table-standings.table-french th.player-score { text-align: center;}
-.container-coverage .table-standings.table-french td.player-score { text-align: center; font-size: 20px;}
+.container-coverage .table-standings.table-french td.player-score { text-align: center; font-size: 24px; vertical-align: middle;}
+.container-coverage .table-standings.table-french td.player-score.player-total { font-size: 30px;}
 .container-coverage .table-standings.table-french tr.disabled { opacity: 0.5;}
+.container-coverage .table-standings.table-french .player-archetype { text-transform: uppercase; font-size: 14px;
+    font-family: 'Metropolis Thin', Arial, serif; display: block; word-break: break-word;}
 .container-coverage .legend { font-style: italic; font-family: 'Metropolis Thin', Arial, serif; margin-top: 10px;}
 
 /* DECKLIST */
@@ -369,6 +377,12 @@ table.table-standings:not(.table-french)>tbody>tr>td.icon-player { padding: 3px 
 #import-mtgmelee .form-group > * { display: block;}
 #import-mtgmelee input[name="import-mtgmelee[tournament_name]"] { width: 100%;}
 
+/* TMP matrix */
+.tmp-matrix .matchup-positive { color: #52D278;}
+.tmp-matrix .matchup-negative { color: #D14042;}
+.tmp-matrix .name-player { text-transform: uppercase; font-size: 16px; font-weight: bold;}
+.tmp-matrix * { font-family: Metropolis, Arial, serif; font-size: 14px; text-align: center; vertical-align: middle;}
+
 input#matchups-export-mode { cursor: pointer;}
 input#matchups-export-mode:checked ~ .matchups-container { background: white;}
 input#matchups-export-mode:checked ~ .matchups-container th.matchup-archetype-image { width: 1px;}
@@ -384,5 +398,5 @@ input#matchups-export-mode:checked ~ .matchups-container .table-matchups .matchu
 input#matchups-export-mode:checked ~ .matchups-container .table-matchups .matchup-positive { background-color: white;}
 input#matchups-export-mode:checked ~ .matchups-container .table-matchups>tbody>tr:hover { background-color: white;}
 
-.sticky { position: fixed; top: 0; width: 1140px;}
-.sticky + .table-french { margin-top: 200px;}
+.sticky { position: fixed; top: 0; width: 1140px; z-index: 20;}
+.sticky + .table-french { margin-top: 200px; z-index: 10;}
