@@ -50,7 +50,7 @@
         "default":
         {
             "handler":"core\\db\\handler\\MysqliHandler",
-            "host":"172.17.0.1",
+            "host":"localhost",
             "user":"root",
             "password":"",
             "name":"metagamer"

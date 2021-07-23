@@ -3,7 +3,7 @@
 <div class="decklist-header">
     <a href="{$content.link_visual}" class="btn btn-info" target="_blank">
         <span class="glyphicon glyphicon-eye-open"></span> Visual decklist
-    </a> {$content.player.name_deck}
+    </a> {$content.player.name_deck} ({$content.player.wins}-{$content.player.matches-$content.player.wins})
     {if $content.export_arena}
         <button class="btn btn-default button-export-arena">
             <span class="glyphicon glyphicon-download"></span> Export Arena

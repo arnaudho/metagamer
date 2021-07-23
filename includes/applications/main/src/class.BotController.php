@@ -33,6 +33,7 @@ class BotController extends DefaultController
         $data = "";
         $start = microtime(true);
         $r = new Request($pUrl);
+//        $r->setOption(CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
         $r->setMethod($pMethod);
         $r->setOption(CURLOPT_SSL_VERIFYPEER, false);
         try {

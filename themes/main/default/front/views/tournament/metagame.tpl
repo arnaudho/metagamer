@@ -50,7 +50,7 @@
         </table>
         <div class="legend-container">
             <div class="legend">
-                <p>{$content.date}</p>
+                <p>{$content.date} - Sample size : {$content.count_matches} matches</p>
                 <p>Data source : <img src="https://mtgmelee.com/images/logo.png" style="width: 100px; display: inline-block; vertical-align: middle;" /></p>
             </div>
         </div>

@@ -50,8 +50,9 @@
                                 {if $deck.percent!==null}
                                     {if $deck.id_archetype==0}<div class="matchup-total-cell">{/if}
                                     <div class="matchup-percent">{$deck.percent}<sup>%</sup></div>
-                                    <span class="matchup-deviation">{$deck.deviation_down}<sup>%</sup> - {$deck.deviation_up}<sup>%</sup></span>
-                                    {*<span class="matchup-count">{$deck.count} matches</span>*}
+                                    {*<span class="matchup-deviation">{$deck.deviation_down}<sup>%</sup> - {$deck.deviation_up}<sup>%</sup></span>*}
+                                    {*<span class="matchup-count">{$deck.count} {if $deck.count == 1}match{else}matches{/if}</span>*}
+                                    <span class="matchup-count">{$deck.wins} - {$deck.count - $deck.wins}</span>
                                     {if $deck.id_archetype==0}</div>{/if}
                                 {else}
                                     -
@@ -69,7 +70,7 @@
                 <tr>
                     <td class="">
                         <div class="matchup-percent">Winrate</div>
-                        <span class="matchup-deviation">Confidence interval</span>
+                        <span class="matchup-deviation">Matchup result{*Confidence interval*}</span>
                     </td>
                 </tr>
                 </tbody>
