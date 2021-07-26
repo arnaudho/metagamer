@@ -91,6 +91,15 @@
         </div>
     </div>
 
+    <h3>Tournaments list :</h3>
+    {if $content.list_tournaments}
+        <ul>
+            {foreach from=$content.list_tournaments item="tournament"}
+                <li><a href="https://mtgmelee.com/Tournament/View/{$tournament.id_tournament}" target="_blank">{$tournament.name_tournament}</a></li>
+            {/foreach}
+        </ul>
+    {/if}
+
     {* TODO export texte *}
 
     {*TODO change format -- check last email*}
@@ -139,14 +148,6 @@
         </table>
     </div>
     {* TODO export texte *}
-
-    {if $content.list_tournaments}
-        <ul>
-            {foreach from=$content.list_tournaments item="tournament"}
-                <li>{$tournament.name_tournament}</li>
-            {/foreach}
-        </ul>
-    {/if}
 {/if}
 
 {if !$request_async}{include file="includes/footer.tpl"}{/if}
