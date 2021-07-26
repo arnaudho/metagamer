@@ -38,9 +38,14 @@
     {foreach from=$content.players item="player"}
         <div class="player-check">
             <div class="player-check-header">
-                <a href="deck/id:{$player.id_player}/" class="btn btn-info player-check-link" target="_blank">
-                    <span class="glyphicon glyphicon-duplicate"></span>
-                </a>
+                <div class="player-check-links">
+                    <span class="player-singularity" data-toggle="tooltip" title="Singularity">
+                        <span class="glyphicon glyphicon-transfer"></span> {$player.singularity}<sup>%</sup>
+                    </span>
+                    <a href="deck/id:{$player.id_player}/" class="btn btn-info" target="_blank">
+                        <span class="glyphicon glyphicon-duplicate"></span>
+                    </a>
+                </div>
                 <h3>{$player.name_player}</h3>
                 <h4>{$player.name_deck}</h4>
             </div>

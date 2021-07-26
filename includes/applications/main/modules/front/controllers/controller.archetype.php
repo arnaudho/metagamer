@@ -658,6 +658,7 @@ namespace app\main\controllers\front {
                 // get archetype aggregate list (maindeck only)
                 $aggregate_main = $this->getAggregateList($aggregate_cond);
                 $aggregate_counts = array_count_values($aggregate_main);
+                $archetype['count_cards'] = count($aggregate_main);
 
                 // compare with all decklists of archetype
                 $players = $this->modelPlayer->getPlayerByCond($aggregate_cond, "id_player, arena_id AS name_player, name_deck");
@@ -671,6 +672,7 @@ namespace app\main\controllers\front {
                         $max_distance = $distance;
                     }
                     $players[$key]['distance'] = $distance;
+                    $players[$key]['singularity'] = round(100*$distance/$archetype['count_cards'], 0);
                     // rework diff here
                     $players[$key]['diff'] = array(
                         "removed" => array(),

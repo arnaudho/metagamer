@@ -364,7 +364,9 @@ table.table-standings:not(.table-french)>tbody>tr>td.icon-player { padding: 3px 
 .aggregate-container .player-check { display: inline-block; padding: 16px; width: 48%; margin: 3px; vertical-align: top;
     background-color: #EEF3F6; border-radius: 2px;}
 .aggregate-container .player-check-header h3 { margin-top: 0;}
-.aggregate-container .player-check-header .player-check-link { float: right;}
+.aggregate-container .player-check-header .player-check-links { float: right;}
+.aggregate-container .player-check-header .player-check-links > * { margin-left: 10px;}
+.aggregate-container .player-check-header .player-singularity { font-size: 16px; cursor: default;}
 .aggregate-container .player-check-header,
 .aggregate-container .player-check-cards li { font-family: Metropolis, Arial, serif;}
 .aggregate-container .player-check-cards { list-style-type: none; padding-left: 0;}
@@ -382,6 +384,10 @@ table.table-standings:not(.table-french)>tbody>tr>td.icon-player { padding: 3px 
 .tmp-matrix .matchup-negative { color: #D14042;}
 .tmp-matrix .name-player { text-transform: uppercase; font-size: 16px; font-weight: bold;}
 .tmp-matrix * { font-family: Metropolis, Arial, serif; font-size: 14px; text-align: center; vertical-align: middle;}
+
+/* TODO temporary */
+/*input#metagame-hide-winrates, label[for=metagame-hide-winrates], .table-metagame-container tr.metagame-deck-winrate { display: none;}*/
+/* TODO temporary */
 
 input#matchups-export-mode { cursor: pointer;}
 input#matchups-export-mode:checked ~ .matchups-container { background: white;}
