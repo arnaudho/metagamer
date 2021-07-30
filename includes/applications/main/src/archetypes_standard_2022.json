@@ -1,0 +1,216 @@
+{
+    "Izzet Dragons":
+    {
+        "image": "Goldspan Dragon",
+        "contains":
+        [
+            "Goldspan Dragon",
+            "Alrund's Epiphany"
+        ],
+        "exclude":
+        [
+            "Plains",
+            "Swamp",
+            "Forest"
+        ]
+    },
+    "Mono-Green Stompy":
+    {
+        "image": "Old-Growth Troll",
+        "contains":
+        [
+            "Old-Growth Troll"
+        ],
+        "exclude":
+        [
+            "Swamp",
+            "Island",
+            "Mountain",
+            "Plains"
+        ]
+    },
+    "Dimir Control":
+    {
+        "image": "Behold the Multiverse",
+        "contains":
+        [
+            "Behold the Multiverse",
+            "Swamp"
+        ],
+        "exclude":
+        [
+            "Plains",
+            "Mountain",
+            "Forest"
+        ]
+    },
+    "Azorius Control":
+    {
+        "image": "Behold the Multiverse",
+        "contains":
+        [
+            "Behold the Multiverse",
+            "Plains"
+        ],
+        "exclude":
+        [
+            "Swamp",
+            "Mountain",
+            "Forest"
+        ]
+    },
+    "Orzhov Dungeons":
+    {
+        "image": "Triumphant Adventurer",
+        "contains":
+        [
+            "Triumphant Adventurer"
+        ],
+        "exclude":
+        [
+            "Mountain",
+            "Island",
+            "Forest"
+        ]
+    },
+    "Orzhov Angels":
+    {
+        "image": "Righteous Valkyrie",
+        "contains":
+        [
+            "Righteous Valkyrie",
+            "Swamp"
+        ],
+        "exclude":
+        [
+            "Mountain",
+            "Island",
+            "Forest"
+        ]
+    },
+    "Orzhov Midrange":
+    {
+        "image": "Kaya the Inexorable",
+        "contains":
+        [
+            "Kaya the Inexorable",
+            "Doomskar"
+        ],
+        "exclude":
+        [
+            "Mountain",
+            "Island",
+            "Forest"
+        ]
+    },
+    "Mono-White Aggro":
+    {
+        "image": "Luminarch Aspirant",
+        "contains":
+        [
+            "Luminarch Aspirant",
+            "Faceless Haven",
+            "Snow-Covered Plains"
+        ]
+    },
+    "Mono-Red Aggro":
+    {
+        "image": "Fireblade Charger",
+        "contains":
+        [
+            "Fireblade Charger",
+            "Faceless Haven",
+            "Snow-Covered Mountain"
+        ]
+    },
+    "Boros Aggro":
+    {
+        "image": "Luminarch Aspirant",
+        "contains":
+        [
+            "Luminarch Aspirant",
+            "Showdown of the Skalds"
+        ],
+        "exclude":
+        [
+            "Swamp",
+            "Island",
+            "Forest"
+        ]
+    },
+    "Rakdos Midrange":
+    {
+        "image": "Valki, God of Lies",
+        "contains":
+        [
+            "Valki, God of Lies",
+            "Goldspan Dragon"
+        ],
+        "exclude":
+        [
+            "Plains",
+            "Island",
+            "Forest"
+        ]
+    },
+    "Simic Ramp":
+    {
+        "image": "Koma, Cosmos Serpent",
+        "contains":
+        [
+            "Koma, Cosmos Serpent"
+        ],
+        "exclude":
+        [
+            "Plains",
+            "Swamp",
+            "Mountain"
+        ]
+    },
+    "Naya Spirit":
+    {
+        "image": "Clarion Spirit",
+        "contains":
+        [
+            "Clarion Spirit",
+            "Forest",
+            "Mountain"
+        ],
+        "exclude":
+        [
+            "Swamp",
+            "Island"
+        ]
+    },
+    "Golgari Elves":
+    {
+        "image": "Elvish Warmaster",
+        "contains":
+        [
+            "Elvish Warmaster",
+            "Skemfar Avenger"
+        ],
+        "exclude":
+        [
+            "Mountain",
+            "Plains",
+            "Island"
+        ]
+    },
+    "Gruul Magda":
+    {
+        "image": "Magda, Brazen Outlaw",
+        "contains":
+        [
+            "Magda, Brazen Outlaw",
+            "Goldspan Dragon",
+            "Forest"
+        ],
+        "exclude":
+        [
+            "Plains",
+            "Island",
+            "Swamp"
+        ]
+    }
+}

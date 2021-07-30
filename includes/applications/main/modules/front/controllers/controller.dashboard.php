@@ -137,6 +137,7 @@ namespace app\main\controllers\front {
             }
         }
 
+        // TODO order archetypes : #players, #matches, alphabetical
         public function matrix () {
             $dashboard_cond = null;
             $metagame = array();
@@ -287,11 +288,11 @@ namespace app\main\controllers\front {
                         $deviation = StatsUtils::getStandardDeviation($matchup['percent'], $matchup['count'], StatsUtils::Z95);
                         $winrate[$m]['deviation'] = $deviation;
                         $winrate[$m]['deviation_up'] = round($matchup['percent'] + $deviation);
-                        if ($winrate[$m]['deviation_up'] > 100) {
+                        if ($winrate[$m]['deviation_up'] > 99) {
                             $winrate[$m]['deviation_up'] = 100;
                         }
                         $winrate[$m]['deviation_down'] = round($matchup['percent'] - $deviation);
-                        if ($winrate[$m]['deviation_down'] < 0) {
+                        if ($winrate[$m]['deviation_down'] < 1) {
                             $winrate[$m]['deviation_down'] = 0;
                         }
                     } else {
@@ -485,7 +486,7 @@ namespace app\main\controllers\front {
                     $this->addMessage($message, self::MESSAGE_ERROR);
                 }
                 $formats[$idTypeFormat] = array(
-                    "name_format" => ucfirst($typeFormat),
+                    "name_format" => ucfirst(str_replace("_", " ", $typeFormat)),
                     "archetypes"  => $archetypes
                 );
             }

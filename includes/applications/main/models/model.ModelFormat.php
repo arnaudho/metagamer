@@ -8,9 +8,13 @@ namespace app\main\models {
     {
         CONST TYPE_FORMAT_STANDARD_ID = 1;
         CONST TYPE_FORMAT_HISTORIC_ID = 2;
+        CONST TYPE_FORMAT_LIMITED_ID = 3;
+        CONST TYPE_FORMAT_STANDARD_2022_ID = 4;
         CONST MAPPING_TYPE_FORMAT = array(
             self::TYPE_FORMAT_STANDARD_ID => "standard",
-            self::TYPE_FORMAT_HISTORIC_ID => "historic"
+            self::TYPE_FORMAT_HISTORIC_ID => "historic",
+            self::TYPE_FORMAT_LIMITED_ID => "limited",
+            self::TYPE_FORMAT_STANDARD_2022_ID => "standard_2022",
         );
 
         public $typeFormat;
