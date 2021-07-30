@@ -5,6 +5,7 @@ namespace app\api\controllers\front {
     use app\api\models\ModelTournament;
     use app\main\models\ModelArchetype;
     use app\main\models\ModelPlayer;
+    use app\main\models\ModelTypeFormat;
     use core\application\Core;
     use core\application\RestController;
     use core\data\SimpleJSON;
@@ -16,6 +17,7 @@ namespace app\api\controllers\front {
         protected $modelPlayer;
         protected $modelTournament;
         protected $modelArchetype;
+        protected $modelTypeFormat;
 
         public function __construct()
         {
@@ -24,6 +26,7 @@ namespace app\api\controllers\front {
             $this->modelPlayer = new ModelPlayer();
             $this->modelTournament = new ModelTournament();
             $this->modelArchetype = new ModelArchetype();
+            $this->modelTypeFormat = new ModelTypeFormat();
             parent::__construct();
         }
 
@@ -66,9 +69,19 @@ namespace app\api\controllers\front {
             $this->content = SimpleJSON::encode($tournaments, JSON_UNESCAPED_SLASHES);
         }
 
-        public function getLastTournaments () {
-            $tournaments = $this->modelTournament->getLastTournaments(50);
-
+        public function getTournamentsByIdTypeFormat () {
+            if (!Core::checkRequiredGetVars('id_type_format')) {
+                $this->throwError(
+                    422, "Parameter [id_type_format] not found"
+                );
+            }
+            $id = $_GET['id_type_format'];
+            if (!$this->modelTypeFormat->getTupleById($id)) {
+                $this->throwError(
+                    422, "Format_type ID $id not found"
+                );
+            }
+            $tournaments = $this->modelTournament->getTournamentsByIdTypeFormat($id);
             $this->content = SimpleJSON::encode($tournaments, JSON_UNESCAPED_SLASHES);
         }
 

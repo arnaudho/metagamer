@@ -72,10 +72,13 @@
         "action": "getTournamentsByIdFormat"
       }
     },
-    "tournaments/last/": {
+    "tournaments/format_type/{$id_type_format}/": {
+      "parameters": {
+        "id_type_format": "[0-9]+"
+      },
       "GET": {
         "controller": "tournament",
-        "action": "getLastTournaments"
+        "action": "getTournamentsByIdTypeFormat"
       }
     },
     "archetype/{$id_archetype}/": {

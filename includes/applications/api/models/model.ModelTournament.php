@@ -37,19 +37,20 @@ namespace app\api\models {
                 ->join("players", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
                 ->andWhere("tournaments.id_format", Query::EQUAL, $pIdFormat)
                 ->groupBy("tournaments.id_tournament")
-                ->order("tournaments.date_tournament", "DESC")
+                ->order("tournaments.date_tournament DESC, name_tournament")
                 ->execute($this->handler);
             return $data;
         }
 
-        public function getLastTournaments ($pLimit = 50) {
-            $data = Query::select("tournaments.id_tournament, name_tournament, date_tournament,
-                    formats.id_format, id_type_format, name_format,
+        public function getTournamentsByIdTypeFormat ($pIdTypeFormat, $pLimit = 10) {
+            $data = Query::select(
+                "tournaments.id_tournament, name_tournament, date_tournament,
                     COUNT(DISTINCT players.id_player) AS count_players", $this->table)
                 ->join("players", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
                 ->join("formats", Query::JOIN_INNER, "formats.id_format = tournaments.id_format")
+                ->andWhere("formats.id_type_format", Query::EQUAL, $pIdTypeFormat)
                 ->groupBy("tournaments.id_tournament")
-                ->order("tournaments.date_tournament", "DESC")
+                ->order("tournaments.date_tournament DESC, name_tournament")
                 ->limit(0, intval($pLimit))
                 ->execute($this->handler);
             return $data;
