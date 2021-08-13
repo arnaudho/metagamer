@@ -45,6 +45,7 @@ namespace app\api\models {
         public function getTournamentsByIdTypeFormat ($pIdTypeFormat, $pLimit = 10) {
             $data = Query::select(
                 "tournaments.id_tournament, name_tournament, date_tournament,
+                    formats.id_format, name_format,
                     COUNT(DISTINCT players.id_player) AS count_players", $this->table)
                 ->join("players", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
                 ->join("formats", Query::JOIN_INNER, "formats.id_format = tournaments.id_format")
