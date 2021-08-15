@@ -168,6 +168,16 @@
         "action": "matrix"
       }
     },
+    "metagame/format_type:{$id_type_format}/": {
+      "parameters": {
+        "id_type_format": "[0-9]+",
+        "size": "[0-9]+"
+      },
+      "GET": {
+        "controller": "index",
+        "action": "metagame"
+      }
+    },
     "search/": {
       "GET": {
         "controller": "index",

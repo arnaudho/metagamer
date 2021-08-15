@@ -69,6 +69,7 @@ namespace app\api\controllers\front
                 // get last tournament from type_format
                 $last_tournament = $this->modelTournament->getLastTournament(Query::condition()
                     ->andWhere("formats.id_type_format", Query::EQUAL, $type_format['id_type_format']));
+                // get last format from a given format_type
                 $format = $this->modelFormat->getFormatById($last_tournament['id_format']);
 
                 // limit data to last 2 weeks of the format
@@ -78,7 +79,7 @@ namespace app\api\controllers\front
                 $data = $format;
             } else {
                 $this->throwError(
-                    422, "Missing parameter [id_format|id_tournament] or entity not found"
+                    422, "Missing parameter [id_format|id_type_format|id_tournament] or entity not found"
                 );
             }
             $size = 10;
@@ -170,6 +171,35 @@ namespace app\api\controllers\front
                 $data['tournaments'] = $this->modelTournament->all($matrix_cond, "id_tournament, name_tournament, date_tournament");
             }
 
+            $this->content = SimpleJSON::encode($data, JSON_UNESCAPED_SLASHES);
+        }
+
+        public function metagame () {
+            if (
+                Core::checkRequiredGetVars('id_type_format') &&
+                $type_format = $this->modelTypeFormat->getTupleById($_GET['id_type_format'])
+            ) {
+                // get last tournament from type_format
+                $last_tournament = $this->modelTournament->getLastTournament(Query::condition()
+                    ->andWhere("formats.id_type_format", Query::EQUAL, $type_format['id_type_format']));
+                // get last format from a given format_type
+                $format = $this->modelFormat->getFormatById($last_tournament['id_format']);
+
+                // limit data to last 2 weeks of the format
+                $metagame_cond = Query::condition()
+                    ->andWhere("tournaments.id_format", Query::EQUAL, $format['id_format'])
+                    ->andWhere("tournaments.date_tournament", Query::UPPER_EQUAL, "DATE_ADD('" . $format['max_date'] . "', INTERVAL -14 DAY)", false);
+                $data = $format;
+            } else {
+                $this->throwError(
+                    422, "Missing parameter [id_type_format] or entity not found"
+                );
+            }
+            if (isset($metagame_cond)) {
+                $data = array_merge($data, $type_format);
+                // no need to round metagame for the homepage, data is just truncated to the top N archetypes
+                $data["metagame"] = $this->modelPlayer->countArchetypes($metagame_cond);
+            }
             $this->content = SimpleJSON::encode($data, JSON_UNESCAPED_SLASHES);
         }
 
