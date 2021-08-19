@@ -65,7 +65,12 @@ namespace app\api\controllers\front {
                     422, "Format ID $id not found"
                 );
             }
-            $tournaments = $this->modelTournament->getTournamentsByIdFormat($id);
+            // TODO QUICKFIX for ALPHA version 20/08
+            $ids_format = $this->modelFormat->getFormatsByIdFormat($id);
+            $tournaments = $this->modelTournament->getTournamentsByCond(
+                Query::condition()
+                    ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false)
+            );
             $this->content = SimpleJSON::encode($tournaments, JSON_UNESCAPED_SLASHES);
         }
 

@@ -27,13 +27,43 @@ namespace app\api\models {
             return $data;
         }
 
-        // TODO order Other ?
         public function getArchetypesByIdFormat($pIdFormat)
         {
             // get count players in format
             $count_players = Query::select("COUNT(DISTINCT players.id_player) AS nb", "players")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
                 ->andWhere("tournaments.id_format", Query::EQUAL, $pIdFormat)
+                ->execute($this->handler);
+            $count_players = $count_players[0]['nb'];
+            if (!$count_players) {
+                return false;
+            }
+            $data = Query::select(
+                "archetypes.id_archetype, name_archetype, colors_archetype", $this->table)
+                ->join("players", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->andWhere("tournaments.id_format", Query::EQUAL, $pIdFormat)
+                ->groupBy("archetypes.id_archetype")
+                ->execute($this->handler);
+            return $data;
+        }
+
+        // TODO order Other ?
+        public function getArchetypesDataByIdFormat ($pIdFormat) {
+            return $this->getArchetypesDataByCond(Query::condition()->andWhere("tournaments.id_format", Query::EQUAL, $pIdFormat));
+        }
+
+        // TODO QUICKFIX for ALPHA version 20/08
+        public function getArchetypesDataByCond ($pCondition) {
+            if (!$pCondition) {
+                return false;
+            } else {
+                $cond = clone $pCondition;
+            }
+            // get count players in format
+            $count_players = Query::select("COUNT(DISTINCT players.id_player) AS nb", "players")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->andCondition($cond)
                 ->execute($this->handler);
             $count_players = $count_players[0]['nb'];
             if (!$count_players) {
@@ -47,7 +77,7 @@ namespace app\api\models {
                 ->join("players", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype")
                 ->join("matches", Query::JOIN_INNER, "matches.id_player = players.id_player")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
-                ->andWhere("tournaments.id_format", Query::EQUAL, $pIdFormat)
+                ->andCondition($cond)
                 ->groupBy("archetypes.id_archetype")
                 ->order("count_players", "DESC")
                 ->execute($this->handler);

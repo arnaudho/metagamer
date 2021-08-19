@@ -1,6 +1,7 @@
 <?php
 namespace app\api\controllers\front {
 
+    use app\api\models\ModelFormat;
     use app\main\models\ModelArchetype;
     use app\main\models\ModelCard;
     use app\main\models\ModelPeople;
@@ -16,6 +17,7 @@ namespace app\api\controllers\front {
         protected $modelCard;
         protected $modelPlayer;
         protected $modelPeople;
+        protected $modelFormat;
         protected $modelArchetype;
         protected $modelTournament;
 
@@ -25,6 +27,7 @@ namespace app\api\controllers\front {
             $this->modelCard = new ModelCard();
             $this->modelPlayer = new ModelPlayer();
             $this->modelPeople = new ModelPeople();
+            $this->modelFormat = new ModelFormat();
             $this->modelArchetype = new ModelArchetype();
             $this->modelTournament = new ModelTournament();
             parent::__construct();
@@ -57,7 +60,16 @@ namespace app\api\controllers\front {
                     422, "Archetype ID $id not found"
                 );
             }
-            $decklists = $this->modelPlayer->getDecklistsByCondition(Query::condition()->andWhere("players.id_archetype", Query::EQUAL, $id), true);
+
+            // TODO QUICKFIX for ALPHA version 20/08
+            // limit decklists to last format group
+            $last_format_id = $this->modelFormat->getLastFormatIdByArchetypeId($id);
+            $ids_format = $this->modelFormat->getFormatsByIdFormat($last_format_id);
+            $decklists = $this->modelPlayer->getDecklistsByCondition(
+                Query::condition()
+                    ->andWhere("players.id_archetype", Query::EQUAL, $id)
+                    ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false),
+                true);
             $this->content = SimpleJSON::encode($decklists, JSON_UNESCAPED_SLASHES);
         }
 

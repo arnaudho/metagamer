@@ -31,11 +31,21 @@ namespace app\api\models {
 
         // TODO handle tournament icons
         public function getTournamentsByIdFormat ($pIdFormat) {
+            return $this->getTournamentsByCond(Query::condition()->andWhere("tournaments.id_format", Query::EQUAL, $pIdFormat));
+        }
+
+        // TODO QUICKFIX for ALPHA version 20/08
+        public function getTournamentsByCond ($pCondition) {
+            if (!$pCondition) {
+                return false;
+            } else {
+                $cond = clone $pCondition;
+            }
             $data = Query::select(
                 "tournaments.id_tournament, name_tournament, date_tournament,
                     COUNT(DISTINCT players.id_player) AS count_players", $this->table)
                 ->join("players", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
-                ->andWhere("tournaments.id_format", Query::EQUAL, $pIdFormat)
+                ->andCondition($cond)
                 ->groupBy("tournaments.id_tournament")
                 ->order("tournaments.date_tournament DESC, name_tournament")
                 ->execute($this->handler);

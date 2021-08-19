@@ -12,6 +12,39 @@ namespace app\api\models {
             parent::__construct("formats", "id_format");
         }
 
+        // TODO QUICKFIX for ALPHA version 20/08
+        public function getFormatsByIdFormat ($pIdFormat) {
+            $ids_format = array();
+            if ($format = $this->getTupleById($pIdFormat)) {
+                $ids_format = array($pIdFormat);
+                if (preg_match('/(.*) \- week \d/i', $format['name_format'], $name_format)) {
+                    $name_format = $name_format[1];
+                    $data = $this->all(
+                        Query::condition()
+                            ->andWhere("name_format", Query::LIKE, "'" . $name_format . "%'", false),
+                        "id_format"
+                    );
+                    foreach ($data as $item) {
+                        $ids_format[] = $item['id_format'];
+                    }
+                }
+            }
+            return $ids_format;
+        }
+
+        public function getLastFormatIdByArchetypeId ($pIdArchetype) {
+            $data = Query::select("id_format", "players")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->andWhere("id_archetype", Query::EQUAL, $pIdArchetype)
+                ->order("date_tournament", "DESC")
+                ->limit(0, 1)
+                ->execute($this->handler);
+            if (empty($data)) {
+                return false;
+            }
+            return $data[0]['id_format'];
+        }
+
         public function getFormatById($pIdFormat)
         {
             $data = Query::select(

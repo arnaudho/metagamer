@@ -6,6 +6,7 @@ namespace app\api\controllers\front {
     use core\application\Core;
     use core\application\RestController;
     use core\data\SimpleJSON;
+    use core\db\Query;
 
     class archetype extends RestController
     {
@@ -47,7 +48,12 @@ namespace app\api\controllers\front {
                     422, "Format ID $id not found"
                 );
             }
-            $archetypes = $this->modelArchetype->getArchetypesByIdFormat($id);
+            // TODO QUICKFIX for ALPHA version 20/08
+            $ids_format = $this->modelFormat->getFormatsByIdFormat($id);
+            $archetypes = $this->modelArchetype->getArchetypesDataByCond(
+                Query::condition()
+                    ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false)
+            );
             $this->content = SimpleJSON::encode($archetypes, JSON_UNESCAPED_SLASHES);
         }
     }
