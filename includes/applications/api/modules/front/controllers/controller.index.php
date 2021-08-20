@@ -185,9 +185,14 @@ namespace app\api\controllers\front
                 // get last format from a given format_type
                 $format = $this->modelFormat->getFormatById($last_tournament['id_format']);
 
+                // TODO QUICKFIX for ALPHA version 20/08
+                // get formats group -- all weeks
+                $ids_format = $this->modelFormat->getFormatsByIdFormat($format['id_format']);
+
                 // limit data to last 2 weeks of the format
                 $metagame_cond = Query::condition()
-                    ->andWhere("tournaments.id_format", Query::EQUAL, $format['id_format'])
+//                    ->andWhere("tournaments.id_format", Query::EQUAL, $format['id_format'])
+                    ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false)
                     ->andWhere("tournaments.date_tournament", Query::UPPER_EQUAL, "DATE_ADD('" . $format['max_date'] . "', INTERVAL -14 DAY)", false);
                 $data = $format;
             } else {
@@ -198,7 +203,7 @@ namespace app\api\controllers\front
             if (isset($metagame_cond)) {
                 $data = array_merge($data, $type_format);
                 // no need to round metagame for the homepage, data is just truncated to the top N archetypes
-                $data["metagame"] = $this->modelPlayer->countArchetypes($metagame_cond);
+                $data["metagame"] = $this->modelPlayer->countArchetypes($metagame_cond, true);
             }
             $this->content = SimpleJSON::encode($data, JSON_UNESCAPED_SLASHES);
         }

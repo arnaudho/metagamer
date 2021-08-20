@@ -7,6 +7,7 @@
     <li class="active"><a data-toggle="tab" href="#mtgmelee">MTG Melee</a></li>
     <li><a data-toggle="tab" href="#mtgmelee_decklists">MTG Melee - decklists (paste)</a></li>
     <li><a data-toggle="tab" href="#mtgmelee_decklists_old">MTG Melee - decklists (old)</a></li>
+    <li><a data-toggle="tab" href="#magicgg_decklists">Magic.gg</a></li>
     <li><a data-toggle="tab" href="#battlefy">Battlefy</a></li>
     <li><a data-toggle="tab" href="#battlefy_decklists">Battlefy - decklists</a></li>
 </ul>
@@ -70,6 +71,22 @@
         <form class="form-inline" method="post">
             <div class="form-group">
                 <input type="text" value="{if $content.count_waiting == 0}0{else}50{/if}" name="import-mtgmelee-decklists[count]" class="form-control">
+                <button type="submit" class="btn btn-primary">Import</button>
+            </div>
+        </form>
+    </div>
+    <div id="magicgg_decklists" class="tab-pane fade">
+        <h3>Magic.gg - Parse decklists</h3>
+
+        <form class="form-inline" method="post">
+            <div class="form-group">
+                <select name="import-magicgg[id_format]" class="form-control">
+                    <option value="" disabled{if !$content.format} selected{/if}>Choose a format</option>
+                    {foreach from=$content.list_formats item="format"}
+                        <option value="{$format.id_format}"{if $content.format.id_format == $format.id_format} selected{/if}>{$format.name_format}</option>
+                    {/foreach}
+                </select>
+                <input type="text" placeholder="Tournament URL" name="import-magicgg[url]" class="form-control">
                 <button type="submit" class="btn btn-primary">Import</button>
             </div>
         </form>

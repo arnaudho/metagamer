@@ -70,7 +70,7 @@ namespace app\main\models {
             }
             $data = $q->execute($this->handler);
             if (empty($data)) {
-                return false;
+                return array();
             }
             $mCard = new ModelCard();
             foreach ($data as $key => $item) {
@@ -221,6 +221,22 @@ namespace app\main\models {
             return $maindeck . "\r\n\r\n" . $sideboard;
         }
 
+        public function convertToTextFormat ($cards) {
+            $maindeck = "";
+            $sideboard = "";
+            foreach ($cards as $card) {
+                $card['name_card'] = explode("/", $card['name_card'], 2);
+                $card['name_card'] = $card['name_card'][0];
+                if ($card['count_main'] > 0) {
+                    $maindeck .= $card['count_main'] . " " . $card['name_card'] . "\r\n";
+                }
+                if ($card['count_side'] > 0) {
+                    $sideboard .= $card['count_side'] . " " . $card['name_card'] . "\r\n";
+                }
+            }
+            return $maindeck . "\r\nSideboard\r\n" . $sideboard;
+        }
+
         public function allByFormat ($pIdFormat, $pCond = null, $pFields = "") {
             if (!$pCond) {
                 $cond = Query::condition();
@@ -327,10 +343,14 @@ namespace app\main\models {
             return $q->execute($this->handler);
         }
 
-        public function countArchetypes ($pCondition = null) {
+        public function countArchetypes ($pCondition = null, $pWinrate = false) {
             if(!$pCondition)
                 $pCondition = Query::condition();
-            $q = Query::select("archetypes.id_archetype, name_archetype, image_archetype, COUNT(1) AS count", $this->table)
+            $select_fields = "archetypes.id_archetype, name_archetype, image_archetype, COUNT(DISTINCT players.id_player) AS count";
+            if ($pWinrate) {
+                $select_fields .= ", ROUND(SUM(result_match)/COUNT(1), 3) AS winrate_archetype, COUNT(1) AS total_matches_archetype";
+            }
+            $q = Query::select($select_fields, $this->table)
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = " . $this->table . ".id_tournament")
                 ->join("archetypes", Query::JOIN_INNER, "archetypes.id_archetype = " . $this->table . ".id_archetype")
                 ->andCondition($pCondition)
@@ -338,6 +358,9 @@ namespace app\main\models {
                 //->andWhere("archetypes.id_archetype", Query::NOT_IN, "(13, 73, 77, 83, 84, 92, 93, 94)", false)
                 ->groupBy("name_archetype")
                 ->order("FIELD (players.id_archetype, " . ModelArchetype::ARCHETYPE_OTHER_ID . "), COUNT(1)", "DESC");
+            if ($pWinrate) {
+                $q->join("matches", Query::JOIN_INNER, "matches.id_player = " . $this->table . ".id_player");
+            }
             $data = $q->execute($this->handler);
             $sum = 0;
             foreach ($data as $d) {

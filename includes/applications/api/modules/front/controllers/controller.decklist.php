@@ -69,7 +69,8 @@ namespace app\api\controllers\front {
                 Query::condition()
                     ->andWhere("players.id_archetype", Query::EQUAL, $id)
                     ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false),
-                true);
+                false);
+            // do not filter on decklists by archetype
             $this->content = SimpleJSON::encode($decklists, JSON_UNESCAPED_SLASHES);
         }
 
