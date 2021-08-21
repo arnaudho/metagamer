@@ -79,7 +79,7 @@ namespace app\api\models {
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
                 ->andCondition($cond)
                 ->groupBy("archetypes.id_archetype")
-                ->order("count_players", "DESC")
+                ->order("FIELD (players.id_archetype, " . \app\main\models\ModelArchetype::ARCHETYPE_OTHER_ID . "), count_players", "DESC")
                 ->execute($this->handler);
             return $data;
         }
