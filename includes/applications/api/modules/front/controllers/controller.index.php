@@ -57,9 +57,14 @@ namespace app\api\controllers\front
                 Core::checkRequiredGetVars('id_format') &&
                 $format = $this->modelFormat->getFormatById($_GET['id_format'])
             ) {
+                // TODO QUICKFIX for ALPHA version 20/08
+                // limit decklists to last format group
+                $ids_format = $this->modelFormat->getFormatsByIdFormat($format['id_format']);
+
                 // limit data to last 2 weeks of the format
                 $matrix_cond = Query::condition()
-                    ->andWhere("tournaments.id_format", Query::EQUAL, $format['id_format'])
+//                    ->andWhere("tournaments.id_format", Query::EQUAL, $format['id_format'])
+                    ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false)
                     ->andWhere("tournaments.date_tournament", Query::UPPER_EQUAL, "DATE_ADD('" . $format['max_date'] . "', INTERVAL -14 DAY)", false);
                 $data = $format;
             } elseif (
@@ -72,9 +77,14 @@ namespace app\api\controllers\front
                 // get last format from a given format_type
                 $format = $this->modelFormat->getFormatById($last_tournament['id_format']);
 
+                // TODO QUICKFIX for ALPHA version 20/08
+                // limit decklists to last format group
+                $ids_format = $this->modelFormat->getFormatsByIdFormat($format['id_format']);
+
                 // limit data to last 2 weeks of the format
                 $matrix_cond = Query::condition()
-                    ->andWhere("tournaments.id_format", Query::EQUAL, $format['id_format'])
+//                    ->andWhere("tournaments.id_format", Query::EQUAL, $format['id_format'])
+                    ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false)
                     ->andWhere("tournaments.date_tournament", Query::UPPER_EQUAL, "DATE_ADD('" . $format['max_date'] . "', INTERVAL -14 DAY)", false);
                 $data = $format;
             } else {
