@@ -216,8 +216,9 @@ namespace app\main\models {
             return $q->execute($this->handler);
         }
 
-        public static function formatManaCost ($pManaCost) {
-            $pManaCost = preg_replace('/(\{([\dxcpsurbgw])\})/i', '<i class="ms ms-$2"></i>', strtolower($pManaCost));
+        public static function formatManaCost ($pManaCost, $pColored = false) {
+            $class = $pColored ? " ms-color" : "";
+            $pManaCost = preg_replace('/(\{([\dxcpsurbgw])\})/i', '<i class="ms ms-$2' . $class . '"></i>', strtolower($pManaCost));
             $pManaCost = preg_replace('/(\{([\dxcpsurbgw])\/([\dxcpsurbgw])\})/i', '<i class="ms ms-ci-2 ms-ci-$2$3"></i>', strtolower($pManaCost));
             return $pManaCost;
         }

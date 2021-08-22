@@ -37,6 +37,7 @@ namespace app\main\controllers\front {
             $this->modelTournament = new ModelTournament();
             $this->modelFormat = new ModelFormat();
             $this->modelCard = new ModelCard();
+            Autoload::addStyle("mana/css/mana.min.css");
         }
 
         public function index () {
@@ -122,6 +123,11 @@ namespace app\main\controllers\front {
                             $metagame[$key]['checked'] = 1;
                         }
                     }
+                }
+                // format archetype colors
+                foreach ($metagame as $key => $item) {
+                    $colors = preg_replace('/(\w)/i', '{$1}', $item['colors_archetype']);
+                    $metagame[$key]['colors_archetype'] = ModelCard::formatManaCost($colors, true);
                 }
 
                 $param = $tournament ? "?id_tournament=" . $tournament['id_tournament'] : "?id_format=" . $format['id_format'];

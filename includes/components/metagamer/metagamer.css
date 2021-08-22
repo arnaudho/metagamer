@@ -113,6 +113,8 @@ table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor:
 .container h2.name-format { text-transform: uppercase; font-size: 40px; font-family: Metropolis, Arial, serif;}
 .container h2.name-tournament { font-family: 'Metropolis Thin', Arial, serif;}
 .dashboard-container .btn-default { font-size: 18px; margin-bottom: 18px;}
+.dashboard-container .table-standings .colors-archetype { vertical-align: middle;}
+.dashboard-container .table-standings .colors-archetype i.ms { font-size: 17px; margin: 1px 1px 1px 0;}
 
 /* SEARCH FORM */
 .container #search-form { margin-top: 40px; margin-bottom: 20px;}
@@ -262,6 +264,12 @@ table.table-leaderboard.leaderboard-detailed tbody tr td { font-size: 16px;}
 
 /* MANA SYMBOLS */
 .container i.ms { font-size: 20px; margin: 2px; border: 1px solid #DDDDDD; border-radius: 15px; padding: 4px;}
+.container i.ms.ms-color { border-color: #333333;}
+.container i.ms.ms-color.ms-w { background-color: #ffffe8;}
+.container i.ms.ms-color.ms-u { background-color: #d2e3ff;}
+.container i.ms.ms-color.ms-b { background-color: #cfc4cc;}
+.container i.ms.ms-color.ms-r { background-color: #ecad8e;}
+.container i.ms.ms-color.ms-g { background-color: #bdd5bf;}
 
 /* ARCHETYPE PAGE */
 .archetype-container { display: flex; margin-bottom: 30px;}

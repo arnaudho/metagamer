@@ -43,6 +43,8 @@ namespace app\main\models {
             return $res[0];
         }
 
+        // TODO decklist result : handle draws and player finish
+        // check in getDecklistsByCardId method
         public function getDecklistsByCondition ($pCond, $pFilter = false) {
             if (!$pCond) {
                 $cond = Query::condition();
@@ -346,7 +348,7 @@ namespace app\main\models {
         public function countArchetypes ($pCondition = null, $pWinrate = false) {
             if(!$pCondition)
                 $pCondition = Query::condition();
-            $select_fields = "archetypes.id_archetype, name_archetype, image_archetype, COUNT(DISTINCT players.id_player) AS count";
+            $select_fields = "archetypes.id_archetype, name_archetype, image_archetype, colors_archetype, COUNT(DISTINCT players.id_player) AS count";
             if ($pWinrate) {
                 $select_fields .= ", ROUND(SUM(result_match)/COUNT(1), 3) AS winrate_archetype, COUNT(1) AS total_matches_archetype";
             }
