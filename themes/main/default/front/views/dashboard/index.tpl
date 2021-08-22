@@ -70,6 +70,7 @@
         <table class="table table-hover table-condensed table-standings">
             <thead>
             <tr>
+                <th></th>
                 <th>Archetype</th>
                 <th>Count</th>
                 <th>Metagame %</th>
@@ -83,6 +84,7 @@
             <tbody>
             {foreach from=$content.metagame item="deck"}
                 <tr{if $deck.name_archetype == "Other"} class="active"{/if}>
+                    <td class="colors-archetype">{$deck.colors_archetype}</td>
                     <td class="name-archetype">{$deck.name_archetype}</td>
                     <td>{$deck.count}</td>
                     <td>{$deck.percent} %</td>
