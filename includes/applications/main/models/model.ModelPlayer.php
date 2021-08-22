@@ -52,7 +52,7 @@ namespace app\main\models {
             $q = Query::select(
                 "players.id_player AS id_decklist, people.id_people AS id_player, arena_id AS name_player,
                     tournaments.id_tournament, name_tournament, formats.id_format, name_format,
-                    archetypes.id_archetype, name_archetype, image_archetype,
+                    archetypes.id_archetype, name_archetype, image_archetype, colors_archetype,
                     IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins_decklist,
                     IF(SUM(result_match) IS NULL, COUNT(result_match), COUNT(result_match)-SUM(result_match)) AS loss_decklist,
                     IF(SUM(result_match) IS NULL, '0-0', CONCAT(SUM(result_match), '-', COUNT(result_match)-SUM(result_match))) AS result_decklist",
@@ -181,7 +181,7 @@ namespace app\main\models {
             $data = Query::select(
                 "players.id_player AS id_decklist, people.id_people AS id_player, arena_id AS name_player,
                     tournaments.id_tournament, name_tournament, date_tournament, image_archetype, count_main, count_side,
-                    formats.id_format, name_format, archetypes.id_archetype, name_archetype,
+                    formats.id_format, name_format, archetypes.id_archetype, name_archetype, colors_archetype,
                     IF(SUM(result_match) IS NULL, 0, SUM(result_match)) AS wins_decklist,
                     IF(SUM(result_match) IS NULL, COUNT(result_match), COUNT(result_match)-SUM(result_match)) AS loss_decklist,
                     IF(SUM(result_match) IS NULL, '0-0', CONCAT(SUM(result_match), '-', COUNT(result_match)-SUM(result_match))) AS result_decklist", $this->table)
@@ -389,6 +389,48 @@ namespace app\main\models {
                 ->execute($this->handler);
         }
 
+        // TODO sort colors
+        /**
+         * Get decklists colors
+         * ** do not handle colorless (C) mana for now
+         * ** get maindeck + sideboard cards
+         * @param $pIdDecklist
+         * @return array
+         */
+        public function getColorsByDecklistId ($pIdDecklist) {
+            $colors = array("W","U","B","R","G");
+            $data = Query::select("GROUP_CONCAT(mana_cost_card SEPARATOR '') AS mana_costs, GROUP_CONCAT(produced_mana_card SEPARATOR '') AS produced_mana", "player_card")
+                ->join("cards", Query::JOIN_INNER, "cards.id_card = player_card.id_card")
+                ->andWhere("id_player", Query::EQUAL, $pIdDecklist)
+                ->execute($this->handler);
+
+            $produced_mana = array();
+            if ($data[0]['produced_mana']) {
+                $chars = count_chars($data[0]['produced_mana'], 1);
+                foreach ($chars as $key => $char) {
+                    $produced_mana[] = chr($key);
+                }
+            } else {
+                trace_r("ERROR : no produced mana found");
+            }
+            $mana_costs = array();
+            if ($data[0]['mana_costs']) {
+                $chars = count_chars($data[0]['mana_costs'], 1);
+                foreach ($chars as $key => $char) {
+                    if (in_array(chr($key), $colors)) {
+                        $mana_costs[] = chr($key);
+                    }
+                }
+            } else {
+                trace_r("ERROR : no mana costs found");
+            }
+
+            $deck_colors = array_intersect($mana_costs, $produced_mana);
+            // sort by colors
+            $deck_colors = array_intersect($colors, $deck_colors);
+            return $deck_colors;
+        }
+
         public function getProLeaguePointsByEvent ($pTag = ModelPlayer::TAG_MPL, $pIdTournament = null) {
             $players = array();
             $player_points = array();
@@ -589,6 +631,19 @@ namespace app\main\models {
                 $id_player = array();
             }
             return $id_player ? $id_player[0]['id_player'] : null;
+        }
+
+        public function getLastDecklistIdByArchetypeId ($pIdArchetype, $pIdFormat = null) {
+            $q = Query::select("id_player", $this->table)
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->andWhere("players.id_archetype", Query::EQUAL, $pIdArchetype)
+                ->order("date_tournament", "DESC")
+                ->limit(0, 1);
+            if ($pIdFormat) {
+                $q->andWhere("tournaments.id_format", Query::EQUAL, $pIdFormat);
+            }
+            $id_decklist = $q->execute($this->handler);
+            return $id_decklist ? $id_decklist[0]['id_player'] : null;
         }
 
         public function getPlayerByFormatId ($pIdFormat, $pFields = "players.*") {

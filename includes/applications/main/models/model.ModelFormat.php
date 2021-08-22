@@ -25,6 +25,26 @@ namespace app\main\models {
             $this->typeFormat = $pIdTypeFormat;
         }
 
+        // TODO QUICKFIX for ALPHA version 20/08
+        public function getFormatsByIdFormat ($pIdFormat) {
+            $ids_format = array();
+            if ($format = $this->getTupleById($pIdFormat)) {
+                $ids_format = array($pIdFormat);
+                if (preg_match('/(.*) \- week \d/i', $format['name_format'], $name_format)) {
+                    $name_format = $name_format[1];
+                    $data = $this->all(
+                        Query::condition()
+                            ->andWhere("name_format", Query::LIKE, "'" . $name_format . "%'", false),
+                        "id_format"
+                    );
+                    foreach ($data as $item) {
+                        $ids_format[] = $item['id_format'];
+                    }
+                }
+            }
+            return $ids_format;
+        }
+
         public function getArchetypeRules () {
             return ModelArchetype::getArchetypesRules($this->typeFormat);
         }

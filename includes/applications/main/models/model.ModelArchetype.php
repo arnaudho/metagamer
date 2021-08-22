@@ -140,6 +140,41 @@ namespace app\main\models {
             return $archetypes;
         }
 
+        public function getByFormatByMinCount ($pIdFormat, $pMinCount, $pExcludeOther = true) {
+            $q = Query::select("archetypes.*, COUNT(1) AS count_players", "archetypes")
+                ->join("players", Query::JOIN_INNER, "players.id_archetype = archetypes.id_archetype")
+                ->join("tournaments", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament AND id_format = $pIdFormat")
+                ->groupBy("name_archetype")
+                ->having("COUNT(1) > $pMinCount", false)
+                ->order("COUNT(1)", "DESC");
+            if ($pExcludeOther) {
+                $q->andWhere($this->table . "." . $this->id, Query::NOT_EQUAL, self::ARCHETYPE_OTHER_ID);
+            }
+            $archetypes = $q->execute($this->handler);
+            return $archetypes;
+        }
+
+        public function getArchetypesByIdFormat($pIdFormat)
+        {
+            // get count players in format
+            $count_players = Query::select("COUNT(DISTINCT players.id_player) AS nb", "players")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->andWhere("tournaments.id_format", Query::EQUAL, $pIdFormat)
+                ->execute($this->handler);
+            $count_players = $count_players[0]['nb'];
+            if (!$count_players) {
+                return false;
+            }
+            $data = Query::select(
+                "archetypes.id_archetype, name_archetype, colors_archetype", $this->table)
+                ->join("players", Query::JOIN_INNER, "archetypes.id_archetype = players.id_archetype")
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->andWhere("tournaments.id_format", Query::EQUAL, $pIdFormat)
+                ->groupBy("archetypes.id_archetype")
+                ->execute($this->handler);
+            return $data;
+        }
+
         /**
          * Returns archetype according to cards found in decklist
          * @param $pDecklist
@@ -147,33 +182,40 @@ namespace app\main\models {
          * @return int|null|string
          */
         static public function decklistMapper ($pDecklist, $pIdTypeFormat) {
+            $archetype = null;
             $mapping = self::getArchetypesRules($pIdTypeFormat);
-            $archetype = self::ARCHETYPE_OTHER;
-            foreach ($mapping as $name => $deck) {
-                if (!array_key_exists('contains', $deck)) {
-                    continue;
-                }
-                $next = false;
-                foreach ($deck['contains'] as $key => $card) {
-                    if (!preg_match_all('/' . $card . '/i', $pDecklist, $output_array)) {
-                        $next = true;
-                        break;
+            if ($mapping) {
+                $archetype = self::ARCHETYPE_OTHER;
+
+                // TODO match exact card name ?
+                foreach ($mapping as $name => $deck) {
+                    if (!array_key_exists('contains', $deck)) {
+                        continue;
                     }
-                }
-                if ($next) {
-                    continue;
-                }
-                if (array_key_exists('exclude', $deck)) {
-                    foreach ($deck['exclude'] as $key => $card) {
-                        if (preg_match_all('/' . $card . '/i', $pDecklist, $output_array)) {
+                    $next = false;
+                    foreach ($deck['contains'] as $key => $card) {
+                        $card = str_replace("/", "\/", $card);
+                        if (!preg_match_all('/' . $card . '/i', $pDecklist, $output_array)) {
                             $next = true;
                             break;
                         }
                     }
-                }
-                if (!$next) {
-                    $archetype = $name;
-                    break;
+                    if ($next) {
+                        continue;
+                    }
+                    if (array_key_exists('exclude', $deck)) {
+                        foreach ($deck['exclude'] as $key => $card) {
+                            $card = str_replace("/", "\/", $card);
+                            if (preg_match_all('/' . $card . '/i', $pDecklist, $output_array)) {
+                                $next = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!$next) {
+                        $archetype = $name;
+                        break;
+                    }
                 }
             }
             return $archetype;
