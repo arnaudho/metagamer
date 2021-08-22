@@ -345,7 +345,7 @@ namespace app\main\models {
             return $q->execute($this->handler);
         }
 
-        public function countArchetypes ($pCondition = null, $pWinrate = false) {
+        public function countArchetypes ($pCondition = null, $pWinrate = false, $pLimit = null) {
             if(!$pCondition)
                 $pCondition = Query::condition();
             $select_fields = "archetypes.id_archetype, name_archetype, image_archetype, colors_archetype, COUNT(DISTINCT players.id_player) AS count";
@@ -360,6 +360,9 @@ namespace app\main\models {
                 //->andWhere("archetypes.id_archetype", Query::NOT_IN, "(13, 73, 77, 83, 84, 92, 93, 94)", false)
                 ->groupBy("name_archetype")
                 ->order("FIELD (players.id_archetype, " . ModelArchetype::ARCHETYPE_OTHER_ID . "), COUNT(1)", "DESC");
+            if ($pLimit) {
+                $q->limit(0, $pLimit);
+            }
             if ($pWinrate) {
                 $q->join("matches", Query::JOIN_INNER, "matches.id_player = " . $this->table . ".id_player");
             }

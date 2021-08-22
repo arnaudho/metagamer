@@ -212,8 +212,9 @@ namespace app\api\controllers\front
             }
             if (isset($metagame_cond)) {
                 $data = array_merge($data, $type_format);
+                $limit = isset($_GET['limit']) ? intval($_GET['limit']) : null;
                 // no need to round metagame for the homepage, data is just truncated to the top N archetypes
-                $data["metagame"] = $this->modelPlayer->countArchetypes($metagame_cond, true);
+                $data["metagame"] = $this->modelPlayer->countArchetypes($metagame_cond, true, $limit);
             }
             $this->content = SimpleJSON::encode($data, JSON_UNESCAPED_SLASHES);
         }
