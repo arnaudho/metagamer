@@ -63,6 +63,7 @@ namespace app\api\controllers\front {
                     422, "Archetype ID $id not found"
                 );
             }
+            $decklists = array();
             // TODO QUICKFIX for ALPHA version 20/08
             $id_type_format = null;
             if (
@@ -73,13 +74,15 @@ namespace app\api\controllers\front {
             }
             // limit decklists to last format group
             $last_format_id = $this->modelFormat->getLastFormatIdByArchetypeId($id, $id_type_format);
-            $ids_format = $this->modelFormat->getFormatsByIdFormat($last_format_id);
-            $decklists = $this->modelPlayer->getDecklistsByCondition(
-                Query::condition()
-                    ->andWhere("players.id_archetype", Query::EQUAL, $id)
-                    ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false),
-                false);
-            // do not filter on decklists by archetype
+            if ($last_format_id) {
+                $ids_format = $this->modelFormat->getFormatsByIdFormat($last_format_id);
+                $decklists = $this->modelPlayer->getDecklistsByCondition(
+                    Query::condition()
+                        ->andWhere("players.id_archetype", Query::EQUAL, $id)
+                        ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false),
+                    false);
+                // do not filter on decklists by archetype
+            }
             $this->content = SimpleJSON::encode($decklists, JSON_UNESCAPED_SLASHES);
         }
 
