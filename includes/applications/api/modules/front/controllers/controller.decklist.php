@@ -7,6 +7,7 @@ namespace app\api\controllers\front {
     use app\main\models\ModelPeople;
     use app\main\models\ModelPlayer;
     use app\main\models\ModelTournament;
+    use app\main\models\ModelTypeFormat;
     use core\application\Core;
     use core\application\RestController;
     use core\data\SimpleJSON;
@@ -20,6 +21,7 @@ namespace app\api\controllers\front {
         protected $modelFormat;
         protected $modelArchetype;
         protected $modelTournament;
+        protected $modelTypeFormat;
 
         public function __construct()
         {
@@ -30,6 +32,7 @@ namespace app\api\controllers\front {
             $this->modelFormat = new ModelFormat();
             $this->modelArchetype = new ModelArchetype();
             $this->modelTournament = new ModelTournament();
+            $this->modelTypeFormat = new ModelTypeFormat();
             parent::__construct();
         }
 
@@ -60,10 +63,16 @@ namespace app\api\controllers\front {
                     422, "Archetype ID $id not found"
                 );
             }
-
             // TODO QUICKFIX for ALPHA version 20/08
+            $id_type_format = null;
+            if (
+                isset($_GET['format_type']) &&
+                $type_format = $this->modelTypeFormat->getTupleById($_GET['format_type'])
+            ) {
+                $id_type_format = $_GET['format_type'];
+            }
             // limit decklists to last format group
-            $last_format_id = $this->modelFormat->getLastFormatIdByArchetypeId($id);
+            $last_format_id = $this->modelFormat->getLastFormatIdByArchetypeId($id, $id_type_format);
             $ids_format = $this->modelFormat->getFormatsByIdFormat($last_format_id);
             $decklists = $this->modelPlayer->getDecklistsByCondition(
                 Query::condition()

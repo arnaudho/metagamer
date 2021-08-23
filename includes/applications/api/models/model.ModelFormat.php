@@ -32,13 +32,17 @@ namespace app\api\models {
             return $ids_format;
         }
 
-        public function getLastFormatIdByArchetypeId ($pIdArchetype) {
-            $data = Query::select("id_format", "players")
+        // TODO QUICKFIX for ALPHA version 20/08 : added id_type_format parameter to make sure we get the right formats
+        public function getLastFormatIdByArchetypeId ($pIdArchetype, $pIdTypeFormat = null) {
+            $q = Query::select("tournaments.id_format", "players")
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
                 ->andWhere("id_archetype", Query::EQUAL, $pIdArchetype)
                 ->order("date_tournament", "DESC")
-                ->limit(0, 1)
-                ->execute($this->handler);
+                ->limit(0, 1);
+            if ($pIdTypeFormat) {
+                $q->join("formats", Query::JOIN_INNER, "tournaments.id_format = formats.id_format AND formats.id_type_format = $pIdTypeFormat");
+            }
+            $data = $q->execute($this->handler);
             if (empty($data)) {
                 return false;
             }
