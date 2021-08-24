@@ -2,21 +2,25 @@
 namespace app\api\controllers\front {
 
     use app\api\models\ModelFormat;
+    use app\main\models\ModelTournament;
     use app\main\models\ModelTypeFormat;
     use core\application\Core;
     use core\application\RestController;
     use core\data\SimpleJSON;
+    use core\db\Query;
 
     class format extends RestController
     {
         protected $modelFormat;
         protected $modelTypeFormat;
+        protected $modelTournament;
 
         public function __construct()
         {
             $this->format = self::FORMAT_JSON;
             $this->modelFormat = new ModelFormat();
             $this->modelTypeFormat = new ModelTypeFormat();
+            $this->modelTournament = new ModelTournament();
             parent::__construct();
         }
 
@@ -32,6 +36,18 @@ namespace app\api\controllers\front {
                     422, "Format ID $id not found"
                 );
             }
+            // TODO QUICKFIX for ALPHA version 20/08
+            // limit decklists to last format group
+            $ids_format = $this->modelFormat->getFormatsByIdFormat($id);
+            // no date limit for full format data
+            $format_cond = Query::condition()
+                ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false)
+                ->order("date_tournament", "DESC");
+            $format['tournaments'] = $this->modelTournament->all($format_cond, "id_tournament, name_tournament, date_tournament, url_tournament, id_format");
+            $format['count_tournaments'] = count($format['tournaments']);
+            $format['max_date'] = $format['tournaments'][0]['date_tournament'];
+            $format['min_date'] = $format['tournaments'][count($format['tournaments'])-1]['date_tournament'];
+
             $this->content = SimpleJSON::encode($format, JSON_UNESCAPED_SLASHES);
         }
 

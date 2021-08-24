@@ -178,7 +178,7 @@ namespace app\api\controllers\front
             $data['archetypes'] = $archetypes;
 
             if ($format) {
-                $data['tournaments'] = $this->modelTournament->all($matrix_cond, "id_tournament, name_tournament, date_tournament");
+                $data['tournaments'] = $this->modelTournament->all($matrix_cond, "id_tournament, name_tournament, date_tournament, url_tournament");
             }
 
             $this->content = SimpleJSON::encode($data, JSON_UNESCAPED_SLASHES);

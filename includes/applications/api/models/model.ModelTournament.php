@@ -15,7 +15,7 @@ namespace app\api\models {
         // TODO handle tournament icons
         public function getTournamentById ($pIdTournament) {
             $data = Query::select(
-                "tournaments.id_tournament, name_tournament, formats.id_format, name_format,
+                "tournaments.id_tournament, name_tournament, url_tournament, formats.id_format, name_format,
                     date_tournament, COUNT(DISTINCT id_player) AS count_players", $this->table)
                 ->join("formats", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
                 ->join("players", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament")
@@ -42,7 +42,7 @@ namespace app\api\models {
                 $cond = clone $pCondition;
             }
             $data = Query::select(
-                "tournaments.id_tournament, name_tournament, date_tournament,
+                "tournaments.id_tournament, name_tournament, date_tournament, url_tournament,
                     COUNT(DISTINCT players.id_player) AS count_players", $this->table)
                 ->join("players", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
                 ->andCondition($cond)
@@ -54,7 +54,7 @@ namespace app\api\models {
 
         public function getTournamentsByIdTypeFormat ($pIdTypeFormat, $pLimit = 10) {
             $data = Query::select(
-                "tournaments.id_tournament, name_tournament, date_tournament,
+                "tournaments.id_tournament, name_tournament, date_tournament, url_tournament,
                     formats.id_format, name_format,
                     COUNT(DISTINCT players.id_player) AS count_players", $this->table)
                 ->join("players", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
