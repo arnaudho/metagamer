@@ -115,6 +115,7 @@ namespace app\main\models {
             foreach ($matches as $match) {
                 $data[$match['id_archetype']]['percent'] = round(100*$data[$match['id_archetype']]['wins']/$match['count'], 1);
                 $data[$match['id_archetype']]['count'] = $match['count'];
+                $data[$match['id_archetype']]['loss'] = $match['count']-$data[$match['id_archetype']]['wins'];
                 // exclude mirror matches
                 if ($match['id_archetype'] != $pArchetypeId) {
                     $total_matches += $match['count'];
@@ -127,6 +128,7 @@ namespace app\main\models {
             array_unshift($data, array(
                 "name_archetype" => "total",
                 "wins"           => $total_wins,
+                "loss"           => $total_matches-$total_wins,
                 "count"          => $total_matches,
                 "percent"        => $total_matches == 0 ? '-' : round((100*$total_wins/$total_matches), 1),
                 "id_archetype"   => 0
