@@ -152,10 +152,13 @@ namespace app\api\controllers\front
                     // divide mirror count
                     if ($matchup['id_archetype'] == $archetype['id_archetype']) {
                         $winrate[$m]['count'] = ceil($matchup['count'] / 2);
-                    }/*
+                    }
                     if (isset($matchup['percent']) && isset($matchup['count']) && $matchup['count'] != 0) {
-                        // League Weekend : count x2
                         $deviation = StatsUtils::getStandardDeviation($matchup['percent'], $matchup['count'], StatsUtils::Z95);
+                        if ($deviation <= 10) {
+                            $winrate[$m]['highlight'] = 1;
+                        }
+                        /*
                         $winrate[$m]['deviation'] = $deviation;
                         $winrate[$m]['deviation_up'] = round($matchup['percent'] + $deviation);
                         if ($winrate[$m]['deviation_up'] > 100) {
@@ -164,11 +167,11 @@ namespace app\api\controllers\front
                         $winrate[$m]['deviation_down'] = round($matchup['percent'] - $deviation);
                         if ($winrate[$m]['deviation_down'] < 0) {
                             $winrate[$m]['deviation_down'] = 0;
-                        }
+                        }*/
                     } else {
-                        $winrate[$m]['deviation_down'] = 0;
-                        $winrate[$m]['deviation_up'] = 100;
-                    }*/
+//                        $winrate[$m]['deviation_down'] = 0;
+//                        $winrate[$m]['deviation_up'] = 100;
+                    }
                 }
                 $archetypes[$key]['winrates'] = $winrate;
                 $header[] = $archetype['name_archetype'];
