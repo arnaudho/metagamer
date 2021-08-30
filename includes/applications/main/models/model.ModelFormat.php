@@ -64,6 +64,25 @@ namespace app\main\models {
             return $data[0];
         }
 
+        public function allWithDates ($pCondition = null, $pLimit = null) {
+            $cond = Query::condition();
+            if ($pCondition) {
+                $cond = clone $pCondition;
+            }
+            $q = Query::select("formats.*, name_type_format, DATE_FORMAT(MIN(date_tournament), '%d/%m') AS date_min,
+                    DATE_FORMAT(MAX(date_tournament), '%d/%m') AS date_max", $this->table)
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
+                ->join("type_format", Query::JOIN_INNER, "type_format.id_type_format = formats.id_type_format")
+                ->andCondition($cond)
+                ->groupBy("id_format")
+                ->order("MAX(date_tournament)", "DESC");
+            if ($pLimit) {
+                $q->limit(0, intval($pLimit));
+            }
+            $data = $q->execute($this->handler);
+            return $data;
+        }
+
         public function allOrdered ($pCondition = null, $pFields = "*") {
             $cond = Query::condition();
             if ($pCondition) {

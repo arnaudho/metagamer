@@ -52,24 +52,24 @@ namespace app\main\controllers\front {
             $ids_format = array();
             $full_formats = isset($_GET['full']) && $_GET['full'] == 1;
             if ($full_formats) {
-                $data = $this->modelFormat->all(Query::condition()->order("id_format", "DESC"));
+                $data = $this->modelFormat->allWithDates(null);
             } else {
                 $this->addContent("link_full", $link_full = RoutingHandler::rewrite("format", "") . "?full=1");
-                $data = $this->modelFormat->all(Query::condition()->order("id_format", "DESC")->limit(0, 8));
+                $data = $this->modelFormat->allWithDates(null, 8);
             }
             $formats = array();
             foreach ($data as $format) {
                 if (!$full_formats) {
                     $ids_format[] = $format['id_format'];
                 }
-                $formats[$format['id_format']] = array(
+                $formats[$format['id_format']] = array_merge($format, array(
                     "name_format"    => $format['name_format'],
                     "link_dashboard" => RoutingHandler::rewrite("dashboard", "") . "?id_format=" . $format['id_format'],
                     "link_other"     => RoutingHandler::rewrite("archetype", "lists") . "?id_archetype=" . ModelArchetype::ARCHETYPE_OTHER_ID . "&id_format=" . $format['id_format'],
                     "link_metagame"  => RoutingHandler::rewrite("tournament", "metagame") . "?id_format=" . $format['id_format'],
                     "tournaments"    => array(),
                     "opened"         => $count_open-- > 0 ? 1 : 0
-                );
+                ));
             }
             $tournaments_cond = Query::condition();
             if (!$full_formats && !empty($ids_format)) {
