@@ -359,7 +359,7 @@ namespace app\main\models {
                 // exclude archetypes from dashboard
                 //->andWhere("archetypes.id_archetype", Query::NOT_IN, "(13, 73, 77, 83, 84, 92, 93, 94)", false)
                 ->groupBy("name_archetype")
-                ->order("FIELD (players.id_archetype, " . ModelArchetype::ARCHETYPE_OTHER_ID . "), COUNT(1) DESC, name_archetype");
+                ->order("FIELD (players.id_archetype, " . ModelArchetype::ARCHETYPE_OTHER_ID . "), count DESC, name_archetype");
             if ($pWinrate) {
                 $q->join("matches", Query::JOIN_INNER, "matches.id_player = " . $this->table . ".id_player");
             }
