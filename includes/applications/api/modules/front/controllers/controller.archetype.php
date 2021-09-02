@@ -52,7 +52,8 @@ namespace app\api\controllers\front {
             $ids_format = $this->modelFormat->getFormatsByIdFormat($id);
             $archetypes = $this->modelArchetype->getArchetypesDataByCond(
                 Query::condition()
-                    ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false)
+                    ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false),
+                true
             );
             $this->content = SimpleJSON::encode($archetypes, JSON_UNESCAPED_SLASHES);
         }

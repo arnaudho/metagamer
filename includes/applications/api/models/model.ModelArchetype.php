@@ -33,7 +33,7 @@ namespace app\api\models {
         }
 
         // TODO QUICKFIX for ALPHA version 20/08
-        public function getArchetypesDataByCond ($pCondition) {
+        public function getArchetypesDataByCond ($pCondition, $pExcludeMirror = true) {
             if (!$pCondition) {
                 return false;
             } else {
@@ -48,7 +48,7 @@ namespace app\api\models {
             if (!$count_players) {
                 return false;
             }
-            $data = Query::select(
+            $q = Query::select(
                 "archetypes.id_archetype, name_archetype, image_archetype, colors_archetype,
                     COUNT(DISTINCT players.id_player) AS count_players,
                     ROUND(COUNT(DISTINCT players.id_player)/$count_players, 3) AS meta_share_archetype,
@@ -58,8 +58,11 @@ namespace app\api\models {
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
                 ->andCondition($cond)
                 ->groupBy("archetypes.id_archetype")
-                ->order("FIELD (players.id_archetype, " . \app\main\models\ModelArchetype::ARCHETYPE_OTHER_ID . "), count_players", "DESC")
-                ->execute($this->handler);
+                ->order("FIELD (players.id_archetype, " . \app\main\models\ModelArchetype::ARCHETYPE_OTHER_ID . "), count_players", "DESC");
+            if ($pExcludeMirror) {
+                $q->join("players op", Query::JOIN_INNER, "matches.opponent_id_player = op.id_player AND players.id_archetype != op.id_archetype");
+            }
+            $data = $q->execute($this->handler);
             return $data;
         }
     }

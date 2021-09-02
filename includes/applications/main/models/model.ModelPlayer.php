@@ -345,7 +345,7 @@ namespace app\main\models {
             return $q->execute($this->handler);
         }
 
-        public function countArchetypes ($pCondition = null, $pWinrate = false, $pLimit = null) {
+        public function countArchetypes ($pCondition = null, $pWinrate = false, $pExcludeMirror = true, $pLimit = null) {
             if(!$pCondition)
                 $pCondition = Query::condition();
             $select_fields = "archetypes.id_archetype, name_archetype, image_archetype, colors_archetype, COUNT(DISTINCT players.id_player) AS count";
@@ -362,6 +362,9 @@ namespace app\main\models {
                 ->order("FIELD (players.id_archetype, " . ModelArchetype::ARCHETYPE_OTHER_ID . "), count DESC, name_archetype");
             if ($pWinrate) {
                 $q->join("matches", Query::JOIN_INNER, "matches.id_player = " . $this->table . ".id_player");
+                if ($pExcludeMirror) {
+                    $q->join("players op", Query::JOIN_INNER, "matches.opponent_id_player = op.id_player AND players.id_archetype != op.id_archetype");
+                }
             }
             $data = $q->execute($this->handler);
             $sum = 0;
@@ -395,6 +398,7 @@ namespace app\main\models {
         }
 
         // TODO sort colors
+        // TODO get produced mana only from lands
         /**
          * Get decklists colors
          * ** do not handle colorless (C) mana for now
