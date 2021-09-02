@@ -359,10 +359,7 @@ namespace app\main\models {
                 // exclude archetypes from dashboard
                 //->andWhere("archetypes.id_archetype", Query::NOT_IN, "(13, 73, 77, 83, 84, 92, 93, 94)", false)
                 ->groupBy("name_archetype")
-                ->order("FIELD (players.id_archetype, " . ModelArchetype::ARCHETYPE_OTHER_ID . "), COUNT(1)", "DESC");
-            if ($pLimit) {
-                $q->limit(0, $pLimit);
-            }
+                ->order("FIELD (players.id_archetype, " . ModelArchetype::ARCHETYPE_OTHER_ID . "), COUNT(1) DESC, name_archetype");
             if ($pWinrate) {
                 $q->join("matches", Query::JOIN_INNER, "matches.id_player = " . $this->table . ".id_player");
             }
@@ -373,6 +370,9 @@ namespace app\main\models {
             }
             foreach ($data as &$d) {
                 $d['percent'] = round(100*$d['count']/$sum, 1);
+            }
+            if ($pLimit) {
+                $data = array_slice($data, 0, $pLimit);
             }
             return $data;
         }
