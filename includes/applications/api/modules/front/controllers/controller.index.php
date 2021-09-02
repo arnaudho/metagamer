@@ -60,12 +60,15 @@ namespace app\api\controllers\front
                 // TODO QUICKFIX for ALPHA version 20/08
                 // limit decklists to last format group
                 $ids_format = $this->modelFormat->getFormatsByIdFormat($format['id_format']);
+                $ids_tournament = $this->modelTournament->getLastTournaments(Query::condition()
+                    ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false), 32, 10);
 
                 // limit data to last 2 weeks of the format
                 $matrix_cond = Query::condition()
 //                    ->andWhere("tournaments.id_format", Query::EQUAL, $format['id_format'])
                     ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false)
-                    ->andWhere("tournaments.date_tournament", Query::UPPER_EQUAL, "DATE_ADD('" . $format['max_date'] . "', INTERVAL -14 DAY)", false);
+//                    ->andWhere("tournaments.date_tournament", Query::UPPER_EQUAL, "DATE_ADD('" . $format['max_date'] . "', INTERVAL -14 DAY)", false)
+                    ->andWhere("tournaments.id_tournament", Query::IN, "(" . implode(",", $ids_tournament) . ")", false);
                 $data = $format;
             } elseif (
                 Core::checkRequiredGetVars('id_type_format') &&
@@ -80,12 +83,15 @@ namespace app\api\controllers\front
                 // TODO QUICKFIX for ALPHA version 20/08
                 // limit decklists to last format group
                 $ids_format = $this->modelFormat->getFormatsByIdFormat($format['id_format']);
+                $ids_tournament = $this->modelTournament->getLastTournaments(Query::condition()
+                    ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false), 32, 10);
 
                 // limit data to last 2 weeks of the format
                 $matrix_cond = Query::condition()
 //                    ->andWhere("tournaments.id_format", Query::EQUAL, $format['id_format'])
                     ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false)
-                    ->andWhere("tournaments.date_tournament", Query::UPPER_EQUAL, "DATE_ADD('" . $format['max_date'] . "', INTERVAL -14 DAY)", false);
+//                    ->andWhere("tournaments.date_tournament", Query::UPPER_EQUAL, "DATE_ADD('" . $format['max_date'] . "', INTERVAL -14 DAY)", false)
+                    ->andWhere("tournaments.id_tournament", Query::IN, "(" . implode(",", $ids_tournament) . ")", false);
                 $data = $format;
             } else {
                 $this->throwError(
@@ -201,12 +207,15 @@ namespace app\api\controllers\front
                 // TODO QUICKFIX for ALPHA version 20/08
                 // get formats group -- all weeks
                 $ids_format = $this->modelFormat->getFormatsByIdFormat($format['id_format']);
+                $ids_tournament = $this->modelTournament->getLastTournaments(Query::condition()
+                    ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false), 32, 10);
 
                 // limit data to last 2 weeks of the format
                 $metagame_cond = Query::condition()
 //                    ->andWhere("tournaments.id_format", Query::EQUAL, $format['id_format'])
                     ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false)
-                    ->andWhere("tournaments.date_tournament", Query::UPPER_EQUAL, "DATE_ADD('" . $format['max_date'] . "', INTERVAL -14 DAY)", false);
+//                    ->andWhere("tournaments.date_tournament", Query::UPPER_EQUAL, "DATE_ADD('" . $format['max_date'] . "', INTERVAL -14 DAY)", false)
+                    ->andWhere("tournaments.id_tournament", Query::IN, "(" . implode(",", $ids_tournament) . ")", false);
                 $data = $format;
             } else {
                 $this->throwError(

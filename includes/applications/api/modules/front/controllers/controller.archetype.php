@@ -3,6 +3,7 @@ namespace app\api\controllers\front {
 
     use app\api\models\ModelArchetype;
     use app\api\models\ModelFormat;
+    use app\api\models\ModelTournament;
     use core\application\Core;
     use core\application\RestController;
     use core\data\SimpleJSON;
@@ -12,12 +13,14 @@ namespace app\api\controllers\front {
     {
         protected $modelFormat;
         protected $modelArchetype;
+        protected $modelTournament;
 
         public function __construct()
         {
             $this->format = self::FORMAT_JSON;
             $this->modelFormat = new ModelFormat();
             $this->modelArchetype = new ModelArchetype();
+            $this->modelTournament = new ModelTournament();
             parent::__construct();
         }
 
@@ -49,10 +52,15 @@ namespace app\api\controllers\front {
                 );
             }
             // TODO QUICKFIX for ALPHA version 20/08
+            // merge formats + only last 10 tournaments
             $ids_format = $this->modelFormat->getFormatsByIdFormat($id);
+            $ids_tournament = $this->modelTournament->getLastTournaments(Query::condition()
+                ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false), 32, 10);
+
             $archetypes = $this->modelArchetype->getArchetypesDataByCond(
                 Query::condition()
-                    ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false),
+                    ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false)
+                    ->andWhere("tournaments.id_tournament", Query::IN, "(" . implode(",", $ids_tournament) . ")", false),
                 true
             );
             $this->content = SimpleJSON::encode($archetypes, JSON_UNESCAPED_SLASHES);

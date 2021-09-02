@@ -111,6 +111,30 @@ namespace app\main\models {
             return $data[0];
         }
 
+        // TODO QUICKFIX for ALPHA version 20/08
+        public function getLastTournaments ($pCondition, $pLimitPlayers = 32, $pLimit = 10) {
+            if (!$pCondition) {
+                return false;
+            } else {
+                $cond = clone $pCondition;
+            }
+            $data = Query::select(
+                "tournaments.id_tournament,
+                    COUNT(DISTINCT players.id_player) AS count_players", $this->table)
+                ->join("players", Query::JOIN_INNER, "tournaments.id_tournament = players.id_tournament")
+                ->andCondition($cond)
+                ->groupBy("tournaments.id_tournament")
+                ->having("count_players >= $pLimitPlayers", false)
+                ->order("tournaments.date_tournament DESC, name_tournament")
+                ->limit(0, $pLimit)
+                ->execute($this->handler);
+            $ids = array();
+            foreach ($data as $item) {
+                $ids[] = $item['id_tournament'];
+            }
+            return $ids;
+        }
+
         public function searchTournamentsByName ($pName, $pLimit = 10) {
             $q = Query::select("tournaments.*, COUNT(1) AS count_players", $this->table)
                 ->join("players", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament")
