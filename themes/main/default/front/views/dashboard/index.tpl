@@ -65,6 +65,9 @@
             </div>
         </form>
 
+        <a href="job/archetypecolors/?id_format={$content.format.id_format}"
+           class="btn btn-default" target="_blank">Update archetype colors <span class="glyphicon glyphicon-new-window"></span></a>
+
         <table class="table table-hover table-condensed table-standings">
             <thead>
             <tr>
