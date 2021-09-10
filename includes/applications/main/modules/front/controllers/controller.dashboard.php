@@ -310,6 +310,7 @@ namespace app\main\controllers\front {
 
                 // fix name display
                 $words = str_word_count($archetype['name_archetype'], 1);
+                $archetypes[$key]['name_raw_archetype'] = $archetypes[$key]['name_archetype'];
                 if (count($words) == 2) {
                     $archetypes[$key]['name_archetype'] = $words[0] . ' <br />' . $words[1];
                 }

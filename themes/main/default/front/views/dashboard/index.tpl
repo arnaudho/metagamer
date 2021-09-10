@@ -40,27 +40,25 @@
             <button type="submit" class="btn btn-default">Winrate matrix <span class="glyphicon glyphicon-th"></span></button>
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-default">
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingTwo">
-                            <h4 class="panel-title">
-                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    Select which archetypes will be displayed in the winrate matrix
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                            <div class="panel-body">
-                                {foreach from=$content.metagame item="deck"}
-                                    {if $deck.name_archetype != "Other"}
-                                        <div class="checkbox">
-                                            <label>
-                                                <input name="archetypes-select[{$deck.id_archetype}]" type="checkbox" value="{$deck.id_archetype}"{if $deck.checked == 1} checked{/if}>
-                                                {$deck.name_archetype} <span class="small">({$deck.percent} %)</span>
-                                            </label>
-                                        </div>
-                                    {/if}
-                                {/foreach}
-                            </div>
+                    <div class="panel-heading" role="tab" id="headingTwo">
+                        <h4 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Select which archetypes will be displayed in the winrate matrix
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                        <div class="panel-body">
+                            {foreach from=$content.metagame item="deck"}
+                                {if $deck.name_archetype != "Other"}
+                                    <div class="checkbox">
+                                        <label>
+                                            <input name="archetypes-select[{$deck.id_archetype}]" type="checkbox" value="{$deck.id_archetype}"{if $deck.checked == 1} checked{/if}>
+                                            {$deck.name_archetype} <span class="small">({$deck.percent} %)</span>
+                                        </label>
+                                    </div>
+                                {/if}
+                            {/foreach}
                         </div>
                     </div>
                 </div>

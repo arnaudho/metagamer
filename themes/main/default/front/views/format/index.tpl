@@ -36,6 +36,7 @@
                         <span class="glyphicon glyphicon-folder-close format-icon"></span>
                         {$format.name_format}
                     </a>
+                    <span style="font-size: 11px; margin: 0 10px;">{$format.date_min}{if $format.date_min != $format.date_max} - {$format.date_max}{/if}</span>
                 </h4>
                 <div class="collapse {if $format.opened==1}in{/if}" id="collapse-format-{$id_format}">
                     <ul>

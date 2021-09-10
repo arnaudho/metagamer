@@ -99,55 +99,97 @@
             {/foreach}
         </ul>
     {/if}
-
-    {* TODO export texte *}
-
-    {*TODO change format -- check last email*}
-
-    <div style="margin-top: 40px;">
-        <table>
-            <tbody>
-            <tr style="background-color: lightblue;">
-                <th>Archetype</th>
-                <th>% metagame</th>
-                <th class="matchup-total"><div class="matchup-total-cell">WINRATE vs. Metagame</div></th>
-                {foreach from=$content.archetypes item="archetype"}
-                    <th class="matchup-detail"><div>vs <span class="matchup-archetype-name">{$archetype.name_archetype}</span></div></th>
-                {/foreach}
-            </tr>
-            {foreach from=$content.archetypes item="archetype"}
-                <tr>
-                    <td rowspan="2">
-                        <div class="archetype-name">{$archetype.name_archetype}</div>
-                    </td>
-                    <td>
-                        <div class="archetype-count">{$archetype.count}</div>
-                    </td>
-                    {foreach from=$archetype.winrates item="deck"}
-                        <td>
-                            {if $deck.percent!==null}
-                                <div class="matchup-percent">{$deck.percent}<sup>%</sup></div>
-                            {else}
-                                -
-                            {/if}
-                        </td>
-                    {/foreach}
-                </tr>
-                <tr>
-                    <td>{$archetype.percent}<sup>%</sup></td>
-                    {foreach from=$archetype.winrates item="deck"}
-                        <td>
-                            {if $deck.percent!==null}
-                                <span class="matchup-count">{$deck.wins}/{$deck.count}</span>
-                            {/if}
-                        </td>
-                    {/foreach}
-                </tr>
-            {/foreach}
-            </tbody>
-        </table>
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        Export for spreadsheet
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <table>
+                        <tbody>
+                            {foreach from=$content.archetypes item="archetype"}
+                                <tr>
+                                    <td>
+                                        <div class="archetype-name">{$archetype.name_raw_archetype}</div>
+                                    </td>
+                                    {foreach from=$archetype.winrates item="deck"}
+                                        <td>
+                                            {if $deck.percent!==null}
+                                                <div class="matchup-percent">{$deck.percent/100}</div>
+                                            {else}
+                                                0.5
+                                            {/if}
+                                        </td>
+                                    {/foreach}
+                                </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingTwo">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Export raw percentages
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="panel-body">
+                    <div style="margin-top: 40px;">
+                        <table>
+                            <tbody>
+                            <tr style="background-color: lightblue;">
+                                <th>Archetype</th>
+                                <th>% metagame</th>
+                                <th class="matchup-total"><div class="matchup-total-cell">WINRATE vs. Metagame</div></th>
+                                {foreach from=$content.archetypes item="archetype"}
+                                    <th class="matchup-detail"><div>vs <span class="matchup-archetype-name">{$archetype.name_archetype}</span></div></th>
+                                {/foreach}
+                            </tr>
+                            {foreach from=$content.archetypes item="archetype"}
+                                <tr>
+                                    <td rowspan="2">
+                                        <div class="archetype-name">{$archetype.name_archetype}</div>
+                                    </td>
+                                    <td>
+                                        <div class="archetype-count">{$archetype.count}</div>
+                                    </td>
+                                    {foreach from=$archetype.winrates item="deck"}
+                                        <td>
+                                            {if $deck.percent!==null}
+                                                <div class="matchup-percent">{$deck.percent}<sup>%</sup></div>
+                                            {else}
+                                                -
+                                            {/if}
+                                        </td>
+                                    {/foreach}
+                                </tr>
+                                <tr>
+                                    <td>{$archetype.percent}<sup>%</sup></td>
+                                    {foreach from=$archetype.winrates item="deck"}
+                                        <td>
+                                            {if $deck.percent!==null}
+                                                <span class="matchup-count">{$deck.wins}/{$deck.count}</span>
+                                            {/if}
+                                        </td>
+                                    {/foreach}
+                                </tr>
+                            {/foreach}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    {* TODO export texte *}
 {/if}
 
 {if !$request_async}{include file="includes/footer.tpl"}{/if}
