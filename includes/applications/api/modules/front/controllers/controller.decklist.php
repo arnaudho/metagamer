@@ -76,9 +76,12 @@ namespace app\api\controllers\front {
             $last_format_id = $this->modelFormat->getLastFormatIdByArchetypeId($id, $id_type_format);
             if ($last_format_id) {
                 $ids_format = $this->modelFormat->getFormatsByIdFormat($last_format_id);
+                $ids_tournament = $this->modelTournament->getLastTournaments(Query::condition()
+                    ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false), 32, 10);
                 $decklists = $this->modelPlayer->getDecklistsByCondition(
                     Query::condition()
                         ->andWhere("players.id_archetype", Query::EQUAL, $id)
+                        ->andWhere("tournaments.id_tournament", Query::IN, "(" . implode(",", $ids_tournament) . ")", false)
                         ->andWhere("tournaments.id_format", Query::IN, "(" . implode(",", $ids_format) . ")", false),
                     false);
                 // do not filter on decklists by archetype
