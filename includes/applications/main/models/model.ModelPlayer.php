@@ -245,12 +245,13 @@ namespace app\main\models {
             } else {
                 $cond = clone $pCond;
             }
-            $fields = "players.id_player, SUM(result_match) AS wins, COUNT(result_match) AS total";
+            $fields = "players.id_player, name_archetype, SUM(result_match) AS wins, COUNT(result_match) AS total";
             if ($pFields) {
                 $fields = $pFields . ", $fields";
             }
             $players = Query::select($fields, $this->table)
                 ->join("tournaments", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament AND id_format = $pIdFormat")
+                ->join("archetypes", Query::JOIN_OUTER_LEFT, "players.id_archetype = archetypes.id_archetype")
                 ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
                 ->andCondition($cond)
                 ->groupBy("players.id_player")
@@ -350,7 +351,7 @@ namespace app\main\models {
                 $pCondition = Query::condition();
             $select_fields = "archetypes.id_archetype, name_archetype, image_archetype, colors_archetype, COUNT(DISTINCT players.id_player) AS count";
             if ($pWinrate) {
-                $select_fields .= ", ROUND(SUM(result_match)/COUNT(1), 3) AS winrate_archetype, COUNT(1) AS total_matches_archetype";
+                $select_fields .= ", ROUND(SUM(IF (op.id_player IS NULL, 0, result_match))/COUNT(op.id_player), 3) AS winrate_archetype, COUNT(op.id_player) AS total_matches_archetype";
             }
             $q = Query::select($select_fields, $this->table)
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_tournament = " . $this->table . ".id_tournament")
@@ -363,7 +364,7 @@ namespace app\main\models {
             if ($pWinrate) {
                 $q->join("matches", Query::JOIN_INNER, "matches.id_player = " . $this->table . ".id_player");
                 if ($pExcludeMirror) {
-                    $q->join("players op", Query::JOIN_INNER, "matches.opponent_id_player = op.id_player AND players.id_archetype != op.id_archetype");
+                    $q->join("players op", Query::JOIN_OUTER_LEFT, "matches.opponent_id_player = op.id_player AND players.id_archetype != op.id_archetype");
                 }
             }
             $data = $q->execute($this->handler);
