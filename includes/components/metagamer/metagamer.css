@@ -341,7 +341,8 @@ table.table-standings:not(.table-french)>tbody>tr>td.icon-player { padding: 3px 
 .container .decklist .decklist-main-container { vertical-align: top; width: 1360px; display: inline-block;}
 .container .decklist .decklist-side-container { vertical-align: top; display: inline-block; max-width: 220px; padding-left: 14px; margin-top: -4px;}
 .container .decklist .decklist-side-container .decklist-card { top: 0;}
-.container .decklist.decklist-text h5 { text-transform: uppercase; font-family: 'Metropolis Medium', Arial, serif; font-size: 20px;}
+.container .decklist.decklist-text h4 { text-transform: uppercase; font-family: 'Metropolis Medium', Arial, serif; font-size: 20px;}
+.container .decklist.decklist-text h5 { text-transform: uppercase; font-family: 'Metropolis Medium', Arial, serif; font-size: 15px;}
 .container .decklist.decklist-visual h5 { text-transform: uppercase; color: white; background-color: grey;
     padding: 14px 15px 10px; font-size: 18px; display: inline-block; font-family: Metropolis, Arial, serif;
     margin-bottom: 12px; border-top-right-radius: 16px;}

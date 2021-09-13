@@ -11,7 +11,7 @@
         <textarea id="export-arena-field" readonly="">{$content.export_arena}</textarea>
     {/if}
 </div>
-{if $content.cards_main!==null}
+{if $content.player.count_cards_main > 0}
     <div class="decklist decklist-text">
         {if $content.logo}
             <div class="logo"></div>
@@ -21,20 +21,25 @@
         <hr class="decklist-separator" />
         <div class="decklist-cards-container">
             <div class="decklist-main-container">
-                <h5 class="decklist-title-main">Main deck ({$content.player.count_cards_main})</h5>
+                <h4 class="decklist-title-main">Main deck ({$content.player.count_cards_main})</h4>
                 <ul class="decklist-main">
-                    {foreach from=$content.cards_main item="card"}
-                        {if $card.count_main > 0}
-                            <li class="decklist-card">
-                                <span class="decklist-card-name">{$card.count_main} {$card.name_card}</span>
-                                <span class="decklist-card-mana">{$card.mana_cost_card}</span>
-                            </li>
+                    {foreach from=$content.categories item="cat"}
+                        {if $cat.count > 0}
+                            <h5>{$cat.label} ({$cat.count})</h5>
+                            {foreach from=$cat.cards item="card"}
+                                {if $card.count_main > 0}
+                                    <li class="decklist-card">
+                                        <span class="decklist-card-name">{$card.count_main} {$card.name_card}</span>
+                                        <span class="decklist-card-mana">{$card.mana_cost_card}</span>
+                                    </li>
+                                {/if}
+                            {/foreach}
                         {/if}
                     {/foreach}
                 </ul>
             </div>
             <div class="decklist-side-container">
-                <h5 class="decklist-title-side">Sideboard ({$content.player.count_cards_side})</h5>
+                <h4 class="decklist-title-side">Sideboard ({$content.player.count_cards_side})</h4>
                 <ul class="decklist-side">
                     {foreach from=$content.cards_side item="card"}
                         {if $card.count_side > 0}

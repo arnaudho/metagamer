@@ -181,24 +181,28 @@ namespace app\main\models {
         }
 
         /**
-         * get ordered decklist for visual display
          * @param $pIdPlayer
          * @param null $pCondition
          * @param null $pOrder
-         * @param string $pAsc
+         * @param bool $pComputedType
          * @return array|resource
          */
-        public function getDecklistCards ($pIdPlayer, $pCondition = null, $pOrder = null, $pAsc = "") {
+        public function getDecklistCards ($pIdPlayer, $pCondition = null, $pOrder = null, $pComputedType = false) {
             if (!$pCondition) {
                 $pCondition = Query::condition();
             }
-            $q = Query::select("cards.id_card, cards.name_card, cards.mana_cost_card, cards.type_card, cards.image_card,
-                IF(cards.mana_cost_card LIKE '{X}%', 20, cards.cmc_card) AS cmc_card, count_main, count_side", $this->tablePlayerCards)
+            $select = "cards.id_card, cards.name_card, cards.mana_cost_card, cards.type_card, cards.image_card,
+                IF(cards.mana_cost_card LIKE '{X}%', 20, cards.cmc_card) AS cmc_card, count_main, count_side";
+            if ($pComputedType) {
+                $select .= ", CASE WHEN type_card LIKE '%creature%' THEN 'creature' WHEN type_card LIKE '%land%' THEN 'land'
+                    WHEN (type_card LIKE '%instant%' OR  type_card LIKE '%sorcery%') THEN 'spell' ELSE 'other' END AS type_computed";
+            }
+            $q = Query::select($select, $this->tablePlayerCards)
                 ->join($this->table, Query::JOIN_INNER, "cards.id_card = player_card.id_card AND id_player = $pIdPlayer")
                 ->andCondition($pCondition)
                 ->groupBy("cards.id_card");
             if ($pOrder) {
-                $q->order($pOrder, $pAsc);
+                $q->order($pOrder);
             } else {
                 $q->order(" CASE  WHEN type_card LIKE '%Creature%' THEN 1 WHEN type_card IN ('Instant', 'Sorcery') THEN 2
                         WHEN type_card = 'Legendary Planeswalker' THEN 3 WHEN type_card = 'Basic Land' THEN 10 WHEN type_card LIKE '%Land%' THEN 9 ELSE 8 END ASC,
@@ -216,7 +220,7 @@ namespace app\main\models {
             return $q->execute($this->handler);
         }
 
-        public static function formatManaCost ($pManaCost, $pColored = false) {
+        public static function formatManaCost ($pManaCost, $pColored = true) {
             $class = $pColored ? " ms-color" : "";
             $pManaCost = preg_replace('/(\{([\dxcpsurbgw])\})/i', '<i class="ms ms-$2' . $class . '"></i>', strtolower($pManaCost));
             $pManaCost = preg_replace('/(\{([\dxcpsurbgw])\/([\dxcpsurbgw])\})/i', '<i class="ms ms-ci-2 ms-ci-$2$3"></i>', strtolower($pManaCost));

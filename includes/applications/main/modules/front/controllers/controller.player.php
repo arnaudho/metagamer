@@ -46,13 +46,15 @@ namespace app\main\controllers\front {
             // format player name
             $player['arena_id'] = " by " . ucwords(strtolower($player['arena_id']), " -\t\r\n\f\v");
 
-            $cards_main = $this->modelCard->getDecklistCards($player['id_player'],
+            $cards_main = $this->modelCard->getDecklistCards(
+                $player['id_player'],
                 Query::condition()->andWhere("count_main", Query::UPPER, 0),
-                " CASE WHEN mana_cost_card = '' THEN 99 ELSE cmc_card END,
-                        CASE WHEN type_card LIKE '%Creature%' THEN 1 WHEN type_card IN ('Instant', 'Sorcery') THEN 2
+                " CASE WHEN type_card LIKE '%Creature%' THEN 1 WHEN type_card IN ('Instant', 'Sorcery') THEN 2
                         WHEN type_card = 'Legendary Planeswalker' THEN 3 WHEN type_card = 'Basic Land' THEN 10
-                        WHEN type_card LIKE '%Land%' THEN 9 ELSE 8 END ASC,
-                        type_card");
+                        WHEN type_card LIKE '%Land%' THEN 9 WHEN mana_cost_card = '' THEN 8 ELSE 7 END ASC, cmc_card, color_card",
+                true
+            );
+
             $sideboard_condition = Query::condition()->andWhere("count_side", Query::UPPER, 0);
             $sideboard_order = "cmc_card ASC,
                         CASE WHEN type_card LIKE '%Creature%' THEN 1 WHEN type_card IN ('Instant', 'Sorcery') THEN 2
@@ -70,12 +72,42 @@ namespace app\main\controllers\front {
                 $cards_side[$key]['mana_cost_card'] = ModelCard::formatManaCost($card['mana_cost_card']);
             }
 
+            $categories_main = array(
+                "creature" => array(
+                    "label" => "Creatures",
+                    "count" => 0,
+                    "cards" => array()
+                ),
+                "spell" => array(
+                    "label" => "Instant & Sorceries",
+                    "count" => 0,
+                    "cards" => array()
+                ),
+                "other" => array(
+                    "label" => "Other spells",
+                    "count" => 0,
+                    "cards" => array()
+                ),
+                "land" => array(
+                    "label" => "Lands",
+                    "count" => 0,
+                    "cards" => array()
+                )
+            );
+            foreach ($cards_main as $card) {
+                $categories_main[$card['type_computed']]['cards'][] = $card;
+                $categories_main[$card['type_computed']]['count'] += $card['count_main'];
+            }
+
+            trace_r($cards_main);
+            trace_r($categories_main);
+
             $cards_all = $this->modelCard->getDecklistCards($player['id_player']);
             $export_arena = $this->modelPlayer->convertToArenaFormat($cards_all);
 
             $this->setTemplate("player", "decklist");
             $this->addContent("link_visual", RoutingHandler::rewrite("player", "visual") . "?id_player=" . $player['id_player']);
-            $this->addContent("cards_main", $cards_main);
+            $this->addContent("categories", $categories_main);
             $this->addContent("cards_side", $cards_side);
             $this->addContent("export_arena", $export_arena);
             $this->addContent("player", $player);
