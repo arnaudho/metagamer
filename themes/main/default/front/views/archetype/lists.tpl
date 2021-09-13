@@ -23,7 +23,8 @@
                 {if $content.decklists[0]['name_deck']}
                     <th data-field="player_deck_name" data-sortable="true">Deck name</th>
                 {/if}
-                <th data-field="player_record" data-sortable="true">Record</th>
+                <th data-field="player_record" data-sortable="true" data-sort-name="player_record_sort">Record</th>
+                <th data-field="player_record_sort" data-visible="false"></th>
                 <th>Decklist</th>
             </tr>
         </thead>
@@ -39,6 +40,7 @@
                         <td>{$decklist.name_deck}</td>
                     {/if}
                     <td>{$decklist.wins}-{$decklist.total-$decklist.wins}</td>
+                    <td>{$decklist.sort_record}</td>
                     <td>
                         <a href="deck/id:{$decklist.id_player}/" class="btn btn-info" target="_blank">
                             <span class="glyphicon glyphicon-duplicate"></span>

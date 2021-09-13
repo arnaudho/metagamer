@@ -377,6 +377,12 @@ namespace app\main\controllers\front {
             if (isset($tournament)) {
                 $this->addContent("name_tournament", $tournament['name_tournament']);
             }
+            // quickfix data sort for record
+            $aplha = range('A', 'Z');
+            $aplhaz = range('Z', 'A');
+            foreach ($decklists as $key => $decklist) {
+                $decklists[$key]["sort_record"] = $aplha[$decklist['wins']] . $aplhaz[$decklist['total']];
+            }
             $this->addContent("archetype", $archetype);
             $this->addContent("decklists", $decklists);
         }

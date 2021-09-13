@@ -118,13 +118,15 @@
                                         <div class="archetype-name">{$archetype.name_raw_archetype}</div>
                                     </td>
                                     {foreach from=$archetype.winrates item="deck"}
-                                        <td>
-                                            {if $deck.percent!==null}
-                                                <div class="matchup-percent">{$deck.percent/100}</div>
-                                            {else}
-                                                0.5
-                                            {/if}
-                                        </td>
+                                        {if $deck.name_archetype != "total"}
+                                            <td>
+                                                {if $deck.percent!==null}
+                                                    <div class="matchup-percent">{$deck.percent/100}</div>
+                                                {else}
+                                                    0.5
+                                                {/if}
+                                            </td>
+                                        {/if}
                                     {/foreach}
                                 </tr>
                             {/foreach}
