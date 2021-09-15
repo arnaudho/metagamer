@@ -106,20 +106,24 @@ namespace app\main\models {
             return $return;
         }
 
-        public function getPlayedCards ($pCondition = null, $pRulesCondition = null, $pOrder = "name_card", $pType = "ASC") {
+        public function getPlayedCards ($pCondition = null, $pRulesCondition = null, $pOrder = "name_card", $pVisual = false) {
             if(!$pCondition)
                 $pCondition = Query::condition();
             if(!$pRulesCondition)
                 $pRulesCondition = Query::condition();
-            $q = Query::select("cards.id_card, name_card,
-                COUNT(IF(count_main = 0, NULL, count_main)) AS count_players_main, COUNT(IF(count_side = 0, NULL, count_side)) AS count_players_side,
-                SUM(count_main) AS count_total_main, SUM(count_side) AS count_total_side", $this->tablePlayerCards)
+            $select = "cards.id_card, name_card, COUNT(IF(count_main = 0, NULL, count_main)) AS count_players_main,
+                COUNT(IF(count_side = 0, NULL, count_side)) AS count_players_side, SUM(count_main) AS count_total_main,
+                SUM(count_side) AS count_total_side";
+            if ($pVisual) {
+                $select .= ", mana_cost_card, image_card";
+            }
+            $q = Query::select($select, $this->tablePlayerCards)
                 ->join("players p", Query::JOIN_INNER, "p.id_player = player_card.id_player")
                 ->join($this->table, Query::JOIN_INNER, "cards.id_card = player_card.id_card")
                 ->join("tournaments", Query::JOIN_INNER, "p.id_tournament = tournaments.id_tournament")
                 ->andCondition(clone $pCondition)
                 ->groupBy("cards.id_card")
-                ->order($pOrder, $pType);
+                ->order($pOrder);
             if ($pRulesCondition) {
                 $rules_cond = clone $pRulesCondition;
                 $q->andCondition($rules_cond);

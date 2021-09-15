@@ -8,6 +8,7 @@ namespace app\main\controllers\front {
     use app\main\models\ModelPlayer;
     use app\main\models\ModelTournament;
     use app\main\src\MetagamerBot;
+    use core\application\Autoload;
     use core\application\Core;
     use core\application\DefaultFrontController;
     use core\application\Go;
@@ -116,7 +117,11 @@ namespace app\main\controllers\front {
 
                 if ($stats['count_players'] > 0) {
                     // TODO 20 seconds query
-                    $cards = $this->modelCard->getPlayedCards($analysis_cond, $rules_cond);
+                    $cards = $this->modelCard->getPlayedCards($analysis_cond, $rules_cond, "cards.name_card", true);
+
+                    foreach ($cards as $key => $card) {
+                        $cards[$key]['mana_cost_card'] = ModelCard::formatManaCost($card['mana_cost_card']);
+                    }
 
                     // TODO display standard deviation in grey shades
                     $deviation = StatsUtils::getStandardDeviation($stats['winrate'], $stats['total']);
@@ -204,6 +209,7 @@ namespace app\main\controllers\front {
                     }
                     $this->addContent("cards", $cards);
                     $this->addContent("confidence", "0.90");
+                    Autoload::addStyle("mana/css/mana.min.css");
                     $this->setTitle($archetype['name_archetype'] . " - Archetype analysis");
                 } else {
                     $this->addMessage("No decklist found", self::MESSAGE_ERROR);

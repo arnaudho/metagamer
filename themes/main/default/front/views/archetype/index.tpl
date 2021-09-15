@@ -154,6 +154,7 @@
                 <thead>
                     <tr>
                         <th>Actions</th>
+                        <th data-field="mana_cost_card" data-sortable="false"></th>
                         <th data-field="name_card" data-sortable="true">Name</th>
                         <th data-field="count_copies" data-sortable="true">Avg # copies</th>
                         <th data-field="count_lists" data-sortable="true"># lists</th>
@@ -177,6 +178,9 @@
                                               data-card-id="excluded-main-{$card.id_card}"
                                               title="Exclude decklists containing this card"></span>
                                     {/if}
+                                </td>
+                                <td class="card-mana-cost">
+                                    {$card.mana_cost_card}
                                 </td>
                                 <td class="card-name">
                                     {$card.name_card}
@@ -229,8 +233,9 @@
                 <thead>
                     <tr>
                         <th>Actions</th>
+                        <th data-field="mana_cost_card" data-sortable="false"></th>
                         <th data-field="name_card" data-sortable="true">Name</th>
-                        <th data-field="count_copies" data-sortable="true">Average # copies</th>
+                        <th data-field="count_copies" data-sortable="true">Avg # copies</th>
                         <th data-field="count_lists" data-sortable="true"># lists</th>
                         <th data-field="count_matches" data-sortable="true"># matches</th>
                         <th data-field="winrate_with" data-sortable="true">Winrate</th>
@@ -252,6 +257,9 @@
                                               data-card-id="excluded-side-{$card.id_card}"
                                               title="Exclude decklists containing this card"></span>
                                     {/if}
+                                </td>
+                                <td class="card-mana-cost">
+                                    {$card.mana_cost_card}
                                 </td>
                                 <td class="card-name">{$card.name_card}</td>
                                 <td {if $card.avg_side == 4}class="highlight"{/if}>{$card.avg_side|floatval}</td>

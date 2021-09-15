@@ -108,6 +108,7 @@ table.archetype-analysis .card-exclude { color: red; font-size: 1.2em; cursor: p
 table.archetype-analysis .card-include { color: green; font-size: 1.2em; cursor: pointer;}
 .container form.loading { pointer-events: none; opacity: 0.6;}
 .container .archetype-analysis .card-name { max-width: 300px;}
+.container .archetype-analysis .card-mana-cost i.ms { font-size: 11px; margin: 0 1px 1px 0;}
 .container .confidence-interval { font-size: 0.7em; font-style: italic;}
 .container .archetype-analysis .card-count-matches { font-size: 0.9em;}
 .container h2.name-format { text-transform: uppercase; font-size: 40px; font-family: Metropolis, Arial, serif;}
