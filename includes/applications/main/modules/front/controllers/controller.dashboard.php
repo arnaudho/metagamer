@@ -367,6 +367,119 @@ namespace app\main\controllers\front {
             $this->setTitle("$title - Winrate matrix");
         }
 
+        public function customMatrix () {
+            $matrix_size = 4;
+            $file = "custom_matrix.csv";
+            $data = array_map('str_getcsv', file($file));
+            if (!$data) {
+                return false;
+            }
+            // Remove column header if necessary
+            if ($data[0][0] == 'Player 1 Name' || $data[0][0] == 'Player 1 Archetype' || $data[0][4] == 'Result') {
+                unset($data[0]);
+            }
+            // get metagame breakdown
+            $players = array();
+            foreach ($data as $match) {
+                $players[$match[0]] = $match[1];
+                $players[$match[2]] = $match[3];
+            }
+            $metagame_full = array_count_values($players);
+            arsort($metagame_full);
+            $total_players = array_sum($metagame_full);
+            $metagame = $metagame_full;
+
+            if (count($metagame_full) > $matrix_size) {
+                // set 'Other' category
+                $metagame = array_slice($metagame_full, 0, $matrix_size-1);
+                $metagame['Other'] = array_sum(array_slice($metagame_full, $matrix_size-1));
+            }
+
+            // setup matrix
+            $ids_archetypes = array();
+            $archetypes = array();
+            $count_id = 0;
+            $tpl_winrates = array(
+                array(
+                    "name_archetype" => "total",
+                    "id_archetype" => "0",
+                    "wins" => 0,
+                    "loss" => 0,
+                    "count" => 0
+                )
+            );
+            foreach ($metagame as $name_deck => $count_deck) {
+                $tpl_winrates[] = array(
+                    "id_archetype"  => "99" . $count_id,
+                    "wins" => 0,
+                    "loss" => 0,
+                    "count" => 0,
+                );
+                $ids_archetypes[$name_deck] = $count_id++;
+            }
+            foreach ($metagame as $name_deck => $count_deck) {
+                $archetypes[] = array(
+                    "id_archetype"  => "99" . $ids_archetypes[$name_deck],
+                    "name_archetype"  => $name_deck,
+                    "image_archetype" => "https://c1.scryfall.com/file/scryfall-cards/large/front/5/a/5a5841fa-4f30-495a-b840-3ef5a2af8fad.jpg?1562494149",
+                    "count" => $count_deck,
+                    "percent" => round(100*$count_deck/$total_players, 1),
+                    "winrates" => $tpl_winrates
+                );
+            }
+
+            // populate matrix winrates
+            foreach ($data as $match) {
+                $key_a = array_key_exists($match[1], $ids_archetypes) ? $ids_archetypes[$match[1]] : $ids_archetypes['Other'];
+                $key_b = array_key_exists($match[3], $ids_archetypes) ? $ids_archetypes[$match[3]] : $ids_archetypes['Other'];
+                if ($match[4] == "Win" || preg_match('/2-/', $match[4], $output_array)) {
+                    // OK
+                } elseif ($match[4] == "Loss" || preg_match('/-2/', $match[4], $output_array)) {
+                    $tmp = $key_a;
+                    $key_a = $key_b;
+                    $key_b = $tmp;
+                } else {
+                    trace_r("WARNING : unknown result : " . $match[4]);
+                    trace_r($match);
+                    continue;
+                }
+                $archetypes[$key_a]['winrates'][$key_b+1]['wins']++;
+                $archetypes[$key_a]['winrates'][$key_b+1]['count']++;
+                $archetypes[$key_b]['winrates'][$key_a+1]['loss']++;
+                $archetypes[$key_b]['winrates'][$key_a+1]['count']++;
+                if ($key_a != $key_b) {
+                    $archetypes[$key_a]['winrates'][0]['wins']++;
+                    $archetypes[$key_a]['winrates'][0]['count']++;
+                    $archetypes[$key_b]['winrates'][0]['loss']++;
+                    $archetypes[$key_b]['winrates'][0]['count']++;
+                }
+            }
+            // set matchup winrates
+            foreach ($archetypes as $key => $archetype) {
+                foreach ($archetype['winrates'] as $k => $matchup) {
+                    if ($matchup['count'] > 0) {
+                        $archetypes[$key]['winrates'][$k]['percent'] = round(100 * $matchup['wins'] / $matchup['count'], 1);
+                    } else {
+                        $archetypes[$key]['winrates'][$k]['percent'] = null;
+                    }
+                    if ($matchup['id_archetype'] == $archetype['id_archetype']) {
+                        $archetypes[$key]['winrates'][$k]['count'] = $matchup['count']/2;
+                    }
+                }
+            }
+            trace_r($players);
+            trace_r($ids_archetypes);
+            trace_r($archetypes);
+
+            $this->addContent("archetypes", $archetypes);
+            $this->addContent("title", "Tournament title");
+            $this->addContent("date", "Tournament date");
+            $this->addContent("count_matches", count($data));
+            $this->addContent("count_players", $total_players);
+            $this->setTemplate("dashboard", "matrix");
+            $this->addMessage("CHECKLIST : <br /> - Change tournament title & date<br /> - Change tournament source<br /> - Set archetype images");
+        }
+
         public function leaderboard () {
             Autoload::addStyle("flags/css/flag-icon.min.css");
             $labels = $this->modelTournament->getProTournamentLabels();
