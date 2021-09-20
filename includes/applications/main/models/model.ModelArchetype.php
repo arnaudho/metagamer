@@ -46,7 +46,7 @@ namespace app\main\models {
             if (array_key_exists($pIdTypeFormat, ModelFormat::MAPPING_TYPE_FORMAT)) {
                 $archetyes_file = Core::$path_to_application."/src/archetypes_" . ModelFormat::MAPPING_TYPE_FORMAT[$pIdTypeFormat] . ".json";
             } else {
-                trace_r("Incorrect format specified for archetypes rules");
+                trace_r("WARNING : Incorrect format specified for archetypes rules");
                 return false;
             }
 
@@ -56,6 +56,11 @@ namespace app\main\models {
             }
             catch(\Exception $e)
             {
+                trace_r("ERROR : incorrect format for archetypes.json file");
+                return null;
+            }
+            if (!$mapping) {
+                trace_r("ERROR : incorrect format for archetypes.json file");
                 return null;
             }
             return $mapping;
