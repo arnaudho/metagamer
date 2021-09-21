@@ -141,7 +141,8 @@
         [
             "Thieves' Guild Enforcer",
             "Drown in the Loch",
-            "Island"
+            "Island",
+	        "Soaring Thought-Thief"
         ],
         "exclude":
         [
@@ -154,7 +155,7 @@
         "image": "Mazemind Tome",
         "contains":
         [
-            "Clearwater Pathway",
+            "Temple of Deceit",
             "Heartless Act"
         ],
         "exclude":
@@ -166,7 +167,8 @@
             "Kroxa, Titan of Death's Hunger",
             "Ruin Crab",
             "Forest",
-            "Plains"
+            "Plains",
+	        "Cinderclasm"
         ]
     },
     "Grixis Tempo":
@@ -363,6 +365,7 @@
         "contains":
         [
             "Emergent Ultimatum",
+            "Cultivate",
             "Omen of the Sea"
         ],
         "exclude":
@@ -431,6 +434,14 @@
             "Canopy Tactician"
         ]
     },
+    "Auras":
+    {
+        "image": "All that Glitters",
+        "contains":
+        [
+            "All that Glitters"
+        ]
+    },
     "Mono-White Control":
     {
         "image": "Ugin, the Spirit Dragon",
@@ -460,6 +471,20 @@
         "exclude":
         [
             "Forest"
+        ]
+    },
+    "Four-color Blink":
+    {
+        "image": "Yorion, Sky Nomad",
+        "contains":
+        [
+            "Skyclave Apparition",
+            "Binding the Old Gods",
+            "Yorion, Sky Nomad"
+        ],
+        "exclude":
+        [
+            "Mountain"
         ]
     },
     "Four-color Foretold":
@@ -666,11 +691,27 @@
         "contains":
         [
             "Goldspan Dragon",
-            "Faceless Haven",
+            "Alrund's Epiphany",
             "Brazen Borrower"
         ],
         "exclude":
         [
+            "Plains",
+            "Swamp",
+            "Forest"
+        ]	
+    },
+    "Izzet Control":
+    {
+        "image": "Expressive Iteration",
+        "contains":
+        [
+            "Expressive Iteration",
+	        "Temple of Epiphany"
+        ],
+        "exclude":
+        [
+            "Goldspan Dragon",
             "Plains",
             "Swamp",
             "Forest"
@@ -691,7 +732,8 @@
         "contains":
         [
             "Winota, Joiner of Forces",
-            "Forest"
+            "Prosperous Innkeeper",
+	        "Branchloft Pathway"
         ]
     },
     "Naya Fury":
@@ -796,10 +838,12 @@
     },
     "Mono-green Aggro":
     {
-        "image": "The Great Henge",
+        "image": "Gemrazer",
         "contains":
         [
-            "The Great Henge"
+            "Gemrazer",
+            "Lovestruck Beast",
+            "Faceless Haven"
         ],
         "exclude":
         [
@@ -830,7 +874,8 @@
         "image": "Luminarch Aspirant",
         "contains":
         [
-            "Luminarch Aspirant"
+            "Luminarch Aspirant",
+            "Faceless Haven"
         ],
         "exclude":
         [
