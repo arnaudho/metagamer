@@ -399,126 +399,6 @@ namespace app\main\controllers\front {
                 ($pA['cmc_card'] > $pB['cmc_card'] ? 1 : -1);
         }
 
-        protected function sortCardsByPlayerCount ($pA, $pB) {
-            if (!array_key_exists('count_players_main', $pA)) {
-                return 1;
-            }
-            if (!array_key_exists('count_players_main', $pB)) {
-                return -1;
-            }
-            return $pA['count_players_main'] == $pB['count_players_main'] ?
-                ($pA['name_card'] > $pB['name_card'] ? 1 : -1) :
-                ($pA['count_players_main'] < $pB['count_players_main'] ? 1 : -1);
-        }
-
-        /*
-         * KARSTEN algo #1
-         *
-         * Sort all played cards by copies and count players
-         * Then add (up to 60 cards) each copies, most popular first
-        */
-        // work on manabase splits (ex if 10 lists play a 5-5 split on snow-covered basics
-        // and some cards are played in 6 copies, the land count could be wrong in some corner cases)
-        public function getAggregateList ($pCondition, $pMaindeck = true) {
-            if (!$pCondition) {
-                return false;
-            }
-            $aggregate = array();
-            $count_aggregate = 0;
-
-            // sideboard count
-            $archetype_card_count = 15;
-            if ($pMaindeck) {
-                // get card count for archetype
-                $archetype_card_count = $this->modelCard->getCardCount($pCondition);
-                if ($archetype_card_count[0]['count_players'] < 5 * $archetype_card_count[1]['count_players']) {
-                    trace_r("WARNING : multiple cards count in archetype");
-                    trace_r($archetype_card_count);
-                }
-                $archetype_card_count = $archetype_card_count[0]['count_cards'];
-            }
-
-
-            $cards = $this->modelCard->getPlayedCardsByCopies($pCondition, $pMaindeck);
-            $current_card = "--";
-            $current_player_count = 0;
-            // add placeholder to check last card for filling copies
-            $cards[] = array('name_card' => "---");
-            $fill_copies = array();
-            foreach ($cards as $key => $card) {
-                if (!isset($card['copie_n'])) {
-                    continue;
-                }
-                if ($current_card != $card['name_card']) {
-                    $current_card = $card['name_card'];
-                    $current_player_count = $card['count_players_main'];
-                } else {
-                    $current_player_count += $card['count_players_main'];
-                    $cards[$key]['count_players_main'] = $current_player_count;
-                }
-
-                // if next card is the same AND with copie_n != N-1, manually add missing copies into the combined list
-                if (
-                    isset($cards[$key+1]) &&
-                    $cards[$key+1]['name_card'] == $card['name_card'] &&
-                    $cards[$key+1]['copie_n'] != ($card['copie_n'] - 1)
-                ) {
-                    for ($i = ($cards[$key+1]['copie_n'] + 1); $i < $card['copie_n']; $i++) {
-                        $tmp_card = $card;
-                        $tmp_card['copie_n'] = $i;
-                        $tmp_card['count_players_main'] = $current_player_count;
-                        $fill_copies[] = $tmp_card;
-                    }
-                }
-
-                // if next card is not same name AND card was only played in N copies, manually add copies 1 to N-1 into the combined list
-                if ($card['copie_n'] != 1 &&
-                    isset($cards[$key+1]) &&
-                    $cards[$key+1]['name_card'] != $card['name_card']
-                ) {
-                    for ($i = 1; $i < $card['copie_n']; $i++) {
-                        $tmp_card = $card;
-                        $tmp_card['copie_n'] = $i;
-                        $tmp_card['count_players_main'] = $current_player_count;
-                        $fill_copies[] = $tmp_card;
-                    }
-                }
-            }
-            $cards = array_merge($cards, $fill_copies);
-
-            // sort copies by player count
-            usort($cards, array($this, "sortCardsByPlayerCount"));
-            trace_r($cards);
-
-            // TODO check split versions -- e.g SB Thoughtseize without any black source / 10 Forest + 6 Snow-covered Forest
-            // http://complots.org/archetype/aggregatelist/?id_archetype=182&id_format=57
-
-            if ($pMaindeck) {
-                // TODO check lands count
-
-                // get average lands count
-                /*
-                SELECT AVG(toto) FROM (SELECT SUM(IF(type_card LIKE '%land%', count_main, 0)) AS toto
-                FROM player_card
-                INNER JOIN players p ON p.id_player = player_card.id_player
-                INNER JOIN cards ON cards.id_card = player_card.id_card
-                INNER JOIN tournaments ON p.id_tournament = tournaments.id_tournament
-                WHERE count_main != '0' AND (id_archetype = '65' AND id_format = '57')
-                GROUP BY p.id_player HAVING SUM(count_main) = 60) tmp
-                 */
-                // when adding a card, if lands threshold is excessed AND card is land, THEN continue
-            }
-
-            foreach ($cards as $card) {
-                $aggregate[] = $card['name_card'];
-                if (++$count_aggregate >= $archetype_card_count) {
-                    break;
-                }
-            }
-            sort($aggregate);
-            return $aggregate;
-        }
-
         public function aggregatelist ()
         {
             $aggregate_cond = null;
@@ -538,12 +418,12 @@ namespace app\main\controllers\front {
             }
             if ($aggregate_cond) {
                 // get archetype aggregate list
-                $aggregate_main = $this->getAggregateList($aggregate_cond);
+                $aggregate_main = $this->modelArchetype->getAggregateList($aggregate_cond);
                 $aggregate_counts = array_count_values($aggregate_main);
                 $list_cards = array_unique($aggregate_main);
 
                 // TODO set cond instead of id format
-                $aggregate_side = $this->getAggregateList($aggregate_cond, false);
+                $aggregate_side = $this->modelArchetype->getAggregateList($aggregate_cond, false);
                 $aggregate_counts_side = array_count_values($aggregate_side);
                 $list_cards_side = array_unique($aggregate_side);
 
@@ -668,7 +548,7 @@ namespace app\main\controllers\front {
                 $sum_distances = 0;
                 $max_distance = 0;
                 // get archetype aggregate list (maindeck only)
-                $aggregate_main = $this->getAggregateList($aggregate_cond);
+                $aggregate_main = $this->modelArchetype->getAggregateList($aggregate_cond);
                 $aggregate_counts = array_count_values($aggregate_main);
                 $archetype['count_cards'] = count($aggregate_main);
 
