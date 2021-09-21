@@ -1,4 +1,18 @@
 {
+    "Jund Citadel":
+    {
+        "image": "Bolas's Citadel",
+        "contains":
+        [
+            "Collected Company",
+            "Bolas's Citadel"
+        ],
+        "exclude":
+        [
+            "Island",
+            "Plains"
+        ]
+    },
     "Jund Company":
     {
         "image": "Collected Company",
@@ -62,11 +76,11 @@
         "contains":
         [
             "Death's Shadow",
-            "Blightstep Pathway"
+            "Blood Crypt"
         ],
         "exclude":
         [
-            "Island",
+            "Overgrown Tomb",
             "Forest",
             "Plains"
         ]
@@ -95,7 +109,59 @@
         [
             "Island",
             "Plains",
-            "Forest"
+            "Forest",
+            "Stomping Ground"
+        ]
+    },
+    "Grixis Arcanist":
+    {
+        "image": "Dreadhorde Arcanist",
+        "contains":
+        [
+            "Dreadhorde Arcanist",
+            "Steam Vents",
+            "Blood Crypt"
+        ],
+        "exclude":
+        [
+            "Stomping Ground",
+            "Forest",
+            "Sacred Foundry"
+        ]
+    },
+    "Izzet Arcanist":
+    {
+        "image": "Dreadhorde Arcanist",
+        "contains":
+        [
+            "Dreadhorde Arcanist",
+            "Steam Vents"
+        ],
+        "exclude":
+        [
+            "Stomping Ground",
+            "Forest",
+            "Island",
+            "Sacred Foundry",
+            "Blood Crypt"
+        ]
+    },
+    "Mardu Arcanist":
+    {
+        "image": "Dreadhorde Arcanist",
+        "contains":
+        [
+            "Dreadhorde Arcanist",
+            "Blood Crypt",
+            "Sacred Foundry",
+            "Godless Shrine"
+        ],
+        "exclude":
+        [
+            "Stomping Ground",
+            "Forest",
+            "Island",
+            "Steam Vents"
         ]
     },
     "Rakdos Arcanist":
@@ -111,7 +177,9 @@
             "Stomping Ground",
             "Forest",
             "Island",
-            "Plains"
+            "Plains",
+            "Godless Shrine",
+            "Steam Vents"
         ]
     },
     "Orzhov Auras":
@@ -136,14 +204,23 @@
         "contains":
         [
             "Kor Spiritdancer",
-            "Staggering Insight",
-	        "Adanto Vanguard"
+            "Sram, Senior Edificer",
+            "Hallowed Fountain"
         ],
         "exclude":
         [
             "Swamp",
-            "Forest",
+            "Godless Shrine",
             "Mountain"
+        ]
+    },
+    "Simic Merfolk":
+    {
+        "image": "Master of the Pearl Trident",
+        "contains":
+        [
+            "Kumena's Speaker",
+            "Breeding Pool"
         ]
     },
     "Esper Control":
@@ -177,6 +254,22 @@
             "Steam Vents"
         ]
     },
+    "Rakdos Midrange":
+    {
+        "image": "Kroxa, Titan of Death's Hunger",
+        "contains":
+        [
+            "Kroxa, Titan of Death's Hunger",
+            "Blood Crypt",
+            "Dragon's Rage Channeler"
+        ],
+        "exclude":
+        [
+            "Steam Vents",
+            "Stomping Ground",
+            "Sacred Foundry"
+        ]
+    },
     "Izzet Phoenix":
     {
         "image": "Arclight Phoenix",
@@ -194,15 +287,42 @@
             "Dragonstorm"
         ]
     },
+    "Temur Creativity":
+    {
+        "image": "Koma, Cosmos Serpent",
+        "contains":
+        [
+            "Indomitable Creativity",
+            "Ketria Triome"
+        ]
+    },
+    "Izzet Creativity":
+    {
+        "image": "The Locust God",
+        "contains":
+        [
+            "Indomitable Creativity",
+            "The Locust God"
+        ]
+    },
+    "Jeskai Creativity":
+    {
+        "image": "Serra's Emissary",
+        "contains":
+        [
+            "Indomitable Creativity",
+            "Raugrin Triome"
+        ]
+    },
     "Jeskai Magma Opus":
     {
         "image": "Magma Opus",
         "contains":
         [
             "Magma Opus",
-            "Mizzix's Mastery",
             "Torrential Gearhulk",
-            "Hallowed Fountain"
+            "Hallowed Fountain",
+            "Archmage's Charm"
         ],
         "exclude":
         [
@@ -218,7 +338,8 @@
         "contains":
         [
             "Teferi, Hero of Dominaria",
-            "Lightning Helix"
+            "Expressive Iteration",
+            "Archmage's Charm"
         ],
         "exclude":
         [
@@ -433,12 +554,42 @@
             "Muxus, Goblin Grandee"
         ]
     },
+    "Goblins Company":
+    {
+        "image": "Collected Company",
+        "contains":
+        [
+            "Collected Company",
+            "Goblin Warchief"
+        ]
+    },
     "Orzhov Humans":
     {
         "image": "General Kudro of Drannith",
         "contains":
         [
             "General Kudro of Drannith"
+        ],
+        "exclude":
+        [
+            "Temple Garden"
+        ]
+    },
+    "Mono-white Humans":
+    {
+        "image": "Thalia's Lieutenant",
+        "contains":
+        [
+            "Thalia's Lieutenant"
+        ],
+        "exclude":
+        [
+            "Mountain",
+            "Swamp",
+            "Forest",
+            "Island",
+            "Godless Shrine",
+            "Temple Garden"
         ]
     },
     "Mono-white Aggro":
@@ -446,15 +597,42 @@
         "image": "Thalia, Guardian of Thraben",
         "contains":
         [
-            "Thalia, Guardian of Thraben",
-            "Thraben Inspector"
+            "Thalia, Guardian of Thraben"
         ],
         "exclude":
         [
             "Mountain",
             "Swamp",
             "Forest",
-            "Island"
+            "Island",
+            "Godless Shrine",
+            "Temple Garden"
+        ]
+    },
+    "Humans Company":
+    {
+        "image": "Collected Company",
+        "contains":
+        [
+            "Thalia's Lieutenant",
+            "Collected Company"
+        ]
+    },
+    "Mutate Combo":
+    {
+        "image": "Vadrok, Apex of Thunder",
+        "contains":
+        [
+            "Vadrok, Apex of Thunder",
+            "Lore Drakkis"
+        ]
+    },
+    "Hardened Scales":
+    {
+        "image": "Hardened Scales",
+        "contains":
+        [
+            "Hardened Scales"
         ]
     },
     "Boros Magecraft":
@@ -509,17 +687,20 @@
             "Steam Vents"
         ]
     },
-    "Mono-red Aggro":
+    "Mono-red Phoenix":
     {
-        "image": "Bomat Courier",
+        "image": "Arclight Phoenix",
         "contains":
         [
-            "Mountain"
+            "Mountain",
+            "Dragon's Rage Channeler",
+            "Faithless Looting",
+            "Arclight Phoenix"
         ],
         "exclude":
         [
             "Ugin, the Spirit Dragon",
-            "Chandra, Awakened Inferno",
+            "Steam Vents",
             "Sacred Foundry",
             "Blood Crypt",
             "Stomping Ground",
@@ -527,6 +708,98 @@
             "Plains",
             "Island",
             "Forest"
+        ]
+    },
+    "Mono-red Madness":
+    {
+        "image": "Fiery Temper",
+        "contains":
+        [
+            "Mountain",
+            "Dragon's Rage Channeler",
+            "Faithless Looting",
+            "Fiery Temper"
+        ],
+        "exclude":
+        [
+            "Ugin, the Spirit Dragon",
+            "Steam Vents",
+            "Sacred Foundry",
+            "Blood Crypt",
+            "Swamp",
+            "Plains",
+            "Island"
+        ]
+    },
+    "Mono-red Torbran":
+    {
+        "image": "Torbran, Thane of Red Fell",
+        "contains":
+        [
+            "Torbran, Thane of Red Fell"
+        ],
+        "exclude":
+        [
+            "Ugin, the Spirit Dragon",
+            "Steam Vents",
+            "Sacred Foundry",
+            "Blood Crypt",
+            "Stomping Ground",
+            "Swamp",
+            "Plains",
+            "Island",
+            "Forest"
+        ]
+    },
+    "Mono-red Wizards":
+    {
+        "image": "Wizard's Lightning",
+        "contains":
+        [
+            "Wizard's Lightning"
+        ],
+        "exclude":
+        [
+            "Ugin, the Spirit Dragon",
+            "Steam Vents",
+            "Sacred Foundry",
+            "Blood Crypt",
+            "Stomping Ground",
+            "Swamp",
+            "Plains",
+            "Island",
+            "Forest"
+        ]
+    },
+    "Mono-red Burn":
+    {
+        "image": "Light Up the Stage",
+        "contains":
+        [
+            "Mountain",
+            "Light Up the Stage",
+            "Static Discharge"
+        ],
+        "exclude":
+        [
+            "Ugin, the Spirit Dragon",
+            "Steam Vents",
+            "Sacred Foundry",
+            "Blood Crypt",
+            "Stomping Ground",
+            "Swamp",
+            "Plains",
+            "Island",
+            "Forest"
+        ]
+    },
+    "Gruul Burn":
+    {
+        "image": "Atarka's Command",
+        "contains":
+        [
+            "Stomping Ground",
+            "Atarka's Command"
         ]
     },
     "Mono-Green Elves":
@@ -582,6 +855,16 @@
             "Lucky Clover"
         ]
     },
+    "Gruul Shaman":
+    {
+        "image": "Harmonic Prodigy",
+        "contains":
+        [
+            "Stomping Ground",
+            "Harmonic Prodigy",
+            "Burning-Tree Emissary"
+        ]
+    },
     "Gruul Aggro":
     {
         "image": "Pelt Collector",
@@ -599,7 +882,6 @@
         "contains":
         [
             "Stone Rain",
-            "Sawtusk Demolisher",
             "Llanowar Elves"
         ]
     },
@@ -616,13 +898,14 @@
             "Plains"
         ]
     },
-    "Selesnya Company":
+    "Selesnya Life":
     {
         "image": "Collected Company",
         "contains":
         [
             "Collected Company",
-            "Temple Garden"
+            "Temple Garden",
+            "Heliod, Sun-Crowned"
         ],
         "exclude":
         [
@@ -631,6 +914,24 @@
             "Mountain",
             "Island",
             "Swamp"
+        ]
+    },
+    "Vesperlark Combo":
+    {
+        "image": "Vesperlark",
+        "contains":
+        [
+            "Vesperlark",
+            "Davriel's Withering"
+        ]
+    },
+    "Selesnya Enchantress":
+    {
+        "image": "Enchantress's Presence",
+        "contains":
+        [
+            "Enchantress's Presence",
+            "Temple Garden"
         ]
     },
     "Abzan Midrange":
@@ -659,6 +960,22 @@
         ],
         "exclude":
         [
+            "Mountain",
+            "Swamp"
+        ]
+    },
+    "Selesnya Company":
+    {
+        "image": "Collected Company",
+        "contains":
+        [
+            "Collected Company",
+            "Luminarch Aspirant",
+            "Elite Spellbinder"
+        ],
+        "exclude":
+        [
+            "Island",
             "Mountain",
             "Swamp"
         ]
@@ -767,12 +1084,16 @@
             "Diligent Excavator"
         ]
     },
-    "Nine Lives":
+    "Nine Lives Prison":
     {
         "image": "Nine Lives",
         "contains":
         [
             "Nine Lives"
+        ],
+        "exclude":
+        [
+            "Enchantress's Presence"
         ]
     },
     "Mono-Black Vampires":
@@ -855,38 +1176,6 @@
             "Mountain"
         ]
     },
-    "Jund Midrange":
-    {
-        "image": "Elder Gargaroth",
-        "contains":
-        [
-            "Binding the Old Gods",
-            "Chandra, Torch of Defiance"
-        ],
-        "exclude":
-        [
-            "Island",
-            "Plains"
-        ]
-    },
-    "Temur Creativity":
-    {
-        "image": "Koma, Cosmos Serpent",
-        "contains":
-        [
-            "Indomitable Creativity",
-            "Koma, Cosmos Serpent"
-        ]
-    },
-    "Izzet Creativity":
-    {
-        "image": "The Locust God",
-        "contains":
-        [
-            "Indomitable Creativity",
-            "The Locust God"
-        ]
-    },
     "Azorius Cycling":
     {
         "image": "Abandoned Sarcophagus",
@@ -913,21 +1202,13 @@
             "Collected Company"
         ]
     },
-    "Colorless Ramp":
-    {
-        "image": "Ugin, the Spirit Dragon",
-        "contains":
-        [
-            "Ugin, the Spirit Dragon",
-            "Mind Stone"
-        ]
-    },
     "Mono-red Ramp":
     {
         "image": "Chandra, Awakened Inferno",
         "contains":
         [
-            "Chandra, Awakened Inferno"
+            "Chandra, Awakened Inferno",
+            "Mind Stone"
         ],
         "exclude":
         [
@@ -978,12 +1259,30 @@
             "Risen Reef"
         ]
     },
-    "Temur & 4C Ramp":
+    "Trickery Combo":
     {
-        "image": "Genesis Ultimatum",
+        "image": "Tibalt's Trickery",
         "contains":
         [
-            "Genesis Ultimatum"
+            "Tibalt's Trickery"
+        ]
+    },
+    "Bant Blink":
+    {
+        "image": "Soulherder",
+        "contains":
+        [
+            "Soulherder",
+            "Temple Garden"
+        ]
+    },
+    "Reanimator":
+    {
+        "image": "Priest of Fell Rites",
+        "contains":
+        [
+            "Priest of Fell Rites",
+            "Unburial Rites"
         ]
     },
     "Temur Midrange":
@@ -998,20 +1297,26 @@
     },
     "Izzet Control":
     {
-        "image": "Magma Opus",
+        "image": "Archmage's Charm",
         "contains":
         [
-            "Magma Opus",
-            "Torrential Gearhulk"
+            "Steam Vents",
+            "Archmage's Charm",
+            "Field of Ruin"
+        ],
+        "exclude":
+        [
+            "Hallowed Fountain",
+            "Breeding Pool",
+            "Watery Grave"
         ]
     },
-    "Simic Turns":
+    "Zombies":
     {
-        "image": "Time Warp",
+        "image": "Diregraf Colossus",
         "contains":
         [
-            "Breeding Pool",
-            "Time Warp"
+            "Diregraf Colossus"
         ]
     },
     "Izzet Tempo":
