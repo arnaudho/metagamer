@@ -937,16 +937,6 @@
             "Island"
         ]
     },
-    "Sultai Citadel":
-    {
-        "image": "Bolas's Citadel",
-        "contains":
-        [
-            "Bolas's Citadel",
-            "Brainstorm",
-            "Weather the Storm"
-        ]
-    },
     "Golgari Aggro":
     {
         "image": "Rotting Regisaur",
