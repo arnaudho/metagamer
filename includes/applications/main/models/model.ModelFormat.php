@@ -45,6 +45,16 @@ namespace app\main\models {
             return $ids_format;
         }
 
+        public function getLastFormatByIdTypeFormat ($pIdTypeFormat) {
+            $last_format = Query::select("*", $this->table)
+                ->join("tournaments", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
+                ->andWhere("id_type_format", Query::EQUAL, $pIdTypeFormat)
+                ->order("date_tournament", "DESC")
+                ->limit(0, 1)
+                ->execute($this->handler);
+            return $last_format[0];
+        }
+
         public function getArchetypeRules () {
             return ModelArchetype::getArchetypesRules($this->typeFormat);
         }
@@ -52,7 +62,7 @@ namespace app\main\models {
         public function getFormatById($pIdFormat)
         {
             $data = Query::select(
-                "formats.id_format, name_format, COUNT(DISTINCT tournaments.id_tournament) AS count_tournaments,
+                "formats.id_format, name_format, id_type_format, COUNT(DISTINCT tournaments.id_tournament) AS count_tournaments,
                 MIN(date_tournament) AS min_date, MAX(date_tournament) AS max_date", $this->table)
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
                 ->andWhere("formats.id_format", Query::EQUAL, $pIdFormat)

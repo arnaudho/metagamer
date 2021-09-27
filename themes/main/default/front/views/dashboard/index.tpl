@@ -68,6 +68,9 @@
         <a href="job/archetypecolors/?id_format={$content.format.id_format}"
            class="btn btn-default" target="_blank">Update archetype colors <span class="glyphicon glyphicon-new-window"></span></a>
 
+        <a href="job/refresharchetypes/?id_format={$content.format.id_format}"
+           class="btn btn-default btn-warning" target="_blank">Refresh archetypes evaluation <span class="glyphicon glyphicon-new-window"></span></a>
+
         <table class="table table-hover table-condensed table-standings">
             <thead>
             <tr>
