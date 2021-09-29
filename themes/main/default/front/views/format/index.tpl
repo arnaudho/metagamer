@@ -37,6 +37,7 @@
                         {$format.name_format}
                     </a>
                     <span style="font-size: 11px; margin: 0 10px;">{$format.date_min}{if $format.date_min != $format.date_max} - {$format.date_max}{/if}</span>
+                    {if $format.date_diff > 7}<span class="glyphicon glyphicon-warning-sign gl-danger" data-toggle="tooltip" title="Time interval > 1 week"></span>{/if}
                 </h4>
                 <div class="collapse {if $format.opened==1}in{/if}" id="collapse-format-{$id_format}">
                     <ul>

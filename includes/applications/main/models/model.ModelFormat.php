@@ -80,7 +80,8 @@ namespace app\main\models {
                 $cond = clone $pCondition;
             }
             $q = Query::select("formats.*, name_type_format, DATE_FORMAT(MIN(date_tournament), '%d/%m') AS date_min,
-                    DATE_FORMAT(MAX(date_tournament), '%d/%m') AS date_max", $this->table)
+                    DATE_FORMAT(MAX(date_tournament), '%d/%m') AS date_max,
+                    DATEDIFF(MAX(date_tournament), MIN(date_tournament)) AS date_diff", $this->table)
                 ->join("tournaments", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
                 ->join("type_format", Query::JOIN_INNER, "type_format.id_type_format = formats.id_type_format")
                 ->andCondition($cond)

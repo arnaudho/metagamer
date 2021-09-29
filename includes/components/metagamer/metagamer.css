@@ -29,6 +29,8 @@
 .container .archetypes-info .rule-remove { cursor: pointer;}
 .container .link-decklists { margin-bottom: 12px;}
 .container p[class^="bg-"] { padding: 15px;}
+.container .glyphicon.gl-danger { color: #ff3849;}
+.container .glyphicon.gl-warning { color: #efb90e;}
 .strong {font-weight: bold;}
 .btn-orange { background-color: #F5875E; border-color: #DC7954; color: white;}
 .btn-orange:hover, .btn-orange:focus { color: white;}
@@ -386,7 +388,8 @@ table.table-standings:not(.table-french)>tbody>tr>td.icon-player { padding: 3px 
 .aggregate-container .archetype-aggregate ul { list-style-type: none; padding-left: 10px;}
 
 /* IMPORT TOURNAMENT */
-#import-mtgmelee .form-group > * { display: block;}
+#import-mtgmelee .form-group > *,
+#import-mtgo .form-group > * { display: block;}
 #import-mtgmelee input[name="import-mtgmelee[tournament_name]"] { width: 100%;}
 
 /* TMP matrix */
