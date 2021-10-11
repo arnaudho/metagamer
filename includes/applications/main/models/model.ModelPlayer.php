@@ -24,8 +24,10 @@ namespace app\main\models {
             }
             $data = Query::select($pFields, $this->table)
                 ->join("tournaments", Query::JOIN_INNER, "players.id_tournament = tournaments.id_tournament")
+                ->join("matches", Query::JOIN_INNER, "matches.id_player = players.id_player")
                 ->join("people", Query::JOIN_INNER, "people.id_people = players.id_people")
                 ->andCondition($cond)
+                ->groupBy("players.id_player")
                 ->execute($this->handler);
             return $data;
         }

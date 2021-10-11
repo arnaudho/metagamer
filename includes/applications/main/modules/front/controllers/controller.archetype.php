@@ -138,7 +138,7 @@ namespace app\main\controllers\front {
                         $stats_without_rules = array(
                             'total' => $stats['total'] - $stats_rules['total']
                         );
-                        $stats_without_rules['winrate'] = round(100*($stats['wins'] - $stats_rules['wins'])/$stats_without_rules['total'], 2);
+                        $stats_without_rules['winrate'] = round(100*($stats['wins'] - $stats_rules['wins'])/$stats_without_rules['total'], 1);
                         $deviation = StatsUtils::getStandardDeviation($stats_without_rules['winrate'], $stats_without_rules['total']);
                         $stats_without_rules['deviation_up']   = $stats_without_rules['winrate'] + $deviation;
                         $stats_without_rules['deviation_down'] = $stats_without_rules['winrate'] - $deviation;
@@ -169,7 +169,7 @@ namespace app\main\controllers\front {
                                 $card['deviation_down_main'] = $card['winrate_main'] - $deviation;
                                 // if we have less matches for current card than total for current rules
                                 if ($stats_rules['total'] > $card['total_main'] && $card['count_players_main'] < $stats_rules['count_players']) {
-                                    $card['winrate_without_main'] = round(100 * ($stats_rules['wins'] - $winrate['wins']) / ($stats_rules['total'] - $card['total_main']), 2);
+                                    $card['winrate_without_main'] = round(100 * ($stats_rules['wins'] - $winrate['wins']) / ($stats_rules['total'] - $card['total_main']), 1);
                                     $deviation = StatsUtils::getStandardDeviation($card['winrate_without_main'], $stats_rules['total'] - $card['total_main']);
                                     $card['deviation_up_without_main'] = $card['winrate_without_main'] + $deviation;
                                     $card['deviation_down_without_main'] = $card['winrate_without_main'] - $deviation;
@@ -199,7 +199,7 @@ namespace app\main\controllers\front {
                                 $card['display_actions_side'] = ($stats_rules['count_players'] > $card['count_players_side']) ? 1 : 0;
                                 // if we have less matches for current card than total for current rules
                                 if ($stats_rules['total'] > $card['total_side'] && $card['count_players_side'] < $stats_rules['count_players']) {
-                                    $card['winrate_without_side'] = round(100 * ($stats_rules['wins'] - $winrate['wins']) / ($stats_rules['total'] - $card['total_side']), 2);
+                                    $card['winrate_without_side'] = round(100 * ($stats_rules['wins'] - $winrate['wins']) / ($stats_rules['total'] - $card['total_side']), 1);
                                     $deviation = StatsUtils::getStandardDeviation($card['winrate_without_side'], $stats_rules['total'] - $card['total_side']);
                                     $card['deviation_up_without_side'] = $card['winrate_without_side'] + $deviation;
                                     $card['deviation_down_without_side'] = $card['winrate_without_side'] - $deviation;
@@ -399,6 +399,28 @@ namespace app\main\controllers\front {
                 ($pA['cmc_card'] > $pB['cmc_card'] ? 1 : -1);
         }
 
+        protected function sortCardsByPlayerCount ($pA, $pB) {
+            if (!array_key_exists('count_players_main', $pA)) {
+                return 1;
+            }
+            if (!array_key_exists('count_players_main', $pB)) {
+                return -1;
+            }
+            return $pA['count_players_main'] == $pB['count_players_main'] ?
+                ($pA['name_card'] > $pB['name_card'] ? 1 : -1) :
+                ($pA['count_players_main'] < $pB['count_players_main'] ? 1 : -1);
+        }
+
+        protected function sortDecklistsBySingularity ($pA, $pB) {
+            if (!array_key_exists('singularity', $pA)) {
+                return 1;
+            }
+            if (!array_key_exists('singularity', $pB)) {
+                return -1;
+            }
+            return $pA['singularity'] < $pB['singularity'] ? 1 : -1;
+        }
+
         public function aggregatelist ()
         {
             $aggregate_cond = null;
@@ -553,7 +575,8 @@ namespace app\main\controllers\front {
                 $archetype['count_cards'] = count($aggregate_main);
 
                 // compare with all decklists of archetype
-                $players = $this->modelPlayer->getPlayerByCond($aggregate_cond, "id_player, arena_id AS name_player, name_deck");
+                $players = $this->modelPlayer->getPlayerByCond($aggregate_cond, "players.id_player, arena_id AS name_player, name_deck,
+                    name_tournament, CONCAT(SUM(result_match), '-', COUNT(1)-SUM(result_match)) AS result");
 
                 foreach ($players as $key => $player) {
                     $decklist_player = $this->modelCard->getDecklistCardsByIdPlayer($player['id_player']);
@@ -579,6 +602,9 @@ namespace app\main\controllers\front {
                 }
                 // get average archetype radius
                 $average_distance = round($sum_distances / count($players), 2);
+                if ($average_distance == 0) {
+                    $players = array();
+                }
 
                 foreach ($players as $key => $player) {
                     if ($player['distance'] < $average_distance*2) {
@@ -586,6 +612,7 @@ namespace app\main\controllers\front {
                     }
                 }
 
+                usort($players, array($this, "sortDecklistsBySingularity"));
                 $this->addContent("aggregate_decklist", $aggregate_counts);
                 $this->addContent("archetype", $archetype);
                 $this->addContent("name_format", $name);

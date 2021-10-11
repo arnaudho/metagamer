@@ -46,8 +46,9 @@
                         <span class="glyphicon glyphicon-duplicate"></span>
                     </a>
                 </div>
-                <h3>{$player.name_player}</h3>
-                <h4>{$player.name_deck}</h4>
+                <h3>{$player.name_player} ({$player.result})</h3>
+                <h4>{$player.name_tournament}</h4>
+                <h5>{$player.name_deck}</h5>
             </div>
             <ul class="player-check-cards">
                 {foreach from=$player.diff.removed item="card"}

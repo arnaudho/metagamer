@@ -18,7 +18,7 @@
     <table class="table table-hover table-condensed" data-toggle="table"  data-search="true">
         <thead>
             <tr>
-                <th data-field="player_name" data-sortable="true">Arena ID</th>
+                <th data-field="player_name" data-sortable="true">Planer name</th>
                 <th data-field="player_tournament" data-sortable="true">Tournament</th>
                 {if $content.decklists[0]['name_deck']}
                     <th data-field="player_deck_name" data-sortable="true">Deck name</th>
