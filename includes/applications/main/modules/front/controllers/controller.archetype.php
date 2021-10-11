@@ -607,7 +607,7 @@ namespace app\main\controllers\front {
                 }
 
                 foreach ($players as $key => $player) {
-                    if ($player['distance'] < $average_distance*2) {
+                    if ($player['distance'] < 12 && $player['distance'] < $average_distance*2) {
                         unset($players[$key]);
                     }
                 }

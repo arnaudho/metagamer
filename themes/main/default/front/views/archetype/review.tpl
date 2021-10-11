@@ -9,6 +9,10 @@
             <h2>Archetype review : {$content.archetype.name_archetype}</h2>
             <h4>{$content.name_format}</h4>
             <h3>Average distance : {$content.average_distance}</h3>
+            {if $content.average_distance > 10}
+                <h4><span class="glyphicon glyphicon-warning-sign gl-danger"></span>
+                    This archetype's average distance is high - Archetype rules may need some review</h4>
+            {/if}
         </div>
     </div>
 

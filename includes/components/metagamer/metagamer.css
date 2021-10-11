@@ -278,7 +278,9 @@ table.table-leaderboard.leaderboard-detailed tbody tr td { font-size: 16px;}
 .archetype-container { display: flex; margin-bottom: 30px;}
 .archetype-container .archetype-image { border-radius: 16px; width: 250px; height: 160px;}
 .archetype-container .archetype-info { padding: 0 24px;}
-.archetype-container .archetype-info * { font-family: "Metropolis", Arial, serif;}
+.archetype-container .archetype-info h2,
+.archetype-container .archetype-info h3,
+.archetype-container .archetype-info h4{ font-family: "Metropolis", Arial, serif;}
 .archetype-container .archetype-info h2 { font-family: "GillSans", Arial, serif; font-size: 46px; text-transform: uppercase;}
 .archetype-container .archetype-info h4 { text-transform: uppercase; color: #666666;}
 
