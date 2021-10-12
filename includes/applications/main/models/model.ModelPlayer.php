@@ -322,7 +322,7 @@ namespace app\main\models {
                 ->join("formats", Query::JOIN_INNER, "tournaments.id_format = formats.id_format")
                 ->join("matches", Query::JOIN_OUTER_LEFT, "matches.id_player = players.id_player")
                 ->groupBy("players.id_player")
-                ->order("formats.id_format DESC, arena_id, date_tournament")
+                ->order("formats.id_format DESC, arena_id, date_tournament", "DESC")
                 ->limit(0, 300)
                 ->execute($this->handler);
             return $data;
