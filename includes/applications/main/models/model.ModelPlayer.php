@@ -760,7 +760,7 @@ namespace app\main\models {
                 ->having("COUNT(1) > 1", false)
                 ->get(false);
             $duplicates = Query::select("players.id_player, decklist_player, COUNT(1) AS count", $this->table)
-                ->join("matches", Query::JOIN_INNER, "players.id_player = matches.id_player")
+                ->join("matches", Query::JOIN_OUTER_LEFT, "players.id_player = matches.id_player")
                 ->andWhere("decklist_player", Query::IN, "(" . $subquery . ")", false)
                 ->groupBy("id_player")
                 ->execute($this->handler);
