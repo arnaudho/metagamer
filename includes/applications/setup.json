@@ -3,10 +3,6 @@
 		"localhost",
 		"metagamer.local"
 	],
-	"kube":[
-		"mtg.kub.soufflet.io",
-		"kub.soufflet.io"
-	],
 	"prod":[
 		"complots.org",
 		"comploz.cluster024.hosting.ovh.net"
