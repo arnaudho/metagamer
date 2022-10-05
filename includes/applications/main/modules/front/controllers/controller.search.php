@@ -115,6 +115,7 @@ namespace app\main\controllers\front {
                 $card['id_card'],
                 Query::condition()->andWhere("formats.id_type_format", Query::EQUAL, ModelFormat::TYPE_FORMAT_HISTORIC_ID));
 
+            // TODO add decklists for each format (maybe merge in 1 tab ?)
             $this->addContent("players", array(
                 array(
                     "slug" => "standard",

@@ -99,9 +99,6 @@ namespace app\main\controllers\front {
                 $categories_main[$card['type_computed']]['count'] += $card['count_main'];
             }
 
-            trace_r($cards_main);
-            trace_r($categories_main);
-
             $cards_all = $this->modelCard->getDecklistCards($player['id_player']);
             $export_arena = $this->modelPlayer->convertToArenaFormat($cards_all);
 

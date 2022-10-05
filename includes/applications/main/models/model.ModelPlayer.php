@@ -410,9 +410,9 @@ namespace app\main\models {
          * @return array
          */
         public function getColorsByDecklistId ($pIdDecklist) {
-            $colors = array("W","U","B","R","G");
+            $colors = array("W","U","B","R","G", "C");
             $data = Query::select("GROUP_CONCAT(mana_cost_card SEPARATOR '') AS mana_costs, GROUP_CONCAT(produced_mana_card SEPARATOR '') AS produced_mana", "player_card")
-                ->join("cards", Query::JOIN_INNER, "cards.id_card = player_card.id_card")
+                ->join("cards", Query::JOIN_INNER, "cards.id_card = player_card.id_card AND count_main > 0")
                 ->andWhere("id_player", Query::EQUAL, $pIdDecklist)
                 ->execute($this->handler);
 
@@ -615,7 +615,7 @@ namespace app\main\models {
                 ($pA['points_player'] < $pB['points_player'] ? 1 : -1);
         }
 
-        public function getPlayerIdByTournamentIdArenaId ($pTournamentId, $pArenaId, $pTagPlayer = "") {
+        public function getPlayerIdByTournamentIdArenaId ($pTournamentId, $pArenaId, $pSecondArenaId = "", $pTagPlayer = "") {
             $q = Query::select("id_player", $this->table)
                 ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " .
                     $pTournamentId . " AND people.arena_id = '" . $pArenaId . "'");
@@ -624,6 +624,12 @@ namespace app\main\models {
                     ->andWhere("tag_player", Query::EQUAL, $pTagPlayer);
             }
             $id_player = $q->execute($this->handler);
+            if (!$id_player && $pSecondArenaId != "") {
+                $id_player = Query::select("id_player", $this->table)
+                    ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " .
+                        $pTournamentId . " AND people.discord_id = '" . $pSecondArenaId . "'")
+                    ->execute($this->handler);
+            }
             if (!$id_player && preg_match('/^([^#]+)#([0-9]+)/', $pArenaId, $output_array)) {
                 $id_player = Query::select("id_player", $this->table)
                     ->join("people", Query::JOIN_INNER, $this->table . ".id_people = people.id_people AND players.id_tournament = " .
