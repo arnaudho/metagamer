@@ -20,7 +20,7 @@
                 }
             }
         },
-        "api-deprecated":
+        "api":
         {
             "theme":"default",
             "multiLanguage": false,
@@ -39,7 +39,7 @@
         "debug": false,
         "session": "php_fw",
         "explainOnSelect": "",
-        "emailContact": "arnaudh80@free.fr"
+        "emailContact": "me@mail.fr"
     },
     "api": {
     },
@@ -51,9 +51,9 @@
         {
             "handler":"core\\db\\handler\\MysqliHandler",
             "host":"complozadm.mysql.db",
-            "user":"complozadm",
-            "password":"adm4Comploz",
-            "name":"complozadm"
+            "user":"username",
+            "password":"password",
+            "name":"dbname"
         }
     },
     "authentication":
